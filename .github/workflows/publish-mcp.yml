@@ -1,0 +1,39 @@
+name: Publish to MCP Registry
+
+# 用 GitHub OIDC 发布到官方 MCP Registry —— 不需要浏览器扫码，不需要 2FA
+# 手动触发：仓库 → Actions → Publish to MCP Registry → Run workflow
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'server.json'
+
+permissions:
+  id-token: write    # OIDC 必需
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show server.json
+        run: cat server.json
+
+      - name: Install mcp-publisher
+        run: |
+          curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" -o mcp-publisher.tar.gz
+          tar xzf mcp-publisher.tar.gz mcp-publisher
+          chmod +x mcp-publisher
+          ./mcp-publisher --help || true
+
+      - name: Validate
+        run: ./mcp-publisher validate
+
+      - name: Login (GitHub OIDC)
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish
+        run: ./mcp-publisher publish
