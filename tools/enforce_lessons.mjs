@@ -154,10 +154,10 @@ try {
 }
 
 /* ══════════ ③b 工具端到端（L-34：语法通过 ≠ 可用）══════════ */
-if (!JSON_OUT) console.log('\n  ── ③b 工具端到端（22 个工具真调 execute + render）──');
+if (!JSON_OUT) console.log('\n  ── ③b 工具端到端（23 个工具真调 execute + render）──');
 try {
   const r = spawnSync(process.execPath, [join(HERE, 'verify_all_tools.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
-  rec('工具', '22 个工具端到端通过', r.status === 0, r.status === 0 ? '全部 execute + render 正常' : 'exit ' + r.status + '（跑 node tools/verify_all_tools.mjs 看明细）');
+  rec('工具', '23 个工具端到端通过', r.status === 0, r.status === 0 ? '全部 execute + render 正常' : 'exit ' + r.status + '（跑 node tools/verify_all_tools.mjs 看明细）');
 } catch (e) { rec('工具', '端到端验证可执行', false, String(e.message).slice(0, 70)); }
 
 /* ══════════ ③c 全站审计（死链/结构/AI索引）══════════ */
