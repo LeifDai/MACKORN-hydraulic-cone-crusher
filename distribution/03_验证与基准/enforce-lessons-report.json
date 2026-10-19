@@ -1,0 +1,311 @@
+{
+  "gate": "L2 构建门禁",
+  "generated": "2026-10-18T19:21:15.750Z",
+  "elapsed_ms": 867882,
+  "total": 34,
+  "passed": 34,
+  "failed": 0,
+  "is_full_run": true,
+  "by_area": {
+    "语法": {
+      "pass": 1,
+      "total": 1
+    },
+    "教训": {
+      "pass": 1,
+      "total": 1
+    },
+    "库": {
+      "pass": 2,
+      "total": 2
+    },
+    "护栏": {
+      "pass": 7,
+      "total": 7
+    },
+    "工具": {
+      "pass": 1,
+      "total": 1
+    },
+    "站点": {
+      "pass": 1,
+      "total": 1
+    },
+    "UAT": {
+      "pass": 3,
+      "total": 3
+    },
+    "G4": {
+      "pass": 1,
+      "total": 1
+    },
+    "G4b": {
+      "pass": 1,
+      "total": 1
+    },
+    "G5": {
+      "pass": 1,
+      "total": 1
+    },
+    "G6": {
+      "pass": 1,
+      "total": 1
+    },
+    "G7": {
+      "pass": 1,
+      "total": 1
+    },
+    "G8": {
+      "pass": 1,
+      "total": 1
+    },
+    "G9": {
+      "pass": 1,
+      "total": 1
+    },
+    "G10": {
+      "pass": 1,
+      "total": 1
+    },
+    "G11": {
+      "pass": 1,
+      "total": 1
+    },
+    "蓝图": {
+      "pass": 1,
+      "total": 1
+    },
+    "G1": {
+      "pass": 1,
+      "total": 1
+    },
+    "硬事实": {
+      "pass": 1,
+      "total": 1
+    },
+    "模型": {
+      "pass": 4,
+      "total": 4
+    },
+    "基准": {
+      "pass": 1,
+      "total": 1
+    },
+    "自验证": {
+      "pass": 1,
+      "total": 1
+    }
+  },
+  "lesson_stats": {
+    "total": 87,
+    "pass": 87,
+    "fails": []
+  },
+  "results": [
+    {
+      "area": "语法",
+      "name": "关键源码文件能被 Node 解析（改源码的脚本不许静默毁掉模块）",
+      "pass": true,
+      "detail": "13 个关键文件语法正确"
+    },
+    {
+      "area": "教训",
+      "name": "可执行教训 87/87",
+      "pass": true,
+      "detail": "全部通过"
+    },
+    {
+      "area": "库",
+      "name": "库检查 30/30",
+      "pass": true,
+      "detail": "全部通过"
+    },
+    {
+      "area": "库",
+      "name": "库判定无「无效经验」残留",
+      "pass": true,
+      "detail": "无"
+    },
+    {
+      "area": "护栏",
+      "name": "规则表非空（18 条）",
+      "pass": true,
+      "detail": "18 条"
+    },
+    {
+      "area": "护栏",
+      "name": "每条规则都有 id/severity/来源",
+      "pass": true,
+      "detail": "字段完整"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：单台圆锥破给料 600mm 被拦",
+      "pass": true,
+      "detail": "命中 GR-02,GR-03"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：整线原矿给料不误报 GR-02",
+      "pass": true,
+      "detail": "误报 GR-03"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：averaged 合并字段被拦",
+      "pass": true,
+      "detail": "命中 GR-03,GR-04"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：干净输出零 error",
+      "pass": true,
+      "detail": "error 0"
+    },
+    {
+      "area": "工具",
+      "name": "22 个工具端到端通过",
+      "pass": true,
+      "detail": "全部 execute + render 正常"
+    },
+    {
+      "area": "站点",
+      "name": "全站审计零严重问题（死链/结构）",
+      "pass": true,
+      "detail": "无死链、结构完整"
+    },
+    {
+      "area": "UAT",
+      "name": "5 个真实用户场景输出可用",
+      "pass": true,
+      "detail": "20 项检查全通过"
+    },
+    {
+      "area": "UAT",
+      "name": "8 个商务交付场景输出可用",
+      "pass": true,
+      "detail": "31 项检查全通过"
+    },
+    {
+      "area": "UAT",
+      "name": "5 个技术诊断场景输出可用",
+      "pass": true,
+      "detail": "17 项检查全通过"
+    },
+    {
+      "area": "G4",
+      "name": "插件级负控 6/6 抓到 + 正控通过",
+      "pass": true,
+      "detail": "校验器有效且不过严"
+    },
+    {
+      "area": "G4b",
+      "name": "硬事实同步负控（证据保留 + 陈述式改写）",
+      "pass": true,
+      "detail": "双向断言通过"
+    },
+    {
+      "area": "G5",
+      "name": "跨表一致性（0 真矛盾 · 0 结构异常）",
+      "pass": true,
+      "detail": "数据表之间自洽"
+    },
+    {
+      "area": "G6",
+      "name": "机会生存法则（在动 · 有证据 · 未退化 · 双轨都在）",
+      "pass": true,
+      "detail": "法则成立"
+    },
+    {
+      "area": "G7",
+      "name": "RSI 判级（分级可测 · 天花板诚实）",
+      "pass": true,
+      "detail": "判级有效"
+    },
+    {
+      "area": "G8",
+      "name": "recurrence = 0（同类错误不复现 · RSI 唯一硬指标）",
+      "pass": true,
+      "detail": "recurrence 0.0% ✅ 所有已知缺陷都有可靠守卫"
+    },
+    {
+      "area": "G9",
+      "name": "RSI 闭环完整（基线/证据/退路/复测/recurrence=0）",
+      "pass": true,
+      "detail": "闭环完整"
+    },
+    {
+      "area": "G10",
+      "name": "发布节奏检查器可用（状态另见报告）",
+      "pass": true,
+      "detail": "状态 HEALTHY · 上次发布 10.62 天前"
+    },
+    {
+      "area": "G11",
+      "name": "AI 大模型友好度 ≥ 85",
+      "pass": true,
+      "detail": "得分 100/100 ✅"
+    },
+    {
+      "area": "蓝图",
+      "name": "五道门禁与自检清单核对",
+      "pass": true,
+      "detail": "17/17 项"
+    },
+    {
+      "area": "护栏",
+      "name": "每条护栏都有可响应的负控（含新增规则强制）",
+      "pass": true,
+      "detail": "17 条负控 + 7 条正控全通过"
+    },
+    {
+      "area": "G1",
+      "name": "标定器能还原已知参数（同值对照）",
+      "pass": true,
+      "detail": "3/3 工况还原或如实标注不可辨识"
+    },
+    {
+      "area": "硬事实",
+      "name": "对外文件的工具数/版本号/语言数与唯一真相源一致",
+      "pass": true,
+      "detail": "检查 15 个对外文件，硬事实全部一致（工具 22 · v0.2.2 · 12 语言）"
+    },
+    {
+      "area": "模型",
+      "name": "质量守恒（28 组网格）",
+      "pass": true,
+      "detail": "最坏 1.40e-3"
+    },
+    {
+      "area": "模型",
+      "name": "无负质量",
+      "pass": true,
+      "detail": "最大负值 0.00e+0"
+    },
+    {
+      "area": "模型",
+      "name": "失效边界 4/4 拒绝",
+      "pass": true,
+      "detail": "4/4"
+    },
+    {
+      "area": "模型",
+      "name": "CSS 单调（产品随 CSS 变粗）",
+      "pass": true,
+      "detail": "10.9 → 12.6 → 15.1 → 19.5 → 29.1"
+    },
+    {
+      "area": "基准",
+      "name": "公开验证基准全通过",
+      "pass": true,
+      "detail": "26/26"
+    },
+    {
+      "area": "自验证",
+      "name": "无硬失败",
+      "pass": true,
+      "detail": "通过 14/15"
+    }
+  ],
+  "rule": "教训+库+护栏含负控+工具端到端+三批UAT+全站审计+插件级负控+蓝图自检+G1同值对照+物理不变量+公开基准"
+}
