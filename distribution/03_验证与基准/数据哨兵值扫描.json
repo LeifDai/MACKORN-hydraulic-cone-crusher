@@ -1,20 +1,13 @@
 {
-  "generated": "2026-10-19T06:12:57.682Z",
+  "generated": "2026-10-19T17:47:40.118Z",
   "scanned_tables": 28,
   "found": 4,
   "by_kind": {
-    "超机型上限": 1,
     "哨兵值": 1,
-    "相邻列突变": 2
+    "相邻列突变": 2,
+    "超机型上限": 1
   },
   "findings": [
-    {
-      "table": "CAVITY_CAPACITY",
-      "path": "NH400/C/CSS16",
-      "kind": "超机型上限",
-      "value": "999 > 500 t/h",
-      "note": "会误导选型"
-    },
     {
       "table": "CAVITY_CAPACITY",
       "path": "NH400/C/CSS16",
@@ -35,6 +28,13 @@
       "kind": "相邻列突变",
       "value": "999 → 310",
       "note": "比值 0.31，可能是录入错位"
+    },
+    {
+      "table": "CAVITY_CAPACITY",
+      "path": "NH400/C/CSS16",
+      "kind": "超机型上限",
+      "value": "999 > 500 t/h",
+      "note": "会误导选型"
     }
   ]
 }

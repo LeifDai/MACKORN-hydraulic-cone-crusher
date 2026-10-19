@@ -1,10 +1,10 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-10-19T15:45:03.447Z",
+  "generated": "2026-10-19T17:47:42.328Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
-    "tools": 22,
+    "tools": 24,
     "skills": 6
   },
   "local_mirrors": [
@@ -35,41 +35,16 @@
     {
       "id": "F-facts",
       "name": "对外文件硬事实（工具数/版本）",
-      "pass": true,
-      "detail": "✅ 与真相源一致（22 工具 / v0.2.2）"
+      "pass": false,
+      "detail": "❌ 发现 3 处过时：README.md 写 工具数=22（应为 24） · llms.txt 写 工具数=22（应为 24） · llms.txt 写 工具数=23（应为 24）"
     }
   ],
-  "remote_surfaces": [
-    {
-      "surface": "npm",
-      "name": "npm latest",
-      "pass": true,
-      "detail": "v0.2.2 · 描述工具数 22 · 期望 v0.2.2/22 工具"
-    },
-    {
-      "surface": "github",
-      "name": "GitHub README",
-      "pass": true,
-      "detail": "✅ 工具数一致（22）"
-    },
-    {
-      "surface": "github-description",
-      "name": "GitHub Description",
-      "pass": true,
-      "detail": "✅ 22 工具"
-    },
-    {
-      "surface": "github-release",
-      "name": "GitHub Release",
-      "pass": true,
-      "detail": "v0.0.3 · 说明里写 22 工具 · 期望 22"
-    }
-  ],
+  "remote_surfaces": [],
   "summary": {
-    "ok": 9,
-    "failed": 0,
+    "ok": 4,
+    "failed": 1,
     "unknown": 0
   },
-  "verdict": "CONSISTENT",
+  "verdict": "STALE",
   "rule": "先升级 → 再上传。上传前必须本工具全绿（STALE 时不许上传）。"
 }

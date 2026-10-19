@@ -1,18 +1,18 @@
 {
-  "generated": "2026-10-19T06:18:12.347Z",
+  "generated": "2026-10-19T17:47:40.196Z",
   "stale_days": 3,
   "rows": [
     {
       "id": "LIVE-1",
       "name": "【动】最近有推进（PDCA 距今天数 ≤ 3）",
       "pass": true,
-      "detail": "最近一轮 R89 · 距今 0.46 天 · 累计 89 轮"
+      "detail": "最近一轮 R93 · 距今 0.05 天 · 累计 93 轮"
     },
     {
       "id": "LIVE-2",
       "name": "【证】最近一轮 PDCA 要素齐全（计划/核对/处置/门禁）",
       "pass": true,
-      "detail": "四要素齐全 · R89"
+      "detail": "四要素齐全 · R93"
     },
     {
       "id": "LIVE-2b",
@@ -24,23 +24,23 @@
       "id": "LIVE-5",
       "name": "【新】目标有可验证产出（check 里有文件或具体数字）",
       "pass": true,
-      "detail": "check 长度 234 · 含文件 false · 含数字 true"
+      "detail": "check 长度 295 · 含文件 true · 含数字 true"
     },
     {
       "id": "LIVE-3",
       "name": "【防】棘轮未倒退（教训数/门禁项数不许减）",
       "pass": true,
-      "detail": "教训 57→88 ✅ · 门禁 43→50 ✅"
+      "detail": "教训 57→90 ✅ · 门禁 43→51 ✅"
     },
     {
       "id": "LIVE-4",
       "name": "【双】云端工作流存在 且 本地近期有改动",
       "pass": true,
-      "detail": "云端工作流 34 步 · 本地核心文件最近改动 0.2 小时前"
+      "detail": "云端工作流 35 步 · 本地核心文件最近改动 0.0 小时前"
     }
   ],
-  "pdca_rounds": 89,
-  "last_pdca_at": "2026-10-18T19:21:32.495Z",
-  "lessons": 88,
-  "gates": 50
+  "pdca_rounds": 93,
+  "last_pdca_at": "2026-10-19T16:41:02.092Z",
+  "lessons": 90,
+  "gates": 51
 }

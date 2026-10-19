@@ -1,16 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-18T19:21:09.933Z",
+  "generated": "2026-10-19T17:47:41.997Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
-  "total_defects": 87,
-  "alive": 87,
-  "dead": 0,
+  "total_defects": 90,
+  "alive": 66,
+  "dead": 24,
   "broken": 0,
-  "recurrence": 0,
+  "recurrence": 0.26666666666666666,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
-  "neg_coverage": 0.5977011494252874,
+  "neg_coverage": 0.5777777777777777,
   "by_status": {
-    "alive": 87
+    "failed": 24,
+    "alive": 66
   },
   "register": [
     {
@@ -22,7 +23,8 @@
         "syntax_gate_negative_controls.mjs"
       ],
       "origin": "F-18：restructure 写 _deploy2，deliver/preflight 读 _deploy → 自检验的是旧文件，\"通过\"是假的",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**构建一致性检查（退出码 1）：⚠ 产物不可重复或目录不一致"
     },
     {
       "id": "L-02",
@@ -42,7 +44,8 @@
         "hardfact_sync_negative_controls.mjs"
       ],
       "origin": "R4：脱敏规则 [A-Za-z]:\\ 把 PowerShell 的 e:\\s* 当成\"盘符 e: + 反斜杠\"，改坏了 verify.ps1",
-      "status": "alive"
+      "status": "failed",
+      "detail": "脱敏规则限定到已知根目录 ✅ · **真跑**合规闸门退出码 1（⚠ 有命中）"
     },
     {
       "id": "L-04",
@@ -66,7 +69,8 @@
         "hardfact_sync_negative_controls.mjs"
       ],
       "origin": "R3：俄罗斯 2023 未申报 → 页面显示 US$0.0M，严重误导",
-      "status": "alive"
+      "status": "failed",
+      "detail": "逻辑链：latestIdx 由计算得出 ✅ · dataIsPartial 由比较得出 ✅ · 两者被真正使用 ✅ ｜ 真跑（exit 1）市场页 0 个中 0 个标注数据缺失 · 已补回 hreflang"
     },
     {
       "id": "L-06",
@@ -75,7 +79,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R1：keyword_gate 测\"词与品牌同页\"是自证式弱检测，275 词 100% 通过但内容未必有用",
-      "status": "alive"
+      "status": "failed",
+      "detail": "结果文件缺少 pages_with_questions/html_pages 字段（审计器可能被改坏）"
     },
     {
       "id": "L-07",
@@ -84,7 +89,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R4：新增 22 个工具页后 hreflang 覆盖从 94/94 掉到 44/94，触发门禁",
-      "status": "alive"
+      "status": "failed",
+      "detail": "真扫站点：0 个页面 · 在 sitemap 中 0（0%）· 含 hreflang 0（0%）"
     },
     {
       "id": "L-08",
@@ -93,7 +99,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "bruno-ip-boundary：Bruno 数据库导出/标定系数/型号符号库绝对不可对外分发",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**合规闸门（退出码 1）：⚠ 有违规"
     },
     {
       "id": "L-09",
@@ -122,7 +129,8 @@
         "hardfact_sync_negative_controls.mjs"
       ],
       "origin": "R6：某国从 $1M 涨到 $10M 是 900% 增长但只多了 $9M，不值得投入",
-      "status": "alive"
+      "status": "failed",
+      "detail": "真跑统计脚本 exit=1 · 显式处理基数效应 有"
     },
     {
       "id": "L-12",
@@ -142,7 +150,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "用户要求：不传整个文件夹，每次只传更新的部分，这样更新了哪些就都清楚了",
-      "status": "alive"
+      "status": "failed",
+      "detail": "缺少 released-manifest.json（差量基线）"
     },
     {
       "id": "L-14",
@@ -171,7 +180,8 @@
         "syntax_gate_negative_controls.mjs"
       ],
       "origin": "硬规矩\"每个数字能指到来源\"；脱敏只能去掉目录树，不能去掉文件名",
-      "status": "alive"
+      "status": "failed",
+      "detail": "构建退出码 1 · 脱敏规则在可执行代码中 ✅ · 合规报告 （无） · 产物含来源标识 ✅"
     },
     {
       "id": "L-17",
@@ -200,7 +210,8 @@
         "hardfact_sync_negative_controls.mjs"
       ],
       "origin": "R2：中文 91 术语对应 179M 市场，印尼语仅 12 术语对应 909M 市场",
-      "status": "alive"
+      "status": "failed",
+      "detail": "未写出可解析结果（退出码 1）"
     },
     {
       "id": "L-20",
@@ -283,7 +294,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R19：建了 47 个新页面（工具页/语言FAQ/国别页），但 llms.txt / keywords.json / agent.json 还是旧的",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**索引同步：站点 0 个 HTML 页 · llms.txt 引用 5 个路径（0%）"
     },
     {
       "id": "L-27",
@@ -332,7 +344,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R29：核验目标交付时发现 llms.txt 不含 /ai/validation/ —— 原因是 sync_ai_index.mjs 用模式匹配把页面分成 tools/faq/markets/guides/langs/core/other 七组，但【other 组从不输出到 llms.txt】。任何不匹配模式的新页面都",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**索引生成：站点 0 页 · llms.txt 引用 5 个路径 · 兜底分组 ✅"
     },
     {
       "id": "L-32",
@@ -345,7 +358,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：214 脚本 / 缺守卫 183 / **被"
     },
     {
       "id": "L-33",
@@ -371,7 +385,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R36：为修 mackorn_knowledge_update 的 EPERM 崩溃改了 evolve.mjs 与 calibration-store.mjs。改完只在两个文件上跑 node --check（语法通过），没重跑端到端。结果补丁在 calibration-store 里用了 writableDir 却漏了",
-      "status": "alive"
+      "status": "failed",
+      "detail": "⚠ 未全通过：22/24（失败 0，退出码 0）"
     },
     {
       "id": "L-35",
@@ -410,7 +425,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R39：UAT-3 模拟用户问「我有一台 NH400 C腔 CSS16，能不能做 350 t/h」。测试报告\"工具没给达标判定\"，我据此给工具加了 target_tph 参数与 verdict 字段。但加完后 UAT 仍失败 —— 复查发现【测试调用自己漏传了 target_tph】。也就是说：一半是真缺口（工具确实没",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑** UAT 2/3 套通过 · 以用户场景驱动 ✅"
     },
     {
       "id": "L-38",
@@ -493,7 +509,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R18：把 L-34 从\"读源码\"改为\"真跑 + 独立复算真值\"后做 mutation 证明。把 verify_all_tools.mjs 的 execute 换成 stub —— L-34 仍通过。原因：被桩掉的验证器会照常写\"22/22 通过\"的 JSON，复读它的检查只能照单全收；而我的独立复算链绕过它、直接调工",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑** prove_l34（exit 1）· 含突变验证 ✅ · 含\"桩掉后无法区分\" ✅ · 独立复算链跑通 ✅"
     },
     {
       "id": "L-45",
@@ -506,7 +523,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R18 S2：审查员删掉 enrich_country_pages.mjs 里\"取最新年份\"的【全部逻辑】、仅保留变量名，L-05 仍 ✅（原判据只查 /latestIdx|dataIsPartial/）。同形态还有 L-06/10/15/16/17/19/20/23/24/29/35/36/38。修复示范：L-05 ",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**定向突变证明（退出码 1）：⚠ 突变后判据仍通过 —— 判据无效"
     },
     {
       "id": "L-46",
@@ -537,7 +555,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R26：收录规律 P2 驱动检查硬事实一致性时，发现工具数从 21 升 22 时漏改了三处【裸 21】：① monitor_live.mjs 写 \"应为 21\" —— 升到 22 后该判断恒为 false，静默失效；② preflight_checklist.mjs 写 \"= 21\" 且阈值 >= 21 —— 就算工具",
-      "status": "alive"
+      "status": "failed",
+      "detail": "实际工具 24 · monitor 无裸21:✅ · preflight 无裸21:✅ · version.json 一致:❌ · 有生成器:✅"
     },
     {
       "id": "L-49",
@@ -555,7 +574,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R27：修\"构建产物工具数 21 vs 声明 22\"时，逐层挖出三处不同性质的遗漏：① gen_php_mcp.mjs 的 $add 注册块只有 22 个工具（缺 mackorn_knowledge —— 而它是材料库入口，我们最重要的差异化能力）② PHP 的 switch 里只有 21 个 case（$add 注册",
-      "status": "alive"
+      "status": "failed",
+      "detail": "工具定义=24 · PHP注册=22 · PHP路由=22 · 三处一致=false"
     },
     {
       "id": "L-51",
@@ -594,7 +614,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R34（用户指令\"提升编程能力，节约收费的 token\"）：复盘本次会话的 token 浪费——① 反复单独跑 5-6 个门禁，每次产生大段输出（合计几十万字符）② 六次重做语法闸门（串行/并发/new Function/配平/vm.Script/词法指纹），每次都是完整试错+大段输出 ③ 改 async 前没先确认 ",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑** status_now（一条命令看全状态）：7 项，❌ 缺 硬事实（本判据只验工具可用，不要求全局全绿 —— 避免循环依赖）"
     },
     {
       "id": "L-54",
@@ -809,7 +830,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R85-R98：多次出现自检 100/100 单独跑通过，但并发跑门禁时变红（多个后台任务抢 dist 与临时文件）。假红会误导判断。",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**单独自检：exit 1 · 得分 ?（串行跑才是真值）"
     },
     {
       "id": "L-73",
@@ -835,7 +857,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R98：构建一致性检查器用正则从生成器源码里抓版本号，但生成器已改为模板占位符（从真相源读），正则抓到占位符，报生成器与 mcp.php 版本不一致的假告警。",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**构建一致性：占位符识别 OK · exit 1"
     },
     {
       "id": "L-75",
@@ -936,7 +959,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R98：gen_php_mcp.mjs 第 174 行硬编码版本号，bump 后 mcp.php 仍是旧版，触发 L-01 与 L-02 双红。根 server.json 也不在同步目标里。",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**版本链：无字面量 ✅ · 从真相源读 ✅ · 构建一致性 exit 1"
     },
     {
       "id": "L-84",
@@ -984,6 +1008,34 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R99：为了把元层改进占比提到 50%，我一度想多写几条教训 —— 这正是把文档写长当改进的反模式。指标必须配套反作弊。",
+      "status": "alive"
+    },
+    {
+      "id": "L-88",
+      "area": "交付",
+      "defect": "先升级再上传：镜像文件必须从真相源同步，上传前必须全绿",
+      "guard": "check()",
+      "negctl": [],
+      "origin": "R100 用户明确指出：昨天讲过要先升级再上传，但 GitHub 上的根 README 仍是旧版（写 19 tools、编码还坏了），而真相源 public-overrides/README.md 早已是 22 tools / V000022。结果 Glama 读根 README 认为我们只有 19 tools，质量分",
+      "status": "failed",
+      "detail": "**真跑**上传前一致性：镜像 4/5 ❌ 对外文件硬事实（工具数/版本） · 真相源 24 工具 / v0.2.2"
+    },
+    {
+      "id": "L-89",
+      "area": "交付",
+      "defect": "线上服务监控必须与本地门禁同等对待：只顾本地会漏掉全站不可用",
+      "guard": "check()",
+      "negctl": [],
+      "origin": "R101 夜间巡检发现 mackorn.cn 的 SSL 证书已过期 4.5 天（DigiCert，到期 2026-10-14）。而本项目有 30+ 门禁、88 条教训，没有任何一条在盯线上服务。后果：官网 HTTPS 全站不可用、爬虫抓不到、Glama 探测 MCP 端点失败（很可能是 PR #15410 卡两周的真",
+      "status": "alive"
+    },
+    {
+      "id": "L-90",
+      "area": "合规",
+      "defect": "对外承诺必须与代码实际行为一致：说一套做一套是合规事故",
+      "guard": "check()",
+      "negctl": [],
+      "origin": "R101 端到端测 npm 包时，发现工具输出「参考价 85-120 万元/台」，而 README 写「This public distribution contains no pricing data」、CLAUDE.md 写「No pricing」。这不是价格泄露（代码有免责声明、是刻意设计的 S4 历史区间），而",
       "status": "alive"
     }
   ],

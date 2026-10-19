@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-18T19:21:12.382Z",
-  "passed": 17,
+  "generated": "2026-10-19T17:47:47.077Z",
+  "passed": 14,
   "total": 17,
   "results": [
     {
@@ -25,7 +25,7 @@
       "gate": "G3",
       "item": "定义完整 + 每工具真跑",
       "pass": true,
-      "evidence": "verify_all_tools 真调 22 个工具的 execute+render"
+      "evidence": "verify_all_tools 真调 23 个工具的 execute+render"
     },
     {
       "gate": "G3",
@@ -37,7 +37,7 @@
       "gate": "G3",
       "item": "工具名唯一",
       "pass": true,
-      "evidence": "22 个名称全唯一"
+      "evidence": "24 个名称全唯一"
     },
     {
       "gate": "G4",
@@ -54,8 +54,8 @@
     {
       "gate": "G5",
       "item": "真 profile 里模型真调一次（有留痕）",
-      "pass": true,
-      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 22 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+      "pass": false,
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
     },
     {
       "gate": "自检1",
@@ -90,8 +90,8 @@
     {
       "gate": "自检6",
       "item": "真 profile 里模型确实调用成功过",
-      "pass": true,
-      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 22 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+      "pass": false,
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
     },
     {
       "gate": "自检7",
@@ -102,9 +102,25 @@
     {
       "gate": "自检8",
       "item": "有一份给「理工男」看的按图索骥手册",
-      "pass": true,
-      "evidence": "有手册类文档"
+      "pass": false,
+      "evidence": "❌ 无"
     }
   ],
-  "gaps": []
+  "gaps": [
+    {
+      "gate": "G5",
+      "item": "真 profile 里模型真调一次（有留痕）",
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+    },
+    {
+      "gate": "自检6",
+      "item": "真 profile 里模型确实调用成功过",
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+    },
+    {
+      "gate": "自检8",
+      "item": "有一份给「理工男」看的按图索骥手册",
+      "evidence": "❌ 无"
+    }
+  ]
 }

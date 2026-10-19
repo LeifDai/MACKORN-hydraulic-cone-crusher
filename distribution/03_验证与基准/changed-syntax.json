@@ -1,17 +1,21 @@
 {
-  "generated": "2026-10-10T20:02:16.527Z",
+  "generated": "2026-10-19T17:32:13.624Z",
   "results": [
     {
-      "file": "tools/_broken_probe.mjs",
-      "ok": false,
-      "msg": "SyntaxError"
+      "file": "plugin/index.mjs",
+      "ok": true,
+      "msg": ""
+    },
+    {
+      "file": "tools/lessons.mjs",
+      "ok": true,
+      "msg": ""
+    },
+    {
+      "file": "tools/enforce_lessons.mjs",
+      "ok": true,
+      "msg": ""
     }
   ],
-  "failures": [
-    {
-      "file": "tools/_broken_probe.mjs",
-      "ok": false,
-      "msg": "SyntaxError"
-    }
-  ]
+  "failures": []
 }
