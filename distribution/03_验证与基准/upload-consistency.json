@@ -1,0 +1,75 @@
+{
+  "schema": "mackorn-upload-consistency/1",
+  "generated": "2026-10-19T15:45:03.447Z",
+  "truth": {
+    "version": "0.2.2",
+    "languages": 12,
+    "tools": 22,
+    "skills": 6
+  },
+  "local_mirrors": [
+    {
+      "id": "M-README.md",
+      "name": "根 README（GitHub 展示的）",
+      "pass": true,
+      "detail": "30KB ✅ 与真相源一致"
+    },
+    {
+      "id": "M-llms.txt",
+      "name": "llms.txt（AI 索引）",
+      "pass": true,
+      "detail": "30KB ✅ 与真相源一致"
+    },
+    {
+      "id": "M-cordis.patch.yml",
+      "name": "cordis.patch.yml",
+      "pass": true,
+      "detail": "0KB ✅ 与真相源一致"
+    },
+    {
+      "id": "M-server.json",
+      "name": "server.json（MCP Registry）",
+      "pass": true,
+      "detail": "1KB ✅ 与真相源一致"
+    },
+    {
+      "id": "F-facts",
+      "name": "对外文件硬事实（工具数/版本）",
+      "pass": true,
+      "detail": "✅ 与真相源一致（22 工具 / v0.2.2）"
+    }
+  ],
+  "remote_surfaces": [
+    {
+      "surface": "npm",
+      "name": "npm latest",
+      "pass": true,
+      "detail": "v0.2.2 · 描述工具数 22 · 期望 v0.2.2/22 工具"
+    },
+    {
+      "surface": "github",
+      "name": "GitHub README",
+      "pass": true,
+      "detail": "✅ 工具数一致（22）"
+    },
+    {
+      "surface": "github-description",
+      "name": "GitHub Description",
+      "pass": true,
+      "detail": "✅ 22 工具"
+    },
+    {
+      "surface": "github-release",
+      "name": "GitHub Release",
+      "pass": true,
+      "detail": "v0.0.3 · 说明里写 22 工具 · 期望 22"
+    }
+  ],
+  "summary": {
+    "ok": 9,
+    "failed": 0,
+    "unknown": 0
+  },
+  "verdict": "CONSISTENT",
+  "rule": "先升级 → 再上传。上传前必须本工具全绿（STALE 时不许上传）。"
+}
