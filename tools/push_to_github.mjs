@@ -32,7 +32,9 @@ const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
 const H = { Authorization: `Bearer ${TOKEN}`, 'User-Agent': 'mackorn-push', Accept: 'application/vnd.github+json' };
 
 // 绝不推送的内容（保险带：即使误入 upload-ready 也不上传）
-const NEVER = [/私钥/, /private[-_]?key/i, /\.env$/i, /npmrc/i, /\.pem$/i, /_npmcache/, /github_publish/i];
+const NEVER = [/私钥/, /private[-_]?key/i, /\.env$/i, /npmrc/i, /\.pem$/i, /_npmcache/, /github_publish/i,
+  /\.moltbook\.json$/i, /moltbook[-_]?key/i, /DNS私钥/,
+];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
