@@ -1,0 +1,201 @@
+{
+  "generated": "2026-10-08T21:51:13.941Z",
+  "dataset": {
+    "title": "Granite jaw crushing dataset: particle size distribution of feed and product",
+    "doi": "10.5281/zenodo.21239431",
+    "license": "CC-BY-4.0",
+    "creator": "Piotr Bortnowski",
+    "institution": "Wrocław University of Science and Technology",
+    "url": "https://zenodo.org/records/21239431",
+    "samples": 23,
+    "feed_classes": 8,
+    "product_classes": 11
+  },
+  "platform_caveat": "本数据集为【颚式破碎机】实测，本模型为【圆锥破碎机】。破碎函数形式相同但参数不同，故本验证【不验证绝对预测精度】。",
+  "data_quality": {
+    "paired_samples": 23,
+    "avg_feed_kg": 31.402,
+    "avg_product_fine_g": 601.7,
+    "product_to_feed_ratio_pct": 1.92,
+    "full_mass_balance_possible": false,
+    "why_not": "产品表只记录细端（<5.6mm）样本，未覆盖全粒级，无法闭合全粒级质量平衡"
+  },
+  "fitted": [
+    {
+      "sample": "p1_1",
+      "n_rosinRammler": 0.739,
+      "xc_mm": 2.197,
+      "r2": 0.9921,
+      "points": 10
+    },
+    {
+      "sample": "p1_2",
+      "n_rosinRammler": 0.784,
+      "xc_mm": 3.06,
+      "r2": 0.9842,
+      "points": 10
+    },
+    {
+      "sample": "p1_3",
+      "n_rosinRammler": 0.854,
+      "xc_mm": 2.665,
+      "r2": 0.9875,
+      "points": 10
+    },
+    {
+      "sample": "p1_4",
+      "n_rosinRammler": 0.737,
+      "xc_mm": 2.53,
+      "r2": 0.9885,
+      "points": 10
+    },
+    {
+      "sample": "p2_1",
+      "n_rosinRammler": 0.75,
+      "xc_mm": 2.678,
+      "r2": 0.988,
+      "points": 10
+    },
+    {
+      "sample": "p2_2",
+      "n_rosinRammler": 0.743,
+      "xc_mm": 2.107,
+      "r2": 0.9885,
+      "points": 10
+    },
+    {
+      "sample": "p2_3",
+      "n_rosinRammler": 0.664,
+      "xc_mm": 2.735,
+      "r2": 0.9896,
+      "points": 10
+    },
+    {
+      "sample": "p2_4",
+      "n_rosinRammler": 0.669,
+      "xc_mm": 2.131,
+      "r2": 0.9828,
+      "points": 10
+    },
+    {
+      "sample": "p3_1",
+      "n_rosinRammler": 0.723,
+      "xc_mm": 2.218,
+      "r2": 0.9904,
+      "points": 10
+    },
+    {
+      "sample": "p3_2",
+      "n_rosinRammler": 0.726,
+      "xc_mm": 2.026,
+      "r2": 0.9886,
+      "points": 10
+    },
+    {
+      "sample": "p3_3",
+      "n_rosinRammler": 0.675,
+      "xc_mm": 2.398,
+      "r2": 0.9816,
+      "points": 10
+    },
+    {
+      "sample": "p3_4",
+      "n_rosinRammler": 0.676,
+      "xc_mm": 1.936,
+      "r2": 0.9916,
+      "points": 10
+    },
+    {
+      "sample": "p4_1",
+      "n_rosinRammler": 0.669,
+      "xc_mm": 2.255,
+      "r2": 0.9928,
+      "points": 10
+    },
+    {
+      "sample": "p4_2",
+      "n_rosinRammler": 0.702,
+      "xc_mm": 2.316,
+      "r2": 0.9869,
+      "points": 10
+    },
+    {
+      "sample": "p4_3",
+      "n_rosinRammler": 0.736,
+      "xc_mm": 2.372,
+      "r2": 0.9902,
+      "points": 10
+    },
+    {
+      "sample": "p4_4",
+      "n_rosinRammler": 0.724,
+      "xc_mm": 2.463,
+      "r2": 0.9873,
+      "points": 10
+    },
+    {
+      "sample": "p5_1",
+      "n_rosinRammler": 0.696,
+      "xc_mm": 3.29,
+      "r2": 0.9852,
+      "points": 10
+    },
+    {
+      "sample": "p5_3",
+      "n_rosinRammler": 0.711,
+      "xc_mm": 2.667,
+      "r2": 0.9853,
+      "points": 10
+    },
+    {
+      "sample": "p5_4",
+      "n_rosinRammler": 0.769,
+      "xc_mm": 2.761,
+      "r2": 0.9869,
+      "points": 10
+    },
+    {
+      "sample": "p6_1",
+      "n_rosinRammler": 0.763,
+      "xc_mm": 2.194,
+      "r2": 0.9867,
+      "points": 10
+    },
+    {
+      "sample": "p6_2",
+      "n_rosinRammler": 0.813,
+      "xc_mm": 3.106,
+      "r2": 0.9858,
+      "points": 10
+    },
+    {
+      "sample": "p6_3",
+      "n_rosinRammler": 0.731,
+      "xc_mm": 2.389,
+      "r2": 0.9892,
+      "points": 10
+    },
+    {
+      "sample": "p6_4",
+      "n_rosinRammler": 0.698,
+      "xc_mm": 2.453,
+      "r2": 0.984,
+      "points": 10
+    }
+  ],
+  "finding": {
+    "rosin_rammler_n_mean": 0.728,
+    "rosin_rammler_n_sd": 0.046,
+    "r2_median": 0.9875
+  },
+  "what_this_validates": [
+    "产品细端分布确实服从 Rosin-Rammler 形式 —— 支持本模型用 RR 拟合给料分布的做法",
+    "同类矿石、同工艺下破碎行为具有一致性（n 的变异系数可量化）"
+  ],
+  "what_this_does_NOT_validate": [
+    "绝对预测精度（平台不同：颚破 vs 圆锥破）",
+    "全粒级质量平衡（产品数据只覆盖细端）",
+    "破碎函数 φ/γ/β 的具体取值（需圆锥破的实测数据）"
+  ],
+  "next_step": "要验证绝对精度，需要【圆锥破】的现场实测：同一工况的给料筛析 + 全粒级产品筛析 + CSS。欢迎提供。"
+}
