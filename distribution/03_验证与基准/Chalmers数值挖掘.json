@@ -1,0 +1,57 @@
+{
+  "generated": "2026-10-11T11:10:54.021Z",
+  "files": [
+    {
+      "file": "chalmers-759.txt",
+      "chars": 68723
+    },
+    {
+      "file": "chalmers-170211.txt",
+      "chars": 58451
+    }
+  ],
+  "tables": [
+    {
+      "file": "chalmers-759.txt",
+      "count": 0,
+      "samples": []
+    },
+    {
+      "file": "chalmers-170211.txt",
+      "count": 0,
+      "samples": []
+    }
+  ],
+  "keyHits": [
+    {
+      "file": "chalmers-759.txt",
+      "kind": "转速",
+      "text": "eccentric speed 269 rpm"
+    },
+    {
+      "file": "chalmers-759.txt",
+      "kind": "转速",
+      "text": "eccentric speed 269 rpm"
+    },
+    {
+      "file": "chalmers-759.txt",
+      "kind": "转速",
+      "text": "eccentric speed 269 rpm"
+    },
+    {
+      "file": "chalmers-759.txt",
+      "kind": "转速",
+      "text": "eccentric speed 269 rpm"
+    },
+    {
+      "file": "chalmers-759.txt",
+      "kind": "CSS 范围",
+      "text": "CSS varies with 1 mm steps between 8 and 16 mm"
+    },
+    {
+      "file": "chalmers-759.txt",
+      "kind": "CSS 范围",
+      "text": "CSS varies with 1 mm steps between 8 and 16 mm"
+    }
+  ]
+}
