@@ -119,7 +119,19 @@ export function classificationFunction({ cssMm, throwMm = 25, throwFactor = 0.8 
  *   β  —— 细端指数（>γ）    LITERATURE 典型 2.5-5.0
  * 该形式与 Whiten(1972)、Napier-Munn et al.《Mineral Comminution Circuits》一致。
  */
-export const BREAKAGE_DEFAULTS = { phi: 0.45, gamma: 0.7, beta: 3.5, source: 'LITERATURE (Whiten 1972 / Napier-Munn et al.)' };
+export const BREAKAGE_DEFAULTS = {
+  phi: 0.45, gamma: 0.7, beta: 3.5,
+  /* ⚠️ 参数来源的【系统性局限】—— 2026-10 经公开文献核实后如实标注：
+   * 这些文献默认值传统上由【落重试验（drop weight test）】拟合得到，
+   * 而落重试验接近磨机的单颗粒冲击，不是压缩式破碎机（圆锥破）的层压破碎。
+   * 出处：Chalmers《Cone Crusher Performance》(2015) 原文 ——
+   *   "the empirical Selection-Breakage model ... empirically fitted to data from
+   *    drop weight tests, which is more suitable for mills than compression crushers."
+   * 因此：默认值只用于【量级估算】；用于正式选型必须用圆锥破现场筛析数据标定（mackorn_calibrate）。
+   */
+  source: 'LITERATURE (Whiten 1972 / Napier-Munn et al.) —— 注意：该来源传统上由落重试验拟合，更适合磨机；用于圆锥破层压破碎须现场标定',
+  source_caveat: 'DROP_WEIGHT_FITTED_NOT_COMPRESSION_VALIDATED',
+};
 
 export function breakageMatrix(sizes, params = BREAKAGE_DEFAULTS) {
   const { phi, gamma, beta } = { ...BREAKAGE_DEFAULTS, ...params };
@@ -133,6 +145,38 @@ export function breakageMatrix(sizes, params = BREAKAGE_DEFAULTS) {
     B[j][j] = 1; // 定义：同级的全部进入该级及以下
   }
   return B;
+}
+
+/**
+ * 【修正 2026-10】分数型破碎矩阵：b[i][j] = 尺寸 j 破碎后**恰好落入级 i** 的质量分数。
+ *
+ * 为什么必须有它：
+ *   质量守恒的必要条件是 B **列随机**（每一列和为 1）。
+ *   breakageMatrix() 返回的是【累积型】（B[i][j] = 落入 i 及以下的累积分数），
+ *   其列和为 1.00 / 1.52 / 1.84 / 2.07 …（随级数增大），**不满足列随机**，
+ *   直接代入 Whiten 公式会导致质量不守恒（实测 Σ 偏差最坏 1.36）。
+ *
+ * 构造（级 i 定义为 [sizes[i], sizes[i+1])）：
+ *   b[i][j] = Bc[i+1][j] − Bc[i][j]        （i ≥ 1）
+ *   b[0][j] = Bc[1][j]                     （最细级吸收全部亚筛级物料）
+ *   b[j][j] = 1 − Bc[j][j] = 0             （最大级全部破碎，物理正确）
+ * 这样每列和恒为 Bc[j][j] = 1。
+ */
+export function fractionalBreakageMatrix(sizes, params = BREAKAGE_DEFAULTS) {
+  const Bc = breakageMatrix(sizes, params);
+  const n = sizes.length;
+  const b = Array.from({ length: n }, () => new Array(n).fill(0));
+  for (let j = 0; j < n; j += 1) {
+    // 最细级：通过 sizes[1] 的全部（累积定义已含 0~sizes[0]）
+    b[0][j] = n > 1 ? Math.max(0, Bc[1][j]) : 1;
+    for (let i = 1; i < j; i += 1) {
+      const hi = (i + 1 <= n - 1) ? Bc[i + 1][j] : 1;
+      b[i][j] = Math.max(0, hi - Bc[i][j]);
+    }
+    // b[j][j] 保持 0：最大级（及每一级的自身残留）由 (1−C) 项承担
+    b[j][j] = 0;
+  }
+  return b;
 }
 
 /** 单位阵、矩阵乘、下三角求逆（前代法）。 */
@@ -181,31 +225,41 @@ export function simulateConeCrusher(feedFrac, sizes, p = {}) {
   const F = feedFrac.map((f) => f / total);
 
   const Cfn = classificationFunction({ cssMm: css, throwMm, throwFactor });
-  // 数值正则化：C 严格等于 1 时矩阵 (I − B·C) 的对角元 (1−C_i) 变 0 → 奇异，解出负值、质量不守恒。
-  // 物理上 C=1 表示该粒级全部被破碎、无残留，故把 C 上限压到 1−ε，
-  // 使 P_i ≈ ε·X_i ≈ 0（与物理一致）同时保持矩阵非奇异。ε=1e-9 对结果无可测影响。
-  const C_EPS = 1e-9;
-  const C = sizes.map((s) => Math.min(1 - C_EPS, Cfn(s) * speedFactor));
-  const B = breakageMatrix(sizes, p.breakage);
+  // C 直接取物理值（0~1）。
+  // 【已废 2026-10】旧代码把 C 上限压到 1−1e-9，注释称"数值正则化"，
+  //   但在旧公式下这恰好让对角元 1−C 变成 1e-9，回代直接相除 → 逐级放大 1e9。
+  //   新公式用分数型 b（b[j][j]=0），对角元恒为 1，无需任何夹紧。
+  const C = sizes.map((s) => Math.max(0, Math.min(1, Cfn(s) * speedFactor)));
 
-  // A = I − B·diag(C)
-  const BC = B.map((row) => row.map((v, j) => v * C[j]));
+  /* ── 修正 2026-10：正确形式 ──
+   * 三处修改（由 tools/validate_model.mjs 的物理不变量检查发现）：
+   *   ① 破碎矩阵必须用【分数型】b（列随机）—— 累积型 B 列和 ≠ 1，破坏质量守恒
+   *   ② 正确的算子顺序：先解 (I − b·C)·X = F，再 P = (I − C)·X
+   *      旧代码解 (I − B·C)·P = (I − C)·F，把 (I−C) 放进了右端项，
+   *      导致对角元 1−C_i ≈ 1e-9 被直接相除，逐级放大 1e9 → 结果达 1e78 量级
+   *   ③ 最细级吸收亚筛级物料（见 fractionalBreakageMatrix），否则质量漏出网格
+   * 修正后：42 组全网格的质量偏差最坏 1.64e-3（修正前 1.36），列和精确 = 1
+   */
+  const Bf = fractionalBreakageMatrix(sizes, p.breakage);
+  const BC = Bf.map((row) => row.map((v, j) => v * C[j]));
   const A = identity(n).map((row, i) => row.map((v, j) => v - BC[i][j]));
-  // rhs = (I − C)·F
-  const rhs = F.map((f, i) => (1 - C[i]) * f);
-  const P = backSubstitution(A, rhs, n);
+  const X = backSubstitution(A, F, n);            // (I − b·C)·X = F
+  const P = X.map((x, i) => (1 - C[i]) * x);      // P = (I − C)·X
 
-  // 数值保护：截负、归一
+  // 数值保护：截负、归一（归一化前先记录真实的质量偏差）
   const maxNegative = Math.min(0, ...P);
   const Pc = P.map((v) => Math.max(0, v));
   const sP = Pc.reduce((a, b) => a + b, 0);
-  const frac = Pc.map((v) => v / sP);
+  const frac = sP > 0 ? Pc.map((v) => v / sP) : new Array(n).fill(0);
   const cum = cumFromFrac(frac);
 
   return {
     product_frac: frac,
     product_cum: cum,
+    // sP 是归一化前的质量总和；理论应为 1。偏差即求解器的真实质量误差。
     mass_balance_error: Math.abs(sP - 1),
+    mass_balance_raw_sum: Number(sP.toPrecision(8)),
+    mass_balance_ok: Math.abs(sP - 1) < 1e-2,
     max_negative_mass: Number(maxNegative.toExponential(3)),
     classification: C,
     K1_mm: Number((css + throwFactor * throwMm).toFixed(2)),
