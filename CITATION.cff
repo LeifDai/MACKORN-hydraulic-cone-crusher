@@ -1,0 +1,100 @@
+cff-version: 1.2.0
+message: "If you use this software or its data in your work, please cite it as below. / 使用本软件或其数据时请按下列格式引用。"
+title: "MACKORN Hydraulic Cone Crusher Selection — NH/NS Series"
+abstract: >-
+  An open-source (MIT) engineering engine for hydraulic cone crusher selection,
+  crushing-and-screening plant design, steady-state flow simulation and
+  measured-data calibration. Exposed as 22 MCP tools for AI agents.
+  Covers MACKORN NH (standard) and NS (high-speed) single-cylinder hydraulic
+  cone crushers for aggregate and metal-mine crushing circuits.
+type: software
+authors:
+  - family-names: "Mackorn"
+    given-names: "Shanghai Mackorn Minerals Co., Ltd."
+    name-particle: ""
+    affiliation: "Shanghai Mackorn Minerals Co., Ltd. (MACKORN 美矿)"
+    website: "https://mackorn.cn"
+  - family-names: "Dai"
+    given-names: "Leif"
+    affiliation: "Shanghai Mackorn Minerals Co., Ltd. (MACKORN 美矿)"
+    email: "leif.dai@mackorn.cn"
+contact:
+  - family-names: "Dai"
+    given-names: "Leif"
+    email: "leif.dai@mackorn.cn"
+    affiliation: "Shanghai Mackorn Minerals Co., Ltd."
+license: MIT
+version: "0.2.0"
+date-released: "2026-10-08"
+repository-code: "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher"
+url: "https://mackorn.cn/ai/"
+identifiers:
+  - type: url
+    value: "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher"
+    description: "Source repository / 源码仓库"
+  - type: url
+    value: "https://www.npmjs.com/package/mackorn-cone-crusher"
+    description: "npm package / npm 包"
+  - type: url
+    value: "https://mackorn.cn/ai/"
+    description: "Project home page / 项目主页"
+keywords:
+  - cone crusher
+  - hydraulic cone crusher
+  - MACKORN
+  - NH series
+  - NS series
+  - crusher selection
+  - crushing plant design
+  - aggregate production
+  - mineral processing
+  - comminution
+  - Whiten model
+  - Bond work index
+  - MCP server
+  - AI agent tool
+  - 圆锥破碎机
+  - 液压圆锥破
+  - 破碎筛分生产线
+  - 选型
+  - 砂石骨料
+  - 金属矿山
+references:
+  - type: article
+    title: "A model for the prediction of cone crusher performance"
+    authors:
+      - family-names: "Whiten"
+        given-names: "W. J."
+    year: 1972
+    notes: >-
+      Steady-state cone crusher model (population balance). Independently
+      implemented in this software from the published literature.
+  - type: article
+    title: "The third theory of comminution"
+    authors:
+      - family-names: "Bond"
+        given-names: "F. C."
+    year: 1952
+    notes: >-
+      Bond work index / comminution energy model. Independently implemented
+      in this software from the published literature.
+  - type: article
+    title: "Cone crusher performance"
+    authors:
+      - family-names: "Evertsson"
+        given-names: "C. M."
+    year: 2000
+    notes: >-
+      Compression-crusher breakage and selection functions; used as an
+      independent cross-validation reference for the crushing model.
+preferred-citation:
+  type: software
+  title: "MACKORN Hydraulic Cone Crusher Selection — NH/NS Series (v0.2.0)"
+  authors:
+    - family-names: "Mackorn"
+      given-names: "Shanghai Mackorn Minerals Co., Ltd."
+  year: 2026
+  version: "0.2.0"
+  repository-code: "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher"
+  url: "https://mackorn.cn/ai/"
+  license: MIT
