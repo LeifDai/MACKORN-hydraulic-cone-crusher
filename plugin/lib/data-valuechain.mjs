@@ -45,7 +45,7 @@ export const VALUE_CHAIN = [
     scope: ['浮选 Flotation', '重选 Gravity', '光电选 Ore sorting（激光/图像/XRT）', '磁选 Magnetic', '浸出 Leaching'],
     key_outputs: ['回收率', '精矿品位', '尾矿品位', '选比', '单位处理成本'],
     downstream_link: '选别指标决定最终经济效益',
-    status: 'planned',
+    status: 'in_progress',  /* R108：选矿知识库 + mackorn_beneficiation_selection 已上线 */
   },
   {
     stage: 5, id: 'automation', name: '自动化与模型选矿', name_en: 'Automation & Model-based Selection',
