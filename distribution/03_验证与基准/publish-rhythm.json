@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-19T17:47:42.212Z",
+  "generated": "2026-10-19T21:07:33.425Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "1f9f859",
-    "date": "2026-10-19T17:23:14Z",
-    "message": "ci: sync server-card.json"
+    "sha": "99739c0",
+    "date": "2026-10-19T17:47:47Z",
+    "message": "chore(nightly): 云端自迭代 2026-10-19 17:47 [skip ci]"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 1.11,
+    "days_since": 1.25,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.02,
-  "days_since_publish": 0.02,
+  "effective_days": 0.14,
+  "days_since_publish": 0.14,
   "changed_since_publish": {
     "count": 276,
     "files": [
@@ -94,7 +94,7 @@
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.0 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.1 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
