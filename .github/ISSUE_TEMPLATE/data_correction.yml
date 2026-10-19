@@ -1,0 +1,96 @@
+name: 📊 数据纠错（Data correction）
+description: 参数表里的数字不对 / 缺 / 看起来像哨兵值
+title: "[data] "
+labels: ["data", "needs-verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **这是我们最重视的一类 issue。**
+
+        一个错的数字比一个缺失的数字危险得多 ——
+        因为它来自厂商参数表（S1 来源），使用者会更相信它。
+
+        > 真实案例：某机型某腔型某 CSS 的额定产能填了 `999 t/h`（机型上限约 500），
+        > 而工具照单全收并输出给客户。发现后我们加了合理性校验，但**根因在数据**。
+
+  - type: input
+    id: model
+    attributes:
+      label: 机型
+      description: 如 NH400 / NS300
+      placeholder: NH400
+    validations:
+      required: true
+
+  - type: input
+    id: cavity
+    attributes:
+      label: 腔型
+      description: EC / C / MC / M / MF / F / EF / EFX / EEF（不确定可留空）
+      placeholder: C
+
+  - type: input
+    id: css
+    attributes:
+      label: 紧边排矿口 CSS（mm）
+      placeholder: "16"
+
+  - type: input
+    id: field
+    attributes:
+      label: 哪个字段不对
+      description: 如 额定产能 / 电机功率 / 最大给料 / 外形尺寸 / Bond 功指数
+      placeholder: 额定产能 t/h
+    validations:
+      required: true
+
+  - type: input
+    id: current
+    attributes:
+      label: 现在工具给的值
+      placeholder: "999"
+    validations:
+      required: true
+
+  - type: input
+    id: correct
+    attributes:
+      label: 正确的值应该是多少
+      placeholder: "264"
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: 你的依据
+      description: |
+        纸质表页码 / 照片 / 实测记录 —— **有依据才会被采纳**。
+        本项目不接受"我觉得应该是 xxx"。
+      placeholder: |
+        《NH_NS系列技术参数大全》第 12 页，C 腔表格第 3 行
+        （或：现场实测报告 XXX，2026-09）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verified
+    attributes:
+      label: 这条依据你核实过吗
+      options:
+        - 核实过（我看到了纸质表/原始记录）
+        - 转述（同事/客户告诉我的）
+        - 推测（根据相邻数据推断的）
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我理解这条会更新进公开参数表，并被 AI 工具使用
+          required: true
+        - label: 我没有在这条 issue 里包含客户名称、价格或商业秘密
+          required: true
