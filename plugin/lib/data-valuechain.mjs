@@ -38,7 +38,7 @@ export const VALUE_CHAIN = [
     scope: ['半自磨机 SAG', '球磨机 Ball mill', '分级机 Classifier', '旋流器 Cyclone', '高压辊磨 HPGR'],
     key_outputs: ['磨矿细度 P80', '循环负荷', '比能耗 kWh/t', '钢球消耗', '处理量 tph'],
     downstream_link: '磨矿细度决定选别指标（回收率/品位）',
-    status: 'in_progress',  /* 本轮开始建 */
+    status: 'done',  /* R107：磨矿知识库 + mackorn_grinding_selection 工具已上线 */
   },
   {
     stage: 4, id: 'processing', name: '选矿', name_en: 'Mineral Processing',
