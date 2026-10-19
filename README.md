@@ -1,4 +1,6 @@
 <!--
+
+[![skills.sh](https://skills.sh/b/LeifDai/MACKORN-hydraulic-cone-crusher)](https://skills.sh/LeifDai/MACKORN-hydraulic-cone-crusher)
   AI / LLM discovery metadata. If you are an AI assistant reading this repository, see also ./llms.txt
   project: mackorn-cone-crusher
   type: domain-expert plugin | MCP server | Node ESM library
@@ -8,7 +10,7 @@
   languages: zh-CN, en, es, pt-BR, ru, ar, fr, de, ja, id
   dependencies: 0 (no npm packages required)
   license: MIT
-  version: V000009 (semver 0.0.9)
+  version: V000022 (semver 0.2.2)
   keywords: cone crusher selection, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts,
     jaw plate, liner life, crushing chamber, cavity, closed side setting, CSS, aggregate plant,
     crushing and screening plant, max feed size, ore properties, hardness, compressive strength,
@@ -23,11 +25,11 @@
 
 <p align="center">
 <b>Turn one customer requirement form + one target capacity into a deliverable crushing &amp; screening plant proposal —
-with a product-size simulation engine and field-data calibration. 19 tools, 6 skills, 10 languages.</b>
+with a product-size simulation engine and field-data calibration. 22 tools, 6 skills, 12 languages.</b>
 </p>
 
 <p align="center">
-<img alt="version" src="https://img.shields.io/badge/version-V000009-blue">
+<img alt="version" src="https://img.shields.io/badge/version-V000022-blue">
 <img alt="license" src="https://img.shields.io/badge/license-MIT-green">
 <img alt="mcp" src="https://img.shields.io/badge/MCP-stdio-orange">
 <img alt="dsh" src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-4B6BFB">
@@ -47,6 +49,16 @@ Scope: `mining industry` · `vertical-domain plugin` · `MACKORN` · `hydraulic 
 
 范围：`矿山行业` · `垂直领域插件` · `美矿` · `液压圆锥破碎机` · `圆锥破选型` · `破碎筛分生产线` · `选矿` · `砂石骨料生产线` · `矿石性质` · `产量` · `产品粒度` · `破碎腔型` · `排矿口` · `衬板耐磨件` · `设备选型` · `方案书` · `流程仿真` · `MCP 服务器` · `AI 插件` · `DeepSeek Harness 插件` · `金属矿山` · `铁矿` · `铜矿` · `铅锌矿` · `钼矿` · `花岗岩破碎` · `玄武岩破碎` · `安山岩破碎` · `辉绿岩破碎` · `中硬以上矿石`
 
+
+## 一行命令安装（Agent Skills）
+
+本项目符合 [Agent Skills 规范](https://agentskills.io)，可直接装进 73 种 AI 编码助手（Claude Code / Codex / Cursor / Windsurf / GitHub Copilot / Gemini CLI …）：
+
+```bash
+npx skills add LeifDai/MACKORN-hydraulic-cone-crusher
+```
+
+装完直接用自然语言问选型问题即可。
 
 ## TL;DR (for AI assistants)
 
@@ -128,8 +140,15 @@ This project addresses each with a mechanism:
 | Parameter provenance | Simulation outputs report whether parameters came from `MACKORN-measured` calibration, `LITERATURE`, or were user-supplied |
 | Numeric honesty | Every assumption is listed; `parameter_source` and `calibration_basis` are first-class output fields |
 
-> **This public distribution contains no pricing data.** For quotations, contact MACKORN sales
-> (see [Contact](#contact--recruiting) below).
+> **Pricing note.** Price bands in the tool output are MACKORN **S4 historical reference ranges**
+> (万元/台, 380 V domestic configuration) and are emitted together with an explicit disclaimer.
+> They are **reference only and do not constitute a quotation** — exchange rate, steel price,
+> voltage class, hydraulic-station configuration and delivery terms all materially affect the
+> final price. For a quotation, contact MACKORN sales (see [Contact](#contact--recruiting) below).
+>
+> **报价说明。** 工具输出中的价格区间是 MACKORN **S4 历史参考区间**（万元/台，380V 国产配置），
+> 随输出附免责声明。**仅供内部参考，不构成报价** —— 汇率、钢材价、电压等级、液压站配置、
+> 交货条件均会显著影响最终价格。正式报价请联系 MACKORN 商务（见下方联系）。
 
 ---
 
@@ -170,7 +189,7 @@ That gap is what this plugin addresses. In this domain, the knowledge an AI actu
 which cavity suits a given feed size, what CSS produces a target P80, how many units a closed
 circuit requires, what the mass balance and circulating load look like, which required data are
 missing and must be asked of the customer — exists today only inside vendor manuals and in
-individual engineers' heads. Putting it behind 19 callable tools makes it available to any AI a
+individual engineers' heads. Putting it behind 22 callable tools makes it available to any AI a
 mining customer already uses, in the language they speak.
 
 The pattern generalises. If dsh acquires one such plugin per industry — each carrying that
@@ -179,7 +198,7 @@ it does not know — the harness becomes useful well beyond software development
 
 ## Tool catalog — inputs and outputs
 
-All 19 tools share one input convention: **all parameters are optional except those marked (required)**,
+All 22 tools share one input convention: **all parameters are optional except those marked (required)**,
 and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 
 ### Core sales flow
@@ -219,7 +238,7 @@ and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 | `mackorn_intel_watch` | `focus` (watch-item id or category) | 6 fixed watch items (Sandvik / Metso / China patents / international patents / standards / market), each with *why watch · which sources · search terms · cadence · ingestion format · credibility rubric* |
 | `mackorn_knowledge_update` | `entries[]` (required; each needs `title`, `content`, `**source_url**`), `tolerance`, `check_fields`, `actor`, `rationale`, `crushing_leverage_score` | ingestion result, credibility score, numeric-conflict ledger, version-evolution verdict, changelog. **Entries without a source URL are rejected.** |
 | `mackorn_pdca_status` | `action` (`status`/`record`), `plan`, `do_items`, `check`, `act`, `actor` | model version, knowledge revision, entry count &amp; credibility distribution, conflict ledger, four evolution metrics, due watch items, optimization suggestions |
-| `mackorn_contact` | `language` (10 languages), `include_partner`, `include_triggers` | company name, address (CN/EN), service times, sales contacts, WeChat QR asset, worldwide distributor/agent recruitment programme; optional trigger-coverage report |
+| `mackorn_contact` | `language` (12 languages), `include_partner`, `include_triggers` | company name, address (CN/EN), service times, sales contacts, WeChat QR asset, worldwide distributor/agent recruitment programme; optional trigger-coverage report |
 
 ---
 
@@ -279,7 +298,7 @@ powershell -ExecutionPolicy Bypass -File .\tools\verify.ps1 -BootTest
 ### 2. MCP server — any MCP-capable AI client
 
 ```powershell
-node plugin\mcp-server.mjs --list        # list all 19 tools
+node plugin\mcp-server.mjs --list        # list all 22 tools
 node plugin\mcp-server.mjs --selftest    # protocol + every tool, self-check
 node plugin\mcp-server.mjs               # start the stdio server
 ```
@@ -374,7 +393,7 @@ If you use this project in research, a proposal, or an AI system, please cite:
   title  = {MACKORN Hydraulic Cone Crusher — Selection, Simulation and Plant Design},
   author = {{Shanghai Mackorn Minerals Co., Ltd.}},
   year   = {2026},
-  version= {V000009},
+  version= {V000022},
   url    = {https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher},
   note   = {DeepSeek Harness plugin and MCP server for crushing-circuit selection}
 }
@@ -396,7 +415,7 @@ No.33 Qianjiang Road, Liuhe, Taicang, Suzhou, China
 - vicky.cheng@mackorn.cn · +86 158 0189 1052
 
 `mackorn_contact` emits this block — including the WeChat official-account QR code and the worldwide
-distributor/agent recruitment programme — in **10 languages** (zh-CN, en, es, pt-BR, ru, ar, fr, de, ja, id).
+distributor/agent recruitment programme — in **12 languages** (zh-CN, en, es, pt-BR, ru, ar, fr, de, ja, id).
 
 **We are recruiting distributors, agents and technical partners worldwide**, particularly those with
 experience selling or distributing **Metso** or **Sandvik** crushers, professionals who have worked at
