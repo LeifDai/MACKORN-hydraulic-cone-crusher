@@ -1,0 +1,434 @@
+{
+  "schema_version": "1.0",
+  "asset": "MACKORN 破碎筛分生产线案例库",
+  "scope": "仅收录在两套知识库 .md 正文中有实质记载的项目。仅能从原始文件名看出、内容无法解析的 500+ 份 doc/docx/xls/xlsx/pdf 原始案例文件，见 README.md「未能解析的原始案例文件」表，未猜测填入本文件。",
+  "generated_from": [
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\07-典型案例汇总.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\21-项目档案库汇总.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\18-项目需求分析手册.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\03-NS系列圆锥破碎机.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\04-MPH系列多缸液压圆锥破碎机.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\06-生产线产能配置表.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\09-选型设计规范与问答.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\00_知识库总览.md"
+  ],
+  "source_codes": {
+    "S2c": "生产线设计专家/knowledge-base/03-NS系列圆锥破碎机.md",
+    "S2d": "生产线设计专家/knowledge-base/04-MPH系列多缸液压圆锥破碎机.md",
+    "S2e": "生产线设计专家/knowledge-base/06-生产线产能配置表.md",
+    "S2f": "生产线设计专家/knowledge-base/18-项目需求分析手册.md",
+    "S2g": "生产线设计专家/knowledge-base/21-项目档案库汇总.md",
+    "S2i": "生产线设计专家/knowledge-base/07-典型案例汇总.md",
+    "S2j": "生产线设计专家/knowledge-base/09-选型设计规范与问答.md"
+  },
+  "unit_conventions": {
+    "capacity_tph": "t/h",
+    "investment": "字符串，保留来源原文的单位与口径（万元 / 元/吨 / 单独报价）。不做四舍五入、不合并口径，避免混淆「主机合计」与「总投资」。",
+    "currency": "CNY",
+    "power_kw": "单台电机功率 kW；来源写「×N」时表示 N 台合计，本字段统一为单台值并在 note 说明"
+  },
+  "cases": [
+    {
+      "name": "福州恒立昌 1000TPH 全整形制砂生产线",
+      "capacity_tph": 1000,
+      "ore": "片麻岩",
+      "stages": ["粗碎", "中碎", "细碎", "检查筛分", "立轴整形制砂", "成品筛分", "洗砂", "选粉"],
+      "equipment": [
+        { "name": "振动喂料机", "model": "MSV1562", "qty": 2, "power_kw": 37 },
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 2, "power_kw": 160 },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": 630 },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 3, "power_kw": 400 },
+        { "name": "检查筛分", "model": "SYW3673D", "qty": 3, "power_kw": 60 },
+        { "name": "立轴冲击破（制砂）", "model": "CVS850", "qty": 3, "power_kw": 500 },
+        { "name": "成品筛分", "model": "SYW3072D", "qty": 4, "power_kw": 60 },
+        { "name": "水洗筛", "model": "SYW1854S", "qty": 1, "power_kw": 18.5 },
+        { "name": "选粉机", "model": "N-2500", "qty": 4, "power_kw": null }
+      ],
+      "investment": "主机合计 2261.6 万元（S2f 案例四设备表逐行加总一致）＋ 皮带输送机 22 条约 572 万元 ＋ 污水处理系统约 225 万元 ＋ 除尘系统约 180 万元（按系统配置）",
+      "year": 2019,
+      "currency": "CNY",
+      "notes": "产品规格代码「960-28」（5 种粒级，全整形，S2g 档案 A）。设备来源为 S2f 案例四（含逐台功率与单价）；S2g 档案 A 给出同一项目的单价与总价表（MSV1562 32 万元/台、MJ613 183、NH700 364、MPH50 245、SYW3673D 56、CVS850 93、SYW3072D 48、SYW1854S 15、N-2500 10）。**三份来源对同一项目的矿种与配置记载不一致**，见 conflicts[0]。",
+      "source": "S2g 档案A + S2f 案例四（2019 年价格）"
+    },
+    {
+      "name": "山东平邑 1500TPH 花岗岩 0-26 破碎筛分生产线（平邑吴军花岗岩）",
+      "capacity_tph": 1500,
+      "ore": "粗晶花岗岩（饱和抗压强度 162 MPa，SiO2 58-72%）",
+      "stages": ["粗碎", "中碎", "细碎", "除土筛分", "检查筛分", "立轴整形制砂", "成品筛分", "水洗", "选粉"],
+      "equipment": [
+        { "name": "振动喂料机", "model": "MSV1862", "qty": 1, "power_kw": null },
+        { "name": "颚式破碎机", "model": "MC1600", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS600", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH700", "qty": 1, "power_kw": null },
+        { "name": "立轴冲击破（制砂）", "model": "CVS850", "qty": 3, "power_kw": null },
+        { "name": "除土筛", "model": "SYW2460D", "qty": 1, "power_kw": null },
+        { "name": "电磁振动给料机", "model": "GZG-1303", "qty": 2, "power_kw": null },
+        { "name": "检查筛分", "model": "SYW3072D", "qty": 2, "power_kw": null },
+        { "name": "成品筛分", "model": "SYW3072D", "qty": 3, "power_kw": null },
+        { "name": "选粉机", "model": null, "qty": 3, "power_kw": null },
+        { "name": "水洗筛", "model": "SYW2160S", "qty": 1, "power_kw": null }
+      ],
+      "investment": "主机合计 1452.4 万元（S2g 档案 B 逐行加总一致：MSV1862 30、MC1600 215、NS600 225、NH700 400、CVS850 85×3、SYW2460D 29、GZG-1303 4.2×2、SYW3072D 47×2 ＋ 47×3、选粉机 10×3、SYW2160S 25）",
+      "year": 2021,
+      "currency": "CNY",
+      "notes": "场地 36400 m²，限高 4.5 m（S2f 案例一）。系统总功率 3098 kW（主机）+ 77.4 kW（洗砂）+ 约 400 kW（污水处理）≈ 3600 kW（S2g 档案 B）。5 座 Φ22m 成品筒仓。分三期实施（粗碎→制砂→水洗）。power_kw 记 null：S2g 档案 B 设备表不含功率列，S2f 案例一只给出 MC1600 400 kW 级的电压等级要求（400 kW 以上用 10 kV 高压电机），未逐台给出功率。**三份来源对同一项目的粗碎/细碎台数记载不一致**，见 conflicts[1]。",
+      "source": "S2g 档案B + S2f 案例一"
+    },
+    {
+      "name": "内蒙古〔客户名称·已脱敏〕 600TPH 硬质板岩破碎筛分生产线",
+      "capacity_tph": 600,
+      "ore": "硬质板岩（原矿 0-800 mm，松散密度 1.6 t/m³）",
+      "stages": ["振动给料", "粗碎", "中碎", "细碎", "除土筛分", "检查/成品筛分"],
+      "equipment": [
+        { "name": "振动给料机", "model": "MSV1862", "qty": 1, "power_kw": 45 },
+        { "name": "颚式破碎机", "model": "MC1600", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS600", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎，多缸液压）", "model": "MPH6", "qty": 2, "power_kw": null },
+        { "name": "除土筛", "model": "SYW2460D", "qty": 1, "power_kw": 30 },
+        { "name": "检查/成品筛", "model": "SYW3072T", "qty": 2, "power_kw": 60 }
+      ],
+      "investment": null,
+      "year": 2024,
+      "currency": "CNY",
+      "notes": "合同号 MKLXSH20240320，合同签订 2024 年 3 月，交付要求 2024-06-20 具备条件（S2g 档案 C）。气温 -30 ℃ 至 40.2 ℃，极端 -40 ℃。验收标准：处理量 600-650 t/h；整形达国家标准；质保为调试稳定 3 个月或到货 18 个月。轴承要求：颚破哈瓦洛，圆锥 SKF/FAG。板框压滤机 500 型×3 台，泥饼含水率 ≤15%（S2f 案例二）。investment 记 null：「来源未提供」该项目的价格或金额。",
+      "source": "S2g 档案C + S2f 案例二 + S2g 第二章索引"
+    },
+    {
+      "name": "赤峰 600TPH 硬质板岩破碎筛分（徐工矿机融资租赁模式）",
+      "capacity_tph": 600,
+      "ore": "硬质板岩（极硬，f=12-18）",
+      "stages": ["粗碎", "中碎", "细碎", "筛分", "制砂"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MC150", "qty": 1, "power_kw": 250 },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": 355 },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 2, "power_kw": 250 },
+        { "name": "振动筛", "model": "S6", "qty": 1, "power_kw": 45 },
+        { "name": "立轴冲击破（制砂）", "model": "CVS837", "qty": 1, "power_kw": 315 }
+      ],
+      "investment": null,
+      "year": 2024,
+      "currency": "CNY",
+      "notes": "业主为「赤峰某矿业」，特点为融资租赁模式（S2i 案例五）。investment 记 null：「来源未提供」项目金额。**注意**：本项目与「内蒙古〔客户名称·已脱敏〕 600TPH 硬质板岩」在矿种、产能、年份上高度重合，但来源给出的业主与设备配置完全不同，无法确认是否为同一项目，故分列两条，不做合并。",
+      "source": "S2i 案例五"
+    },
+    {
+      "name": "新疆 300TPH 鹅卵石破碎筛分制砂生产线",
+      "capacity_tph": 300,
+      "ore": "鹅卵石 + 河石（高磨蚀性，高含泥量）",
+      "stages": ["粗碎", "中碎", "细碎", "制砂", "筛分", "除泥"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MC125", "qty": 1, "power_kw": 200 },
+        { "name": "圆锥破碎机（中碎）", "model": "NS400", "qty": 1, "power_kw": 160 },
+        { "name": "圆锥破碎机（细碎）", "model": "NH400", "qty": 1, "power_kw": 160 },
+        { "name": "立轴冲击破（制砂）", "model": "CVS837", "qty": 1, "power_kw": 315 },
+        { "name": "振动筛", "model": "S4", "qty": 1, "power_kw": null },
+        { "name": "除泥筛", "model": "BVS910", "qty": 1, "power_kw": null }
+      ],
+      "investment": null,
+      "year": 2021,
+      "currency": "CNY",
+      "notes": "S2i 案例三记载 NS400 的特点为「弹簧过铁（鹅卵石无大铁）」，并称加装除泥筛（+BVS910）以降低含泥量影响。S2c 案例 1 记载同一项目「电机总功率：160+160+315+315 = 950 kW」，但按其列出的设备（MC125 200 kW + NS400 160 + NH400 160 + CVS837 315）实际为 835 kW，且式中出现两个 315 项而无 MC125 项——**来源自身算式与设备清单不符**，本文件原样保留该算式，不代为更正。S4 型号栏 power_kw 记 null：「来源未提供」。investment 记 null：「来源未提供」。",
+      "source": "S2i 案例三 + S2c 案例1 + S2g 第二章索引"
+    },
+    {
+      "name": "河南嵩县 200TPH 鹅卵石移动式破碎制砂项目",
+      "capacity_tph": 200,
+      "ore": "鹅卵石（给料粒度 < 80 mm）",
+      "stages": ["移动圆锥破碎", "返回闭路", "整形制砂", "水洗去泥"],
+      "equipment": [
+        { "name": "履带式圆锥破碎站", "model": null, "qty": 1, "power_kw": null },
+        { "name": "整形制砂机", "model": null, "qty": 1, "power_kw": null }
+      ],
+      "investment": "加工费 18 元/吨；预付 60 万元进场费",
+      "year": 2021,
+      "currency": "CNY",
+      "notes": "工艺流程：入料 < 80 mm，破碎后 > 33 mm 返回圆锥，< 33 mm 进整形机制砂至 < 31.5 mm；0-5 mm 砂水洗去泥（暂不配压滤机）。无固定场地，2-3 周可进场，履带式快速布置（S2f 案例三、S2g 档案 D）。设备具体型号记 null：「来源未提供」（仅写「履带式圆锥破碎站 + 整形机」）。时间：S2g 档案 D 记为 2021 年 10 月。S2g 第二章索引把该项目记为「移动圆锥站+整形机」。",
+      "source": "S2g 档案D + S2f 案例三 + S2g 第二章索引"
+    },
+    {
+      "name": "福州 2400TPH 超大型花岗岩破碎筛分项目",
+      "capacity_tph": 2400,
+      "ore": "花岗岩",
+      "stages": ["粗碎", "中碎（粗腔）", "中碎（细腔）", "细碎整形", "筛分", "制砂"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MC1600", "qty": 2, "power_kw": 400 },
+        { "name": "圆锥破碎机（中碎粗腔）", "model": "NH800EC", "qty": 2, "power_kw": 450 },
+        { "name": "圆锥破碎机（中碎细腔）", "model": "NH800MF", "qty": 2, "power_kw": 450 },
+        { "name": "多缸液压圆锥（细碎整形）", "model": "MP1250", "qty": 2, "power_kw": 400 },
+        { "name": "振动筛", "model": "S6", "qty": 2, "power_kw": null },
+        { "name": "水平筛", "model": "H7", "qty": 2, "power_kw": null },
+        { "name": "立轴冲击破（制砂）", "model": "CVS850", "qty": 3, "power_kw": 450 }
+      ],
+      "investment": null,
+      "year": 2019,
+      "currency": "CNY",
+      "notes": "时间记载为 2019-2020 年，业主为「福州某大型建材集团」，用途为大型搅拌站骨料供应；总装机功率约 7500 kW（S2i 案例四）。year 取起始年 2019。**与 S2e 配置表冲突**：S2e 在 2300-2700 TPH 档给出的配置为 MC1600×2 + NH890×2 + MP1250×2 + H7×2 + CVS850×3（总功率 ~7500 kW），与本案例的 NH800×4 不同，见 conflicts[2]。investment 记 null：「来源未提供」。",
+      "source": "S2i 案例四"
+    },
+    {
+      "name": "哈密富宏钒钛磁铁矿 2000-2500TPH 破碎筛分项目",
+      "capacity_tph": 2000,
+      "ore": "钒钛磁铁矿（极硬，难磨）",
+      "stages": ["粗碎（颚破方案 或 旋回破方案）", "中碎", "细碎", "筛分"],
+      "equipment": [
+        { "name": "颚式破碎机（颚破方案粗碎）", "model": "MC1200-10（给料 1200 mm，最大给料 1000 mm；配置 1350-10）", "qty": 1, "power_kw": null },
+        { "name": "旋回破碎机（旋回破方案粗碎）", "model": "1200/1350 mm", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH880", "qty": 2, "power_kw": null },
+        { "name": "多缸液压圆锥（细碎）", "model": "MP1250", "qty": 2, "power_kw": null },
+        { "name": "水平筛", "model": "H7", "qty": 2, "power_kw": null }
+      ],
+      "investment": null,
+      "year": 2025,
+      "currency": "CNY",
+      "notes": "时间 2025 年 4 月（S2i 案例六）。来源同时给出两套粗碎方案（颚破 MC1600 方案 与 旋回破 1200/1350 mm 方案），中/细碎与筛分配置相同；本案例 capacity_tph 取速查表的 2000，正文写 2000-2500 TPH，两个数值均来自 S2i。power_kw 全部记 null：「来源未提供」。investment 记 null：「来源未提供」。",
+      "source": "S2i 案例六 + S2i 典型案例速查表"
+    },
+    {
+      "name": "福建朱总 200TPH 锂矿破碎项目",
+      "capacity_tph": 200,
+      "ore": "锂矿（硬度中硬，磨蚀性中等）",
+      "stages": ["粗碎", "中碎", "细碎", "筛分", "制砂（可选）"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MC116", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS400", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH400", "qty": 1, "power_kw": null },
+        { "name": "振动筛", "model": "S4", "qty": 1, "power_kw": null },
+        { "name": "立轴冲击破（制砂，可选）", "model": "CVS837", "qty": 1, "power_kw": null }
+      ],
+      "investment": null,
+      "year": 2024,
+      "currency": "CNY",
+      "notes": "时间 2024 年 7 月，特点为「小型项目，灵活配置」，总功率约 800 kW（S2i 案例七）。power_kw 逐台记 null：「来源未提供」。investment 记 null：「来源未提供」。",
+      "source": "S2i 案例七"
+    },
+    {
+      "name": "通化巨鑫 500TPH 辉绿岩破碎筛分生产线",
+      "capacity_tph": 500,
+      "ore": "辉绿岩",
+      "stages": ["粗碎", "中碎", "细碎", "筛分", "制砂"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 2, "power_kw": null },
+        { "name": "振动筛", "model": "S6", "qty": 1, "power_kw": null },
+        { "name": "立轴冲击破（制砂）", "model": "CVS837", "qty": 1, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "总功率约 1400 kW（S2d 第五章）。year 记 null：「来源未提供」项目年份。investment 记 null：「来源未提供」。",
+      "source": "S2d 第五章"
+    },
+    {
+      "name": "福州 1000TPH 花岗岩破碎筛分（奕顺融矿）",
+      "capacity_tph": 1000,
+      "ore": "花岗岩",
+      "stages": ["粗碎", "中碎", "细碎", "筛分"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 2, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 2, "power_kw": null },
+        { "name": "振动筛", "model": "S6", "qty": 1, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "配置代码 1000-25（S2d 第五章，自注「最大给料 250 mm」）。year / power_kw / investment 均记 null：「来源未提供」。**配置代码含义冲突**：S2e 第二章把「1000-25」解释为「粗碎给料 1000 mm」，与 S2d 的「最大给料 250 mm」矛盾，见 conflicts[3]。",
+      "source": "S2d 第五章"
+    },
+    {
+      "name": "洛阳富川 1000TPH 破碎筛分项目",
+      "capacity_tph": 1000,
+      "ore": null,
+      "stages": ["粗碎", "中碎", "细碎"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 2, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 2, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "仅见于 S2g 第二章项目索引表，状态「已完成」。ore / year / investment 记 null：「来源未提供」。S2g 档案 A 记载的福州恒立昌 1000TPH 项目主机配置与本条相同，可能是同一项目，但 S2g 未做关联说明，不做合并。",
+      "source": "S2g 第二章索引"
+    },
+    {
+      "name": "360TPH 破碎筛分项目",
+      "capacity_tph": 360,
+      "ore": null,
+      "stages": ["粗碎", "中碎"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MC1200", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH600", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH700", "qty": 2, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "仅见于 S2g 第二章项目索引表。项目名称来源即为「360TPH」。**MC1200 型号未出现在任何设备参数表中**（MC 系列参数表只有 MC110/116/125/150/1250/1600），来源未做说明。ore / year / investment 记 null：「来源未提供」。",
+      "source": "S2g 第二章索引"
+    },
+    {
+      "name": "400TPH 破碎筛分项目",
+      "capacity_tph": 400,
+      "ore": null,
+      "stages": ["粗碎", "中碎", "细碎"],
+      "equipment": [
+        { "name": "颚式破碎机（给料颚破组合）", "model": "PEV900", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS400", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH400", "qty": 2, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "仅见于 S2g 第二章项目索引表。PEV900 属 PE/P EV 系列（对应国标 PE 系列，S2a §2.9）。ore / year / investment 记 null：「来源未提供」。",
+      "source": "S2g 第二章索引"
+    },
+    {
+      "name": "富锦 450TPH 破碎筛分项目",
+      "capacity_tph": 450,
+      "ore": null,
+      "stages": ["粗碎", "中碎", "细碎", "制砂"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "PE900", "qty": 2, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS400", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH400", "qty": 2, "power_kw": null },
+        { "name": "立轴冲击破（制砂）", "model": "CV117R1", "qty": 3, "power_kw": null }
+      ],
+      "investment": null,
+      "year": 2021,
+      "currency": "CNY",
+      "notes": "仅见于 S2g 第二章项目索引表（项目名「450TPH（富锦）」）。ore / investment 记 null：「来源未提供」。",
+      "source": "S2g 第二章索引"
+    },
+    {
+      "name": "400-500TPH 石灰石破碎筛分制砂线",
+      "capacity_tph": 500,
+      "ore": "石灰石",
+      "stages": ["粗碎（双颚破）", "中碎", "细碎", "制砂"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "PE900", "qty": 2, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NS400", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "NH400", "qty": 2, "power_kw": null },
+        { "name": "立轴冲击破（制砂）", "model": "CV117", "qty": 3, "power_kw": null }
+      ],
+      "investment": null,
+      "year": null,
+      "currency": "CNY",
+      "notes": "S2c 案例 2，产能记载为「400-500TPH（制砂模式）」，本文件 capacity_tph 取上限 500。配置要点「双颚破粗碎+NS 中碎+NH 细碎+三台制砂机」。year / power_kw / investment 记 null：「来源未提供」。本条与上一条「富锦 450TPH」产能与配置相近，来源未说明是否同一项目，不做合并。",
+      "source": "S2c 案例2"
+    },
+    {
+      "name": "1200TPH 破碎筛分项目",
+      "capacity_tph": 1200,
+      "ore": null,
+      "stages": ["粗碎", "中碎", "细碎"],
+      "equipment": [
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 2, "power_kw": null },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": null },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 2, "power_kw": null }
+      ],
+      "investment": null,
+      "year": 2021,
+      "currency": "CNY",
+      "notes": "仅见于 S2g 第二章项目索引表。**与 S2d 记载冲突**：S2d §二给出「1200TPH：2 台 MJ613 + 1 台 NH700 + 2 台 MPH50」，与索引一致；但 S2d 同时给出「2000TPH：2-2 台 MJ613 + 1 台 NH700 + 2 台 MPH50」，即 1200 与 2000 TPH 配置相同（来源原文如此，似有笔误），见 conflicts[4]。ore / investment 记 null：「来源未提供」。",
+      "source": "S2g 第二章索引 + S2d §二"
+    },
+    {
+      "name": "1000TPH 片麻岩全整形制砂生产线（S2g/S2f 口径，与福州恒立昌条目同源）",
+      "capacity_tph": 1000,
+      "ore": "片麻岩",
+      "stages": ["粗碎", "中碎", "细碎", "检查筛分", "成品筛分", "立轴整形制砂", "水洗", "选粉"],
+      "equipment": [
+        { "name": "振动喂料机", "model": "MSV1562", "qty": 2, "power_kw": 37 },
+        { "name": "颚式破碎机", "model": "MJ613", "qty": 2, "power_kw": 160 },
+        { "name": "圆锥破碎机（中碎）", "model": "NH700", "qty": 1, "power_kw": 630 },
+        { "name": "圆锥破碎机（细碎）", "model": "MPH50", "qty": 3, "power_kw": 400 },
+        { "name": "检查筛分", "model": "SYW3673D", "qty": 3, "power_kw": 60 },
+        { "name": "立轴冲击破（制砂）", "model": "CVS850", "qty": 3, "power_kw": 500 },
+        { "name": "成品筛分", "model": "SYW3072D", "qty": 4, "power_kw": 60 },
+        { "name": "水洗筛", "model": "SYW1854S", "qty": 1, "power_kw": 18.5 },
+        { "name": "选粉机", "model": "N-2500", "qty": 4, "power_kw": null }
+      ],
+      "investment": "主机合计 2261.6 万元",
+      "year": 2019,
+      "currency": "CNY",
+      "notes": "本条与 cases[0] 是同一项目在 S2f/S2g 中的记载，保留为独立条目是因为 S2f 案例四的正文标题为「1000TPH 片麻岩全整形制砂（福州）」，与 cases[0] 名称不同；两者的设备与价格数据完全一致，供交叉核对。矿种为片麻岩（S2f/S2g），非花岗岩。",
+      "source": "S2f 案例四 + S2g 档案A"
+    }
+  ],
+  "standard_configurations_by_capacity": {
+    "note": "以下是 S2g 第四章「各产能段标准配置参考」的通用配置，非具体项目，故不列入 cases[]，供选型比对。总功率为来源给出的区间。",
+    "configs": [
+      { "capacity_tph": 300, "equipment": ["MC125×1（粗碎）", "NS400×1（中碎）", "NH400×1（细碎）", "CVS837×1（制砂）", "S4×1（筛分）"], "total_power_kw_range": [900, 1200], "source": "S2g 第四章" },
+      { "capacity_tph": 500, "equipment": ["MJ613×1", "NH400×1", "MPH50×2", "CVS837×1", "S6×1"], "total_power_kw_range": [1500, 2000], "source": "S2g 第四章" },
+      { "capacity_tph": 1000, "equipment": ["MJ613×2（并联）", "NH700×1", "MPH50×2-3", "CVS850×2", "S6×2"], "total_power_kw_range": [3000, 3500], "source": "S2g 第四章" },
+      { "capacity_tph": 1500, "equipment": ["MC1600×2", "NS600×1", "NH700×2", "CVS850×3", "S6×2", "H7×2"], "total_power_kw_range": [5000, 6000], "source": "S2g 第四章" },
+      { "capacity_tph": 2000, "equipment": ["MC1600×2", "NH880×2", "MP1250×2", "CVS850×3", "S6×2", "H8×2"], "total_power_kw_range": [7000, 9000], "source": "S2g 第四章" }
+    ]
+  },
+  "conflicts": [
+    {
+      "field": "福州恒立昌 1000TPH 项目的矿种与细碎/制砂配置",
+      "value_a": "片麻岩；2×MJ613 + 1×NH700 + 3×MPH50 + 3×CVS850 + 2×MSV1562 + 3×SYW3673D + 4×SYW3072D + 1×SYW1854S + 4×N-2500；主机合计 2261.6 万元；2019 年",
+      "source_a": "S2g 档案A + S2f 案例四",
+      "value_b": "花岗岩（抗压强度 200-260 MPa）；2×MJ613（160 kW×2）+ 1×NH700（355 kW，EC 粗腔）+ 2×MPH50（250 kW×2，MC 中腔）+ 2×S6（45 kW×2）+ CVS837×1-2；总投资约 2800 万元（2019 年价格，含安装调试）；2019-2021 年",
+      "source_b": "S2i 案例一",
+      "value_c": "2×MJ613（160 kW×2）+ 1×NH700（355 kW，EC 腔）+ 2×MPH50（250 kW×2，MC 腔）+ 2×S6（45 kW×2）；总装机约 1650 kW；总投资（不含土建）约 2200 万元",
+      "source_c": "S2j Q1",
+      "resolution": "三份来源对同一产能项目的矿种、台数、功率、投资全部不一致。本文件以 S2g/S2f 为主值（因为它给出了逐台单价与逐行可加总的主机合计 2261.6 万元），其余两版并列。**未做取舍**：需向美矿技术部确认该项目到底是片麻岩还是花岗岩、细碎段是 2 台还是 3 台。"
+    },
+    {
+      "field": "山东平邑 1500TPH 项目的粗碎/中碎/细碎台数",
+      "value_a": "1×MC1600 + 1×NS600 + 1×NH700 + 3×CVS850（S2g 档案 B，含单价表）",
+      "source_a": "S2g 档案B",
+      "value_b": "2×MC1600 + 1×NS600 + 2×NH700 + 4×CVS850 + 除土预筛 + 5 座 Φ22m 筒仓",
+      "source_b": "S2f 案例一",
+      "value_c": "2×MC1600 + NS600 + NH700 + 4×CVS850",
+      "source_c": "S2g 第二章索引（平邑吴军花岗岩）",
+      "value_d": "2×MC1600（400 kW×2）+ 2×S6 + 2×NH700（355 kW×2，EC+MC）+ 2×MPH50 + 2×CVS837；分步实施一期 1000TPH、二期 1500TPH",
+      "source_d": "S2i 案例二",
+      "resolution": "以 S2g 档案 B 为主值（唯一含单价表者）。案例二的工艺特点（分步实施、除尘按 1500TPH 预留、土建一次完成）与 S2f 案例一的「分三期实施」表述也不一致。"
+    },
+    {
+      "field": "福州 2400TPH 项目的中碎机型",
+      "value_a": "2×NH800EC + 2×NH800MF（共 4 台 NH800）",
+      "source_a": "S2i 案例四",
+      "value_b": "NH890×2（在 2300-2700 TPH 档）",
+      "source_b": "S2e 配置速查表",
+      "resolution": "两者的总装机功率一致（约 7500 kW），但中碎机型不同。S2e 的 1000-25 代码与配置亦不同。不做取舍。"
+    },
+    {
+      "field": "配置代码「1000-25」的含义",
+      "value_a": "粗碎给料 1000 mm，方案代号 25",
+      "source_a": "S2e 第二章配置代码解读",
+      "value_b": "最大给料 250 mm",
+      "source_b": "S2d 第五章（福州 1000TPH 花岗岩）",
+      "resolution": "同一代码在 S2e 与 S2d 中含义相反（1000 mm 给料 vs 250 mm 给料）。S2a §三 对配置代码格式的说明（「1500-2C16-2S6-2H6-1000-32」）也与两者都不完全吻合。需核实。"
+    },
+    {
+      "field": "2000TPH 与 1200TPH 的配置是否相同",
+      "value_a": "1200TPH：2×MJ613 + 1×NH700 + 2×MPH50；2000TPH：2-2×MJ613 + 1×NH700 + 2×MPH50",
+      "source_a": "S2d §二（原文如此，两个产能档配置完全相同，疑似笔误）",
+      "value_b": "2000TPH：MC1600×2 + NH880×2 + MP1250×2 + CVS850×3 + S6×2 + H8×2，总功率 ~7000-9000 kW",
+      "source_b": "S2g 第四章 + S2e 配置速查表",
+      "resolution": "S2g/S2e 的 2000TPH 标准配置明显大于 S2d 的表述，S2d 该行应视为 S2d 自身笔误或指其他口径，本文件原样保留，不做修改。"
+    },
+    {
+      "field": "300TPH 鹅卵石项目的电机总功率",
+      "value_a": "950 kW（来源算式：160+160+315+315）",
+      "source_a": "S2c 案例1",
+      "value_b": "835 kW（按其设备清单 MC125 200 + NS400 160 + NH400 160 + CVS837 315 计算）",
+      "source_b": "由 S2i 案例三 + S2a 的功率参数推算",
+      "resolution": "来源自身算式与设备清单不符（算式中含两个 315 kW 项、缺 MC125 200 kW 项）。本文件原样保留 950 kW 并标注，不代为更正。"
+    },
+    {
+      "field": "NH700 在案例中的功率",
+      "value_a": "355 kW（S2i 案例一/二/五、S2e Q1、S2d 辉绿岩项目）",
+      "value_b": "630 kW（S2f 案例四设备表、S2g 档案 A 同项目）",
+      "source_a": "S2i / S2e / S2d",
+      "source_b": "S2f / S2g",
+      "resolution": "同一型号在同一套知识库内部也存在 355 与 630 两种写法。与 equipment-nh-ns.json 的 conflicts 对应。"
+    }
+  ]
+}
