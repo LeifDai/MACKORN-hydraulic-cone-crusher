@@ -1,0 +1,303 @@
+{
+  "generated": "2026-10-08T22:19:19.547Z",
+  "method": "真跑 uncertainty.mjs 的敏感度分析（确定性区间传播），按跨工况平均贡献排序",
+  "caveat": "敏感度基于文献区间端点法，反映参数在文献区间内变化时输出的变化量，不等同于真实误差",
+  "runs": [
+    {
+      "case": "中碎工况",
+      "cssMm": 40,
+      "feedP80Mm": 200,
+      "p80": 29.1,
+      "interval": [
+        27.15,
+        31.05
+      ],
+      "sigma_pct": 6.7,
+      "grade": "A",
+      "contributions": [
+        {
+          "param": "gamma",
+          "label": "γ 破碎函数粗端指数",
+          "source": "LITERATURE",
+          "range": [
+            0.4,
+            1
+          ],
+          "p80_at_lo": 27.31,
+          "p80_at_hi": 30.12,
+          "spread_mm": 2.8,
+          "half_width_mm": 1.4,
+          "contribution_pct": 51.5
+        },
+        {
+          "param": "phi",
+          "label": "φ 破碎函数粗粒生成占比",
+          "source": "LITERATURE (Whiten 1972 / Napier-Munn et al.)",
+          "range": [
+            0.3,
+            0.6
+          ],
+          "p80_at_lo": 30.29,
+          "p80_at_hi": 27.9,
+          "spread_mm": 2.39,
+          "half_width_mm": 1.19,
+          "contribution_pct": 37.2
+        },
+        {
+          "param": "throwFactor",
+          "label": "啮合区宽度系数",
+          "source": "LITERATURE 0.5-1.0",
+          "range": [
+            0.5,
+            1
+          ],
+          "p80_at_lo": 28.6,
+          "p80_at_hi": 29.59,
+          "spread_mm": 1,
+          "half_width_mm": 0.5,
+          "contribution_pct": 6.6
+        },
+        {
+          "param": "beta",
+          "label": "β 破碎函数细端指数",
+          "source": "LITERATURE",
+          "range": [
+            2.5,
+            5
+          ],
+          "p80_at_lo": 28.61,
+          "p80_at_hi": 29.45,
+          "spread_mm": 0.85,
+          "half_width_mm": 0.42,
+          "contribution_pct": 4.6
+        }
+      ]
+    },
+    {
+      "case": "细碎工况",
+      "cssMm": 16,
+      "feedP80Mm": 120,
+      "p80": 15.12,
+      "interval": [
+        12.54,
+        17.7
+      ],
+      "sigma_pct": 17.1,
+      "grade": "B",
+      "contributions": [
+        {
+          "param": "throwFactor",
+          "label": "啮合区宽度系数",
+          "source": "LITERATURE 0.5-1.0",
+          "range": [
+            0.5,
+            1
+          ],
+          "p80_at_lo": 12.72,
+          "p80_at_hi": 17.23,
+          "spread_mm": 4.5,
+          "half_width_mm": 2.25,
+          "contribution_pct": 75.9
+        },
+        {
+          "param": "gamma",
+          "label": "γ 破碎函数粗端指数",
+          "source": "LITERATURE",
+          "range": [
+            0.4,
+            1
+          ],
+          "p80_at_lo": 13.9,
+          "p80_at_hi": 15.8,
+          "spread_mm": 1.89,
+          "half_width_mm": 0.95,
+          "contribution_pct": 13.5
+        },
+        {
+          "param": "phi",
+          "label": "φ 破碎函数粗粒生成占比",
+          "source": "LITERATURE (Whiten 1972 / Napier-Munn et al.)",
+          "range": [
+            0.3,
+            0.6
+          ],
+          "p80_at_lo": 15.91,
+          "p80_at_hi": 14.33,
+          "spread_mm": 1.58,
+          "half_width_mm": 0.79,
+          "contribution_pct": 9.4
+        },
+        {
+          "param": "beta",
+          "label": "β 破碎函数细端指数",
+          "source": "LITERATURE",
+          "range": [
+            2.5,
+            5
+          ],
+          "p80_at_lo": 14.8,
+          "p80_at_hi": 15.35,
+          "spread_mm": 0.55,
+          "half_width_mm": 0.28,
+          "contribution_pct": 1.2
+        }
+      ]
+    },
+    {
+      "case": "超细碎工况",
+      "cssMm": 8,
+      "feedP80Mm": 60,
+      "p80": 11.61,
+      "interval": [
+        8.93,
+        14.29
+      ],
+      "sigma_pct": 23.1,
+      "grade": "B",
+      "contributions": [
+        {
+          "param": "throwFactor",
+          "label": "啮合区宽度系数",
+          "source": "LITERATURE 0.5-1.0",
+          "range": [
+            0.5,
+            1
+          ],
+          "p80_at_lo": 8.63,
+          "p80_at_hi": 13.57,
+          "spread_mm": 4.94,
+          "half_width_mm": 2.47,
+          "contribution_pct": 85.2
+        },
+        {
+          "param": "phi",
+          "label": "φ 破碎函数粗粒生成占比",
+          "source": "LITERATURE (Whiten 1972 / Napier-Munn et al.)",
+          "range": [
+            0.3,
+            0.6
+          ],
+          "p80_at_lo": 12.39,
+          "p80_at_hi": 11,
+          "spread_mm": 1.4,
+          "half_width_mm": 0.7,
+          "contribution_pct": 6.8
+        },
+        {
+          "param": "gamma",
+          "label": "γ 破碎函数粗端指数",
+          "source": "LITERATURE",
+          "range": [
+            0.4,
+            1
+          ],
+          "p80_at_lo": 10.86,
+          "p80_at_hi": 12.24,
+          "spread_mm": 1.38,
+          "half_width_mm": 0.69,
+          "contribution_pct": 6.6
+        },
+        {
+          "param": "beta",
+          "label": "β 破碎函数细端指数",
+          "source": "LITERATURE",
+          "range": [
+            2.5,
+            5
+          ],
+          "p80_at_lo": 11.26,
+          "p80_at_hi": 11.88,
+          "spread_mm": 0.62,
+          "half_width_mm": 0.31,
+          "contribution_pct": 1.3
+        }
+      ]
+    }
+  ],
+  "ranked": [
+    {
+      "param": "throwFactor",
+      "label": "啮合区宽度系数",
+      "avg_contribution_pct": 55.9,
+      "max_contribution_pct": 85.2,
+      "range": [
+        0.5,
+        1
+      ]
+    },
+    {
+      "param": "gamma",
+      "label": "γ 破碎函数粗端指数",
+      "avg_contribution_pct": 23.9,
+      "max_contribution_pct": 51.5,
+      "range": [
+        0.4,
+        1
+      ]
+    },
+    {
+      "param": "phi",
+      "label": "φ 破碎函数粗粒生成占比",
+      "avg_contribution_pct": 17.8,
+      "max_contribution_pct": 37.2,
+      "range": [
+        0.3,
+        0.6
+      ]
+    },
+    {
+      "param": "beta",
+      "label": "β 破碎函数细端指数",
+      "avg_contribution_pct": 2.4,
+      "max_contribution_pct": 4.6,
+      "range": [
+        2.5,
+        5
+      ]
+    }
+  ],
+  "how_to_measure": {
+    "throwFactor": {
+      "name": "啮合区宽度系数",
+      "what": "物料在破碎腔内的实际啮合（压缩）区宽度 —— 决定 K1/K2 与哪些粒级被判为「已碎」",
+      "how": [
+        "方案 A（推荐）：做一次【满腔给料试验】—— 记录实际给料粒度分布与产品粒度分布，用 mackorn_calibrate 反算",
+        "方案 B：测量破碎腔在不同开口下的实际排料口形状（铅丝/蜡饼压痕法），得到 K1 与 K2 的实测值",
+        "方案 C：查该机型的腔型图纸，取啮合区实际长度与偏心距的比值"
+      ],
+      "samples": "同一工况 3 组以上（不同班次或不同批次），才能区分「稳定值」与「偶然值」",
+      "cost": "低（一次生产性试验即可，不需停机改造）"
+    },
+    "gamma": {
+      "name": "γ 破碎函数粗端指数",
+      "what": "破碎后粗粒级（接近给料粒度）的生成比例随粒度的衰减速率",
+      "how": [
+        "做【单颗粒或料层压缩试验】：同一粒级样品在不同载荷下破碎，筛析产品",
+        "或用现场数据：同机型、同物料、不同 CSS 的 3 组以上给料/产品筛析配对，联合反算 φ/γ/β",
+        "注意：γ 与 β 会互相补偿，必须同时标定，不能单独定一个"
+      ],
+      "samples": "≥ 3 组不同 CSS 的配对数据（只测一个 CSS 无法分离 γ 与 β）",
+      "cost": "中（需安排试验与筛析，但不需要设备改造）"
+    },
+    "phi": {
+      "name": "φ 破碎函数粗粒生成占比",
+      "what": "一次破碎中「产生较大碎片」与「产生细粉」的比例分配",
+      "how": [
+        "与 γ/β 联合反算（同一批数据）",
+        "若做过落重试验（JK 落重），可直接取 t10 曲线拟合"
+      ],
+      "samples": "与 γ/β 共用同一批数据",
+      "cost": "低（复用 γ/β 的数据）"
+    },
+    "beta": {
+      "name": "β 破碎函数细端指数",
+      "what": "细粒（远小于给料粒度）的生成速率",
+      "how": [
+        "与 γ/β 联合反算",
+        "细端最好用激光粒度或沉降法补充 <0.5mm 的数据"
+      ],
+      "samples": "与 γ/β 共用，但需细端数据支撑",
+      "cost": "低—中"
+    }
+  }
+}
