@@ -1,0 +1,64 @@
+{
+  "generated": "2026-10-14T15:10:25.840Z",
+  "offline": true,
+  "endpoint": "https://mackorn.cn/ai/api/mcp.php",
+  "local_tool_count": 22,
+  "rows": [
+    {
+      "name": "目录（机型枚举）",
+      "tool": "mackorn_equipment_catalog",
+      "args": {},
+      "verdict": "○",
+      "note": "离线模式，未对照"
+    },
+    {
+      "name": "产能校核 · 正常格",
+      "tool": "mackorn_capacity_check",
+      "args": {
+        "model": "NH400",
+        "cavity": "EC",
+        "css": 16
+      },
+      "verdict": "○",
+      "note": "离线模式，未对照"
+    },
+    {
+      "name": "产能校核 · 哨兵格",
+      "tool": "mackorn_capacity_check",
+      "args": {
+        "model": "NH400",
+        "cavity": "C",
+        "css": 16
+      },
+      "verdict": "○",
+      "note": "离线模式，未对照"
+    },
+    {
+      "name": "MCFM 给料模数",
+      "tool": "mackorn_mcfm_analysis",
+      "args": {
+        "cumulative_retained": [
+          100,
+          100,
+          95,
+          80,
+          60,
+          45,
+          30,
+          20
+        ]
+      },
+      "verdict": "○",
+      "note": "离线模式，未对照"
+    },
+    {
+      "name": "材料库查询",
+      "tool": "mackorn_knowledge",
+      "args": {
+        "ore": "花岗岩"
+      },
+      "verdict": "○",
+      "note": "离线模式，未对照"
+    }
+  ]
+}
