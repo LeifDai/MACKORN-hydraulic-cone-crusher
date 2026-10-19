@@ -1,0 +1,82 @@
+{
+  "generated": "2026-10-09T15:39:28.213Z",
+  "sample_size": 10,
+  "results": [
+    {
+      "id": "L-02",
+      "rel": "public-overrides/package.json",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-05",
+      "rel": "tools/enrich_country_pages.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-07",
+      "rel": "tools/add_hreflang.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-08",
+      "rel": "tools/verify_libraries.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-10",
+      "rel": "tools/build_public.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-15",
+      "rel": "tools/sync_ai_index.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-16",
+      "rel": "tools/build_tool_pages.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-17",
+      "rel": "tools/two_centers.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-19",
+      "rel": "tools/deliver.mjs",
+      "status": "caught",
+      "raw": null
+    },
+    {
+      "id": "L-23",
+      "rel": "tools/night_report.mjs",
+      "status": "caught",
+      "raw": null
+    }
+  ],
+  "weak": [],
+  "caught": [
+    "L-02",
+    "L-05",
+    "L-07",
+    "L-08",
+    "L-10",
+    "L-15",
+    "L-16",
+    "L-17",
+    "L-19",
+    "L-23"
+  ],
+  "skipped": [],
+  "method": "把目标文件里的函数实现替换为 return undefined（关键词保留），再跑该教训的 check；仍通过即为弱检查。",
+  "caveat": "本测试在临时副本上进行，原仓库未改动。样本有限（SAMPLE 环境变量可调），非全量结论。"
+}
