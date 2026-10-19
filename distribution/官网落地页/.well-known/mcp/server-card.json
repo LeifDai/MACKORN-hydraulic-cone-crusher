@@ -1,0 +1,96 @@
+{
+    "serverInfo":  {
+                       "name":  "MACKORN Hydraulic Cone Crusher",
+                       "version": "0.2.2"
+                   },
+    "authentication":  {
+                           "required":  false,
+                           "schemes":  [
+
+                                       ]
+                       },
+    "tools":  [
+                  {
+                      "name":  "mackorn_requirement_intake",
+                      "description":  "把 MACKORN《砂石骨料/金属矿山生产线客户需求信息输入表》的内容 + 客户要求的产量，一次性变成「还缺什么要问客户」+「该配什么设备」的完整解答"
+                  },
+                  {
+                      "name":  "mackorn_proposal",
+                      "description":  "按 MACKORN 标准方案口径，把客户需求一次性生成一份**可直接交付的方案书**（Markdown）"
+                  },
+                  {
+                      "name":  "mackorn_cone_selection",
+                      "description":  "MACKORN 液压圆锥破碎机选型主工具：按目标处理量 t/h、给料最大粒度、目标产品粒度与工序（中碎/细碎/超细碎）从 NH 标准型与 NS 高速型单缸液压圆锥破中选出机型 + 腔型 + 紧边排矿口 CSS + 台数，给出候选排序、P80 估计、参考价区间与达标判定"
+                  },
+                  {
+                      "name":  "mackorn_plant_design",
+                      "description":  "MACKORN 破碎筛分生产线总体配置：按原矿最大粒度与目标产品粒度计算总破碎比、推荐破碎段数、各段给料/产品/破碎比分配，并对中碎段与细碎段各做一次液压圆锥破选型，同时给出筛分面积、输送带带宽、辅机（给料机/除铁器/除尘/洗砂/AORS）配置建议"
+                  },
+                  {
+                      "name":  "mackorn_capacity_check",
+                      "description":  "给定 MACKORN 机型 + 腔型 + 紧边排矿口 CSS，从《NH_NS系列技术参数大全》腔型×CSS 详表查出生产能力区间 t/h（无详表的机型按系列区间外推并标注为近似），同时返回排矿口范围合规性、最大给料限制、外形尺寸与重量"
+                  },
+                  {
+                      "name":  "mackorn_cost_estimate",
+                      "description":  "MACKORN 液压圆锥破投资与运营成本估算：按机型与台数算装机功率、年电耗、年电费、吨电耗与吨电费"
+                  },
+                  {
+                      "name":  "mackorn_mcfm_analysis",
+                      "description":  "计算 MACKORN 粗粒级给料模数 MCFM（M=(A1+…+A7−7A8)/(100−A8)），判定是否落在工程最优窗口 4.0-4.5，并给出\"均匀布料 → 速度均匀化 → 磨损稳定 → 模数恒定\"的杠杆调整建议"
+                  },
+                  {
+                      "name":  "mackorn_wear_design",
+                      "description":  "沿破碎腔高度离散截面评估衬板磨损均匀度（均匀度 = 1 − σ/μ，均等化条件 dW/dt ≈ const），给出多梯度分区硬度设计 H_i = H_base × k^i，并给出磨损均匀度提升量"
+                  },
+                  {
+                      "name":  "mackorn_grading_porosity",
+                      "description":  "按粗/中/细三组分配比计算料层孔隙率 φ（经验模型 φ = 0.42 − 0.30·min(中料占比,0.35) + 0.15·max(0, 细料占比 − 0.30)），与最优配比窗口（粗 50% / 中 30% / 细 20%，最优孔隙率 0.28）对比，判断料层密度是否足以维持模数恒定"
+                  },
+                  {
+                      "name":  "mackorn_market_intel",
+                      "description":  "MACKORN 液压圆锥破市场纵深分析：返回\"行业/技术/时效/经济/可操作\"五维评估框架与打分口径、破碎效率核心杠杆链、竞品对标矩阵（美卓 HP / 山特维克 CS / 特雷克斯 / 克虏伯）、美矿优势与差距、客户痛点应对话术、报价影响因素与价格参考区间"
+                  },
+                  {
+                      "name":  "mackorn_selection_report",
+                      "description":  "MACKORN 液压圆锥破生产线选型报告一键生成：把生产线配置、圆锥破选型、MCFM 诊断、成本估算、衬板设计串成一份 Markdown 报告，并自动汇总全部\"假设与来源\"和\"风险与待确认项\""
+                  },
+                  {
+                      "name":  "mackorn_equipment_catalog",
+                      "description":  "列出 MACKORN 液压圆锥破全部可选机型与腔型枚举值：NH 标准型 9 个型号、NS 高速型 4 个型号的基本参数（最大给料/排矿口范围/功率/重量/产能），以及 9 种腔型代码的含义与适用场景"
+                  },
+                  {
+                      "name":  "mackorn_intel_watch",
+                      "description":  "返回 MACKORN 行业情报的固定观测面与可执行研究简报：山特维克/美卓新品与专利动向、中国与国际破碎机专利（IPC B02C 2/00 等）、国家标准更新、矿山机械市场数据"
+                  },
+                  {
+                      "name":  "mackorn_knowledge_update",
+                      "description":  "把新采集到的行业情报/竞品动态/专利/标准/案例写入 MACKORN 持久化知识库，并自动完成：①来源可信度分级（1-5，白名单域名提档）②数值矛盾检测（功率/产能/CSS/价格/能耗等字段两两比对，超容差即记冲突）③版本演进判定（矛盾处置率≥0.8 且覆盖率≥0.3 且杠杆分≥0.6 → V1.1→V2）④变更留痕（changelog + PDCA 台账）"
+                  },
+                  {
+                      "name":  "mackorn_pdca_status",
+                      "description":  "查看并推进 MACKORN 插件的自我优化循环（PDCA）：当前模型版本与知识库修订号、条目数与可信度分布、矛盾台账（open/建议值/处置率）、四项演进指标、版本演进阈值、到期的情报观测项、以及\"本轮该做什么\"的优化建议清单"
+                  },
+                  {
+                      "name":  "mackorn_crusher_curve",
+                      "description":  "用 Whiten(1972) 稳态圆锥破模型生成产品粒度曲线：给入料分布 + CSS + 偏心距，算出产品 P80、破碎比、逐级产品分布、啮合区 K1/K2，并给 Bond(1952) 功耗估算"
+                  },
+                  {
+                      "name":  "mackorn_simulate_flowsheet",
+                      "description":  "多段破碎 + 筛分 + 闭路流程模拟：按段定义逐段算产品粒度与循环负荷，用群体平衡迭代到稳态，输出各段入料/出料 P80、破碎比、筛下率、循环负荷、最终产品 P80，并校核物料平衡"
+                  },
+                  {
+                      "name":  "mackorn_calibrate",
+                      "description":  "用**现场实测筛析数据**标定破碎函数参数 φ/γ/β 与啮合系数：输入某工况的给料筛析与产品筛析（累积通过率 %）+ 该工况 CSS，用最小二乘（有界网格 + 局部细化）反算出与实测最贴合的一套参数，给出拟合优度、逐点残差与可用性判断"
+                  },
+                  {
+                      "name":  "mackorn_contact",
+                      "description":  "MACKORN 美矿的联系方式与全球招募信息：公司名称、地址（中英文）、三个商务电话与邮箱、官网 mackorn.cn、服务时间 GMT+8 9:00-17:30、微信公众号二维码位置，以及「诚征各地代理商/代理人/选矿人才」的招募条件与申请方式"
+                  }
+              ],
+    "resources":  [
+
+                  ],
+    "prompts":  [
+
+                ]
+}
