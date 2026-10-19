@@ -38,6 +38,7 @@ import { evaluateDistributor, VERIFICATION_CHANNELS } from './lib/distributor.mj
 import { describe, concentration, residualAnalysis, weibullFit, growthWithBaseEffect } from './lib/stats.mjs';
 import { selectionKnowledge } from './lib/knowledge-bridge.mjs';
 import { selectGrinding, grindingCatalog } from './lib/grinding-engine.mjs';
+import { recommendBeneficiation, beneficiationCatalog } from './lib/processing-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -1813,11 +1814,106 @@ const toolGrinding = {
     });
   },
 };
+/* --------------------------------------------------------------------------
+ * 选矿方法推荐（R108 · P3）—— 全矿山价值链第 4 段
+ *
+ * 用户目标：「选矿（浮选、重选、光电选（激光、图像））」
+ *
+ * 诚实边界：不含药剂制度（企业机密）、不含设备型号、不含经济指标。
+ *   光电选的抛废率必须做工业试验，本工具只给经验区间并强制告警。
+ * -------------------------------------------------------------------------- */
+const toolBeneficiation = {
+  name: 'mackorn_beneficiation_selection',
+  description:
+    '(Multilingual triggers / 多语言触发词: beneficiation, mineral processing, flotation, gravity separation, ore sorting, sensor-based sorting, magnetic separation, recovery, concentrate grade, liberation, 选矿, 选别, 浮选, 重选, 光电选, 光选, 激光选矿, 图像选矿, 磁选, 回收率, 精矿品位, 解离粒度, 矿泥 | beneficio, flotación, gravedad, separación magnética | Aufbereitung, Flotation, Schwerkraftscheidung, Magnetscheidung | обогащение, флотация, гравитация, магнитная сепарация | enrichissement, flottation, gravité, séparation magnétique | beneficiamento, flotação, gravidade, separação magnética | 選鉱, 浮選, 比重選別, 磁選 | anrikning, flotation, gravimetrisk | oparbejdning, flotation, gravitation | rikastus, vaahdotus, painovoima | معالجة المعادن, تعويم, فصل بالجاذبية | pengolahan mineral, flotasi, gravitasi, pemisahan magnetik) '
+    + 'MACKORN 选矿方法推荐工具（全价值链第 4 段）：按矿石类型/目标矿物/解离粒度，推荐选矿方法（浮选 / 重选 / 光电选 / 磁选），给适用条件、预期回收率区间、能耗区间、关键限制，并主动拦截：解离粒度过细（<10μm）或过粗（>200μm）告警、矿泥 >15% 强制提示脱泥、光电选必须做工业试验的强制告警。'
+    + ' 用于回答：这个矿该用什么选别方法、预期回收率多少、有什么坑。'
+    + ' 【适用边界】本工具只管【选矿方法选择】；磨矿请用 grinding_selection，破碎请用 cone_selection / plant_design。不含药剂制度、设备型号、经济指标；实际方案必须做选矿试验。',
+  parameters: obj(
+    {
+      ore: S.string('矿石类型/名称（如 硫化铜矿石 / 磁铁矿 / 金矿 / 石灰石）。'),
+      target_mineral: S.string('目标矿物或元素（如 铜 / 金 / 铁 / 钨）。'),
+      liberation_um: S.number('解离粒度 μm（磨到多细才解离）。低于 10μm 或高于 200μm 会告警。'),
+      feed_p80_mm: S.number('磨矿给料 P80 mm（用于判断是否需要预选抛废）。'),
+      target_tph: S.number('处理量 t/h。'),
+      slime_pct: S.number('矿泥（-10μm）占比 %。>15% 会强制提示脱泥。'),
+      mode: S.stringEnum('只查目录或只做推荐。', ['recommend', 'catalog'], { default: 'recommend' }),
+    },
+    [],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const L = ['## 选矿方法目录', ''];
+        L.push('| 方法 | 给料粒度 μm | 回收率 % | 能耗 kWh/t | 原理 |');
+        L.push('|:---|:---|:---|:---|:---|');
+        for (const m of (v.catalog.methods || [])) {
+          L.push('| ' + m.method + ' | ' + ((m.feed_size_um || []).join('–') || '—') + ' | ' + ((m.typical_recovery_pct || []).join('–') || '—') + ' | ' + ((m.energy_kwh_t || []).join('–') || '—') + ' | ' + String(m.principle || '').slice(0, 30) + ' |');
+        }
+        L.push('');
+        L.push('### 方法选择规则');
+        for (const r of (v.catalog.selection_rules || [])) L.push('- **' + r.condition + '** → ' + r.recommend + '（' + r.why + '）');
+        L.push('');
+        L.push('> ' + (v.catalog.basis || ''));
+        L.push('>');
+        L.push('> ⚠️ 已知缺口：' + ((v.catalog.known_gaps || []).slice(0, 3).join('；')));
+        return text(L.join('\n'));
+      }
+      const L = [];
+      L.push('## 选矿方法推荐');
+      L.push('');
+      if (v.error) {
+        L.push('### ❌ ' + (v.message || v.error));
+        for (const w of (v.warnings || [])) L.push('- ' + w);
+        return text(L.join('\n'));
+      }
+      L.push('**首选：' + (v.primary_method || '—') + '**');
+      if (v.recovery_pct_range) L.push('- 预期回收率区间：' + v.recovery_pct_range.join('–') + '%（S3 文献典型值，非本矿实测）');
+      L.push('');
+      if (v.recommended_methods && v.recommended_methods.length) {
+        L.push('### 候选方法');
+        for (const m of v.recommended_methods) {
+          L.push('#### ' + m.method);
+          if (m.why) L.push('- **为什么**：' + m.why);
+          if (m.feed_size_um) L.push('- 适用粒度：' + m.feed_size_um.join('–') + ' μm');
+          if (m.typical_recovery_pct) L.push('- 回收率区间：' + m.typical_recovery_pct.join('–') + '%');
+          if (m.energy_kwh_t) L.push('- 能耗：' + m.energy_kwh_t.join('–') + ' kWh/t');
+          if (m.sensors) L.push('- 传感器选项：' + m.sensors.map((s) => s.type + '（' + s.use + '）').join('；'));
+          if (m.honest_note) L.push('- ⚠️ ' + m.honest_note);
+          if (m.limitations && m.limitations.length) { L.push('- 限制：'); for (const x of m.limitations) L.push('  - ' + x); }
+          L.push('');
+        }
+      }
+      if (v.warnings && v.warnings.length) {
+        L.push('### ⚠️ 告警');
+        for (const w of v.warnings) L.push('- ' + w);
+        L.push('');
+      }
+      L.push('### 指标定义');
+      for (const d of (v.metric_definitions || [])) L.push('- **' + d.name + '**' + (d.formula ? '：`' + d.formula + '`' : '') + (d.note ? ' —— ' + d.note : ''));
+      L.push('');
+      return text(L.join('\n'));
+    },
+  },
+  async execute(args) {
+    const mode = args.mode || 'recommend';
+    if (mode === 'catalog') return { catalog: beneficiationCatalog() };
+    return recommendBeneficiation({
+      ore: args.ore,
+      targetMineral: args.target_mineral,
+      liberationUm: args.liberation_um,
+      feedP80Mm: args.feed_p80_mm,
+      targetTph: args.target_tph,
+      slimePct: args.slime_pct,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation,
 ];
 
 /* --------------------------------------------------------------------------
