@@ -1,6 +1,35 @@
-node_modules/
-dist/
+
+# ── 密钥与私有数据（绝不提交）──
+agent/MackornRot/.moltbook.json
+**/.moltbook.json
+**/mcp-publisher/_home/
+**/DNS私钥*.txt
+distribution/_npmcli/
+distribution/_npmcache/
+distribution/_deploy/
+distribution/_verify/
+knowledge/_refs/
+
+# 备份/临时文件（脚本产生的 .bak/.rNNbak/.prev 等一律不提交，也不进合规扫描）
+*.bak
+*.prev
+*.r[0-9]*bak
+*.strbak
+*.mutbak
+*.oneoff
+*.oneoff-done
+*.pre*fix
+*.dupfixbak
+*.linebak
+*.b6bak
+# R96：发布用的临时文件（含 token，绝不能提交）
+.npmrc-pub
+.npmcache-pub/
+.npmcache-skill/
+.nc-appeal.json
+.nc-cff-bak
 *.tgz
-.tmp-kb/
-.runtime/
-.DS_Store
+
+# R104：GitHub device flow token（绝不能提交）
+.gh-token
+
