@@ -1,0 +1,19 @@
+{
+  "generated": "2026-10-19T16:30:39.759Z",
+  "purpose": "把踩过的坑写成可执行检查，让它们一直生效",
+  "total": 1,
+  "pass": 0,
+  "is_full_run": false,
+  "scope": "仅 L-05",
+  "results": [
+    {
+      "id": "L-05",
+      "area": "数据",
+      "title": "跨国数据必须处理\"某年未申报\"，不能当成 0",
+      "origin": "R3：俄罗斯 2023 未申报 → 页面显示 US$0.0M，严重误导",
+      "fix": "取最新可得年份并显式标注",
+      "pass": false,
+      "detail": "逻辑链：latestIdx 由计算得出 ❌ 硬编码（突变形态） · dataIsPartial 由比较得出 ✅ · 两者被真正使用 ✅ ｜ 真跑（exit 0）市场页 21 个中 0 个标注数据缺失 · 已补回 hreflang"
+    }
+  ]
+}
