@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "created_at": "2026-10-18T00:46:49.303Z",
+  "baselines": {
+    "l13fix": {
+      "at": "2026-10-18T00:46:49.304Z",
+      "gates": 46,
+      "lessons": 60,
+      "recurrence": 0,
+      "level": 2,
+      "tools": 22
+    }
+  },
+  "rounds": [
+    {
+      "id": "R1",
+      "at": "2026-10-18T00:46:49.533Z",
+      "title": "修 L-13 判据副作用：build_delta 生成的 zip 打破 L-14 的残留包上限",
+      "layer": "L2",
+      "change": "L-13 的 check 跑 build_delta.mjs 会新增更新包 zip；跑完自动删除本次新增的 zip，消除副作用",
+      "evidence": "修前 recurrence 3.3%（L-13/L-14 守卫失效）；修后 rsi_register 复测 recurrence 0.0%，守卫存活 60/60",
+      "rollback": "还原 tools/lessons.mjs 中 L-13 的 __L13_CLEANUP__ 段",
+      "before": {
+        "at": "2026-10-18T00:46:49.304Z",
+        "gates": 46,
+        "lessons": 60,
+        "recurrence": 0,
+        "level": 2,
+        "tools": 22
+      },
+      "after": {
+        "at": "2026-10-18T00:46:49.507Z",
+        "gates": 46,
+        "lessons": 60,
+        "recurrence": 0,
+        "level": 2,
+        "tools": 22
+      },
+      "delta": {
+        "gates": 0,
+        "lessons": 0,
+        "recurrence": 0,
+        "level": 0
+      }
+    }
+  ],
+  "last_verify": {
+    "at": "2026-10-18T00:46:49.803Z",
+    "gates": 46,
+    "lessons": 60,
+    "recurrence": 0,
+    "level": 2,
+    "tools": 22
+  }
+}
