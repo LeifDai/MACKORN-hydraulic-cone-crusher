@@ -1,4 +1,11 @@
 /**
+ * ⚠️ 执行顺序依赖（教训 L-51）：
+ *   sync_ai_index.mjs 会【重写】distribution/官网落地页/llms.txt，
+ *   因此本脚本必须在它【之后】运行，否则定位段会被冲掉。
+ *   正确顺序：sync_ai_index → apply_tags
+ *   本脚本自身会报告"已应用"，但那只反映中间状态 —— 最终状态由 build_public 把关。
+ *
+ * 原头部注释：
  * 标签单一真相源 + 统一应用器
  *
  * 定位（一句话）：
@@ -252,3 +259,36 @@ console.log('  英文标签 ' + TAGS_EN.length + ' · 中文标签 ' + TAGS_ZH.l
 if (!WRITE && problems) { console.log('  ❌ ' + problems + ' 个目标未达标（运行 node tools/apply_tags.mjs --write 应用）'); process.exit(1); }
 if (WRITE && problems) { console.log('  ❌ 应用后仍有 ' + problems + ' 个问题'); process.exit(1); }
 console.log(WRITE ? '  ✅ 标签已统一应用' : '  ✅ 标签覆盖达标');
+
+/* ══════════════════════════════════════════════════════════════════
+ * R31 事故的教训（L-52）：本脚本是"用文本替换改源码"的一类，
+ * 它曾在 2026-10-10 把 22 行引号插坏，导致 plugin/index.mjs 无法解析，
+ * 而当时所有门禁全绿。因此：**改完立刻对自己改过的文件跑 node --check**。
+ * ══════════════════════════════════════════════════════════════════ */
+if (!process.argv.includes('--no-verify')) {
+  try {
+    const { execFileSync } = await import('node:child_process');
+    const changed = ['plugin/index.mjs', 'tools/lessons.mjs', 'tools/enforce_lessons.mjs',
+      'plugin/lib/guardrails.mjs', 'plugin/lib/data.mjs', 'plugin/lib/engine.mjs'];
+    const bad = [];
+    for (const rel of changed) {
+      const f = join(ROOT, rel);
+      if (!existsSync(f)) continue;
+      let ok = false;
+      for (let k = 0; k < 3 && !ok; k += 1) {
+        try { execFileSync(process.execPath, ['--check', f], { stdio: 'ignore', windowsHide: true, timeout: 120000 }); ok = true; } catch { }
+      }
+      if (!ok) bad.push(rel);
+    }
+    if (bad.length) {
+      console.error('');
+      console.error('  ❌ apply_tags 改坏了源码语法：' + bad.join(', '));
+      console.error('     ⚠️ 这是 R31 事故的重演 —— 请立刻修复或回滚，不要继续。');
+      process.exit(1);
+    } else {
+      console.log('  ✅ 自检：改动涉及的 ' + changed.filter((r) => existsSync(join(ROOT, r))).length + ' 个源码文件语法正确');
+    }
+  } catch (e) {
+    console.log('  ⚠ 自检未能执行: ' + String(e.message).slice(0, 60));
+  }
+}
