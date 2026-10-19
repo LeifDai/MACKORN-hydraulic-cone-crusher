@@ -1,0 +1,226 @@
+{
+  "verified_at": "2026-10-08T23:54:09.767Z",
+  "all_pass": true,
+  "total_checks": 35,
+  "passed_checks": 35,
+  "items": [
+    {
+      "n": 1,
+      "title": "公开验证数据集与基准",
+      "pass": true,
+      "checks": [
+        {
+          "name": "公开基准脚本存在且可跑",
+          "ok": true,
+          "detail": "26/26 通过"
+        },
+        {
+          "name": "基准零依赖（无 npm 依赖）",
+          "ok": true,
+          "detail": "只 import node: 与本地文件"
+        },
+        {
+          "name": "真实公开数据集已归档（Zenodo/CC-BY）",
+          "ok": true,
+          "detail": "3 个关键文件"
+        },
+        {
+          "name": "数据集带出处与许可清单",
+          "ok": true,
+          "detail": "manifest.json 含 DOI 与许可"
+        },
+        {
+          "name": "数据集含【给料 + 产品】筛析配对",
+          "ok": true,
+          "detail": "给料 8 粒级 + 产品 11 粒级"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "title": "每个预测附误差区间与置信度",
+      "pass": true,
+      "checks": [
+        {
+          "name": "不确定度模块存在",
+          "ok": true,
+          "detail": "13 KB"
+        },
+        {
+          "name": "单机预测带回 uncertainty.interval_mm",
+          "ok": true,
+          "detail": "15.12 mm [12.54, 17.7]"
+        },
+        {
+          "name": "单机预测带 confidence_grade",
+          "ok": true,
+          "detail": "分级 B ±17.1%"
+        },
+        {
+          "name": "流程预测也带 uncertainty",
+          "ok": true,
+          "detail": "±14.1% 分级 B"
+        },
+        {
+          "name": "指出主导误差源（可指导标定）",
+          "ok": true,
+          "detail": "啮合区宽度系数 75.9%"
+        },
+        {
+          "name": "未标定时明确声明未经实测标定",
+          "ok": true,
+          "detail": "已声明"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "title": "可复现的验证脚本（任何人能重跑）",
+      "pass": true,
+      "checks": [
+        {
+          "name": "公开基准脚本零依赖可跑",
+          "ok": true,
+          "detail": "退出码可判、58 ms"
+        },
+        {
+          "name": "带 --json 机器可读输出",
+          "ok": true,
+          "detail": "可接 CI"
+        },
+        {
+          "name": "带回归基线（防改动破坏）",
+          "ok": true,
+          "detail": "expected.json"
+        },
+        {
+          "name": "README 说明怎么跑",
+          "ok": true,
+          "detail": "README.md"
+        },
+        {
+          "name": "METHODOLOGY 说明设计逻辑与局限",
+          "ok": true,
+          "detail": "METHODOLOGY.md"
+        },
+        {
+          "name": "公开数据集下载器可复现",
+          "ok": true,
+          "detail": "按 DOI 重下"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "title": "不确定性量化与失效边界",
+      "pass": true,
+      "checks": [
+        {
+          "name": "不确定性量化：确定性区间传播（非随机）",
+          "ok": true,
+          "detail": "可复现、可解释、可审计"
+        },
+        {
+          "name": "区分需标定参数与设备铭牌参数",
+          "ok": true,
+          "detail": "避免把铭牌值当未知量"
+        },
+        {
+          "name": "失效边界：CSS=0/负/NaN/Infinity 全部拒绝",
+          "ok": true,
+          "detail": "4/4 被拒绝"
+        },
+        {
+          "name": "质量守恒（物理不变量）通过",
+          "ok": true,
+          "detail": "最坏 1.40e-3 @CSS6/F80=300"
+        },
+        {
+          "name": "标定优先级指南（可执行动作）",
+          "ok": true,
+          "detail": "6 KB"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "title": "与公开数据的对标报告",
+      "pass": true,
+      "checks": [
+        {
+          "name": "对标报告 1：花岗岩颚破 23 组",
+          "ok": true,
+          "detail": "10.5281/zenodo.21239431 · 23 组 · 拟合 23 组"
+        },
+        {
+          "name": "对标报告 2：单颗粒破碎 200 组",
+          "ok": true,
+          "detail": "10.5281/zenodo.21702040 · 200 次试验"
+        },
+        {
+          "name": "报告含「不能证明什么」的局限声明",
+          "ok": true,
+          "detail": "3 条局限"
+        },
+        {
+          "name": "平台差异如实标注",
+          "ok": true,
+          "detail": "颚破 vs 圆锥破已标注"
+        },
+        {
+          "name": "材料差异如实标注",
+          "ok": true,
+          "detail": "软质沸石已标注"
+        },
+        {
+          "name": "DOI 可回溯",
+          "ok": true,
+          "detail": "两个 Zenodo DOI"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "title": "编进工具输出与 AI 可达内容",
+      "pass": true,
+      "checks": [
+        {
+          "name": "工具输出含 uncertainty 字段",
+          "ok": true,
+          "detail": "crusher_curve + flowsheet"
+        },
+        {
+          "name": "工具假设文本说明公式与矩阵",
+          "ok": true,
+          "detail": "含 2026-10 修正说明"
+        },
+        {
+          "name": "AI 可抓取验证页面已发布",
+          "ok": true,
+          "detail": "20 KB"
+        },
+        {
+          "name": "页面含基准结果与两份交叉验证",
+          "ok": true,
+          "detail": "含两份对标"
+        },
+        {
+          "name": "llms.txt 收录验证页",
+          "ok": true,
+          "detail": "llms.txt 含 /ai/validation/"
+        },
+        {
+          "name": "工具数 22（含知识库工具）",
+          "ok": true,
+          "detail": "23 个工具"
+        },
+        {
+          "name": "机器可读结果 JSON 可被 AI 直接取用",
+          "ok": true,
+          "detail": "benchmark-results.json"
+        }
+      ]
+    }
+  ],
+  "note": "每条证据都可复现：文件存在性 + 内容匹配 + 实跑结果。未达成的如实标 GAP。"
+}
