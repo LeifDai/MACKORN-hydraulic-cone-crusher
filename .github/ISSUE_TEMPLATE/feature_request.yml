@@ -1,0 +1,78 @@
+name: 💡 功能建议（Feature request）
+description: 希望新增某类计算 / 数据 / 集成
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **先说清一件事**：本项目对"准确性"的要求高于"功能数量"。
+
+        所以一个功能建议能不能被采纳，关键不在"有没有用"，
+        而在 **"它的数字从哪来"**。
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 建议类型
+      options:
+        - 新增计算能力（如某类设备选型）
+        - 新增数据表（如更多机型/矿石）
+        - 新增仿真模型
+        - 新增集成（MCP / HTTP / 某平台）
+        - 文档 / 翻译
+        - 工程体验（可维护性、性能）
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你遇到的实际问题
+      description: 请描述**场景**，不要只描述"想要一个 X 功能"
+      placeholder: |
+        客户发来一张需求表，里面写了"含土较多且为粘性土质"，
+        但工具没有告诉我这会怎么影响筛分面积的计算……
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: 这个功能的数字/公式从哪来
+      description: |
+        **这一栏是本模板最重要的部分。** 请给出至少一种：
+        · 公开文献（作者/年份/标题）
+        · 国家标准 / 行业标准（编号）
+        · 厂商技术手册
+        · 现场实测数据（格式见 CONTRIBUTING.md）
+      placeholder: |
+        建议引用《XXX》(作者, 年) 第 N 章的公式；
+        或 GB/T XXXXX-20XX 第 X 条。
+    validations:
+      required: true
+
+  - type: textarea
+    id: boundary
+    attributes:
+      label: 这个功能的边界在哪（什么时候不适用）
+      description: 请主动说明它的局限 —— 这比说明它能干什么更重要
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: 我理解以下纪律
+      options:
+        - label: 未知字段会返回 null，不会估算
+          required: true
+        - label: 冲突来源会并列保留，不会取平均
+          required: true
+        - label: 如果是估算/经验值，会明确标注来源等级（S4）
+          required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充说明（可选）
