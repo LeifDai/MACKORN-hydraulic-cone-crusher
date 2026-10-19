@@ -209,7 +209,7 @@ function auditLocal() {
   }
   if (mtErr) todo('A', 'MCP 协议实测无法运行（沙箱限制子进程）', mtErr);
   else {
-    if (nTools === 19) ok('A', 'MCP tools/list 返回 19 个工具');
+    if (nTools === 22) ok('A', 'MCP tools/list 返回 23 个工具');
     else no('A', `MCP tools/list 返回 ${nTools} 个工具`);
     if (called && hasAssum) ok('A', 'MCP 真实工具调用成功且带 assumptions[]');
     else no('A', 'MCP 工具调用异常', `called=${called} assumptions=${hasAssum}`);
