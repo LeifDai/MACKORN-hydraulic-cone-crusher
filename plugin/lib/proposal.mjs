@@ -198,7 +198,7 @@ export function buildProposal(input = {}) {
     if (fc) rows.push(['3', '细碎液压圆锥破', `${fc.model}（${fc.cavity} 腔）`, fc.units, fc.power_kw, `CSS ${fc.css_mm}mm，产能 ${fc.capacity_tph.join('-')} t/h，单台需求 ${fc.per_unit_tph} t/h，依据：${fc.basis}`]);
     rows.push(['4', '振动筛（检查筛）', '（按筛分面积选型）', '—', '—', `处理量 ${plant.screening.throughput_tph} t/h，面积 ${plant.screening.optimistic_m2}-${plant.screening.conservative_m2} m²`]);
     rows.push(['5', '成品筛', '（按规格与占比选型）', '—', '—', req.product_specs ? `规格：${req.product_specs.join(' / ')}` : '规格待确认']);
-    rows.push(['6', '带式输送机', `B${plant.conveying.recommended_width_mm}`, '按流程配置', '—', `设计能力 ${plant.conveying.design_throughput_tph} t/h，倾角 ≤ ${plant.conveying.max_incline_deg.join('-')}°（来源 S5）`]);
+    rows.push(['6', '带式输送机', `B${plant.conveying.recommended_width_mm}`, '按流程配置', '—', `设计能力 ${plant.conveying.design_throughput_tph} t/h，倾角 ≤ ${(plant.conveying.max_incline_deg_single ?? plant.conveying.max_incline_deg.join('-'))}°（来源 S5）`]);
     rows.push(['7', '除铁器', '悬挂式电磁除铁器', plant.recommended_stages >= 3 ? 2 : 1, '—', '圆锥破前必配']);
     rows.push(['8', '除尘系统', '除尘罩 + 布袋除尘器', '按转运点', '—', `排放 ≤ ${intake.normalized.flags.dust_limit_mgm3 ?? '待确认'} mg/m³`]);
     if (intake.normalized.flags.soil_removal_needed) {
