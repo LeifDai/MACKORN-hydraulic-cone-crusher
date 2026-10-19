@@ -37,6 +37,7 @@ import { PRICE_DISCLAIMER } from './lib/data-market.mjs';
 import { evaluateDistributor, VERIFICATION_CHANNELS } from './lib/distributor.mjs';
 import { describe, concentration, residualAnalysis, weibullFit, growthWithBaseEffect } from './lib/stats.mjs';
 import { selectionKnowledge } from './lib/knowledge-bridge.mjs';
+import { selectGrinding, grindingCatalog } from './lib/grinding-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -1710,11 +1711,113 @@ const toolKnowledge = {
   },
 };
 
+/* --------------------------------------------------------------------------
+ * 磨矿选型（R107 · P2）—— 全矿山价值链第 3 段
+ *
+ * 用户目标：「磨矿（半自磨机，球磨机，分级机，旋流器）」
+ *
+ * 诚实边界：本工具【不含】厂商型号参数（如 MQY/MQS 球磨机型号表），
+ *   只给「磨矿方式 + 功率量级 + 比能耗区间」，不足以直接下采购单。
+ *   型号参数需 MACKORN 或厂家提供功率曲线与规格表。
+ * -------------------------------------------------------------------------- */
+const toolGrinding = {
+  name: 'mackorn_grinding_selection',
+  description:
+    '(Multilingual triggers / 多语言触发词: grinding, SAG, semi-autogenous, ball mill, rod mill, HPGR, high pressure grinding rolls, classifier, spiral classifier, hydrocyclone, cyclone, grinding circuit, P80, specific energy, Bond work index, 磨矿, 半自磨, 球磨, 棒磨, 高压辊磨, 分级机, 螺旋分级机, 水力旋流器, 旋流器, 磨矿流程, 磨矿细度, 比能耗, 邦德功指数 | molienda, molino de bolas, SAG, ciclón, clasificador | Mahlung, Kugelmühle, SAG-Mühle, Zyklon, Klassierer | измельчение, шаровая мельница, ПСИ, гидроциклон, классификатор | broyage, broyeur à boulets, SAG, cyclone, classificateur | moagem, moinho de bolas, SAG, ciclone, classificador | 粉砕, ボールミル, SAGミル, サイクロン, 分級機 | malning, kul kvarn, SAG-kvarn, cyklon | formaling, kuglemølle, SAG-mølle, cyklon | hienonnus, kuulamylly, SAG-mylly, sykloni | طحن, مطحنة كروية, هيدروسيكلون, مصنف | penggilingan, ball mill, SAG, siklon, klasifikasi) '
+    + 'MACKORN 磨矿选型工具（全价值链第 3 段）：按处理量 t/h + 给料 P80 + 目标产品 P80，选磨矿方式（半自磨 SAG / 球磨 / 高压辊磨 HPGR），给功率量级、比能耗区间、分级设备建议（螺旋分级机 / 水力旋流器），并主动拦截越界（球磨给料 >25mm 拒绝、Bond 公式用于半自磨拒绝、目标 <20μm 告警）。'
+    + ' 用于回答：这条线磨矿段该配什么磨机、多大功率、磨到多细、配什么分级设备。'
+    + ' 【适用边界】本工具只管【磨矿与分级】；破碎段请用 cone_selection / plant_design。磨矿数据取自公开文献典型区间（S3/S5），【不含厂商型号参数】，正式方案须经 MACKORN 技术复核。半自磨高频波动需专门试验，本工具只给量级。',
+  parameters: obj(
+    {
+      target_tph: S.number('处理量 t/h（必填）。'),
+      feed_p80_mm: S.number('磨矿给料 P80 mm（球磨典型 ≤25mm；半自磨 ≤350mm）。'),
+      product_p80_mm: S.number('目标产品 P80 mm（如 0.075 = 75μm）。'),
+      ore: S.string('矿石名称或硬度备注（如 铁矿石 f=12-14）。'),
+      closed_circuit: S.boolean('是否闭路（默认 true；闭路需配分级设备）。'),
+      mode: S.stringEnum('只查目录或只做选型。', ['select', 'catalog'], { default: 'select' }),
+    },
+    ['target_tph'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const L = ['## 磨矿设备目录', ''];
+        L.push('### 磨矿方式');
+        L.push('| 方式 | 给料 mm | 产品 P80 mm | 比能耗 kWh/t | 适用 |');
+        L.push('|:---|:---|:---|:---|:---|');
+        for (const m of (v.catalog.methods || [])) {
+          L.push('| ' + m.method + ' | ' + ((m.feed_size_mm || []).join('–') || '—') + ' | ' + ((m.product_p80_mm || []).join('–') || '—') + ' | ' + ((m.specific_energy_kwh_t || []).join('–') || '—') + ' | ' + String(m.application || '').slice(0, 40) + ' |');
+        }
+        L.push('');
+        L.push('### 分级设备');
+        L.push('| 设备 | 分级粒度 mm | 适用 |');
+        L.push('|:---|:---|:---|');
+        for (const x of (v.catalog.classifiers || [])) {
+          L.push('| ' + x.classifier + ' | ' + ((x.cut_size_mm || []).join('–') || '—') + ' | ' + String(x.application || '').slice(0, 40) + ' |');
+        }
+        L.push('');
+        L.push('> ' + (v.catalog.basis || ''));
+        L.push('>');
+        L.push('> ⚠️ 已知缺口：' + ((v.catalog.known_gaps || []).slice(0, 3).join('；')));
+        return text(L.join('\n'));
+      }
+      const L = [];
+      L.push('## 磨矿选型结论');
+      L.push('');
+      if (v.rejections && v.rejections.length) {
+        L.push('### ❌ 拒绝计算');
+        for (const r of v.rejections) { L.push('- **' + r.rule + '**：' + r.detail); L.push('  → ' + r.action); }
+        L.push('');
+        return text(L.join('\n'));
+      }
+      L.push('**推荐：' + (v.recommended_method || '—') + '**');
+      L.push('');
+      if (v.installed_power_kw_range) L.push('- 装机功率量级：' + v.installed_power_kw_range[0] + '–' + v.installed_power_kw_range[1] + ' kW');
+      if (v.specific_energy_kwh_t) L.push('- 比能耗区间：' + v.specific_energy_kwh_t.join('–') + ' kWh/t（' + (v.candidates?.[0]?.specific_energy_source || 'S3') + '）');
+      if (v.classifier) L.push('- 分级设备：**' + v.classifier.recommended + '** —— ' + v.classifier.reason);
+      L.push('');
+      if (v.candidates && v.candidates.length) {
+        L.push('### 候选排序');
+        L.push('| 评分 | 方式 | 功率量级 kW | 比能耗 kWh/t | 适用 |');
+        L.push('|:---|:---|:---|:---|:---|');
+        for (const x of v.candidates) {
+          L.push('| ' + x.match_score + ' | ' + x.method + ' | ' + ((x.installed_power_kw_range || []).join('–') || '—') + ' | ' + ((x.specific_energy_kwh_t || []).join('–') || '—') + ' | ' + String(x.reason || '').slice(0, 40) + ' |');
+        }
+        L.push('');
+      }
+      if (v.warnings && v.warnings.length) {
+        L.push('### ⚠️ 告警');
+        for (const w of v.warnings) L.push('- ' + w);
+        L.push('');
+      }
+      if (v.equipment_model_note) {
+        L.push('### 型号建议');
+        L.push('**' + (v.equipment_model_recommendation === null ? 'null（本版不含厂商型号）' : v.equipment_model_recommendation) + '**');
+        L.push('');
+        L.push('> ' + v.equipment_model_note);
+        L.push('');
+      }
+      return text(L.join('\n'));
+    },
+  },
+  async execute(args) {
+    const mode = args.mode || 'select';
+    if (mode === 'catalog') return { catalog: grindingCatalog() };
+    return selectGrinding({
+      targetTph: args.target_tph,
+      feedP80Mm: args.feed_p80_mm,
+      productP80Mm: args.product_p80_mm,
+      ore: args.ore,
+      closedCircuit: args.closed_circuit !== false,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding,
 ];
 
 /* --------------------------------------------------------------------------
