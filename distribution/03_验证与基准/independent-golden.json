@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "fail": 0,
+  "rows": [
+    {
+      "tool": "mackorn_capacity_check",
+      "ok": true,
+      "why": "4 项真值断言全过"
+    },
+    {
+      "tool": "mackorn_crusher_curve",
+      "ok": true,
+      "why": "3 项真值断言全过"
+    }
+  ],
+  "generated": "2026-10-19T16:30:36.550Z"
+}
