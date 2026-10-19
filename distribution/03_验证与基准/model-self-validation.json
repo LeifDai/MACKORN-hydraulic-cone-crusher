@@ -1,0 +1,217 @@
+{
+  "generated": "2026-10-14T13:22:24.877Z",
+  "dialectic": {
+    "thesis": "已有 22 工具、Whiten(1972) 模型、Bond(1952) 功耗，架构完整",
+    "antithesis": "参数为文献默认值、无实测标定；外部权威实测数据在本环境不可获取（MDPI 403、PDF 不可解析）",
+    "synthesis": "不做精确度的假承诺，转而做到并公布【物理不变量 / 确定性 / 敏感性区间 / 失效边界】四类可严格验证的性质"
+  },
+  "why_a_contribution": "闭源商业软件无法被独立验证；学术论文很少公布完整验证。我们是第一个把\"模型不确定性\"作为一等公民公布的开源圆锥破选型工具。",
+  "discipline": "验证失败就报失败，误差大就报误差大，绝不美化。",
+  "summary": {
+    "total": 15,
+    "passed": 14,
+    "hard_fail": 1,
+    "warn": 0
+  },
+  "error_bar": {
+    "point_estimate_p80_mm": 15.12,
+    "sigma_pct": 161.7,
+    "interval_mm": [
+      -9.33,
+      39.57
+    ],
+    "note": "标定前不得当作精确值使用"
+  },
+  "sensitivity": [
+    {
+      "param": "breakage.phi",
+      "label": "φ 粗粒生成占比",
+      "range": [
+        0.3,
+        0.6
+      ],
+      "lo": 15.91,
+      "mid": 15.12,
+      "hi": 14.33,
+      "spread_mm": 1.58,
+      "spread_pct": 10.4
+    },
+    {
+      "param": "breakage.gamma",
+      "label": "γ 粗端指数",
+      "range": [
+        0.4,
+        1
+      ],
+      "lo": 13.9,
+      "mid": 15.12,
+      "hi": 15.8,
+      "spread_mm": 1.89,
+      "spread_pct": 12.5
+    },
+    {
+      "param": "breakage.beta",
+      "label": "β 细端指数",
+      "range": [
+        2.5,
+        5
+      ],
+      "lo": 14.8,
+      "mid": 15.12,
+      "hi": 15.35,
+      "spread_mm": 0.55,
+      "spread_pct": 3.6
+    },
+    {
+      "param": "throwMm",
+      "label": "偏心距 mm",
+      "range": [
+        15,
+        40
+      ],
+      "lo": 12.63,
+      "mid": 15.12,
+      "hi": 20.04,
+      "spread_mm": 7.42,
+      "spread_pct": 49
+    },
+    {
+      "param": "throwFactor",
+      "label": "啮合区宽度系数",
+      "range": [
+        0.5,
+        1
+      ],
+      "lo": 12.72,
+      "mid": 15.12,
+      "hi": 17.23,
+      "spread_mm": 4.5,
+      "spread_pct": 29.8
+    },
+    {
+      "param": "speedRpm",
+      "label": "转速 rpm",
+      "range": [
+        200,
+        400
+      ],
+      "lo": 59.97,
+      "mid": 15.12,
+      "hi": 11.64,
+      "spread_mm": 48.34,
+      "spread_pct": 319.7
+    }
+  ],
+  "parity": {
+    "local_p80": 15.12,
+    "remote_p80": 19.346,
+    "rel_diff_pct": 27.95
+  },
+  "checks": [
+    {
+      "group": "质量守恒",
+      "name": "28 组工况质量平衡误差 < 1e-2",
+      "pass": true,
+      "detail": "最大 1.40e-3（修正前为 5.2e+78）",
+      "severity": "fail"
+    },
+    {
+      "group": "质量守恒",
+      "name": "无负质量分量（数值稳定）",
+      "pass": true,
+      "detail": "最大负质量 0.00e+0",
+      "severity": "fail"
+    },
+    {
+      "group": "物理合理性",
+      "name": "产品 P80 < 给料 P80",
+      "pass": true,
+      "detail": "6 组工况全部满足",
+      "severity": "fail"
+    },
+    {
+      "group": "物理合理性",
+      "name": "CSS 越大产品越粗（严格单调）",
+      "pass": true,
+      "detail": "9 点单调 10.9 → 11.7 → 12.6 → 13.8 → 15.1 → 16.8 → 19.5 → 24.3 → 29.1",
+      "severity": "fail"
+    },
+    {
+      "group": "物理合理性",
+      "name": "给料越粗产品越粗（单调不降）",
+      "pass": true,
+      "detail": "6 点单调 16 → 17 → 17 → 17 → 17 → 17",
+      "severity": "fail"
+    },
+    {
+      "group": "物理合理性",
+      "name": "啮合区 K1 > CSS > K2",
+      "pass": true,
+      "detail": "K1=36 K2=0.1 (CSS=16)",
+      "severity": "fail"
+    },
+    {
+      "group": "确定性",
+      "name": "重复计算 10 次逐字节一致",
+      "pass": true,
+      "detail": "输出 1324 字符完全一致",
+      "severity": "fail"
+    },
+    {
+      "group": "确定性",
+      "name": "顺序无关（无全局状态泄漏）",
+      "pass": true,
+      "detail": "插入 2 次其他计算后结果不变",
+      "severity": "fail"
+    },
+    {
+      "group": "敏感性",
+      "name": "最敏感参数跨度已量化",
+      "pass": true,
+      "detail": "最敏感：转速 rpm（319.7%）—— 标定优先测它",
+      "severity": "fail"
+    },
+    {
+      "group": "输入校验",
+      "name": "CSS = 0 必须拒绝",
+      "pass": true,
+      "detail": "已拒绝：cssMm 必须为正数（紧边排矿口 mm）",
+      "severity": "fail"
+    },
+    {
+      "group": "输入校验",
+      "name": "CSS 为负必须拒绝",
+      "pass": true,
+      "detail": "已拒绝：cssMm 必须为正数（紧边排矿口 mm）",
+      "severity": "fail"
+    },
+    {
+      "group": "输入校验",
+      "name": "CSS 非数字必须拒绝",
+      "pass": true,
+      "detail": "已拒绝：cssMm 必须为正数（紧边排矿口 mm）",
+      "severity": "fail"
+    },
+    {
+      "group": "输入校验",
+      "name": "正常工况必须接受",
+      "pass": true,
+      "detail": "正常接受",
+      "severity": "fail"
+    },
+    {
+      "group": "功耗一致性",
+      "name": "Bond 功耗为正且随破碎比增大",
+      "pass": true,
+      "detail": "F80=120/P80=16 → {\"w_kwh_per_t\":23.807,\"wi_used\":15,\"form · F80=200/P80=25 → {\"w_kwh_per_t\":19.393,\"wi_used\":15,\"form · F80=300/P80=40 → {\"w_kwh_per_t\":15.057,\"wi_used\":15,\"form",
+      "severity": "fail"
+    },
+    {
+      "group": "双实现一致性",
+      "name": "JS 与 PHP 同值（差异 < 2%）",
+      "pass": false,
+      "detail": "本地 15.12 vs 线上 19.35 mm（差 27.95%）",
+      "severity": "fail"
+    }
+  ]
+}
