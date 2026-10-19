@@ -1,0 +1,43 @@
+{
+  "generated": "2026-10-19T06:17:19.468Z",
+  "pages": 97,
+  "total_mb": 1.55,
+  "issues": {
+    "title": [],
+    "desc": [],
+    "canonical": [],
+    "hreflang": [],
+    "lang": [],
+    "jsonld": [],
+    "big": [],
+    "deadlink": []
+  },
+  "ai_index": {
+    "llms.txt": {
+      "exists": true,
+      "kb": 14,
+      "refs": 98
+    },
+    "llms-full.txt": {
+      "exists": true,
+      "kb": 26,
+      "refs": 96
+    },
+    ".well-known/keywords.json": {
+      "exists": true,
+      "kb": 24,
+      "refs": 97
+    },
+    ".well-known/agent.json": {
+      "exists": true,
+      "kb": 9,
+      "refs": 60
+    },
+    "sitemap.xml": {
+      "exists": true,
+      "kb": 24,
+      "refs": 0
+    }
+  },
+  "jsonld_pages": 97
+}
