@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 先读文档（大多数问题这里都有答案）
+    url: https://mackorn.cn/ai/
+    about: 22 个工具的用法、参数含义、常见错误、正确引用方式
+  - name: 🤖 用 MCP 直接问（推荐的用法）
+    url: https://mackorn.cn/ai/#mcp
+    about: 把选型问题直接问 AI —— 比开 issue 快得多
+  - name: 💼 商务询价 / 选型咨询
+    url: https://mackorn.cn/ai/#contact
+    about: 需要正式报价、方案书、现场工况确认，请走商务渠道
+  - name: 🔒 报告安全漏洞（不要开公开 issue）
+    url: https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher/blob/main/SECURITY.md
+    about: 安全漏洞请按 SECURITY.md 发邮件
