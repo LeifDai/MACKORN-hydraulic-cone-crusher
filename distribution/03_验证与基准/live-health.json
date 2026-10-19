@@ -1,0 +1,55 @@
+{
+  "schema": "mackorn-live-health/1",
+  "generated": "2026-10-19T12:50:32.573Z",
+  "host": "mackorn.cn",
+  "cert_warn_days": 14,
+  "expected_tools": 22,
+  "checks": [
+    {
+      "id": "cert",
+      "name": "SSL 证书有效且不临期",
+      "pass": false,
+      "detail": "❌ **已过期 4.5 天**（Oct 14 23:59:59 2026 GMT）",
+      "cert": {
+        "ok": false,
+        "days": -4.5,
+        "validTo": "Oct 14 23:59:59 2026 GMT",
+        "issuer": "DigiCert Inc",
+        "subject": "mackorn.cn",
+        "err": null
+      }
+    },
+    {
+      "id": "home",
+      "name": "官网首页 HTTPS 可达",
+      "pass": false,
+      "detail": "❌ CERT_HAS_EXPIRED"
+    },
+    {
+      "id": "landing",
+      "name": "/ai/ 落地页可达",
+      "pass": false,
+      "detail": "❌ CERT_HAS_EXPIRED"
+    },
+    {
+      "id": "mcp",
+      "name": "MCP 端点响应 JSON-RPC",
+      "pass": false,
+      "detail": "❌ CERT_HAS_EXPIRED",
+      "tools": null
+    },
+    {
+      "id": "llms",
+      "name": "llms.txt 可达",
+      "pass": false,
+      "detail": "❌ CERT_HAS_EXPIRED"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5
+  },
+  "verdict": "UNHEALTHY",
+  "note": "线上健康检查 —— 弥补\"只顾本地、不看线上\"的监控盲区。"
+}
