@@ -1,0 +1,143 @@
+{
+  "gate": "L2 构建门禁（quick 子集）",
+  "generated": "2026-10-12T12:36:58.760Z",
+  "elapsed_ms": 239886,
+  "total": 16,
+  "passed": 16,
+  "failed": 0,
+  "is_full_run": false,
+  "by_area": {
+    "语法": {
+      "pass": 1,
+      "total": 1
+    },
+    "教训": {
+      "pass": 1,
+      "total": 1
+    },
+    "库": {
+      "pass": 2,
+      "total": 2
+    },
+    "护栏": {
+      "pass": 6,
+      "total": 6
+    },
+    "工具": {
+      "pass": 1,
+      "total": 1
+    },
+    "站点": {
+      "pass": 1,
+      "total": 1
+    },
+    "模型": {
+      "pass": 4,
+      "total": 4
+    }
+  },
+  "lesson_stats": {
+    "total": 55,
+    "pass": 55,
+    "fails": []
+  },
+  "results": [
+    {
+      "area": "语法",
+      "name": "关键源码文件能被 Node 解析（改源码的脚本不许静默毁掉模块）",
+      "pass": true,
+      "detail": "13 个关键文件语法正确"
+    },
+    {
+      "area": "教训",
+      "name": "可执行教训 55/55",
+      "pass": true,
+      "detail": "全部通过"
+    },
+    {
+      "area": "库",
+      "name": "库检查 30/30",
+      "pass": true,
+      "detail": "全部通过"
+    },
+    {
+      "area": "库",
+      "name": "库判定无「无效经验」残留",
+      "pass": true,
+      "detail": "无"
+    },
+    {
+      "area": "护栏",
+      "name": "规则表非空（18 条）",
+      "pass": true,
+      "detail": "18 条"
+    },
+    {
+      "area": "护栏",
+      "name": "每条规则都有 id/severity/来源",
+      "pass": true,
+      "detail": "字段完整"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：单台圆锥破给料 600mm 被拦",
+      "pass": true,
+      "detail": "命中 GR-02,GR-03"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：整线原矿给料不误报 GR-02",
+      "pass": true,
+      "detail": "误报 GR-03"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：averaged 合并字段被拦",
+      "pass": true,
+      "detail": "命中 GR-03,GR-04"
+    },
+    {
+      "area": "护栏",
+      "name": "负控：干净输出零 error",
+      "pass": true,
+      "detail": "error 0"
+    },
+    {
+      "area": "工具",
+      "name": "22 个工具端到端通过",
+      "pass": true,
+      "detail": "全部 execute + render 正常"
+    },
+    {
+      "area": "站点",
+      "name": "全站审计零严重问题（死链/结构）",
+      "pass": true,
+      "detail": "无死链、结构完整"
+    },
+    {
+      "area": "模型",
+      "name": "质量守恒（28 组网格）",
+      "pass": true,
+      "detail": "最坏 1.40e-3"
+    },
+    {
+      "area": "模型",
+      "name": "无负质量",
+      "pass": true,
+      "detail": "最大负值 0.00e+0"
+    },
+    {
+      "area": "模型",
+      "name": "失效边界 4/4 拒绝",
+      "pass": true,
+      "detail": "4/4"
+    },
+    {
+      "area": "模型",
+      "name": "CSS 单调（产品随 CSS 变粗）",
+      "pass": true,
+      "detail": "10.9 → 12.6 → 15.1 → 19.5 → 29.1"
+    }
+  ],
+  "rule": "教训+库+护栏含负控+工具端到端+三批UAT+全站审计+插件级负控+蓝图自检+G1同值对照+物理不变量+公开基准"
+}
