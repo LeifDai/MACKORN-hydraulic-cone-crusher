@@ -17,6 +17,7 @@
  */
 
 import { readFileSync, existsSync } from 'node:fs';
+import { safeWrite, safeRead, safeAppend, writableDir, storageMode } from './store.mjs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 
@@ -25,7 +26,8 @@ export const LITERATURE_SOURCE = 'LITERATURE (Whiten 1972 / Napier-Munn et al.)'
 
 /** 知识库目录：允许用环境变量覆盖（测试/多租户用）。 */
 export function kbDir() {
-  return process.env.MACKORN_KB_DIR || join(process.env.DSH_HOME || join(homedir(), '.dsh'), 'mackorn-knowledge');
+  /* 可写性探测：全部不可写时返回 null，调用方按只读模式处理（R36 修复） */
+  return writableDir() || process.env.MACKORN_KB_DIR || null;
 }
 
 function readStore() {
