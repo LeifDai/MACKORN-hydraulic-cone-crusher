@@ -1,0 +1,94 @@
+name: CI
+
+# 公开可复现的验证：任何人在 GitHub 上都能看到测试真的在跑、真的通过。
+# 这也是 awesome-dsh-plugin 评审标准里"项目是否活跃维护"的直接证据。
+#
+# 三项检查：
+#   1. DSH 插件契约 + 功能冒烟 + 8 项负控
+#   2. MCP 协议 + 全部 19 个工具
+#   3. MCPB 包能否成功构建（Smithery 的 stdio 分发路径依赖它）
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['18', '20', '22']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Confirm zero runtime dependencies
+        run: |
+          node -e "
+            const p = require('./package.json');
+            const deps = Object.keys(p.dependencies || {}).length;
+            console.log('runtime dependencies:', deps);
+            if (deps !== 0) { console.error('Expected zero runtime dependencies'); process.exit(1); }
+          "
+
+      - name: Verify the dsh.bundle manifest is present
+        run: |
+          node -e "
+            const p = require('./package.json');
+            if (!p.dsh || !p.dsh.bundle || !p.dsh.bundle.patch) {
+              console.error('package.json must declare dsh.bundle.patch'); process.exit(1);
+            }
+            console.log('dsh.bundle.patch =', p.dsh.bundle.patch);
+          "
+          test -f cordis.patch.yml && echo 'cordis.patch.yml present'
+
+      - name: Plugin contract + functional smoke + negative controls
+        run: npm run selftest
+
+      - name: MCP protocol + every tool
+        run: npm run mcp:selftest
+
+      - name: Tool count matches the documented 19
+        run: |
+          count=$(node plugin/mcp-server.mjs --list 2>&1 | grep -oE '共 [0-9]+ 个工具' | grep -oE '[0-9]+' | head -1)
+          echo "tools: $count"
+          if [ "$count" != "19" ]; then echo "Expected 19 tools, got $count"; exit 1; fi
+
+      - name: Build the MCPB bundle (Smithery stdio path)
+        run: |
+          node tools/build_mcpb.mjs . /tmp/mcpb-out
+          test -f /tmp/mcpb-out/manifest.json
+          test -f /tmp/mcpb-out/server/mcp-server.mjs
+          node -e "
+            const m = require('/tmp/mcpb-out/manifest.json');
+            const req = ['name','version','description','author','server'];
+            const missing = req.filter(k => !m[k]);
+            if (missing.length) { console.error('manifest missing:', missing); process.exit(1); }
+            console.log('MCPB manifest OK —', m.tools.length, 'tools');
+            if (m.tools.length !== 19) { console.error('Expected 19 tools in manifest'); process.exit(1); }
+          "
+
+      - name: Read back a real tool result over MCP stdio
+        run: |
+          printf '%s\n' \
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' \
+            '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
+            '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"mackorn_crusher_curve","arguments":{"css_mm":16,"feed_p80_mm":90,"bond_wi":14}}}' \
+            | node plugin/mcp-server.mjs > /tmp/mcp-out.txt 2>/dev/null
+          cat /tmp/mcp-out.txt
+          grep -q 'product_p80_mm' /tmp/mcp-out.txt && echo 'tool call returned a product P80'
+          grep -q 'assumptions' /tmp/mcp-out.txt && echo 'output carries assumptions[]'
