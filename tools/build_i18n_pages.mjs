@@ -26,10 +26,10 @@ const LANGS = {
   en: {
     htmlLang: 'en', dir: 'ltr', path: 'en',
     title: 'MACKORN Hydraulic Cone Crusher Selection — Mining-industry AI Plugin',
-    desc: 'MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase). 19 tools, MCP server, MIT.',
+    desc: 'MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase). 22 tools, MCP server, MIT.',
     h1: 'Give your AI 29 years of cone crusher selection experience',
-    sub: 'One customer requirement form + a target capacity in, and out come the equipment selection, plant configuration, product-size simulation, circulating load and a 14-section proposal. 19 tools · 6 skills · zero runtime dependencies · MIT · callable by any AI over MCP.',
-    cap: 'What it does', tools: '19 tools', faq: 'FAQ', contact: 'Contact', mats: 'Materials & markets',
+    sub: 'One customer requirement form + a target capacity in, and out come the equipment selection, plant configuration, product-size simulation, circulating load and a 14-section proposal. 22 tools · 6 skills · zero runtime dependencies · MIT · callable by any AI over MCP.',
+    cap: 'What it does', tools: '22 tools', faq: 'FAQ', contact: 'Contact', mats: 'Materials & markets',
     caps: [
       ['What to still ask the customer', 'Fields left blank but essential, graded blocking / critical / recommended / optional, each with a ready-to-send question.'],
       ['What equipment to specify', 'Stage count, per-stage size split, crusher model + cavity + closed-side setting + unit count + power, screen area, belt width, auxiliaries.'],
