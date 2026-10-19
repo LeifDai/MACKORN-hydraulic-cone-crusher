@@ -396,7 +396,7 @@
       "weight_t": null,
       "dimensions_mm": null,
       "stroke_mm": null,
-      "notes": "来源未提供给料口尺寸、排料口范围、最大进料粒度、重量（S2a 表格中原样为「-」）。适用给料 20-60 mm。S2d 自述典型应用为 500TPH 项目中的辅助细碎。S2g 档案 C（林西晟昊 600-650 t/h）细碎段用 2×MPH6，多缸液压。max_feed_mm / css_range_mm / weight_t / dimensions_mm / stroke_mm 均为「来源未提供」。",
+      "notes": "来源未提供给料口尺寸、排料口范围、最大进料粒度、重量（S2a 表格中原样为「-」）。适用给料 20-60 mm。S2d 自述典型应用为 500TPH 项目中的辅助细碎。S2g 档案 C（〔客户名称·已脱敏〕 600-650 t/h）细碎段用 2×MPH6，多缸液压。max_feed_mm / css_range_mm / weight_t / dimensions_mm / stroke_mm 均为「来源未提供」。",
       "source": "S2d §2 + S2a §2.5"
     },
     {
