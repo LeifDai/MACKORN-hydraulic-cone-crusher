@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "cn.mackorn/mackorn-cone-crusher",
+  "description": "Mining industry cone crusher selection and crushing-plant design for AI. 22 MCP tools, NH/NS hydraulic cone crushers, aggregate & metal-mine crushing circuits, Whiten-1972 simulation, measured-data calibration, 12 languages, MIT.",
+  "title": "MACKORN Hydraulic Cone Crusher Selection",
+  "version": "0.2.2",
+  "websiteUrl": "https://mackorn.cn/ai/",
+  "repository": {
+    "url": "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mackorn.cn/ai/api/mcp.php"
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "mackorn-cone-crusher",
+      "version": "0.2.2",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
