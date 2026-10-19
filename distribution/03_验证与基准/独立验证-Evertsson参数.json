@@ -1,0 +1,91 @@
+{
+  "generated": "2026-10-11T11:12:30.183Z",
+  "purpose": "用 Evertsson/Chalmers 论文的真实实验参数（269 rpm, CSS 8-16mm）独立验证我们的 Whiten 实现",
+  "source": "S3 文献 — Evertsson C.M., Cone Crusher Performance, Chalmers thesis 759",
+  "source_params": {
+    "eccentric_speed_rpm": 269,
+    "css_range_mm": [
+      8,
+      16
+    ],
+    "feed_note": "0-250mm 经粗碎"
+  },
+  "results": [
+    {
+      "css": 8,
+      "ok": true,
+      "p80": 14.09,
+      "ratio": 2.9,
+      "energy": null
+    },
+    {
+      "css": 9,
+      "ok": true,
+      "p80": 14.37,
+      "ratio": 2.84,
+      "energy": null
+    },
+    {
+      "css": 10,
+      "ok": true,
+      "p80": 14.62,
+      "ratio": 2.79,
+      "energy": null
+    },
+    {
+      "css": 11,
+      "ok": true,
+      "p80": 14.85,
+      "ratio": 2.75,
+      "energy": null
+    },
+    {
+      "css": 12,
+      "ok": true,
+      "p80": 15.05,
+      "ratio": 2.71,
+      "energy": null
+    },
+    {
+      "css": 13,
+      "ok": true,
+      "p80": 15.4,
+      "ratio": 2.65,
+      "energy": null
+    },
+    {
+      "css": 14,
+      "ok": true,
+      "p80": 15.72,
+      "ratio": 2.6,
+      "energy": null
+    },
+    {
+      "css": 15,
+      "ok": true,
+      "p80": 16.04,
+      "ratio": 2.55,
+      "energy": null
+    },
+    {
+      "css": 16,
+      "ok": true,
+      "p80": 16.53,
+      "ratio": 2.47,
+      "energy": null
+    }
+  ],
+  "findings": [
+    {
+      "check": "CSS 增大 → 产品变粗（单调）",
+      "pass": true,
+      "note": "与 Chalmers 定性结论一致"
+    },
+    {
+      "check": "P80/CSS 落在 0.8–4 倍",
+      "pass": true,
+      "note": "实测 1.03–1.76（圆锥破文献典型区间）"
+    }
+  ],
+  "discipline_note": "Evertsson 用他自己的模型，我们是 Whiten(1972)，不是同一套 —— 只做量级与趋势一致性判断，不做逐点比对。逐点验证需 MACKORN 现场筛析数据（S5）"
+}
