@@ -1,0 +1,117 @@
+{
+  "generated": "2026-10-19T06:18:09.798Z",
+  "models_checked": 13,
+  "contradiction": 0,
+  "structural": 0,
+  "coverage": 19,
+  "ambiguity": [
+    {
+      "kind": "产能口径",
+      "subject": "5 个机型的 capacityTph 上限 > tphMax 分档上界",
+      "detail": "NH700(1508>1200) NS200(166>150) NS300(341>300) NS400(598>500) NS600(1046>800)",
+      "documented": true,
+      "note": "源码已注释说明 tphMax 是\"分档上界\" —— 语义区分清楚 ✅（这不是矛盾，是两种口径）"
+    }
+  ],
+  "findings": {
+    "contradiction": [],
+    "structural": [],
+    "coverage": [
+      {
+        "kind": "无腔型详表",
+        "subject": "NH600",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NH700",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NH860",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NH865",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NH890",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NH895",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NS200",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NS300",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NS400",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "无腔型详表",
+        "subject": "NS600",
+        "note": "选型退化为系列外推（工具已声明\"近似\"）"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "EC",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "C",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "MC",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "M",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "MF",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "F",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "EF",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "EFX",
+        "note": "覆盖差异"
+      },
+      {
+        "kind": "腔型未进给料表",
+        "subject": "EEF",
+        "note": "覆盖差异"
+      }
+    ]
+  }
+}
