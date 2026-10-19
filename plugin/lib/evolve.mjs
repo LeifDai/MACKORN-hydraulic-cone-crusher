@@ -18,6 +18,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from 'node:fs';
+import { safeWrite, safeRead, safeAppend, writableDir, storageMode } from './store.mjs';
 import { join, dirname } from 'node:path';
 import { homedir } from 'node:os';
 
@@ -30,8 +31,8 @@ export const EVOLVER_VERSION = 'V1';
 /** 知识库目录：$MACKORN_KB_DIR > $DSH_HOME/mackorn-knowledge > ~/.dsh/mackorn-knowledge */
 export function kbDir() {
   if (process.env.MACKORN_KB_DIR) return process.env.MACKORN_KB_DIR;
-  const home = process.env.DSH_HOME || join(homedir(), '.dsh');
-  return join(home, 'mackorn-knowledge');
+  /* 改用可写性探测：写不进去不抛错，降级为只读模式（R36 修复） */
+  return writableDir() || join(process.env.DSH_HOME || join(homedir(), '.dsh'), 'mackorn-knowledge');
 }
 
 function readJson(path, fallback) {
@@ -43,13 +44,12 @@ function readJson(path, fallback) {
   }
 }
 function writeJson(path, value) {
-  mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, JSON.stringify(value, null, 2), 'utf8');
+  const r = safeWrite(path, JSON.stringify(value, null, 2));
+  if (!r.ok) return r;   // 只读模式：不抛错，由调用方回显
 }
 function appendLog(path, record) {
   try {
-    mkdirSync(dirname(path), { recursive: true });
-    appendFileSync(path, `${JSON.stringify(record)}\n`, 'utf8');
+    safeAppend(path, `${JSON.stringify(record)}\n`, 'utf8');
   } catch { /* 日志失败不影响主流程 */ }
 }
 
