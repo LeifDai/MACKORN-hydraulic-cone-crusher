@@ -1,0 +1,36 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "选型与设计",
+      "description": "从客户需求表到设备选型、整线配置与方案书 —— 销售与设计的主流程。",
+      "skills": [
+        "mackorn-requirement-intake",
+        "mackorn-cone-crusher-selection",
+        "mackorn-crushing-plant-design"
+      ]
+    },
+    {
+      "title": "仿真与实测标定",
+      "description": "用公开文献模型（Whiten 1972 / Bond 1952）做粒度曲线与流程仿真，并用现场筛析数据反算破碎函数参数。",
+      "skills": [
+        "mackorn-plant-simulation"
+      ]
+    },
+    {
+      "title": "市场与竞争",
+      "description": "五维取证打分、竞品对标（美卓 HP / 山特维克 CS）、客户痛点话术与报价影响因素。",
+      "skills": [
+        "mackorn-market-depth"
+      ]
+    },
+    {
+      "title": "行业插件方法论",
+      "description": "把任何行业的专家知识做成可被 AI 稳定调用的插件 —— 本项目用的就是这套方法，可复用到其他垂直行业。",
+      "skills": [
+        "dsh-industry-plugin-blueprint"
+      ]
+    }
+  ]
+}
