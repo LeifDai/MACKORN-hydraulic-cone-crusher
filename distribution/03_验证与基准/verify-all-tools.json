@@ -1,0 +1,122 @@
+{
+  "generated": "2026-10-19T16:30:36.226Z",
+  "total": 23,
+  "passed": 22,
+  "failed": 1,
+  "results": [
+    {
+      "name": "mackorn_requirement_intake",
+      "status": "ok",
+      "ms": 105
+    },
+    {
+      "name": "mackorn_proposal",
+      "status": "ok",
+      "ms": 114
+    },
+    {
+      "name": "mackorn_cone_selection",
+      "status": "ok",
+      "ms": 45
+    },
+    {
+      "name": "mackorn_plant_design",
+      "status": "ok",
+      "ms": 105
+    },
+    {
+      "name": "mackorn_capacity_check",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_cost_estimate",
+      "status": "ok",
+      "ms": 0
+    },
+    {
+      "name": "mackorn_mcfm_analysis",
+      "status": "ok",
+      "ms": 0
+    },
+    {
+      "name": "mackorn_wear_design",
+      "status": "ok",
+      "ms": 2
+    },
+    {
+      "name": "mackorn_grading_porosity",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_market_intel",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_selection_report",
+      "status": "ok",
+      "ms": 151
+    },
+    {
+      "name": "mackorn_equipment_catalog",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_intel_watch",
+      "status": "ok",
+      "ms": 3
+    },
+    {
+      "name": "mackorn_knowledge_update",
+      "status": "ok",
+      "ms": 4
+    },
+    {
+      "name": "mackorn_pdca_status",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_crusher_curve",
+      "status": "ok",
+      "ms": 49
+    },
+    {
+      "name": "mackorn_simulate_flowsheet",
+      "status": "ok",
+      "ms": 155
+    },
+    {
+      "name": "mackorn_calibrate",
+      "status": "ok",
+      "ms": 345
+    },
+    {
+      "name": "mackorn_contact",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_distributor_eval",
+      "status": "ok",
+      "ms": 2
+    },
+    {
+      "name": "mackorn_market_stats",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_knowledge",
+      "status": "ok",
+      "ms": 29
+    },
+    {
+      "name": "mackorn_grinding_selection",
+      "status": "no-sample"
+    }
+  ]
+}
