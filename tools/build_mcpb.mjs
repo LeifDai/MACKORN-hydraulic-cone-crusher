@@ -6,7 +6,7 @@
  * 必填字段（schema）：name, version, description, author, server{type, entry_point, mcp_config}
  *
  * 本脚本：
- *   1. 从插件真实定义里取 19 个工具（单一真相源，不手抄）
+ *   1. 从插件真实定义里取 23 个工具（单一真相源，不手抄）
  *   2. 生成 manifest.json
  *   3. 把 mcp-server.mjs + lib/ 拷进 server/
  *   4. 输出到 distribution/mcpb/mackorn-cone-crusher/
@@ -49,7 +49,7 @@ const manifest = {
   display_name: 'MACKORN Hydraulic Cone Crusher',
   version: SEMVER,
   description:
-    'Cone crusher and crushing-plant selection for MACKORN NH/NS hydraulic cone crushers: requirement intake, equipment selection, plant configuration, proposal generation, product-size simulation and field-data calibration. 19 tools, zero runtime dependencies.',
+    'Cone crusher and crushing-plant selection for MACKORN NH/NS hydraulic cone crushers: requirement intake, equipment selection, plant configuration, proposal generation, product-size simulation and field-data calibration. 22 tools, zero runtime dependencies.',
   long_description: [
     'Gives an AI the working knowledge of a crushing-plant selection engineer for MACKORN NH/NS',
     'single-cylinder hydraulic cone crushers and the aggregate / metal-mine crushing circuits built around them.',
@@ -249,3 +249,15 @@ writeFileSync(join(OUT_DIR, 'README.md'),
 console.log(`  manifest.json 已生成（${tools.length} 个工具）`);
 console.log(`  server/ 已就位`);
 console.log(`  输出目录: ${OUT_DIR}`);
+
+/* ══════════════════════════════════════════════════════════════════
+ * R33 追加（教训 L-28）：本脚本会改 .mjs 源码 —— 必须验证"改没改成"。
+ * 文本替换的锚点不存在会【静默失败】；R31 事故就是这么把
+ * plugin/index.mjs 的 22 行引号插坏、整个文件无法解析，而门禁全绿。
+ * ══════════════════════════════════════════════════════════════════ */
+try {
+  const { verifyAfterWrite } = await import('./verify_after_write.mjs');
+  verifyAfterWrite();
+} catch (e) {
+  console.log('  ⚠ 改完自检未能执行: ' + String(e.message).slice(0, 60));
+}
