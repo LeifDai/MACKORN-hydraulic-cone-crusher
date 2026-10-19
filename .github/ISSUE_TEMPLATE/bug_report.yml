@@ -1,0 +1,91 @@
+name: 🐛 缺陷报告（Bug report）
+description: 工具算错了 / 报错了 / 输出不符合预期
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **先说一句：如果是"某个数字看起来不对"，请改用「数据纠错」模板** ——
+        那类问题往往根因在参数表，不在这里。
+
+  - type: dropdown
+    id: tool
+    attributes:
+      label: 哪个工具
+      options:
+        - mackorn_cone_selection（选型）
+        - mackorn_capacity_check（产能校核）
+        - mackorn_equipment_catalog（机型枚举）
+        - mackorn_plant_design（整线配置）
+        - mackorn_simulate_flowsheet（流程仿真）
+        - mackorn_crusher_curve（单机粒度曲线）
+        - mackorn_calibrate（实测标定）
+        - mackorn_wear_design（衬板磨损）
+        - mackorn_cost_estimate（成本估算）
+        - mackorn_mcfm_analysis（给料模数）
+        - mackorn_requirement_intake（需求表入口）
+        - mackorn_proposal（方案书）
+        - mackorn_selection_report（选型报告）
+        - mackorn_market_intel / market_stats（市场）
+        - mackorn_intel_watch / knowledge_update / pdca_status（自我迭代）
+        - mackorn_distributor_eval（代理商评估）
+        - mackorn_contact（联系方式）
+        - 其他 / 不确定
+    validations:
+      required: true
+
+  - type: textarea
+    id: args
+    attributes:
+      label: 你传的参数（原样贴 JSON）
+      render: json
+      placeholder: |
+        { "model": "NH400", "cavity": "EC", "css": 16 }
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你期望的结果
+      description: 以及**为什么**这样期望（引用文献/手册/实测均可）
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际得到的结果（原样贴输出）
+      render: json
+    validations:
+      required: true
+
+  - type: dropdown
+    id: how
+    attributes:
+      label: 你怎么调用的
+      options:
+        - MCP 客户端（Claude/Cursor/其他）
+        - HTTP 端点（mackorn.cn/ai/api/mcp.php）
+        - 本地直接跑 plugin/index.mjs
+        - npx mackorn-cone-crusher
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: package.json 里的 version，或 `npm ls mackorn-cone-crusher`
+      placeholder: "0.2.1"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: gates
+    attributes:
+      label: 如果你是改代码时发现的
+      options:
+        - label: 我已跑 `node tests/run.mjs`（若未跑请留空）
+        - label: 我已跑 `node tools/self_audit.mjs`
