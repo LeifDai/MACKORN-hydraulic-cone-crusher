@@ -329,4 +329,4 @@ cite-as:
 支持的助手（73 种，节选）：Claude Code · Codex · Cursor · Windsurf · GitHub Copilot ·
 Gemini CLI · OpenCode · Cline · Roo Code · Kiro · Qwen Code · Trae · Junie · Amp …
 
-装完即可用自然语言问选型问题，助手会自动调用本项目的 22 个工具。
+装完即可用自然语言问选型问题，助手会自动调用本项目的 23 个工具。
