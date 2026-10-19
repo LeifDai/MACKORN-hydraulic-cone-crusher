@@ -439,7 +439,7 @@ function tool_contact($lang) {
     ],
     'qr' => 'https://mackorn.cn/contact/ 页面含微信二维码',
     'partner_program' => '诚征各地代理商 / 代理人 / 选矿人才合作',
-    'plugin' => 'https://mackorn.cn/ai/ · MCP: cn.mackorn/mackorn-cone-crusher（22 个工具）',
+    'plugin' => 'https://mackorn.cn/ai/ · MCP: cn.mackorn/mackorn-cone-crusher（23 个工具）',
   ];
   return [$c, [A('联系方式为 MACKORN 官方公开信息', 'OFFICIAL')], []];
 }
