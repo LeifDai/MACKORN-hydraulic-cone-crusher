@@ -1,0 +1,40 @@
+{
+  "generated": "2026-10-19T06:12:57.682Z",
+  "scanned_tables": 28,
+  "found": 4,
+  "by_kind": {
+    "超机型上限": 1,
+    "哨兵值": 1,
+    "相邻列突变": 2
+  },
+  "findings": [
+    {
+      "table": "CAVITY_CAPACITY",
+      "path": "NH400/C/CSS16",
+      "kind": "超机型上限",
+      "value": "999 > 500 t/h",
+      "note": "会误导选型"
+    },
+    {
+      "table": "CAVITY_CAPACITY",
+      "path": "NH400/C/CSS16",
+      "kind": "哨兵值",
+      "value": "[115,999]",
+      "note": "命中常见哨兵数字"
+    },
+    {
+      "table": "CAVITY_CAPACITY",
+      "path": "NH400/C 列2",
+      "kind": "相邻列突变",
+      "value": "217 → 999",
+      "note": "比值 4.60，可能是录入错位"
+    },
+    {
+      "table": "CAVITY_CAPACITY",
+      "path": "NH400/C 列3",
+      "kind": "相邻列突变",
+      "value": "999 → 310",
+      "note": "比值 0.31，可能是录入错位"
+    }
+  ]
+}
