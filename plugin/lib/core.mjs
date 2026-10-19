@@ -149,11 +149,52 @@ export function wearUniformity(wearRates) {
   };
 }
 
-/** 多梯度结构衬板分区硬度设计：H_i = base * factor^i。 */
-export function gradientLinerDesign(nSections, baseHardness = 60.0, gradientFactor = 1.15) {
-  const out = [];
-  for (let i = 0; i < nSections; i += 1) out.push(pyRound(baseHardness * gradientFactor ** i, 2));
+/**
+ * 多梯度结构衬板分区硬度设计：H_i = base * factor^i
+ *
+ * ⚠️ 单位与物理上限（P0 修正 · 2026-10-02）
+ *   历史缺陷：本函数原先只做乘法，无上限校验。base=58、k=1.12、5 段时输出
+ *   58 / 64.96 / 72.76 / 81.49 / 91.27 —— 该组数值**在任何单位下都不成立**：
+ *     · 若按 HB：58 HB 比退火低碳钢还软（耐磨铸铁铸态即 ≥450 HB）
+ *     · 若按 HRC：末段 91.27 HRC 超过任何铸造耐磨材料的可达硬度（实用上限约 65~68 HRC）
+ *   现修正为：① 明确单位 ② 施加物理上限 ③ 返回是否被截断
+ *
+ * 物理参考（公开资料）：
+ *   高铬铸铁（KmTBCr26 等）铸态 ~450-550 HB，硬化态 ≥600-650 HB ≈ 56-60 HRC
+ *   铸造耐磨材料实用硬度上限 ≈ 65-68 HRC
+ *   高锰钢 ZGMn13 铸态 ~180-220 HB，加工硬化表层可达 ~500 HB
+ */
+export const HARDNESS_LIMITS = {
+  HRC: { min: 20, max: 68, note: '铸造耐磨材料实用上限约 65-68 HRC' },
+  HB: { min: 120, max: 650, note: '高铬铸铁硬化态约 600-650 HB' },
+  HBW: { min: 120, max: 650, note: '同 HB' },
+};
+
+export function gradientLinerDesign(nSections, baseHardness = 58.0, gradientFactor = 1.12, unit = 'HRC') {
+  const lim = HARDNESS_LIMITS[unit] || HARDNESS_LIMITS.HRC;
+  const raw = [];
+  for (let i = 0; i < nSections; i += 1) raw.push(baseHardness * gradientFactor ** i);
+  const out = raw.map((v) => pyRound(Math.min(v, lim.max), 2));
+  // 元信息挂在数组上，保持向后兼容的返回类型
+  out.unit = unit;
+  out.capped = raw.some((v) => v > lim.max);
+  out.raw_last = pyRound(raw[raw.length - 1], 2);
+  out.limit = lim.max;
+  out.in_range = baseHardness >= lim.min && baseHardness <= lim.max;
   return out;
+}
+
+/** 校验一组分区硬度设计是否物理可实现（P0 修正的配套门禁）。 */
+export function validateHardnessDesign(values, unit = 'HRC') {
+  const lim = HARDNESS_LIMITS[unit] || HARDNESS_LIMITS.HRC;
+  const v = (values || []).map(Number).filter(Number.isFinite);
+  const problems = [];
+  if (!v.length) return { unit, ok: false, problems: ['硬度数组为空'], limit: lim };
+  const below = v.filter((x) => x < lim.min);
+  const above = v.filter((x) => x > lim.max);
+  if (below.length) problems.push(`${below.length} 个值低于 ${unit} 下限 ${lim.min}（${below.join(', ')}）—— 比退火碳钢还软，不可能用于耐磨衬板`);
+  if (above.length) problems.push(`${above.length} 个值超过 ${unit} 上限 ${lim.max}（${above.join(', ')}）—— ${lim.note}`);
+  return { unit, min: Math.min(...v), max: Math.max(...v), limit: lim, ok: problems.length === 0, problems };
 }
 
 /* ==========================================================================
