@@ -47,6 +47,17 @@ const TARGETS = [
       [/"version":\s*"\d+\.\d+\.\d+"/g, () => `"version": "${SEMVER}"`],
     ],
   },
+
+  /* R97 root server.json —— 这个才是【发布到 npm】的那份。
+   * 原来 TARGETS 只含 public-overrides/server.json，
+   * 导致根 server.json 长期停在 0.2.0 而无人发现（L-02 只查了 overrides 那份）。
+   * 教训：真相源同步链要覆盖【所有实际被消费的副本】。 */
+  {
+    file: join(ROOT, 'server.json'),
+    rules: [
+      [/"version":\s*"\d+\.\d+\.\d+"/g, () => `"version": "${SEMVER}"`],
+    ],
+  },
   {
     file: join(OVR, '发布清单.md'),
     rules: [
