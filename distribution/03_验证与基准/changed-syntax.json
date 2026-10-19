@@ -1,0 +1,17 @@
+{
+  "generated": "2026-10-10T20:02:16.527Z",
+  "results": [
+    {
+      "file": "tools/_broken_probe.mjs",
+      "ok": false,
+      "msg": "SyntaxError"
+    }
+  ],
+  "failures": [
+    {
+      "file": "tools/_broken_probe.mjs",
+      "ok": false,
+      "msg": "SyntaxError"
+    }
+  ]
+}
