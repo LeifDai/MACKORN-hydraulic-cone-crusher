@@ -1,0 +1,118 @@
+{
+  "generated": "2026-10-08T21:56:41.482Z",
+  "dataset": {
+    "title": "Data for Discrete element modelling and experimental validation of brittle particle comminution",
+    "doi": "10.5281/zenodo.21702040",
+    "license": "CC-BY-4.0",
+    "url": "https://zenodo.org/records/21702040",
+    "material": "沸石 ZEOLITE_DASUN（软质，莫氏 3.5-4）",
+    "equipment": "Microtest MA Schmeltzer 单颗粒压缩试验机，0.5 mm/min",
+    "size_classes": [
+      "2.50-2.80mm",
+      "3.15-3.35mm",
+      "3.55-4.00mm",
+      "4.00-4.50mm"
+    ],
+    "tests_total": 200
+  },
+  "material_caveat": "材料为软质沸石，非中等硬度以上矿石。故本验证【验证方法与分布形式】，不验证绝对强度数值。",
+  "by_size": [
+    {
+      "sizeClass": "2.50-2.80mm",
+      "dMeanMm": 2.65,
+      "tests": 50,
+      "fractured": 49,
+      "forceMeanN": 24.27,
+      "forceSdN": 10.36,
+      "forceMedianN": 22.53,
+      "forceMinN": 9.81,
+      "forceMaxN": 74.27,
+      "cvPct": 42.7
+    },
+    {
+      "sizeClass": "3.15-3.35mm",
+      "dMeanMm": 3.25,
+      "tests": 50,
+      "fractured": 45,
+      "forceMeanN": 32.09,
+      "forceSdN": 11.33,
+      "forceMedianN": 32.68,
+      "forceMinN": 14.31,
+      "forceMaxN": 64.07,
+      "cvPct": 35.3
+    },
+    {
+      "sizeClass": "3.55-4.00mm",
+      "dMeanMm": 3.775,
+      "tests": 50,
+      "fractured": 49,
+      "forceMeanN": 41.08,
+      "forceSdN": 17.67,
+      "forceMedianN": 36.15,
+      "forceMinN": 13.36,
+      "forceMaxN": 82.69,
+      "cvPct": 43
+    },
+    {
+      "sizeClass": "4.00-4.50mm",
+      "dMeanMm": 4.25,
+      "tests": 50,
+      "fractured": 48,
+      "forceMeanN": 45.03,
+      "forceSdN": 21.98,
+      "forceMedianN": 45.35,
+      "forceMinN": 9.49,
+      "forceMaxN": 97.51,
+      "cvPct": 48.8
+    }
+  ],
+  "weibull_fits": [
+    {
+      "sizeClass": "2.50-2.80mm",
+      "dMeanMm": 2.65,
+      "m": 3.008,
+      "F0N": 27.09,
+      "r2": 0.9261,
+      "n": 50
+    },
+    {
+      "sizeClass": "3.15-3.35mm",
+      "dMeanMm": 3.25,
+      "m": 3.265,
+      "F0N": 35.76,
+      "r2": 0.9509,
+      "n": 50
+    },
+    {
+      "sizeClass": "3.55-4.00mm",
+      "dMeanMm": 3.775,
+      "m": 2.621,
+      "F0N": 46.14,
+      "r2": 0.9664,
+      "n": 50
+    },
+    {
+      "sizeClass": "4.00-4.50mm",
+      "dMeanMm": 4.25,
+      "m": 2.194,
+      "F0N": 50.81,
+      "r2": 0.9771,
+      "n": 50
+    }
+  ],
+  "size_effect": {
+    "monotonically_increasing_force": true,
+    "specific_strength_drop_pct": 27.1,
+    "interpretation": "存在尺寸效应，与 Weibull 最弱链理论一致"
+  },
+  "what_this_validates": [
+    "力-位移曲线峰值识别可自动、可复现地判定破碎事件",
+    "破碎力服从威布尔分布 —— 支持本模型所有基于 Weibull 的分析（衬板寿命 B10、市场统计的 weibull 模式）",
+    "存在尺寸效应 —— 支持\"强度随粒径下降\"的建模假设"
+  ],
+  "what_this_does_NOT_validate": [
+    "花岗岩/玄武岩等中等硬度以上矿石的绝对破碎强度（材料不同）",
+    "圆锥破料层破碎的破碎函数数值（单颗粒 ≠ 料层）"
+  ],
+  "remaining_gap": "要完整验证绝对精度，仍需【圆锥破】现场数据：同工况给料筛析 + 全粒级产品筛析 + CSS。"
+}
