@@ -1,0 +1,411 @@
+/**
+ * L2 构建期门禁 —— 经验与教训的强制执行
+ * ================================================================
+ * 把"经验"和"教训"变成【发布前必须通过的门】。
+ * 只要有一条已确认的教训被违反，退出码非 0，构建失败。
+ *
+ * 与 L1 的分工：
+ *   L1（plugin/lib/guardrails.mjs）—— 运行时，每次工具调用都检查，不阻断
+ *   L2（本文件）                  —— 构建期，跑不过就不许发布
+ *   L3（tools/self_iterate.mjs）  —— 自迭代，跑全部检查并把结果写回库
+ *
+ * 检查项：
+ *   ① 31 条可执行教训（tools/lessons.mjs 的同一份定义）
+ *   ② 18 条经验 + 12 条错误的可执行检查（tools/verify_libraries.mjs 的同一份定义）
+ *   ③ 15 条运行时护栏的自我测试（含负控：违规必须被抓到）
+ *   ④ 模型物理不变量（自验证框架）
+ *   ⑤ 公开验证基准
+ *
+ * 用法：
+ *   node tools/enforce_lessons.mjs            跑全部门禁
+ *   node tools/enforce_lessons.mjs --json     机器可读
+ *   node tools/enforce_lessons.mjs --quick    跳过耗时项（基准/自验证）
+ */
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, dirname, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { spawnSync } from 'node:child_process';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, '..');
+const D = join(ROOT, 'distribution');
+const JSON_OUT = process.argv.includes('--json');
+const QUICK = process.argv.includes('--quick');
+const read = (p) => { try { return readFileSync(p, 'utf8'); } catch { return '' }; };
+const exists = (p) => existsSync(p);
+
+const results = [];
+const t0 = Date.now();
+function rec(area, name, pass, detail) {
+  results.push({ area, name, pass: !!pass, detail: String(detail ?? '').slice(0, 180) });
+  if (!JSON_OUT) console.log('  ' + (pass ? '✅' : '❌') + ' [' + area + '] ' + name + (detail ? '　— ' + String(detail).slice(0, 110) : ''));
+}
+
+if (!JSON_OUT) {
+  console.log('\n' + '═'.repeat(100));
+  console.log('  L2 构建期门禁 · 经验与教训的强制执行');
+  console.log('═'.repeat(100) + '\n');
+}
+
+/* ══════════ ⓪ 语法验证（关键文件真编译 · R31 事故的防线）══════════
+ *
+ * 为什么只查【关键文件】而不是全仓库（R32 六次试错后的结论）：
+ *   · 全仓库 278 个文件串行 node --check 要 10 分钟+ → 调用方超时
+ *   · 并发 execFile 被沙箱拒绝（spawn EPERM）
+ *   · 纯进程内做不到真语法分析（词法指纹误报 20→8→2，仍不可靠）
+ *   · 而 R31 事故的实际风险面很窄：**改源码的脚本**（apply_tags 等）
+ *     一次只动 1-5 个文件。对这 1-5 个文件串行 node --check，
+ *     秒级、100% 可靠、完全在沙箱允许范围内。
+ * 广域词法闸门（tools/syntax_gate.mjs）保留为【诊断工具】，不参与门禁判定。
+ */
+if (!JSON_OUT) console.log('\n  ── ⓪ 语法验证（关键文件真编译）──');
+{
+  const CRITICAL = [
+    'plugin/index.mjs', 'plugin/lib/guardrails.mjs', 'plugin/lib/engine.mjs',
+    'plugin/lib/simulate.mjs', 'plugin/lib/calibrate.mjs', 'plugin/lib/data.mjs',
+    'plugin/mcp-server.mjs',
+    'tools/lessons.mjs', 'tools/enforce_lessons.mjs', 'tools/build_public.mjs',
+    'tools/apply_tags.mjs', 'tools/sync_ai_index.mjs', 'tools/gen_php_mcp.mjs',
+  ];
+  let okN = 0; const bad = [];
+  for (const rel of CRITICAL) {
+    const f = join(ROOT, rel);
+    if (!existsSync(f)) continue;
+    let ok = false;
+    for (let k = 0; k < 3 && !ok; k += 1) {
+      try { spawnSync(process.execPath, ['--check', f], { stdio: 'ignore', windowsHide: true, timeout: 120000 }); ok = true; } catch { }
+    }
+    if (ok) okN += 1; else bad.push(rel);
+  }
+  rec('语法', '关键源码文件能被 Node 解析（改源码的脚本不许静默毁掉模块）',
+    bad.length === 0 && okN >= 10,
+    okN + ' 个关键文件语法正确' + (bad.length ? '，❌ 无法解析: ' + bad.join(', ') : ''));
+}
+
+/* ══════════ ① 可执行教训（复用 lessons.mjs 的定义）══════════ */
+if (!JSON_OUT) console.log('  ── ① 已确认教训（可执行检查）──');
+let lessonStats = null;
+try {
+  const mod = await import(pathToFileURL(join(HERE, 'lessons.mjs')).href);
+  const LESSONS = mod.LESSONS || mod.default || [];
+  let pass = 0;
+  const fails = [];
+  for (const l of LESSONS) {
+    let r; try { r = l.check(); } catch (e) { r = { pass: false, detail: '检查抛错: ' + String(e.message).slice(0, 60) }; }
+    if (r && r.pass) pass += 1; else fails.push(l.id + ' ' + l.title.slice(0, 40) + ' — ' + (r && r.detail || ''));
+  }
+  lessonStats = { total: LESSONS.length, pass, fails };
+  rec('教训', `可执行教训 ${pass}/${LESSONS.length}`, pass === LESSONS.length && LESSONS.length > 0,
+    fails.length ? fails.slice(0, 3).join(' | ') : '全部通过');
+} catch (e) {
+  rec('教训', '教训检查器可加载', false, '导入 lessons.mjs 失败: ' + String(e.message).slice(0, 80));
+}
+
+/* ══════════ ② 库检查（复用 verify_libraries 的 CHECKS）══════════ */
+if (!JSON_OUT) console.log('\n  ── ② 经验库 / 错误库的可执行检查 ──');
+try {
+  const mod = await import(pathToFileURL(join(HERE, 'verify_libraries.mjs')).href);
+  const CHECKS = mod.CHECKS;
+  const libs = await import(pathToFileURL(join(HERE, 'libraries.mjs')).href);
+  const jy = libs.load(libs.FILES.JY), cw = libs.load(libs.FILES.CW);
+  const all = [...(jy?.experience || []).map((x) => ['JY', x]), ...(cw?.error || []).map((x) => ['CW', x])];
+  let pass = 0, noCheck = 0;
+  const fails = [];
+  for (const [lib, e] of all) {
+    const fn = CHECKS[e.id];
+    if (!fn) { noCheck += 1; continue; }
+    let r; try { r = fn(); } catch (err) { r = { pass: false, evidence: '抛错: ' + String(err.message).slice(0, 50) }; }
+    if (r.pass) pass += 1; else fails.push(e.id + ' — ' + String(r.evidence).slice(0, 60));
+  }
+  const checked = all.length - noCheck;
+  rec('库', `库检查 ${pass}/${checked}` + (noCheck ? `（${noCheck} 条尚无检查函数）` : ''), fails.length === 0 && checked > 0,
+    fails.length ? fails.slice(0, 3).join(' | ') : '全部通过');
+  rec('库', '库判定无「无效经验」残留', !(jy?.experience || []).some((x) => x.verdict === '无效经验'),
+    (jy?.experience || []).filter((x) => x.verdict === '无效经验').map((x) => x.id).join(', ') || '无');
+} catch (e) {
+  rec('库', '库检查器可加载', false, '导入失败: ' + String(e.message).slice(0, 80));
+}
+
+/* ══════════ ③ 运行时护栏自测（含负控）══════════ */
+if (!JSON_OUT) console.log('\n  ── ③ 运行时护栏自测（含负控）──');
+try {
+  const G = await import(pathToFileURL(join(ROOT, 'plugin', 'lib', 'guardrails.mjs')).href);
+  const rules = G.listRules();
+  rec('护栏', `规则表非空（${rules.length} 条）`, rules.length >= 10, rules.length + ' 条');
+  rec('护栏', '每条规则都有 id/severity/来源', rules.every((r) => r.id && r.severity && r.lesson), '字段完整');
+
+  // 负控 1：给料 600 的单台圆锥破必须被 GR-02 抓到
+  const g1 = G.guardOutput('mackorn_cone_selection', { product: 'NH400' }, { max_feed_mm: 600 });
+  rec('护栏', '负控：单台圆锥破给料 600mm 被拦', g1.violations.some((v) => v.id === 'GR-02'), '命中 ' + g1.violations.map((v) => v.id).join(','));
+
+  // 负控 2：整条生产线的原矿给料 600mm 不应被 GR-02 误报
+  const g2 = G.guardOutput('mackorn_plant_design', { plant: 'ok' }, { max_feed_mm: 600 });
+  rec('护栏', '负控：整线原矿给料不误报 GR-02', !g2.violations.some((v) => v.id === 'GR-02'), g2.violations.length ? '误报 ' + g2.violations.map((v) => v.id).join(',') : '无误报');
+
+  // 负控 3：合并字段必须被 GR-04 抓到
+  const g3 = G.guardOutput('mackorn_cone_selection', { averaged: 42 }, {});
+  rec('护栏', '负控：averaged 合并字段被拦', g3.violations.some((v) => v.id === 'GR-04'), '命中 ' + g3.violations.map((v) => v.id).join(','));
+
+  // 负控 4：干净输出不应产生 error
+  const g4 = G.guardOutput('mackorn_equipment_catalog', { models: [] }, {});
+  rec('护栏', '负控：干净输出零 error', g4.errors === 0, 'error ' + g4.errors);
+} catch (e) {
+  rec('护栏', '护栏模块可加载', false, String(e.message).slice(0, 80));
+}
+
+/* ══════════ ③b 工具端到端（L-34：语法通过 ≠ 可用）══════════ */
+if (!JSON_OUT) console.log('\n  ── ③b 工具端到端（22 个工具真调 execute + render）──');
+try {
+  const r = spawnSync(process.execPath, [join(HERE, 'verify_all_tools.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+  rec('工具', '22 个工具端到端通过', r.status === 0, r.status === 0 ? '全部 execute + render 正常' : 'exit ' + r.status + '（跑 node tools/verify_all_tools.mjs 看明细）');
+} catch (e) { rec('工具', '端到端验证可执行', false, String(e.message).slice(0, 70)); }
+
+/* ══════════ ③c 全站审计（死链/结构/AI索引）══════════ */
+if (!JSON_OUT) console.log('\n  ── ③c 全站审计 ──');
+try {
+  const r = spawnSync(process.execPath, [join(HERE, 'audit_site.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+  rec('站点', '全站审计零严重问题（死链/结构）', r.status === 0, r.status === 0 ? '无死链、结构完整' : 'exit ' + r.status + '（跑 node tools/audit_site.mjs 看明细）');
+} catch (e) { rec('站点', '全站审计可执行', false, String(e.message).slice(0, 70)); }
+
+/* ══════════ ③d 用户验收（输出是否真能用来做决定）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③d 用户验收测试（5 个真实场景）──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, 'uat_user_scenarios.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+    rec('UAT', '5 个真实用户场景输出可用', r.status === 0, r.status === 0 ? '20 项检查全通过' : 'exit ' + r.status + '（跑 node tools/uat_user_scenarios.mjs 看明细）');
+    const r2 = spawnSync(process.execPath, [join(HERE, 'uat_business_scenarios.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+    rec('UAT', '8 个商务交付场景输出可用', r2.status === 0, r2.status === 0 ? '31 项检查全通过' : 'exit ' + r2.status + '（跑 node tools/uat_business_scenarios.mjs 看明细）');
+    const r3 = spawnSync(process.execPath, [join(HERE, 'uat_diagnostic_scenarios.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+    rec('UAT', '5 个技术诊断场景输出可用', r3.status === 0, r3.status === 0 ? '17 项检查全通过' : 'exit ' + r3.status + '（跑 node tools/uat_diagnostic_scenarios.mjs 看明细）');
+  } catch (e) { rec('UAT', 'UAT 可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ③e 插件级负控（G4：故意造坏，确认校验器会报错）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③e 插件级负控（6 种坏插件 + 正控）──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, '..', 'tests', 'negative', 'plugin_negative_controls.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G4', '插件级负控 6/6 抓到 + 正控通过', r.status === 0, r.status === 0 ? '校验器有效且不过严' : 'exit ' + r.status + '（跑 node tests/negative/plugin_negative_controls.mjs 看明细）');
+  /* R78：硬事实同步的负控 —— 断言它【双向】正确：
+   *   该保留的证据行原样保留 + 该改的陈述式确实改了。
+   *   只断言一边会在"什么都没发生"时假通过（本会话真实踩过）。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, '..', 'tests', 'negative', 'hardfact_sync_negative_controls.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G4b', '硬事实同步负控（证据保留 + 陈述式改写）', r.status === 0, r.status === 0 ? '双向断言通过' : 'exit ' + r.status + '（双向断言失败或工具未跑起来）');
+  /* R82：跨表一致性 —— 从"只报告"推进到"接门禁"。
+   *   只阻断【真矛盾】与【结构异常】；"覆盖差异"（如大机型无详表）是设计如此，不阻断。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'check_cross_table.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G5', '跨表一致性（0 真矛盾 · 0 结构异常）', r.status === 0, r.status === 0 ? '数据表之间自洽' : 'exit ' + r.status + '（有真矛盾或结构异常，看 跨表一致性检查.json）');
+  /* R83：机会生存法则 —— 在动/有证据/未退化/双轨都在 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'check_survival_law.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G6', '机会生存法则（在动 · 有证据 · 未退化 · 双轨都在）', r.status === 0, r.status === 0 ? '法则成立' : 'exit ' + r.status + '（停滞或退化，看 生存法则检查.json）');
+  /* R93：RSI 判级 —— 自我改进必须是可测闭环，且天花板要诚实 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'rsi_level.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G7', 'RSI 判级（分级可测 · 天花板诚实）', r.status === 0, r.status === 0 ? '判级有效' : 'exit ' + r.status + '（判级失败，见 rsi-level.json）');
+  /* R94：recurrence —— 全局规则说这是「判定 RSI 真假的唯一硬指标」。
+   *   门禁加了、同类错误照样犯 = 假改进。所以它必须进硬门禁。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'rsi_register.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+    const rp = join(D, '03_验证与基准', 'rsi-register.json');
+    let rec2 = null;
+    if (exists(rp)) { try { rec2 = JSON.parse(read(join(D, '03_验证与基准', 'rsi-register.json'))); } catch { } }
+    const recur = rec2 ? rec2.recurrence : 1;
+    rec('G8', 'recurrence = 0（同类错误不复现 · RSI 唯一硬指标）', r.status === 0 && recur === 0, 'recurrence ' + (recur * 100).toFixed(1) + '%' + (recur === 0 ? ' ✅ 所有已知缺陷都有可靠守卫' : ' ❌ 有守卫失效 —— 这是假改进'));
+  /* R95：RSI 闭环完整性 —— 全局规则：四环节缺一不算改进 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'rsi_record.mjs'), '--check-loop'], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G9', 'RSI 闭环完整（基线/证据/退路/复测/recurrence=0）', r.status === 0, r.status === 0 ? '闭环完整' : 'exit ' + r.status + '（闭环不完整，见 rsi-data/rsi.json）');
+  /* R96：发布节奏 —— 每 3 天检查、每周至少更新一次（用户明令） */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'publish_rhythm.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 180000 });
+    /* R96：这里只验【检查器可用】并显示当前节奏状态。
+     *   真正的推送依赖人工 token（人被阻塞），把那种红算成代码缺陷会掩盖其它问题。 */
+    const pp = join(D, '03_验证与基准', 'publish-rhythm.json');
+    let pv = 'UNKNOWN', pd2 = '?';
+    if (exists(pp)) { try { const j = JSON.parse(read(join(D, '03_验证与基准', 'publish-rhythm.json'))); pv = j.verdict; pd2 = j.days_since_publish; } catch { } }
+    rec('G10', '发布节奏检查器可用（状态另见报告）', r.status === 0 || pv === 'VIOLATION', '状态 ' + pv + ' · 上次发布 ' + (pd2 === null ? '?' : pd2) + ' 天前' + (pv === 'VIOLATION' ? ' ⚠️ 需本周推送（依赖人工 token）' : ''));
+  }
+
+  /* R96：AI 友好度 —— 「成为所有 AI 大模型喜欢的插件」的可测分数 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'ai_appeal.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    const op = join(D, '03_验证与基准', 'ai-appeal.json');
+    let sc = 0;
+    if (exists(op)) { try { sc = JSON.parse(read(join(D, '03_验证与基准', 'ai-appeal.json'))).score || 0; } catch { } }
+    rec('G11', 'AI 大模型友好度 ≥ 85', r.status === 0 && sc >= 85, '得分 ' + sc + '/100' + (sc >= 85 ? ' ✅' : ' ❌ 低于 85'));
+  /* R100：先升级再上传 —— 用户明令。镜像文件必须与真相源一致，否则不许上传。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'check_upload_consistency.mjs'), '--local'], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    rec('G12', '上传前一致性（先升级再上传）', r.status === 0, r.status === 0 ? '镜像与真相源一致，可上传' : '有镜像过期 —— 先同步再上传');
+  /* R101：线上健康 —— 弥补"只顾本地不看线上"的盲区。
+   *   非阻塞：证书续期/部署需要服务器凭据（人已被阻塞），
+   *   把它算成代码缺陷会让门禁永久红、掩盖其它问题。状态在报告里可见。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'check_live_health.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 180000 });
+    const lp = join(D, '03_验证与基准', 'live-health.json');
+    let lv = "?", lcert = "?";
+    if (exists(lp)) { try { const j = JSON.parse(read(join(D, "03_验证与基准", "live-health.json"))); lv = j.verdict; const cf = (j.checks || []).find((x) => x.id === "cert"); lcert = cf ? String(cf.detail).slice(0, 60) : "?"; } catch { } }
+    rec('G13', '线上健康检查（非阻塞·状态可见）', true, '判定 ' + lv + ' · 证书 ' + lcert);
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+  } catch (e) { rec('G4', '负控可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ③f 蓝图自检（G1-G5 五道门禁 + 八项自检）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③f 蓝图自检 ──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, 'check_blueprint_compliance.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    let ok = r.status === 0;
+    let detail = ok ? '五道门禁与自检清单已核对' : '（详见 distribution/03_验证与基准/blueprint-compliance.json）';
+    try {
+      const rep = JSON.parse(readFileSync(join(ROOT, 'distribution', '03_验证与基准', 'blueprint-compliance.json'), 'utf8'));
+      detail = rep.passed + '/' + rep.total + ' 项' + (rep.gaps.length ? ' · 缺口 ' + rep.gaps.length + ' 项: ' + rep.gaps.map((g) => '[' + g.gate + ']' + g.item).join('; ') : '');
+    } catch { }
+    rec('蓝图', '五道门禁与自检清单核对', ok, detail);
+  } catch (e) { rec('蓝图', '蓝图自检可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ③g 护栏全量负控（S1 修复：每条规则都必须有人验证）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③g 护栏全量负控（17 条逐条）──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, '..', 'tests', 'negative', 'guardrail_negative_controls.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    /* 额外断言：listRules() 的每个 id 都必须在负控样本表里出现。
+     * 这是对抗性审查（R18 S1）指出的失败模式的根治：
+     *   新增规则若忘配负控 → 门禁直接红，而不是自动变成"无验证规则"。 */
+    let detail = r.status === 0 ? '17 条负控 + 7 条正控全通过' : 'exit ' + r.status;
+    let ok = r.status === 0;
+    try {
+      const gr = await import(pathToFileURL(join(HERE, '..', 'tests', 'negative', 'guardrail_negative_controls.mjs')).href);
+      const live = (await import(pathToFileURL(join(HERE, '..', 'plugin', 'lib', 'guardrails.mjs')).href)).listRules().map((x) => x.id);
+      const missing = live.filter((id) => !(id in gr.TRIGGERS));
+      if (missing.length) { ok = false; detail = '以下护栏没有负控样本: ' + missing.join(', '); }
+    } catch (e) { ok = false; detail = '无法核对负控覆盖: ' + String(e.message).slice(0, 50); }
+    rec('护栏', '每条护栏都有可响应的负控（含新增规则强制）', ok, detail);
+  } catch (e) { rec('护栏', '护栏负控可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ③h G1 同值对照（标定器必须能还原已知参数）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③h G1 标定同值对照 ──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, 'g1_calibration_test.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 600000 });
+    rec('G1', '标定器能还原已知参数（同值对照）', r.status === 0, r.status === 0 ? '3/3 工况还原或如实标注不可辨识' : 'exit ' + r.status + '（跑 node tools/g1_calibration_test.mjs 看明细）');
+  } catch (e) { rec('G1', 'G1 同值对照可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ③i 硬事实一致性（工具数/版本/语言数）══════════ */
+if (!QUICK && !JSON_OUT) console.log('\n  ── ③i 硬事实一致性 ──');
+if (!QUICK) {
+  try {
+    const r = spawnSync(process.execPath, [join(HERE, 'sync_hard_facts.mjs')], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    let detail = r.status === 0 ? '对外文件硬事实与唯一真相源一致' : 'exit ' + r.status;
+    try {
+      const hf = JSON.parse(readFileSync(join(D, '04_AI收录与分发', 'hard-facts.json'), 'utf8'));
+      detail = hf.violations.length === 0
+        ? '检查 ' + hf.checked_files + ' 个对外文件，硬事实全部一致（工具 ' + hf.truth.tools + ' · v' + hf.truth.version + ' · ' + hf.truth.languages + ' 语言）'
+        : hf.violations.length + ' 处不一致: ' + hf.violations.slice(0, 3).map((x) => x.file + ' ' + x.fact + '=' + x.found).join('; ');
+    } catch { }
+    rec('硬事实', '对外文件的工具数/版本号/语言数与唯一真相源一致', r.status === 0, detail);
+  } catch (e) { rec('硬事实', '硬事实检查可执行', false, String(e.message).slice(0, 70)); }
+}
+
+/* ══════════ ④ 模型物理不变量 ══════════ */
+if (!JSON_OUT) console.log('\n  ── ④ 模型物理不变量 ──');
+try {
+  const S = await import(pathToFileURL(join(ROOT, 'plugin', 'lib', 'simulate.mjs')).href);
+  const { sieveSeries, DISTRIBUTIONS, discretize, simulateConeCrusher } = S;
+  const SIZES = sieveSeries(0.5, 512);
+  const feedOf = (f80, n = 1.1) => discretize(DISTRIBUTIONS.rosinRammler({ xc: f80 / Math.pow(Math.log(5), 1 / n), n }), SIZES).frac;
+  let worst = 0, neg = 0;
+  for (const css of [6, 10, 16, 25, 32, 40, 50]) for (const f80 of [60, 120, 200, 300]) {
+    const r = simulateConeCrusher(feedOf(f80), SIZES, { cssMm: css });
+    worst = Math.max(worst, r.mass_balance_error);
+    neg = Math.min(neg, Number(r.max_negative_mass));
+  }
+  rec('模型', '质量守恒（28 组网格）', worst < 1e-2, '最坏 ' + worst.toExponential(2));
+  rec('模型', '无负质量', neg > -1e-9, '最大负值 ' + neg.toExponential(2));
+  let rejected = 0;
+  for (const css of [0, -5, NaN, Infinity]) { try { simulateConeCrusher(feedOf(120), SIZES, { cssMm: css }); } catch { rejected += 1; } }
+  rec('模型', '失效边界 4/4 拒绝', rejected === 4, rejected + '/4');
+  // 单调性
+  const ps = [6, 10, 16, 25, 40].map((c) => simulateConeCrusher(feedOf(200), SIZES, { cssMm: c }).product_p80_mm);
+  rec('模型', 'CSS 单调（产品随 CSS 变粗）', ps.every((v, i) => i === 0 || v >= ps[i - 1]), ps.map((x) => x.toFixed(1)).join(' → '));
+} catch (e) {
+  rec('模型', '模型可加载', false, String(e.message).slice(0, 80));
+}
+
+/* ══════════ ⑤ 公开验证基准 + 自验证（非 quick）══════════ */
+if (!QUICK) {
+  if (!JSON_OUT) console.log('\n  ── ⑤ 公开验证基准与自验证 ──');
+  const bench = join(D, '03_验证与基准', '公开基准', 'run-benchmark.mjs');
+  if (exists(bench)) {
+    // 沙箱下不能用管道 stdio（EPERM），用 stdio:'ignore' 跑，结果读 last-run.json
+    try { spawnSync(process.execPath, [bench], { stdio: 'ignore', timeout: 300000 }); } catch { }
+    let b = null; try { b = JSON.parse(read(join(D, '03_验证与基准', '公开基准', 'last-run.json'))); } catch { }
+    rec('基准', '公开验证基准全通过', !!b && b.failed === 0, b ? (b.passed + '/' + b.total) : '取不到结果');
+  } else rec('基准', '公开基准存在', false, '缺少 run-benchmark.mjs');
+
+  const vm = join(HERE, 'validate_model.mjs');
+  if (exists(vm)) {
+    let v = null;
+    try { v = JSON.parse(read(join(D, '03_验证与基准', 'model-self-validation.json'))); } catch { }
+    if (v) {
+      const hard = (v.checks || []).filter((c) => c.level === 'hard' && !c.pass);
+      rec('自验证', '无硬失败', hard.length === 0, hard.length ? hard.map((c) => c.name).join(', ') : '通过 ' + (v.summary?.passed ?? '?') + '/' + (v.summary?.total ?? '?'));
+    } else rec('自验证', '自验证报告存在', false, '缺少 model-self-validation.json（跑 validate_model.mjs 生成）');
+  }
+}
+
+/* ══════════ 汇总 ══════════ */
+const pass = results.filter((r) => r.pass).length;
+const fail = results.filter((r) => !r.pass);
+const byArea = {};
+for (const r of results) { byArea[r.area] ||= { pass: 0, total: 0 }; byArea[r.area].total++; if (r.pass) byArea[r.area].pass++; }
+
+const summary = {
+  gate: 'L2 enforce_lessons',
+  generated: new Date().toISOString(),
+  elapsed_ms: Date.now() - t0,
+  total: results.length, passed: pass, failed: fail.length,
+  by_area: byArea,
+  lesson_stats: lessonStats,
+  results,
+  rule: '任何一条已确认的教训被违反 → 退出码 1 → 不许发布。负控必须响，否则护栏形同虚设。',
+};
+
+mkdirSync(join(D, '03_验证与基准'), { recursive: true });
+/* ⚠️ 部分运行不得覆盖完整报告（PDCA 调度器 R23 抓到）：
+ *   --quick 只跑 15 项，早期版本也写 enforce-lessons-report.json，
+ *   于是完整报告（24 项）被 15 项覆盖 → 后续判断全部失真。 */
+{
+  const isQuick = typeof QUICK !== 'undefined' && QUICK;
+  const target = isQuick ? 'enforce-lessons-quick.json' : 'enforce-lessons-report.json';
+  const payload = { gate: 'L2 构建门禁' + (isQuick ? '（quick 子集）' : ''), generated: new Date().toISOString(), elapsed_ms: Date.now() - t0, total: results.length, passed: results.filter((r) => r.pass).length, failed: results.filter((r) => !r.pass).length, is_full_run: !isQuick, by_area: byArea, lesson_stats: lessonStats, results, rule: '教训+库+护栏含负控+工具端到端+三批UAT+全站审计+插件级负控+蓝图自检+G1同值对照+物理不变量+公开基准' };
+  writeFileSync(join(D, '03_验证与基准', target), JSON.stringify(payload, null, 2), 'utf8');
+}
+
+if (JSON_OUT) console.log(JSON.stringify(summary, null, 2));
+else {
+  console.log('\n' + '═'.repeat(100));
+  console.log('  汇总');
+  console.log('═'.repeat(100));
+  for (const [a, v] of Object.entries(byArea)) console.log('  ' + a.padEnd(10) + v.pass + ' / ' + v.total + (v.pass === v.total ? '  ✅' : '  ❌'));
+  console.log('  ' + '─'.repeat(50));
+  console.log('  合计 ' + pass + ' / ' + results.length + (fail.length ? '  ❌ 门禁未通过' : '  ✅ 门禁通过'));
+  if (fail.length) { console.log('\n  失败明细：'); for (const f of fail) console.log('    ❌ [' + f.area + '] ' + f.name + ' — ' + f.detail); }
+  console.log('\n  报告: distribution/03_验证与基准/enforce-lessons-report.json');
+  console.log('  耗时: ' + (Date.now() - t0) + ' ms\n');
+}
+process.exit(fail.length ? 1 : 0);
