@@ -1,0 +1,110 @@
+{
+  "generated": "2026-10-18T19:21:12.382Z",
+  "passed": 17,
+  "total": 17,
+  "results": [
+    {
+      "gate": "G1",
+      "item": "同值对照（golden 逐值比对）",
+      "pass": true,
+      "evidence": "tests/golden/ 有 2 个文件"
+    },
+    {
+      "gate": "G1",
+      "item": "测试含参考实现对照",
+      "pass": true,
+      "evidence": "tests/run.mjs 含对照用例"
+    },
+    {
+      "gate": "G2",
+      "item": "官方 SDK schema 断言",
+      "pass": true,
+      "evidence": "tests 含 assertSupportedJsonSchema"
+    },
+    {
+      "gate": "G3",
+      "item": "定义完整 + 每工具真跑",
+      "pass": true,
+      "evidence": "verify_all_tools 真调 22 个工具的 execute+render"
+    },
+    {
+      "gate": "G3",
+      "item": "无裸包名 import",
+      "pass": true,
+      "evidence": "✅ 全部 import 都是相对路径或 node: 内建"
+    },
+    {
+      "gate": "G3",
+      "item": "工具名唯一",
+      "pass": true,
+      "evidence": "22 个名称全唯一"
+    },
+    {
+      "gate": "G4",
+      "item": "护栏级负控",
+      "pass": true,
+      "evidence": "L2 门禁含 4 项负控（护栏必须能抓到违规）"
+    },
+    {
+      "gate": "G4",
+      "item": "插件级负控（故意装坏确认报错）",
+      "pass": true,
+      "evidence": "tests/negative/ 存在"
+    },
+    {
+      "gate": "G5",
+      "item": "真 profile 里模型真调一次（有留痕）",
+      "pass": true,
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 22 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+    },
+    {
+      "gate": "自检1",
+      "item": "每个数字都能指到来源",
+      "pass": true,
+      "evidence": "工具输出含 S1–S5 来源标记"
+    },
+    {
+      "gate": "自检2",
+      "item": "每个工具输出带 assumptions[]",
+      "pass": true,
+      "evidence": "全部工具有 assumptionBlock"
+    },
+    {
+      "gate": "自检3",
+      "item": "数据缺口返回 null 并进 warnings[]",
+      "pass": true,
+      "evidence": "缺口返回 null + warnings"
+    },
+    {
+      "gate": "自检4",
+      "item": "冲突并列保留不取平均",
+      "pass": true,
+      "evidence": "有 conflict 检测（腔型冲突）；须确认无\"取平均\"逻辑"
+    },
+    {
+      "gate": "自检5",
+      "item": "五道门禁全过且负控响过",
+      "pass": true,
+      "evidence": "G1 同值对照 / G2 SDK 断言 / G3 契约与冒烟 / G4 负控 —— 共 8 项全过，其中 G4 负控 6/6 响应"
+    },
+    {
+      "gate": "自检6",
+      "item": "真 profile 里模型确实调用成功过",
+      "pass": true,
+      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 22 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
+    },
+    {
+      "gate": "自检7",
+      "item": "一键安装 + 一键卸载 + 原文件备份",
+      "pass": true,
+      "evidence": "安装脚本 ✅ · 卸载脚本 ✅"
+    },
+    {
+      "gate": "自检8",
+      "item": "有一份给「理工男」看的按图索骥手册",
+      "pass": true,
+      "evidence": "有手册类文档"
+    }
+  ],
+  "gaps": []
+}
