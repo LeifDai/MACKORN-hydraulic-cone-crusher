@@ -1,0 +1,809 @@
+{
+  "generated": "2026-10-13T16:27:24.818Z",
+  "total": 57,
+  "red_loose": [],
+  "yellow": [],
+  "green": [
+    "L-01",
+    "L-02",
+    "L-03",
+    "L-04",
+    "L-05",
+    "L-06",
+    "L-07",
+    "L-08",
+    "L-09",
+    "L-10",
+    "L-11",
+    "L-12",
+    "L-13",
+    "L-14",
+    "L-15",
+    "L-16",
+    "L-17",
+    "L-18",
+    "L-19",
+    "L-20",
+    "L-21",
+    "L-22",
+    "L-23",
+    "L-24",
+    "L-25",
+    "L-26",
+    "L-27",
+    "L-28",
+    "L-29",
+    "L-30",
+    "L-31",
+    "L-32",
+    "L-33",
+    "L-34",
+    "L-35",
+    "L-36",
+    "L-37",
+    "L-38",
+    "L-39",
+    "L-40",
+    "L-41",
+    "L-42",
+    "L-43",
+    "L-44",
+    "L-45",
+    "L-46",
+    "L-47",
+    "L-48",
+    "L-49",
+    "L-50",
+    "L-51",
+    "L-52",
+    "L-53",
+    "L-54",
+    "L-55",
+    "L-56",
+    "L-57"
+  ],
+  "detail": [
+    {
+      "id": "L-01",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 924,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-02",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1207,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-03",
+      "grade": "green",
+      "counts": 0,
+      "tests": 2,
+      "body_len": 843,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-04",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1212,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-05",
+      "grade": "green",
+      "counts": 2,
+      "tests": 4,
+      "body_len": 2361,
+      "signals": {
+        "spawn": true,
+        "readdir": true,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-06",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 2396,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-07",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1400,
+      "signals": {
+        "spawn": false,
+        "readdir": true,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-08",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1157,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-09",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 979,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-10",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 836,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-11",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 687,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-12",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1021,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-13",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1390,
+      "signals": {
+        "spawn": true,
+        "readdir": true,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-14",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 224,
+      "signals": {
+        "spawn": false,
+        "readdir": true,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-15",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1626,
+      "signals": {
+        "spawn": false,
+        "readdir": true,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-16",
+      "grade": "green",
+      "counts": 0,
+      "tests": 2,
+      "body_len": 1188,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-17",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1461,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-18",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 754,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-19",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1091,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-20",
+      "grade": "green",
+      "counts": 0,
+      "tests": 3,
+      "body_len": 1156,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-21",
+      "grade": "green",
+      "counts": 1,
+      "tests": 4,
+      "body_len": 1198,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-22",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1048,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-23",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 661,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-24",
+      "grade": "green",
+      "counts": 2,
+      "tests": 0,
+      "body_len": 1369,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-25",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 944,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-26",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1282,
+      "signals": {
+        "spawn": true,
+        "readdir": true,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-27",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 605,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-28",
+      "grade": "green",
+      "counts": 0,
+      "tests": 10,
+      "body_len": 2965,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-29",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1434,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-30",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 892,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-31",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1233,
+      "signals": {
+        "spawn": true,
+        "readdir": true,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-32",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1388,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-33",
+      "grade": "green",
+      "counts": 0,
+      "tests": 5,
+      "body_len": 1374,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-34",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 2656,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-35",
+      "grade": "green",
+      "counts": 0,
+      "tests": 5,
+      "body_len": 1583,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-36",
+      "grade": "green",
+      "counts": 0,
+      "tests": 2,
+      "body_len": 737,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-37",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 815,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-38",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1430,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-39",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1489,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-40",
+      "grade": "green",
+      "counts": 0,
+      "tests": 1,
+      "body_len": 1129,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-41",
+      "grade": "green",
+      "counts": 1,
+      "tests": 0,
+      "body_len": 1515,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-42",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 582,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-43",
+      "grade": "green",
+      "counts": 0,
+      "tests": 3,
+      "body_len": 1080,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-44",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 917,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-45",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 945,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-46",
+      "grade": "green",
+      "counts": 0,
+      "tests": 4,
+      "body_len": 775,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-47",
+      "grade": "green",
+      "counts": 0,
+      "tests": 3,
+      "body_len": 1001,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-48",
+      "grade": "green",
+      "counts": 1,
+      "tests": 2,
+      "body_len": 1037,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-49",
+      "grade": "green",
+      "counts": 0,
+      "tests": 4,
+      "body_len": 851,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-50",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 696,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-51",
+      "grade": "green",
+      "counts": 0,
+      "tests": 3,
+      "body_len": 667,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-52",
+      "grade": "green",
+      "counts": 0,
+      "tests": 2,
+      "body_len": 1227,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-53",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 1293,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-54",
+      "grade": "green",
+      "counts": 0,
+      "tests": 3,
+      "body_len": 761,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-55",
+      "grade": "green",
+      "counts": 0,
+      "tests": 0,
+      "body_len": 501,
+      "signals": {
+        "spawn": false,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-56",
+      "grade": "green",
+      "counts": 0,
+      "tests": 2,
+      "body_len": 1141,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": true,
+        "dynImport": false
+      }
+    },
+    {
+      "id": "L-57",
+      "grade": "green",
+      "counts": 0,
+      "tests": 5,
+      "body_len": 725,
+      "signals": {
+        "spawn": true,
+        "readdir": false,
+        "joinD": false,
+        "dynImport": false
+      }
+    }
+  ],
+  "method": "R61：直接 import LESSONS 并用 check.toString() 取真实函数源码（v1 的三种文本解析都不可靠：正则跨条跳跃 / 花括号被正则量词干扰 / 行边界漏抽）"
+}
