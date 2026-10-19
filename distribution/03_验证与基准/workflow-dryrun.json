@@ -1,0 +1,185 @@
+{
+  "generated": "2026-10-14T12:39:12.783Z",
+  "workflow": ".github/workflows/nightly-self-iteration.yml",
+  "parsed_steps": 25,
+  "executed": 22,
+  "passed": 7,
+  "tolerated_failures": 1,
+  "hard_failures": 14,
+  "skipped": 3,
+  "note": "本地预演：识别 continue-on-error，区分「工作流允许的失败」与「会让工作流标红的硬失败」。含 shell 专用语法的步骤跳过并标注。",
+  "results": [
+    {
+      "name": "单元测试",
+      "cmd": "node tests/run.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "硬事实同步（工具数/语言数）",
+      "cmd": "node tools/sync_tool_count_facts.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "CITATION 校验",
+      "cmd": "node tools/check_citation.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "跨表一致性检查",
+      "cmd": "node tools/check_cross_table.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "数据哨兵值扫描",
+      "cmd": "node tools/scan_sentinel_values.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "全状态一览（省 token）",
+      "cmd": "node tools/status_now.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "关键文件语法验证",
+      "cmd": "node tools/verify_changed_syntax.mjs plugin/index.mjs tools/lessons.mjs tools/enforce_lessons.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "直接运行守卫审计",
+      "cmd": "node tools/audit_run_guards.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "独立验证（Evertsson 真实参数）",
+      "cmd": "node tools/validate_evertsson_params.mjs || true",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "L2 经验教训门禁（全部可执行教训 + 库检查 + 护栏负控 + 物理不变量 + 硬事实 + 语法验证）",
+      "cmd": "node tools/enforce_lessons.mjs",
+      "status": null,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "公开验证基准（26 项，零依赖）",
+      "cmd": "node distribution/03_验证与基准/公开基准/run-benchmark.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "L3 自迭代循环（累积试验、写回经验库与错误库）",
+      "cmd": "node tools/self_iterate.mjs",
+      "status": null,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "模型自验证",
+      "cmd": "node tools/validate_model.mjs",
+      "status": 1,
+      "ok": false,
+      "tolerated": true
+    },
+    {
+      "name": "库验证（经验/错误）",
+      "cmd": "node tools/verify_libraries.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "合规与版本门禁",
+      "cmd": "node tools/build_public.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "云端工作流本地预演",
+      "cmd": "node tools/workflow_dryrun.mjs",
+      "status": null,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "蓝图门禁自检（G1-G5 + 负控）",
+      "cmd": "node tools/check_blueprint_compliance.mjs node tests/negative/plugin_negative_controls.mjs node tests/negative/guardrail_negative_controls.mjs node tools/g1_calibration_test.mjs",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "工具描述审计",
+      "cmd": "node tools/audit_tool_descriptions_v2.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "用户验收测试",
+      "cmd": "node tools/uat_user_scenarios.mjs node tools/uat_business_scenarios.mjs node tools/uat_diagnostic_scenarios.mjs",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "全站审计",
+      "cmd": "node tools/audit_site.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "线上状态核实",
+      "cmd": "node tools/check_live_state.mjs",
+      "status": 0,
+      "ok": true,
+      "tolerated": false
+    },
+    {
+      "name": "生成并发布模型卡",
+      "cmd": "node tools/build_model_card.mjs node tools/publish_model_card.mjs",
+      "status": 1,
+      "ok": false,
+      "tolerated": false
+    },
+    {
+      "name": "生成夜间报告",
+      "cmd": "node tools/night_report.mjs node tools/night_summary.mjs mkdir -p distribution/05_视角与复盘 { echo \"# 云端夜间自迭代报告\" echo \"\" echo \"生成时间（UTC）：$(date -u '+%Y-%m-%d %H:%M:%S')\" echo \"触发方式：${{ github.event_name }}\" echo \"\" echo \"## 各步结果\" echo \"\" echo \"| 步骤 | 结果 |\" echo \"|:---|:---|\" echo \"| 单元测试 | ${{ steps.t1.outcome || '见日志' }} |\" echo \"\" echo \"详见本次 Actions 运行日志与下方 artifacts。\" } > distribution/05_视角与复盘/云端夜间报告.md",
+      "status": "skipped",
+      "tolerated": false
+    },
+    {
+      "name": "提交本轮结果（经验库/错误库/历史/报告）",
+      "cmd": "git config user.name  \"mackorn-cloud-bot\" git config user.email \"leif.dai@mackorn.cn\" git add -A distribution/07_库 distribution/03_验证与基准 distribution/05_视角与复盘 || true if git diff --staged --quiet; then echo \"本轮无变化，不提交\" else git commit -m \"chore(nightly): 云端自迭代 $(date -u '+%Y-%m-%d %H:%M') [skip ci]\" git push || echo \"推送失败（可能无权限）—— 结果仍在 artifacts 中\" fi",
+      "status": "skipped",
+      "tolerated": false
+    },
+    {
+      "name": "上传结果 artifacts",
+      "cmd": null,
+      "status": "skipped",
+      "tolerated": false
+    }
+  ]
+}
