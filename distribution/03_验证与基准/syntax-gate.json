@@ -1,0 +1,31 @@
+{
+  "generated": "2026-10-11T05:06:00.627Z",
+  "checked": 274,
+  "failed": 2,
+  "syntax_failures": 2,
+  "env_failures": 0,
+  "failures": [
+    {
+      "file": "tools/build_tool_pages.mjs",
+      "problems": [
+        {
+          "line": 155,
+          "msg": "模板字符串未闭合 `"
+        }
+      ]
+    },
+    {
+      "file": "tools/gen_qr_svg.mjs",
+      "problems": [
+        {
+          "line": 50,
+          "msg": "模板字符串未闭合 `"
+        }
+      ]
+    }
+  ],
+  "elapsed_s": 5.59,
+  "method": "in-process lexer + R31-fingerprint detection (foreign text outside literals, adjacent strings, unbalanced quotes/brackets)",
+  "honesty": "这是针对已知损坏类别的定向闸门，不是完整语法分析器；它不保证抓到所有语法错误，但能抓到本仓库真实发生过的那一类",
+  "why": "apply_tags 曾把文本插进字符串字面量内部，造成 22 行引号损坏、index.mjs 无法解析，而当时门禁全绿（R31）"
+}
