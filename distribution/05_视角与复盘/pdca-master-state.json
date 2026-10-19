@@ -1,0 +1,162 @@
+{
+  "generated": "2026-10-10T14:18:12.094Z",
+  "mode": "status",
+  "scan": {
+    "gates": [
+      {
+        "name": "L2 构建门禁",
+        "passed": 25,
+        "total": 25,
+        "ok": true
+      },
+      {
+        "name": "可执行教训",
+        "passed": 50,
+        "total": 50,
+        "ok": true
+      },
+      {
+        "name": "公开基准",
+        "passed": 26,
+        "total": 26,
+        "ok": true
+      },
+      {
+        "name": "蓝图自检",
+        "passed": 17,
+        "total": 17,
+        "ok": true
+      },
+      {
+        "name": "全站审计",
+        "passed": 1,
+        "total": 1,
+        "ok": true
+      }
+    ],
+    "weaknesses": [
+      {
+        "id": "S2",
+        "name": "教训判据强度不足",
+        "count": 41,
+        "detail": "红（裸计数）0 · 黄（关键词/计数）41 · 绿（行为）4",
+        "items": [
+          "L-01",
+          "L-02",
+          "L-03",
+          "L-04",
+          "L-05",
+          "L-07",
+          "L-08",
+          "L-09",
+          "L-10",
+          "L-11",
+          "L-12",
+          "L-13",
+          "L-14",
+          "L-15",
+          "L-16",
+          "L-17",
+          "L-18",
+          "L-19",
+          "L-20",
+          "L-21",
+          "L-22",
+          "L-23",
+          "L-24",
+          "L-25",
+          "L-26",
+          "L-27",
+          "L-29",
+          "L-30",
+          "L-31",
+          "L-32",
+          "L-33",
+          "L-35",
+          "L-37",
+          "L-38",
+          "L-39",
+          "L-40",
+          "L-41",
+          "L-42",
+          "L-43",
+          "L-44",
+          "L-45"
+        ]
+      }
+    ],
+    "todos": [
+      "1. 把 42 条教训逐条映射到\"它验证的具体函数/行\"，然后做【精确突变】测试",
+      "2. 把纯文本断言（关键词匹配）改为行为断言（真调对象、比对输出）",
+      "3. 在门禁报告里把教训分三档显示：已证伪 / 仅结构匹配 / 仅存在性",
+      "4. 给 L-30 这类同义反复的判据重写（去掉裸\"工具\"分支）"
+    ],
+    "history": {
+      "self_iterate_rounds": 31,
+      "pdca_rounds": 55
+    },
+    "signals": []
+  },
+  "plan": [
+    {
+      "id": "A-GATES",
+      "score": 10,
+      "value": 10,
+      "cost": 1
+    },
+    {
+      "id": "A-GUARD",
+      "score": 9,
+      "value": 9,
+      "cost": 1
+    },
+    {
+      "id": "A-WEAK-SCAN",
+      "score": 8,
+      "value": 8,
+      "cost": 1
+    },
+    {
+      "id": "A-DELIVER",
+      "score": 7,
+      "value": 7,
+      "cost": 1
+    },
+    {
+      "id": "A-REPORT",
+      "score": 5,
+      "value": 5,
+      "cost": 1
+    },
+    {
+      "id": "A-MUTATION",
+      "score": 4.5,
+      "value": 9,
+      "cost": 2
+    },
+    {
+      "id": "A-G1",
+      "score": 4.5,
+      "value": 9,
+      "cost": 2
+    },
+    {
+      "id": "A-E2E",
+      "score": 4.5,
+      "value": 9,
+      "cost": 2
+    },
+    {
+      "id": "A-UAT",
+      "score": 4,
+      "value": 8,
+      "cost": 2
+    },
+    {
+      "id": "A-S2-FIX",
+      "score": 1.8,
+      "value": 9,
+      "cost": 5
+    }
+  ]
+}
