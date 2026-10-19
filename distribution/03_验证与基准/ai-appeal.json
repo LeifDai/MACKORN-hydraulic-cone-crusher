@@ -1,0 +1,135 @@
+{
+  "schema": "mackorn-ai-appeal/1",
+  "generated": "2026-10-19T06:16:55.389Z",
+  "what": "AI 大模型友好度评分 —— 把「成为所有 AI 大模型喜欢的插件」变成可测指标。",
+  "score": 100,
+  "grade": "A+",
+  "passed": 13,
+  "total": 13,
+  "by_layer": {
+    "发现层": {
+      "pass": 4,
+      "total": 4
+    },
+    "调用层": {
+      "pass": 4,
+      "total": 4
+    },
+    "结果层": {
+      "pass": 3,
+      "total": 3
+    },
+    "信任层": {
+      "pass": 2,
+      "total": 2
+    }
+  },
+  "items": [
+    {
+      "id": "A1",
+      "layer": "发现层",
+      "name": "工具描述含中英触发词",
+      "pass": true,
+      "detail": "中 ✅ 英 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A1b",
+      "layer": "发现层",
+      "name": "工具描述含多语言触发词（9+ 语言）",
+      "pass": true,
+      "detail": "有多语言触发词 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A2",
+      "layer": "发现层",
+      "name": "llms.txt 存在且说明\"何时用我\"",
+      "pass": true,
+      "detail": "30 KB，含触发说明 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A3",
+      "layer": "发现层",
+      "name": "有 Agent Skills（SKILL.md）→ 73 种助手可装",
+      "pass": true,
+      "detail": "6 个技能",
+      "weight": 1
+    },
+    {
+      "id": "A4",
+      "layer": "调用层",
+      "name": "零运行时依赖（沙箱里能跑）",
+      "pass": true,
+      "detail": "dependencies 为空 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A5",
+      "layer": "调用层",
+      "name": "不需要认证（不用问用户要 key）",
+      "pass": true,
+      "detail": "无认证要求 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A6",
+      "layer": "调用层",
+      "name": "MCP 可启动（server.json + bin）",
+      "pass": true,
+      "detail": "server.json ✅ · bin ✅",
+      "weight": 1
+    },
+    {
+      "id": "A7",
+      "layer": "调用层",
+      "name": "支持远程 HTTP（不能装东西时也能用）",
+      "pass": true,
+      "detail": "有 remotes 配置 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A8",
+      "layer": "结果层",
+      "name": "输出是结构化对象（不是散文）",
+      "pass": true,
+      "detail": "工具返回对象 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A9",
+      "layer": "结果层",
+      "name": "每个结果带 assumptions / warnings",
+      "pass": true,
+      "detail": "4/4 个工具带边界说明",
+      "weight": 1
+    },
+    {
+      "id": "A10",
+      "layer": "结果层",
+      "name": "未知字段返回 null（不编造）",
+      "pass": true,
+      "detail": "源码里明确用 null 表示未知 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A11",
+      "layer": "信任层",
+      "name": "有明确的能力边界 + 拒绝规则",
+      "pass": true,
+      "detail": "护栏里有拒绝规则 ✅ · Harness 已导出 ✅",
+      "weight": 1
+    },
+    {
+      "id": "A12",
+      "layer": "信任层",
+      "name": "可引用（CITATION.cff）",
+      "pass": true,
+      "detail": "CITATION.cff ✅",
+      "weight": 1
+    }
+  ],
+  "failed": [],
+  "next_step": "已达满分。下一步是让别人知道它（分发），不是继续加功能。"
+}
