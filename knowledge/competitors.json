@@ -1,0 +1,319 @@
+{
+  "schema_version": "1.0",
+  "asset": "MACKORN 液压圆锥破碎机竞品对标库",
+  "generated_from": [
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\05_市场竞品分析\\液压圆锥破碎机竞品对比分析.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\00_知识库总览.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\00_知识库总览_合并版.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\01_产品技术参数\\NH_NS系列技术参数大全.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\01_产品系列与技术规格.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\03_液压系统与Hydroset.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\04_ASRi自动控制系统.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\05_破碎腔型选择与衬板.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\11_H系列破碎机规格与备件.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\12_移动圆锥破碎机专题.md",
+    "E:\\Mackorn\\MACKORN美矿液压圆锥破专家\\09_Sandvik山特维克知识库\\13_跨品牌对比_美卓HPMP系列.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\02-NH系列液压圆锥破碎机.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\04-MPH系列多缸液压圆锥破碎机.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\08-CVS系列制砂机与备件选型.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\09-选型设计规范与问答.md",
+    "E:\\Mackorn\\MACKORN美矿破碎筛分生产线设计专家\\knowledge-base\\99-专家系统提示词.md"
+  ],
+  "source_codes": {
+    "S1": "液压圆锥破专家/01_产品技术参数/NH_NS系列技术参数大全.md",
+    "S3": "液压圆锥破专家/05_市场竞品分析/液压圆锥破碎机竞品对比分析.md",
+    "S1b": "液压圆锥破专家/00_知识库总览.md 与 00_知识库总览_合并版.md",
+    "S9a": "液压圆锥破专家/09_Sandvik山特维克知识库/01_产品系列与技术规格.md",
+    "S9c": "液压圆锥破专家/09_Sandvik山特维克知识库/03_液压系统与Hydroset.md",
+    "S9d": "液压圆锥破专家/09_Sandvik山特维克知识库/04_ASRi自动控制系统.md",
+    "S9e": "液压圆锥破专家/09_Sandvik山特维克知识库/05_破碎腔型选择与衬板.md",
+    "S9k": "液压圆锥破专家/09_Sandvik山特维克知识库/11_H系列破碎机规格与备件.md",
+    "S9m": "液压圆锥破专家/09_Sandvik山特维克知识库/13_跨品牌对比_美卓HPMP系列.md",
+    "S2b": "生产线设计专家/knowledge-base/02-NH系列液压圆锥破碎机.md",
+    "S2d": "生产线设计专家/knowledge-base/04-MPH系列多缸液压圆锥破碎机.md",
+    "S2p": "生产线设计专家/knowledge-base/08-CVS系列制砂机与备件选型.md",
+    "S2j": "生产线设计专家/knowledge-base/09-选型设计规范与问答.md",
+    "S2h": "生产线设计专家/knowledge-base/99-专家系统提示词.md"
+  },
+  "models_field_note": "models[] 每个元素为对象 {model, series, power_kw, max_feed_mm, css_range_mm, capacity_tph, equivalent, note, source}。所有字段一律来自上述来源；查不到的写 null。美矿机型的完整逐机型参数（含外形尺寸、重量、腔型）见 equipment-nh-ns.json，此处只保留对标所需的最小字段。",
+  "brands": [
+    {
+      "brand": "美矿 MACKORN",
+      "full_name": "上海美矿机械股份有限公司 / Shanghai Mackorn Minerals Co., Ltd.",
+      "origin": "中国（工厂位于江苏省苏州市太仓市）",
+      "position": "国产中端；全球二线",
+      "models": [
+        { "model": "NH200", "series": "NH（单缸液压，标准型）", "power_kw": 90, "max_feed_mm": 135, "css_range_mm": [4, 32], "capacity_tph": [25, 125], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH300", "series": "NH", "power_kw": 160, "max_feed_mm": 185, "css_range_mm": [6, 38], "capacity_tph": [45, 205], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH400", "series": "NH", "power_kw": 250, "max_feed_mm": 215, "css_range_mm": [8, 44], "capacity_tph": [87, 394], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH600", "series": "NH", "power_kw": 315, "max_feed_mm": 275, "css_range_mm": [13, 51], "capacity_tph": [160, 659], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH700", "series": "NH", "power_kw": 630, "max_feed_mm": 350, "css_range_mm": [10, 70], "capacity_tph": [277, 1508], "note": "S2 系列来源一律按 355 kW 引用；见 equipment-nh-ns.json conflicts", "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH860", "series": "NH", "power_kw": 500, "max_feed_mm": 315, "css_range_mm": [16, 51], "capacity_tph": [285, 1123], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH865", "series": "NH", "power_kw": 500, "max_feed_mm": 123, "css_range_mm": [10, 44], "capacity_tph": [162, 694], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH890", "series": "NH", "power_kw": 750, "max_feed_mm": 370, "css_range_mm": [16, 70], "capacity_tph": [503, 2436], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NH895", "series": "NH", "power_kw": 750, "max_feed_mm": 120, "css_range_mm": [10, 70], "capacity_tph": [246, 1452], "source": "S1 §1.1（功率另见 S1b §7.1）" },
+        { "model": "NS200", "series": "NS（单缸液压，高速型）", "power_kw": 90, "max_feed_mm": 240, "css_range_mm": [19, 38], "capacity_tph": [69, 166], "source": "S1 §2.1（功率另见 S1b §7.1）" },
+        { "model": "NS300", "series": "NS", "power_kw": 160, "max_feed_mm": 360, "css_range_mm": [19, 54], "capacity_tph": [90, 341], "source": "S1 §2.1（功率另见 S1b §7.1）" },
+        { "model": "NS400", "series": "NS", "power_kw": 250, "max_feed_mm": 450, "css_range_mm": [25, 54], "capacity_tph": [193, 598], "source": "S1 §2.1（功率另见 S1b §7.1）" },
+        { "model": "NS600", "series": "NS", "power_kw": 315, "max_feed_mm": 560, "css_range_mm": [38, 83], "capacity_tph": [313, 1046], "source": "S1 §2.1（功率另见 S1b §7.1）" },
+        { "model": "MPH30", "series": "MPH（多缸液压）", "power_kw": 160, "max_feed_mm": 180, "css_range_mm": [13, 31], "capacity_tph": [80, 200], "source": "S2d §2 系列（见 equipment-nh-ns.json）" },
+        { "model": "MPH50", "series": "MPH", "power_kw": 250, "max_feed_mm": 220, "css_range_mm": [16, 38], "capacity_tph": [120, 300], "note": "来源写 200-250 kW 区间", "source": "S2d §2 系列" },
+        { "model": "MPH6", "series": "MPH", "power_kw": 160, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": [60, 150], "source": "S2d §2 系列" },
+        { "model": "MPH83", "series": "MPH", "power_kw": 315, "max_feed_mm": null, "css_range_mm": [22, 50], "capacity_tph": [250, 500], "source": "S2d §2 系列" },
+        { "model": "MP50", "series": "MP（多缸液压）", "power_kw": 315, "max_feed_mm": null, "css_range_mm": [25, 50], "capacity_tph": [200, 450], "source": "S2d §2 系列" },
+        { "model": "MP1250", "series": "MP", "power_kw": 400, "max_feed_mm": null, "css_range_mm": [32, 64], "capacity_tph": [350, 700], "note": "美卓亦有同名 MP1250 型号，勿混用", "source": "S2d §2 系列" }
+      ],
+      "advantages": [
+        { "item": "本土化服务", "detail": "国内工厂（江苏太仓），响应速度快；华东 24 小时响应", "source": "S3 §3.1 + S3 §5.3" },
+        { "item": "性价比", "detail": "同等规格价格低于进口品牌 30%-50%（S3）；S2j Q4 另表述为「低 20-30%」", "source": "S3 §3.1 + S2j Q4" },
+        { "item": "定制能力", "detail": "可根据客户工况定制腔型和衬板配置", "source": "S3 §3.1" },
+        { "item": "远程监控", "detail": "AORS 系统支持数百台设备同时监控", "source": "S3 §3.1" },
+        { "item": "融资租赁", "detail": "美矿自营融资租赁业务，解决客户资金压力", "source": "S3 §3.1" },
+        { "item": "备件供应", "detail": "国产备件供应周期短、价格优；常规件 3-7 天供货", "source": "S3 §3.1 + S3 §5.3" },
+        { "item": "供货周期", "detail": "4-8 周（S2j Q4）；对比山特维克 12-20 周、美卓 8-12 周", "source": "S2j Q4" }
+      ],
+      "disadvantages": [
+        { "item": "品牌知名度", "detail": "在国际矿山巨头客户中认知度有限", "source": "S3 §3.2" },
+        { "item": "大型矿山认证", "detail": "大型矿山（央企/国企）采购中品牌认可度待提升", "source": "S3 §3.2" },
+        { "item": "衬板寿命", "detail": "部分工况下衬板耐磨性较进口品牌有差距", "source": "S3 §3.2" },
+        { "item": "全球服务网络", "detail": "海外市场服务网络尚在建设中", "source": "S3 §3.2" }
+      ],
+      "price_band": "中端（国产）",
+      "source": "S3 §1/§3/§4 + S1b 核心技术对比表 + S2j Q4"
+    },
+    {
+      "brand": "美卓 Metso",
+      "full_name": "Metso Corporation",
+      "origin": "芬兰",
+      "position": "全球一线，高端矿山",
+      "models": [
+        { "model": "HP100", "series": "HP（Nordberg HP，多缸液压）", "power_kw": 90, "max_feed_mm": 150, "css_range_mm": null, "capacity_tph": [65, 170], "equivalent": "山特维克 CH420/CS420", "source": "S9m §1.1" },
+        { "model": "HP200", "series": "HP", "power_kw": 132, "max_feed_mm": 185, "css_range_mm": null, "capacity_tph": [75, 250], "equivalent": "山特维克 CH430/CS430", "source": "S9m §1.1" },
+        { "model": "HP300", "series": "HP", "power_kw": 200, "max_feed_mm": 240, "css_range_mm": null, "capacity_tph": [120, 430], "equivalent": "山特维克 CH440/CS440", "source": "S9m §1.1" },
+        { "model": "HP400", "series": "HP", "power_kw": 315, "max_feed_mm": 350, "css_range_mm": null, "capacity_tph": [200, 650], "equivalent": "山特维克 CH660/CS660", "source": "S9m §1.1" },
+        { "model": "HP500", "series": "HP", "power_kw": 400, "max_feed_mm": 400, "css_range_mm": null, "capacity_tph": [300, 900], "equivalent": "山特维克 CH870", "source": "S9m §1.1" },
+        { "model": "HP800", "series": "HP", "power_kw": 600, "max_feed_mm": 500, "css_range_mm": null, "capacity_tph": [400, 1200], "equivalent": "山特维克 CH880", "source": "S9m §1.1" },
+        { "model": "MP800", "series": "MP（Multi Purpose，多缸液压）", "power_kw": null, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "equivalent": "山特维克 CH880 级别", "note": "来源只给出级别对应，未给出参数", "source": "S9m §1.2" },
+        { "model": "MP1250", "series": "MP", "power_kw": null, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "equivalent": "山特维克 CH880（更大规格）", "note": "主要区别为更大的偏心距和更重的架构；美矿亦有同名 MP1250 型号", "source": "S9m §1.2" },
+        { "model": "GP 系列", "series": "GP（单缸液压）", "power_kw": null, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "note": "来源只给出系列定位，未给出型号与参数", "source": "S1b §三 竞品参考系列" },
+        { "model": "CV217", "series": "立轴冲击破（制砂，对比用）", "power_kw": 340, "max_feed_mm": 50, "css_range_mm": null, "capacity_tph": [150, 340], "note": "与美矿 CVS837 对标", "source": "S2p §四" }
+      ],
+      "advantages": [
+        { "item": "技术路线", "detail": "多缸液压，圆锥破碎机全球销量领先；HP 系列代表行业标准", "source": "S3 §2.1" },
+        { "item": "自动化", "detail": "IC（Intelligent Crushing）系列自动控制系统，与美卓全流程控制集成；可通过 PLC 集成实现更复杂的自动化", "source": "S3 §2.1 + S9m §2.3" },
+        { "item": "全球服务", "detail": "售后服务网络最完善", "source": "S3 §2.1" },
+        { "item": "中国市场基础", "detail": "HP 系列在中国矿山占有率高，配件易得", "source": "S9m §4.2" },
+        { "item": "产品粒型", "detail": "「阶梯式」腔壁设计，平衡产量与粒型；HP 的阶梯式腔型粒型更好", "source": "S9m §2.2/§4.2" }
+      ],
+      "disadvantages": [
+        { "item": "价格", "detail": "高（进口品牌溢价）", "source": "S3 §2.1" },
+        { "item": "交货周期", "detail": "长（进口）", "source": "S3 §4" },
+        { "item": "备件价格", "detail": "高", "source": "S3 §4" }
+      ],
+      "price_band": "高端",
+      "source": "S3 §1/§2.1/§4 + S9m §1 + S1b §三 + S2p §四"
+    },
+    {
+      "brand": "山特维克 Sandvik",
+      "full_name": "Sandvik AB",
+      "origin": "瑞典",
+      "position": "全球一线，高端矿山",
+      "models": [
+        { "model": "CH420", "series": "CH（Hydrocone 重型工业用）", "power_kw": 90, "max_feed_mm": 185, "css_range_mm": [13, 38], "capacity_tph": [75, 145], "note": "最大给料按 EC 腔：EC185/C145/MC115 mm；总重约 5,300 kg（细腔）/5,100 kg；偏心套可选 25/29/33/38 mm；对应旧型号 H2800", "source": "S9a §2.1 + S9k §1.1" },
+        { "model": "CH430", "series": "CH", "power_kw": 150, "max_feed_mm": 215, "css_range_mm": [16, 44], "capacity_tph": [95, 235], "note": "EC215/C175/MC140 mm；总重约 9,200 kg（细腔）/8,500 kg；对应旧型号 H3800", "source": "S9a §2.2 + S9k §1.1" },
+        { "model": "CH440", "series": "CH", "power_kw": 220, "max_feed_mm": 360, "css_range_mm": [19, 51], "capacity_tph": [135, 320], "note": "EC360/C300/MC235 mm；总重约 14,300 kg（细腔）/13,500 kg；腔型 EEF/EF/EFX/F/MF/M/MC/C/CX/EC；对应旧型号 H4800", "source": "S9a §2.3 + S9k §1.1" },
+        { "model": "CH660", "series": "CH", "power_kw": 315, "max_feed_mm": 560, "css_range_mm": [22, 64], "capacity_tph": [200, 480], "note": "EC560/C500/MC420 mm；总重约 23,500 kg（细腔）/22,000 kg；对应旧型号 H6800", "source": "S9a §2.4 + S9k §1.1" },
+        { "model": "CH870", "series": "CH", "power_kw": 400, "max_feed_mm": 650, "css_range_mm": [25, 75], "capacity_tph": null, "note": "EC650/C550/MC450 mm；总重约 50,000 kg；过载保护为蓄能器；对应旧型号 H8800", "source": "S9a §2.5 + S9k §1.1" },
+        { "model": "CH880", "series": "CH", "power_kw": 600, "max_feed_mm": 800, "css_range_mm": [32, 102], "capacity_tph": null, "note": "EC800/C700/MC600 mm；总重约 70,000 kg；**CH880 专用压力限制阀（非蓄能器）**；对应旧型号 H8800 A", "source": "S9a §2.5 + S9k §1.1" },
+        { "model": "CS420", "series": "CS（Standard Cone 紧凑型）", "power_kw": 90, "max_feed_mm": 240, "css_range_mm": [9, 25], "capacity_tph": [50, 115], "note": "最大给料 EC240/C200 mm；腔型 EC/C/MC", "source": "S9a §三" },
+        { "model": "CS430", "series": "CS", "power_kw": 150, "max_feed_mm": 360, "css_range_mm": [11, 38], "capacity_tph": [75, 165], "note": "EC360/C300 mm；腔型 EC/C/MC", "source": "S9a §三" },
+        { "model": "CS440", "series": "CS", "power_kw": 220, "max_feed_mm": 450, "css_range_mm": [13, 51], "capacity_tph": [95, 240], "note": "EC450/C400 mm；腔型 EC/C/MC。**来源警示**：曾有客户反映衬板使用问题（原始文件《关于CS440圆锥破碎机衬板使用问题的函.doc》），选型时需注意给料条件与破碎腔匹配", "source": "S9a §三 + S9e §6.1" },
+        { "model": "CS660", "series": "CS", "power_kw": 315, "max_feed_mm": 560, "css_range_mm": [19, 64], "capacity_tph": [150, 380], "note": "EC560/C500 mm；腔型 EC/C", "source": "S9a §三" },
+        { "model": "H2800", "series": "H（Hydrocone 1800 系列，早期型号）", "power_kw": 90, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "equivalent": "CH420", "source": "S9k §1.1" },
+        { "model": "H3800", "series": "H", "power_kw": 132, "max_feed_mm": 245, "css_range_mm": [10, 38], "capacity_tph": [80, 260], "equivalent": "CH430", "note": "EC245/C195/MC145 mm；偏心套 25/29/33/38 mm；来源另给逐腔型×CSS 通过量表", "source": "S9k §三" },
+        { "model": "H4800", "series": "H", "power_kw": 200, "max_feed_mm": 275, "css_range_mm": [13, 70], "capacity_tph": [145, 560], "equivalent": "CH440", "note": "来源记「160 kW / 200 kW（双速可选）」；EC275/C215/MC175 mm；偏心套 29/33/38/44 mm；主机重量约 16,000 kg；来源另给逐腔型×CSS 通过量表", "source": "S9k §二" },
+        { "model": "H6800", "series": "H", "power_kw": 250, "max_feed_mm": 370, "css_range_mm": [16, 54], "capacity_tph": [250, 930], "equivalent": "CH660", "note": "EC370/C300/MC215 mm；偏心套 38/44/50/57 mm", "source": "S9k §四" },
+        { "model": "H8800", "series": "H", "power_kw": 400, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "equivalent": "CH870", "source": "S9k §1.1" },
+        { "model": "H8800 A", "series": "H", "power_kw": 450, "max_feed_mm": null, "css_range_mm": null, "capacity_tph": null, "equivalent": "CH880", "source": "S9k §1.1" },
+        { "model": "QH330", "series": "移动圆锥破（履带式，搭载 CH660）", "power_kw": 250, "max_feed_mm": 220, "css_range_mm": [16, 54], "capacity_tph": [200, 400], "note": "发动机 Caterpillar C9（250 kW）；整机重量约 38,000 kg；履带式液压驱动；Hydroset 油箱 40 L、润滑油箱 150 L、液压油箱 700 L、柴油箱 900 L", "source": "09_Sandvik山特维克知识库/12_移动圆锥破碎机专题.md §一 + 01_产品系列与技术规格.md §七" },
+        { "model": "Barmac B7150", "series": "立轴冲击破（制砂，对比用）", "power_kw": 330, "max_feed_mm": 53, "css_range_mm": null, "capacity_tph": [140, 330], "note": "与美矿 CVS837 对标；转子直径 840 mm；原装进口", "source": "S2p §四" }
+      ],
+      "advantages": [
+        { "item": "技术路线", "detail": "单缸和多缸并存，CS 系列为高速型；超硬岩破碎能力强，设计精密", "source": "S3 §2.2" },
+        { "item": "材料技术", "detail": "自有合金材料专利，衬板寿命长", "source": "S3 §2.2" },
+        { "item": "全球覆盖", "detail": "矿山 OEM 配套首选品牌", "source": "S3 §2.2" },
+        { "item": "CLP 腔型设计", "detail": "Constant Liner Performance 恒定衬板性能：近垂直给料口轮廓，破碎腔形状在衬板整个磨损周期内几乎不变，带来恒定给料接受能力、增加产量、高质量产品、延长衬板寿命", "source": "S9a §1.2 + S9e §3" },
+        { "item": "Hydroset 液压系统", "detail": "安全（过铁保护）+ 调节（液压调 CSS）+ 传感（测量主轴位置）三合一", "source": "S9a §1.2 + S9c §1.1" },
+        { "item": "ASRi 2.0 自动控制系统", "detail": "CSS 控制、给料优化、衬板磨损监测与补偿、报警记录、USB 导出；全球已交付超过 4,500 套", "source": "S9a §1.2 + S9d §1.2" },
+        { "item": "顶部维护设计", "detail": "所有维护和检查均从上部进行，快速便捷", "source": "S9a §1.2" }
+      ],
+      "disadvantages": [
+        { "item": "价格", "detail": "高", "source": "S3 §2.2" },
+        { "item": "备件价格", "detail": "极高", "source": "S3 §5.3" },
+        { "item": "售后服务", "detail": "慢，收费高；需预约", "source": "S3 §5.3 + S2h 问题 2" },
+        { "item": "供货周期", "detail": "长约 12-20 周（S2j Q4）；S2h 问题 2 对 H6800 记为 12-16 周", "source": "S2j Q4 + S2h 问题 2" },
+        { "item": "CS440 衬板历史问题", "detail": "曾有客户反映衬板使用问题，选型时需注意给料条件和破碎腔匹配", "source": "S9a §三 + S9e §6.1" }
+      ],
+      "price_band": "高端",
+      "source": "S3 §1/§2.2/§4 + S9a + S9k + S9e + S9m"
+    },
+    {
+      "brand": "特雷克斯 Terex",
+      "full_name": "Terex Corporation",
+      "origin": "美国",
+      "position": "全球二线，中高端",
+      "models": [],
+      "advantages": [
+        { "item": "技术积累", "detail": "中高端，圆锥破碎机通过收购 Jaques 积累技术", "source": "S3 §2.3" },
+        { "item": "结构", "detail": "结构简单，维护方便", "source": "S3 §2.3" },
+        { "item": "价格", "detail": "价格适中（中高端定位）", "source": "S3 §2.3" }
+      ],
+      "disadvantages": [
+        { "item": "服务网络", "detail": "服务网络有限", "source": "S3 §2.3" },
+        { "item": "性价比", "detail": "美矿性价比优于特雷克斯", "source": "S3 §2.3" }
+      ],
+      "price_band": "中高端",
+      "not_provided": "models[] 为空：来源只给出「代表系列 T-series / TC 系列」，未提供任何具体型号或参数。",
+      "source": "S3 §1/§2.3/§4"
+    },
+    {
+      "brand": "克虏伯 Krupp",
+      "full_name": "thyssenkrupp",
+      "origin": "德国",
+      "position": "高端（部分业务已被美卓收购）",
+      "models": [],
+      "advantages": [],
+      "disadvantages": [],
+      "price_band": "高端",
+      "not_provided": "models[] / advantages[] / disadvantages[] 均为空：来源（S3 §1）只在一张品牌概述表中列出「高端（已被美卓收购部分业务）」，代表系列栏为「-」，无任何型号、参数或优缺点记载。",
+      "source": "S3 §1"
+    }
+  ],
+  "comparison_matrix": {
+    "note": "来源 S3 §4「竞品对比（选型维度）」，各列取值按来源原样记录。",
+    "dimensions": ["技术路线", "功率范围 (kW)", "自动化水平", "衬板耐磨性", "价格定位", "交货周期", "备件价格", "适用客户"],
+    "columns": [
+      { "brand": "美矿 NH/NS", "values": ["单缸液压", "90-750", "AORS 中等", "中等-优", "中端", "短（国产）", "低", "国内矿山/骨料"] },
+      { "brand": "美卓 HP", "values": ["多缸液压", "90-750", "IC 优秀", "优", "高端", "长（进口）", "高", "大型矿山/全球项目"] },
+      { "brand": "山特维克 CS", "values": ["单缸/多缸", "110-600", "ASRi 优秀", "优", "高端", "长（进口）", "高", "大型矿山"] },
+      { "brand": "特雷克斯", "values": ["多缸", "90-450", "中等", "中等", "中高端", "中等", "中等", "中型矿山"] }
+    ],
+    "source": "S3 §4"
+  },
+  "model_level_comparisons": [
+    {
+      "topic": "美矿 NH700 vs 山特维克 H6800 vs 美卓 HP800（来源 S2b §四）",
+      "rows": [
+        { "item": "给料口", "mackorn_nh700": "350 mm", "sandvik_h6800": "340 mm", "metso_hp800": "350 mm" },
+        { "item": "产能", "mackorn_nh700": "300-600 t/h", "sandvik_h6800": "280-550 t/h", "metso_hp800": "290-580 t/h" },
+        { "item": "电机功率", "mackorn_nh700": "315-355 kW", "sandvik_h6800": "315 kW", "metso_hp800": "330 kW" },
+        { "item": "过铁保护", "mackorn_nh700": "液压", "sandvik_h6800": "液压", "metso_hp800": "液压" }
+      ],
+      "mackorn_claim": "给料口更大（350 mm vs 340 mm）；产能上限更高（600 t/h vs 550 t/h）；本地化服务响应快；备件供货周期短",
+      "source": "S2b §四"
+    },
+    {
+      "topic": "美矿 NH700 vs 山特维克 H6800（来源 S2h 问题 2）",
+      "rows": [
+        { "item": "给料口", "mackorn_nh700": "350 mm（更大）", "sandvik_h6800": "340 mm" },
+        { "item": "最大产能", "mackorn_nh700": "600 t/h（更高）", "sandvik_h6800": "550 t/h" },
+        { "item": "电机功率", "mackorn_nh700": "355 kW", "sandvik_h6800": "315 kW" },
+        { "item": "腔型选项", "mackorn_nh700": "EC/MC/MF", "sandvik_h6800": "EC/MC/EF/F" },
+        { "item": "价格", "mackorn_nh700": "低 15-20%", "sandvik_h6800": "高" },
+        { "item": "供货周期", "mackorn_nh700": "4-6 周", "sandvik_h6800": "12-16 周" },
+        { "item": "售后服务", "mackorn_nh700": "本地化，快", "sandvik_h6800": "需预约" }
+      ],
+      "mackorn_claim": "两者性能相当，NH700 性价比更高，供货更快，售后响应更及时。山特维克在极端工况下略有优势。",
+      "source": "S2h 问题 2"
+    },
+    {
+      "topic": "美矿 CVS837 vs 山特维克 Barmac B7150 vs 美卓 CV217（制砂机，来源 S2p §四）",
+      "rows": [
+        { "item": "转子直径", "mackorn_cvs837": "837 mm", "sandvik_b7150": "840 mm", "metso_cv217": "850 mm" },
+        { "item": "最大进料", "mackorn_cvs837": "50 mm", "sandvik_b7150": "53 mm", "metso_cv217": "50 mm" },
+        { "item": "产能", "mackorn_cvs837": "150-350 t/h", "sandvik_b7150": "140-330 t/h", "metso_cv217": "150-340 t/h" },
+        { "item": "功率", "mackorn_cvs837": "315-400 kW", "sandvik_b7150": "330 kW", "metso_cv217": "340 kW" },
+        { "item": "特点", "mackorn_cvs837": "石打石/石打铁可选", "sandvik_b7150": "原装进口", "metso_cv217": "稳定可靠" }
+      ],
+      "source": "S2p §四"
+    }
+  ],
+  "technical_differences": [
+    {
+      "topic": "过铁保护机制",
+      "sandvik": "Hydroset 液压系统：主液压缸支撑动锥，过铁时液压让压；动锥整体下降，行程较大（约 30-40 mm）；两者都有蓄能器辅助快速复位",
+      "metso_hp": "ACL（Accumulator）蓄能器系统：顶轴升起释放间隙，蓄能器辅助复位；顶轴升起，行程较小（约 20-30 mm）",
+      "mackorn": "液压自动后退（单缸液压）；AORS 系统；S2c/S2b 称 NS 系列为弹簧过铁保护",
+      "source": "S9m §2.1 + S1b 核心技术对比表 + S3 §4"
+    },
+    {
+      "topic": "破碎腔设计",
+      "sandvik": "CLP 恒定衬板性能：近垂直给料口，衬板磨损曲线平缓；CH 系列腔型 11 种；衬板顶部螺纹锁紧；磨损周期长",
+      "metso_hp": "「腔型优化」：阶梯式腔壁，平衡产量与粒型；多种标准腔型；衬板顶部压板固定；磨损周期中等",
+      "mackorn": "层压破碎原理（NH/NS 单缸液压、MPH 多缸液压）",
+      "source": "S9m §2.2 + S1b 核心技术对比表"
+    },
+    {
+      "topic": "自动化系统",
+      "sandvik": "ASRi 2.0：CSS 控制、给料优化、衬板监测、报警记录、USB 数据导出；界面更图形化",
+      "metso": "IC（Intelligent Crushing）：CSS 控制、给料优化、破碎机保护；可通过 PLC 集成实现更复杂的自动化",
+      "mackorn": "AORS：实时监测电机功率、液压压力、油温、油位；过载自动报警并调节给料；云端数据上传；多级预警（黄色预警/红色报警）；远程大数据监测（可实时监测数百台设备）",
+      "source": "S9m §2.3 + S1b 核心技术对比表 + S3 §3.1"
+    },
+    {
+      "topic": "主机架与偏心机构",
+      "sandvik_ch": "主机架整体铸造+焊接复合结构；上架体分体铸造；下架体轴承座整体铸造；偏心套精密加工、可选多规格，从底部抽出需拆卸上架体；主轴锰钢锻造锥面配合",
+      "metso_hp": "主机架高强度钢板焊接结构；上架体整体铸造大型加工；下架体轴承座焊接+精加工；偏心套精密加工、规格固定；主轴锰钢锻造锥面配合",
+      "source": "S9m §3.1/§3.2"
+    },
+    {
+      "topic": "润滑系统容量",
+      "sandvik_ch": "主润滑强制循环油浴+油泵；油箱容量约 150 L；水冷板式冷却器",
+      "metso_hp": "强制循环油泵；油箱容量约 200 L（大型号更大）；水冷或风冷",
+      "source": "S9m §3.3"
+    }
+  ],
+  "competitive_claims": [
+    { "claim": "同等规格价格低于进口品牌 30%-50%", "source": "S3 §3.1" },
+    { "claim": "美矿 NH 系列备件价格低 40%-60%", "source": "S3 §5.1" },
+    { "claim": "交货周期缩短 60% 以上（对比美卓 HP）", "source": "S3 §5.1" },
+    { "claim": "国产备件，常规件 3-7 天供货", "source": "S3 §5.3" },
+    { "claim": "太仓工厂，华东 24 小时响应", "source": "S3 §5.3" },
+    { "claim": "同等规格价格低于进口品牌 20-30%", "source": "S2j Q4" },
+    { "claim": "NH700 价格比山特维克 H6800 低 15-20%", "source": "S2h 问题 2" }
+  ],
+  "claim_conflicts": [
+    {
+      "field": "价格优势幅度",
+      "value_a": "低 30%-50%",
+      "source_a": "S3 §3.1 + S3 §5.3",
+      "value_b": "低 20-30%",
+      "source_b": "S2j Q4",
+      "value_c": "NH700 较 H6800 低 15-20%",
+      "source_c": "S2h 问题 2",
+      "resolution": "三处口径均不同（可能对应不同机型/不同渠道口径）。面向客户的报价话术必须选定一种口径并与销售确认，禁止在同一份材料中混用。"
+    },
+    {
+      "field": "山特维克供货周期",
+      "value_a": "12-20 周",
+      "source_a": "S2j Q4",
+      "value_b": "12-16 周（H6800）",
+      "source_b": "S2h 问题 2",
+      "resolution": "区间口径不同，非矛盾，按机型区分使用。"
+    },
+    {
+      "field": "山特维克对比列的口径",
+      "value_a": "对比列为「山特维克 CS」系列",
+      "source_a": "S3 §4 竞品对比矩阵",
+      "value_b": "对比列为「山特维克 H6800」（H 系列/旧型号命名）",
+      "source_b": "S2b §四 + S2h 问题 2",
+      "resolution": "S3 以 CS 系列为代表对比，S2b/S2h 以 H6800 为代表对比，两者不是同一系列，选型话术中须注明所对标的具体型号。"
+    }
+  ],
+  "not_provided": {
+    "competitor_price_figures": "两套知识库均未提供任何竞品（美卓/山特维克/特雷克斯/克虏伯）的具体价格数字，只有相对表述（高/极高/中高端/低 30%-50% 等）。因此 competitors.json 的 price_band 只能填定性档位。",
+    "terex_and_krupp_models": "特雷克斯只有系列名（T-series / TC），克虏伯代表系列为「-」，均无具体型号与参数。",
+    "mackorn_price_vs_metso_numeric": "美矿与美卓之间的价差只有「美卓价格高」「美矿中端」等定性表述，无百分比数字。",
+    "CE_certification": "两套知识库均未提及任何竞品或美矿产品的 CE 认证情况。"
+  }
+}
