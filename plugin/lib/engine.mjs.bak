@@ -1,0 +1,1018 @@
+/**
+ * MACKORN 选型与方案引擎（engine.mjs）
+ * ============================================================================
+ * 在 core.mjs（理论内核）+ data.mjs（厂商数据）+ data-market.mjs（市场数据）
+ * 之上，实现液压圆锥破碎机选型、生产线配置、产能校核、成本估算、磨损设计、
+ * 市场纵深分析与选型报告生成。
+ *
+ * 输出纪律（全插件统一）：
+ *   1. 每个结果都带 `assumptions[]` —— 所有非厂商标定的取值一律显式列出。
+ *   2. 数据缺口一律返回 null 并在 `warnings[]` 说明，绝不填猜测值。
+ *   3. 机型/腔型/CSS 触发的任何边界都进 `warnings[]`。
+ * ============================================================================
+ */
+
+import {
+  mcfmFormula, mcfmDeviation, mcfmAdvice, mcfmOptimalRange,
+  velocityUniformityIndex, velocityAdvice, wearUniformity, gradientLinerDesign,
+  porosityFromGrading, optimalGrading, pyRound, stats,
+  fiveDimScore, FIVE_DIMENSIONS, CRUSHING_LEVERAGE_CHAIN, validateHardnessDesign, HARDNESS_LIMITS } from './core.mjs';
+import {
+  NH_SERIES, NS_SERIES, ALL_MODELS, CAVITY_TYPES, CAVITY_FEED_TABLE, CAVITY_CAPACITY,
+  CAPACITY_TO_MODEL, ENGINEERING_DEFAULTS, CAVITY_FINENESS_NOTE, findModel, NH_DIMENSIONS,
+  MACKORN_BELT_TABLE, MACKORN_BELT_SPEED, MACKORN_BELT_POWER_PER_M,
+  MACKORN_STAGE_RATIO, MACKORN_COARSE_CRUSHER_TABLE, MACKORN_LINER_LIFE,
+  MACKORN_MAGNET_SEPARATOR, MACKORN_IRON_ORE_METAL_DETECTION,
+  MACKORN_INSTALL_COST, MACKORN_INSTALL_COST_CNY_PER_TON,
+  MACKORN_ECCENTRIC_THROW, MACKORN_BELT_INCLINE_MAX, beltInclineMaxFor,
+} from './data.mjs';
+import {
+  PRICE_DISCLAIMER, PRICE_NH, PRICE_NS, PRICE_HYDRAULIC_STATION, PRICE_SPARE_PARTS,
+  FINANCING, COMPETITOR_BRANDS, COMPETITOR_MATRIX, MACKORN_ADVANTAGES, MACKORN_GAPS,
+  PAIN_POINT_PLAYBOOK, PRICE_FACTORS, findPrice,
+} from './data-market.mjs';
+
+/** 由工程经验推导的规则（非厂商标定）。所有使用处必须回显到 assumptions。 */
+export const ENGINEERING_RULES = {
+  p80OverCss: {
+    value: [1.5, 2.5],
+    note: '圆锥破 P80 与紧边排矿口 CSS 的经验倍数区间；实际粒形曲线须以 MACKORN 厂家产品曲线确认',
+  },
+  stageReductionRatio: {
+    coarse: [6, 8],
+    mediumCoarse: [4, 6],
+    mediumMid: [3, 5],
+    fine: [3, 4],
+    sand: [6, 10],
+    note: '取自 MACKORN 书面规范《09-选型设计规范与问答》§1.2；MSS 引擎内部使用粗碎 5:1，与此冲突，本插件采用书面规范并在 assumptions 标注',
+    source: 'S6',
+  },
+  beltNote: 'MACKORN 自有标准《16-皮带输送机配置手册》：入料粒度越大要求带宽越宽；给料粒度超过带宽 1/3 需在受料点加装缓冲挡板',
+  hopperSurgeFactor: { value: [1.15, 1.3], note: '中间仓/缓冲仓按下游额定能力的放大系数' },
+};
+
+const A = (text, source) => ({ assumption: text, source });
+
+/* ==========================================================================
+ * 1. MCFM 粒度分布诊断
+ * ========================================================================== */
+
+export function analyzeMcfm({ cumulativeRetained, feedTopMm, targetProductMm, oreNote }) {
+  const warnings = [];
+  const assumptions = [
+    A('M = (A1+…+A7 − 7A8)/(100 − A8)，A 为 8 个筛级的累积筛余百分比（源自矿山选矿科研模型 V1 · MackornCoreTheory.mcfm_formula）', 'PY-MODEL'),
+    A(`最优模数窗口 [${mcfmOptimalRange().join(', ')}]（模型内置工程推荐区间）`, 'PY-MODEL'),
+  ];
+  let M = null;
+  let deviation = null;
+  let advice = null;
+  if (Array.isArray(cumulativeRetained)) {
+    M = mcfmFormula(cumulativeRetained);
+    deviation = mcfmDeviation(M);
+    advice = mcfmAdvice(deviation.level);
+    if (Array.isArray(cumulativeRetained) && cumulativeRetained.length === 8) {
+      const a8 = Number(cumulativeRetained[7]);
+      if (Number.isFinite(a8) && (a8 < 8 || a8 > 45)) {
+        warnings.push(`A8=${a8} 不合理：A8 是"80% 通过粒级"的累积筛余百分比，按定义应接近 20（80% 通过 = 20% 筛余）。当前值会使 M 失真（例如 A8=99 会算出 M=-218）。请确认 A8 填的是 80% 通过粒级对应的累积筛余。`);
+      }
+    }
+    if (M > 6) warnings.push(`模数 M=${M} 远高于最优上限 4.5，粗粒级严重集中，须优先做布料改造而不是加大破碎机`);
+    if (M < 3) warnings.push(`模数 M=${M} 远低于最优下限 4.0，细粒级过多，须核查预筛分与筛孔磨损`);
+  } else {
+    warnings.push('未提供 cumulativeRetained（长度 8 的累积筛余数组），仅返回理论窗口与诊断框架');
+  }
+
+  const sieveSlots = [
+    { label: 'A1', nominalMm: 60 },
+    { label: 'A2', nominalMm: 40 },
+    { label: 'A3', nominalMm: 20 },
+    { label: 'A4', nominalMm: 10 },
+    { label: 'A5', nominalMm: 5 },
+    { label: 'A6', nominalMm: 2.5 },
+    { label: 'A7', nominalMm: 1.25 },
+    { label: 'A8', nominalMm: '80% 通过粒级' },
+  ];
+
+  return {
+    input_echo: { cumulativeRetained: cumulativeRetained ?? null, feedTopMm: feedTopMm ?? null, targetProductMm: targetProductMm ?? null, oreNote: oreNote ?? null },
+    mcfm: M,
+    optimal_range: mcfmOptimalRange(),
+    deviation,
+    advice,
+    sieve_slots: sieveSlots,
+    leverage_chain: CRUSHING_LEVERAGE_CHAIN,
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 2. 产能校核（腔型 × CSS → t/h）
+ * ========================================================================== */
+
+function interpCapacityPair(pairs, cssList, css) {
+  // pairs: [[min,max]|null, ...] 对齐 cssList
+  const pts = [];
+  for (let i = 0; i < cssList.length; i += 1) {
+    const cap = pairs[i];
+    if (!cap) continue;
+    pts.push({ css: cssList[i], min: cap[0], max: cap[1] });
+  }
+  if (pts.length === 0) return null;
+  if (css <= pts[0].css) return pts[0];
+  if (css >= pts[pts.length - 1].css) return pts[pts.length - 1];
+  for (let i = 0; i < pts.length - 1; i += 1) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    if (css >= a.css && css <= b.css) {
+      const t = (css - a.css) / (b.css - a.css);
+      return {
+        css,
+        min: pyRound(a.min + (b.min - a.min) * t, 1),
+        max: pyRound(a.max + (b.max - a.max) * t, 1),
+        interpolatedBetween: [a.css, b.css],
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * 产能校核：优先使用 S1 腔型 × CSS 详表；无详表的机型用系列区间线性外推并标注为近似。
+ */
+export function checkCapacity({ model, cavity, css }) {
+  const warnings = [];
+  const assumptions = [];
+  const m = findModel(model);
+  if (!m) throw new Error(`未知机型 "${model}"；可用机型：${ALL_MODELS.map((x) => x.model).join(', ')}`);
+
+  const cssNum = Number(css);
+  if (!Number.isFinite(cssNum)) throw new Error('css 必须为数值（紧边排矿口 mm）');
+  if (cssNum < m.cssMin || cssNum > m.cssMax) {
+    warnings.push(`CSS=${cssNum}mm 超出 ${m.model} 的排矿口范围 ${m.cssMin}-${m.cssMax}mm`);
+  }
+
+  const detail = CAVITY_CAPACITY[m.model];
+  let result = null;
+  let basis = null;
+  if (detail && cavity) {
+    const row = detail.rows.find((r) => r.cavity.toUpperCase() === String(cavity).toUpperCase());
+    if (row) {
+      const hit = interpCapacityPair(row.cap, detail.css, cssNum);
+      if (hit) {
+        result = hit;
+        basis = `S1 腔型×CSS 详表（${m.model} ${row.cavity}）`;
+        if (hit.interpolatedBetween) assumptions.push(A(`CSS=${cssNum} 落在详表列 ${hit.interpolatedBetween.join('/')} 之间，按线性插值`, 'INTERP'));
+      }
+      if (row.maxFeedMm < m.maxFeedMm) {
+        assumptions.push(A(`${row.cavity} 腔最大给料 ${row.maxFeedMm}mm 小于机型整体最大给料 ${m.maxFeedMm}mm，选型须按腔型值校验`, 'S1'));
+      }
+    } else {
+      warnings.push(`${m.model} 详表中没有 ${cavity} 腔型记录（详表覆盖：${detail.rows.map((r) => r.cavity).join('/')}${detail.efNote ? ' + ' + detail.efNote : ''}）`);
+    }
+  }
+
+  if (!result) {
+    // 系列能力区间线性外推
+    const [lo, hi] = m.capacityTph;
+    const span = m.cssMax - m.cssMin;
+    const t = span > 0 ? Math.max(0, Math.min(1, (cssNum - m.cssMin) / span)) : 0;
+    result = { css: cssNum, min: pyRound(lo, 1), max: pyRound(lo + (hi - lo) * t, 1) };
+    basis = `${m.model} 系列产能区间线性外推（近似）`;
+    assumptions.push(A(`无 ${m.model} 腔型×CSS 详表，按系列区间 ${lo}-${hi} t/h 在 CSS ${m.cssMin}-${m.cssMax}mm 上线性外推`, 'APPROX'));
+  }
+
+  return {
+    model: m.model,
+    series: m.model.startsWith('NS') ? 'NS 高速型' : 'NH 标准型',
+    cavity: cavity ?? null,
+    css: cssNum,
+    capacity_min_tph: result.min,
+    capacity_rated_tph: result.max,
+    basis,
+    power_kw: m.powerKw,
+    max_feed_mm: m.maxFeedMm,
+    css_range_mm: [m.cssMin, m.cssMax],
+    weight_kg: m.weightKg,
+    cavity_note: cavity ? CAVITY_FINENESS_NOTE[String(cavity).toUpperCase()] ?? null : null,
+    dimensions_mm: NH_DIMENSIONS[m.model] ?? null,
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 3. 液压圆锥破碎机选型
+ * ========================================================================== */
+
+function pickCavityForFeed(maxFeedMm) {
+  for (const row of CAVITY_FEED_TABLE) {
+    if (maxFeedMm < row.maxFeedLtMm) return row.cavity;
+  }
+  return ['EC'];
+}
+
+/**
+ * 液压圆锥破碎机选型主入口。
+ * @param {object} input
+ * @param {number} input.targetTph 目标处理量 t/h（必填）
+ * @param {number} [input.maxFeedMm] 给料最大粒度 mm
+ * @param {number} [input.targetProductMm] 目标最终产品粒度 mm
+ * @param {string} [input.stage] '中碎' | '细碎' | '超细碎' | 'auto'
+ * @param {string} [input.ore] 矿石名称/硬度备注
+ * @param {number} [input.units] 指定台数（默认自动）
+ * @param {boolean} [input.closedCircuit] 是否闭路
+ */
+export function selectConeCrusher(input = {}) {
+  const targetTph = Number(input.targetTph);
+  if (!Number.isFinite(targetTph) || targetTph <= 0) throw new Error('targetTph 必须为正数（t/h）');
+  const maxFeedMm = Number.isFinite(Number(input.maxFeedMm)) ? Number(input.maxFeedMm) : null;
+  const targetProductMm = Number.isFinite(Number(input.targetProductMm)) ? Number(input.targetProductMm) : null;
+  const stage = input.stage && input.stage !== 'auto' ? String(input.stage) : inferStage(input);
+  const ore = input.ore ?? null;
+  const closedCircuit = input.closedCircuit !== false;
+  const fixedUnits = Number.isFinite(Number(input.units)) ? Math.max(1, Math.round(Number(input.units))) : null;
+
+  const assumptions = [
+    A('机型与产能数据取自 S1《NH_NS系列技术参数大全》（上海美矿/官网）', 'S1'),
+    A(`本段按${closedCircuit ? '闭路' : '开路'}配置；闭路循环负荷放大系数 ${ENGINEERING_DEFAULTS.circulatingLoadClosedCircuit.value.join('-')}`, 'ENGINEERING-RANGE'),
+    A(`P80 ≈ CSS × ${ENGINEERING_RULES.p80OverCss.value.join('-')}（经验倍数，须以厂家产品曲线确认）`, 'ENGINEERING-RANGE'),
+    A(`破碎机负荷率默认 ${ENGINEERING_DEFAULTS.loadFactor.value}（连续工况工程默认）`, 'ENGINEERING-DEFAULT'),
+  ];
+  const warnings = [];
+
+  // ---------- 产品粒度可达性 与 CSS 反推 ----------
+  const P80_LO = ENGINEERING_RULES.p80OverCss.value[0];
+  const P80_MID = (ENGINEERING_RULES.p80OverCss.value[0] + ENGINEERING_RULES.p80OverCss.value[1]) / 2;
+  const clf = closedCircuit ? ENGINEERING_DEFAULTS.circulatingLoadClosedCircuit.value[0] : 1;
+
+  /**
+   * 产品可达性硬约束：单段 P80 下界 = cssMin × 1.5。
+   * 若该下界已超过目标产品粒度，这台机型**单段无论如何都做不出该产品**——
+   * 例如 NS400 cssMin=25mm → P80 下界 37.5mm，做 20mm 产品必然不达标。
+   */
+  const productReachable = (m) => targetProductMm === null || m.cssMin * P80_LO <= targetProductMm * 1.15;
+  /** 由目标产品粒度反推该机型 CSS（取 P80/CSS 倍数中值），并夹到机型排矿口范围内。 */
+  const cssFromProduct = (m) => (targetProductMm === null ? null : Math.min(m.cssMax, Math.max(m.cssMin, targetProductMm / P80_MID)));
+
+  /** 某机型某腔型在给定 CSS 下的能力：有详表用详表插值，否则按系列区间在 CSS 轴上线性分配。 */
+  const capacityAtCss = (m, cavity, css) => {
+    const detail = CAVITY_CAPACITY[m.model];
+    if (detail) {
+      const row = detail.rows.find((r) => r.cavity === cavity);
+      if (!row) return null;
+      const list = detail.css;
+      const clamped = Math.max(list[0], Math.min(list[list.length - 1], css));
+      const hit = interpCapacityPair(row.cap, list, clamped);
+      return hit ? { css: clamped, min: hit.min, max: hit.max } : null;
+    }
+    const [lo, hi] = m.capacityTph;
+    const span = m.cssMax - m.cssMin;
+    const t = span > 0 ? Math.max(0, Math.min(1, (css - m.cssMin) / span)) : 0;
+    return { css: pyRound(css, 1), min: pyRound(lo, 1), max: pyRound(lo + (hi - lo) * t, 1), approximated: true };
+  };
+
+  const cavityPool = stage === '中碎' ? ['EC', 'C', 'MC'] : stage === '细碎' ? ['M', 'MF', 'F'] : ['F', 'EF', 'EFX', 'EEF'];
+  const feedAllowedPool = maxFeedMm !== null ? pickCavityForFeed(maxFeedMm) : cavityPool;
+  // 候选池 = 段位池 ∩ 给料约束池；交集为空时退回段位池并显式告警，
+  // 避免"候选里出现 EC 但建议池写 M/MC"这种自相矛盾的输出。
+  let effectivePool = cavityPool.filter((c) => feedAllowedPool.includes(c));
+  if (effectivePool.length === 0) {
+    effectivePool = cavityPool;
+    warnings.push(`段位腔型池（${cavityPool.join('/')}）与给料粒度要求的腔型池（${feedAllowedPool.join('/')}）没有交集：已回退到段位腔型池，请复核给料粒度是否与该工序段匹配`);
+  } else if (effectivePool.length < cavityPool.length) {
+    warnings.push(`按给料最大粒度 ${maxFeedMm}mm 收窄腔型池：${cavityPool.join('/')} → ${effectivePool.join('/')}`);
+  }
+
+  // ---------- 单台可达能力（自动定台数的依据） ----------
+  // 修正：CSS 由产品粒度驱动、机型由产能驱动。
+  // 旧算法取"系列最大能力"估台数，会把 NH890 的 2436 t/h 当细碎单台能力，
+  // 算出离谱的小台数，并把根本做不到产品粒度的机型排到第一位。
+  const singleUnitCapability = () => {
+    let best = 0;
+    let who = null;
+    for (const m of ALL_MODELS) {
+      if (!productReachable(m)) continue;
+      if (maxFeedMm !== null && m.maxFeedMm < maxFeedMm) continue;
+      const css = cssFromProduct(m) ?? m.cssMax;
+      for (const cavity of effectivePool) {
+        const detail = CAVITY_CAPACITY[m.model];
+        if (detail) {
+          const row = detail.rows.find((r) => r.cavity === cavity);
+          if (!row || (maxFeedMm !== null && row.maxFeedMm < maxFeedMm)) continue;
+          if (row.cap.every((c) => c === null)) continue;
+        }
+        const cap = capacityAtCss(m, cavity, css);
+        if (!cap) continue;
+        // 净新给料能力 = 额定能力 ÷ 循环负荷系数（与候选判定口径保持一致）
+        const net = cap.min / clf;
+        if (net > best) { best = net; who = `${m.model} ${cavity} 腔 @ CSS ${cap.css}mm`; }
+      }
+    }
+    return { best, who };
+  };
+
+  const capability = singleUnitCapability();
+  if (capability.best === 0) {
+    warnings.push('在给定给料/产品粒度与工序段下，没有机型能同时满足硬约束；已按最大可能能力估算台数，请复核输入');
+  }
+  const perUnitFor = (unitsValue) => targetTph / unitsValue;
+
+  /** 按给定台数生成候选，并按匹配分排序。 */
+  const generate = (unitsValue) => {
+    const perUnit = perUnitFor(unitsValue);
+    const need = perUnit * clf;
+    const list = [];
+    const excluded = [];
+    for (const m of ALL_MODELS) {
+      if (maxFeedMm !== null && m.maxFeedMm < maxFeedMm) continue;
+      if (!productReachable(m)) { excluded.push(`${m.model}（排矿口下限 ${m.cssMin}mm，P80 下界 ${pyRound(m.cssMin * P80_LO, 1)}mm > 目标 ${targetProductMm}mm）`); continue; }
+      for (const cavity of effectivePool) {
+        const detail = CAVITY_CAPACITY[m.model];
+        if (detail) {
+          const row = detail.rows.find((r) => r.cavity === cavity);
+          if (!row) continue;
+          if (maxFeedMm !== null && row.maxFeedMm < maxFeedMm) continue;
+          if (row.cap.every((c) => c === null)) continue;
+        }
+        const css = cssFromProduct(m) ?? (detail ? detail.css[detail.css.length - 1] : m.cssMax);
+        const cap = capacityAtCss(m, cavity, css);
+        if (!cap) continue;
+        const basis = detail ? 'S1 腔型×CSS 详表' : '系列区间近似';
+        list.push(buildCandidate(m, cavity, cap, perUnit, closedCircuit, basis, maxFeedMm, targetProductMm, need));
+      }
+    }
+    // 去重：同机型同腔型保留最优
+    const best = new Map();
+    for (const c of list) {
+      const key = `${c.model}|${c.cavity}`;
+      const prev = best.get(key);
+      if (!prev || c.match_score > prev.match_score) best.set(key, c);
+    }
+    const ranked = [...best.values()].sort((a, b) => b.match_score - a.match_score || a.power_kw - b.power_kw || a.total_price_mid - b.total_price_mid);
+    return { ranked, excluded };
+  };
+
+  // 自动定台数：从"单台可达能力"起算，若没有任何候选达标则逐台增加（上限 6 台），
+  // 避免出现"给了首选却全部不达标"的假结论。
+  let units = fixedUnits ?? Math.max(1, Math.ceil(targetTph / Math.max(1, capability.best)));
+  let generated = generate(units);
+  if (!fixedUnits) {
+    let guard = 0;
+    while (units < 6 && guard < 6 && !generated.ranked.some((c) => c.capacity_ok && c.product_ok)) {
+      units += 1;
+      generated = generate(units);
+      guard += 1;
+    }
+  }
+  if (units > 1) {
+    warnings.push(`目标 ${targetTph} t/h 需 ${units} 台并联：当前约束下单台净给料能力上限约 ${pyRound(capability.best, 0)} t/h（${capability.who ?? '无满足项'}），按不超负荷配置`);
+  }
+  const perUnitTph = perUnitFor(units);
+
+  const { ranked, excluded: excludedByProduct } = generated;
+  const candidates = ranked;
+
+  if (excludedByProduct.length > 0) {
+    warnings.push(`以下机型因"排矿口下限做不出目标 ${targetProductMm}mm 产品"被硬约束排除：${excludedByProduct.join('；')}`);
+  }
+  if (ranked.length === 0) {
+    warnings.push('没有任何机型/腔型组合满足给定约束；请放宽给料粒度、降低目标产量、或改为多段破碎');
+  } else if (!ranked.some((c) => c.capacity_ok && c.product_ok)) {
+    warnings.push(`在 ${units} 台配置下没有任何候选同时满足"产能达标 + 产品可达"：请增加台数、放宽目标产量，或由 MACKORN 提供该机型的腔型×CSS 详表复核（当前大量机型只有系列区间近似数据）`);
+  }
+  if (ranked.length > 0 && ranked[0].basis === '系列区间近似') {
+    warnings.push('首选机型无 S1 腔型×CSS 详表，产能为系列区间近似值，正式方案须经 MACKORN 技术复核');
+    const pm = findModel(ranked[0].model);
+    if (pm && ranked[0].css_mm <= pm.cssMin + 0.01) {
+      warnings.push(`⚠️ 低置信外推：首选 ${ranked[0].model} 的 CSS ${ranked[0].css_mm}mm 正好落在排矿口下限（${pm.cssMin}mm），线性外推在端点处上下限塌缩成单值（${ranked[0].capacity_tph.join('-')} t/h），不代表厂商标定能力。请 MACKORN 提供该机型产品曲线/腔型详表，或把 CSS 抬高一档重算后再定案`);
+    }
+  }
+  if (maxFeedMm !== null && maxFeedMm > 350) {
+    warnings.push(`给料最大粒度 ${maxFeedMm}mm 超出 S1 §4.2 腔型表的常规分档（>350mm 建议前段预筛分或改用粗碎设备）`);
+  }
+
+  return {
+    request: { targetTph, maxFeedMm, targetProductMm, stage, ore, units, closedCircuit },
+    recommended_units: units,
+    per_unit_tph: pyRound(perUnitTph, 1),
+    recommended_cavity_pool: effectivePool,
+    cavity_pool_basis: {
+      by_stage: cavityPool,
+      by_feed: maxFeedMm !== null ? feedAllowedPool : null,
+      effective: effectivePool,
+      rule: '按给料粒度选腔（MACKORN《NH_NS系列技术参数大全》§4.2）：<50 EF/EFX/EEF；50-100 F/MF；100-200 M/MC；200-350 C/EC；>350 EC（需预筛分）',
+    },
+    candidates: ranked.slice(0, 8),
+    top_pick: ranked[0] ?? null,
+    alternatives: ranked.slice(1, 4),
+    assumptions,
+    warnings,
+  };
+}
+
+function inferStage(input) {
+  const p = Number(input.targetProductMm);
+  const f = Number(input.maxFeedMm);
+  if (Number.isFinite(p) && p <= 12) return '细碎';
+  if (Number.isFinite(p) && p <= 25) return '中碎';
+  if (!Number.isFinite(f)) return '细碎';
+  if (f > 200) return '中碎';
+  return '细碎';
+}
+
+function buildCandidate(m, cavity, cap, perUnitTph, closedCircuit, basis, maxFeedMm, targetProductMm, needPerUnit) {
+  const price = findPrice(m.model);
+  const totalPriceMid = price ? ((price.priceWanCny[0] + price.priceWanCny[1]) / 2) * 10000 : null;
+  const clf = closedCircuit ? ENGINEERING_DEFAULTS.circulatingLoadClosedCircuit.value[0] : 1;
+  const need = Number.isFinite(needPerUnit) ? needPerUnit : perUnitTph * clf;
+  const effectiveRated = cap.max / clf;   // 计入循环负荷后的净新给料能力（额定）
+  const effectiveCons = cap.min / clf;    // 同上（保守/下限）
+  const capacityOk = effectiveRated >= need * 0.98;
+  const capacityConservativeOk = effectiveCons >= need * 0.98;
+  const headroom = effectiveRated / Math.max(1, perUnitTph);
+  const p80 = [pyRound(cap.css * 1.5, 1), pyRound(cap.css * 2.5, 1)];
+  // 产品可达性（硬约束）：P80 下界必须覆盖目标产品粒度，否则这台机器做不出该产品
+  const productOk = targetProductMm === null || p80[0] <= targetProductMm * 1.15;
+
+  let score = 50;
+  if (capacityOk) score += 22; else score -= 20;
+  if (!productOk) score -= 30;
+  if (headroom >= 1.0 && headroom <= 1.35) score += 14;      // 余量适中最好
+  else if (headroom > 1.35 && headroom <= 1.8) score += 6;
+  else if (headroom > 1.8) score -= 6;                        // 大马拉小车
+  if (maxFeedMm !== null && m.maxFeedMm >= maxFeedMm * 1.1) score += 6;
+  if (targetProductMm !== null && productOk) score += 10;
+  const isFast = m.model.startsWith('NS');
+  if (isFast && (cavity === 'F' || cavity === 'EF' || cavity === 'EFX')) score += 5;
+  if (!cap.approximated) score += 4;                          // 详表硬数据优于系列外推
+  score = Math.max(0, Math.min(100, score));
+
+  return {
+    model: m.model,
+    series: isFast ? 'NS 高速型单缸液压圆锥破' : 'NH 标准型单缸液压圆锥破',
+    cavity,
+    cavity_note: CAVITY_FINENESS_NOTE[cavity] ?? null,
+    css_mm: cap.css,
+    css_basis: targetProductMm !== null ? `由目标产品 ${targetProductMm}mm 反推（CSS = 目标 ÷ ${ENGINEERING_RULES.p80OverCss.value[0]}-${ENGINEERING_RULES.p80OverCss.value[1]} 倍数中值），并夹到机型排矿口范围` : '未给目标产品粒度，取机型最大排矿口',
+    p80_estimate_mm: p80,
+    product_ok: productOk,
+    capacity_tph: [cap.min, cap.max],
+    capacity_after_circulating_load_tph: pyRound(effectiveRated, 1),
+    capacity_conservative_tph: pyRound(effectiveCons, 1),
+    capacity_ok: capacityOk,
+    capacity_conservative_ok: capacityConservativeOk,
+    headroom_ratio: pyRound(headroom, 2),
+    power_kw: m.powerKw,
+    max_feed_mm: m.maxFeedMm,
+    weight_t: pyRound(m.weightKg / 1000, 1),
+    price_ref_wan_cny_per_unit: price ? price.priceWanCny : null,
+    price_ref_note: price ? price.note ?? null : null,
+    basis,
+    match_score: score,
+    total_price_mid: totalPriceMid ?? Number.MAX_SAFE_INTEGER,
+  };
+}
+
+/* ==========================================================================
+ * 4. 破碎筛分生产线配置
+ * ========================================================================== */
+
+export function sizePlant(input = {}) {
+  const targetTph = Number(input.targetTph);
+  if (!Number.isFinite(targetTph) || targetTph <= 0) throw new Error('targetTph 必须为正数（t/h）');
+  const maxFeedMm = Number.isFinite(Number(input.maxFeedMm)) ? Number(input.maxFeedMm) : 500;
+  const productMm = Number.isFinite(Number(input.targetProductMm)) ? Number(input.targetProductMm) : 20;
+  const ore = input.ore ?? null;
+  const closedCircuit = input.closedCircuit !== false;
+  const washing = input.washing === true;
+
+  const assumptions = [
+    A('破碎段数取自 ENGINEERING_DEFAULTS.crushingStagesGuide（工程经验总破碎比分档）', 'ENGINEERING-RANGE'),
+    A('各段单机破碎比取自 MACKORN 书面规范《09-选型设计规范与问答》§1.2（粗碎 6-8、中碎粗腔 4-6、中碎中腔 3-5、细碎 3-4、制砂 6-10）；MSS 引擎内部另有粗碎 5:1 口径，两者冲突已并列保留', 'S6 / CONFLICT'),
+    A('粗碎设备档位取自 MACKORN《09-选型设计规范与问答》§1.1', 'S6'),
+    A('皮带带宽与带速取自 MACKORN《16-皮带输送机配置手册》（MACKORN 自有标准，优先于通用经验值）', 'S5'),
+    A(`筛分单位面积处理量 ${ENGINEERING_DEFAULTS.screeningUnitCapacityTphPerM2.value.join('-')} t/h·m²`, 'ENGINEERING-RANGE'),
+    A(`筛分效率 ${ENGINEERING_DEFAULTS.screeningEfficiency.value.join('-')}`, 'ENGINEERING-RANGE'),
+    A(`循环负荷系数 ${ENGINEERING_DEFAULTS.circulatingLoadClosedCircuit.value.join('-')}`, 'ENGINEERING-RANGE'),
+  ];
+  const warnings = [];
+
+  const totalRatio = maxFeedMm / Math.max(1, productMm);
+  const guide = ENGINEERING_DEFAULTS.crushingStagesGuide.find((g) => totalRatio <= g.totalRatioMax);
+  const stages = guide ? guide.stages : 4;
+  if (totalRatio > 100) warnings.push(`总破碎比 ${pyRound(totalRatio, 1)} 偏大，建议三段 + 超细碎或制砂段，并复核单段破碎比可行性`);
+
+  // 阶段粒度分配
+  const stagePlan = [];
+  let currentSize = maxFeedMm;
+  const order = ['粗碎', '中碎', '细碎', '超细碎/制砂'];
+  const ratioForStage = (name) => {
+    const r = ENGINEERING_RULES.stageReductionRatio;
+    if (name === '粗碎') return r.coarse[1] - 1;      // 6-8 → 取 7
+    if (name === '中碎') return r.mediumCoarse[1] - 1; // 4-6 → 取 5
+    if (name === '细碎') return r.fine[1] - 0.5;       // 3-4 → 取 3.5
+    return r.sand[0];                                  // 制砂 6-10 → 取 6
+  };
+  for (let i = 0; i < stages; i += 1) {
+    const name = order[Math.min(i, order.length - 1)];
+    const remaining = currentSize / productMm;
+    const targetRemaining = Math.pow(remaining, 1 / (stages - i));
+    let next = currentSize / Math.min(ratioForStage(name), Math.max(1.5, targetRemaining));
+    if (i === stages - 1) next = productMm;
+    next = Math.max(productMm, pyRound(next, 1));
+    stagePlan.push({
+      index: i + 1,
+      stage: name,
+      feed_mm: pyRound(currentSize, 1),
+      product_mm: next,
+      reduction_ratio: pyRound(currentSize / next, 2),
+      duty: i === 0 ? '粗碎：颚式/旋回破碎机' : i === stages - 1 ? '细碎：液压圆锥破（本品为美矿主营段）' : '中碎：液压圆锥破（粗/中腔）',
+    });
+    currentSize = next;
+  }
+
+  // 粗碎设备档位（MACKORN 自有表）——必须在圆锥破选型之前算，
+  // 因为中碎段的真实给料上界是**粗碎设备的实际排矿口**，不是等比分配出来的理论值。
+  const coarse = MACKORN_COARSE_CRUSHER_TABLE.find((c) => targetTph >= c.tph[0] && targetTph < c.tph[1]) ?? null;
+  if (coarse && maxFeedMm !== null && maxFeedMm > coarse.maxFeedMm) {
+    warnings.push(`目标产量档位推荐粗碎设备 ${coarse.equipment}（最大给料 ${coarse.maxFeedMm}mm），但输入原矿最大粒度 ${maxFeedMm}mm 更大，须上调粗碎设备档位或增加预筛分`);
+  }
+
+  // 选型（对中碎与细碎段各做一次圆锥破选型）
+  // 关键：每段传**该段自己的**产品粒度，不是整线最终粒度——
+  // 否则中碎段会被要求做出成品细度，CSS 被压到下限，得出错误机型。
+  const midIdx = Math.min(1, stages - 1);
+  const fineIdx = stages - 1;
+  const theoreticalMidFeed = stagePlan[midIdx].feed_mm;
+  const midFeedMm = coarse ? Math.min(theoreticalMidFeed, coarse.dischargeMm[1]) : theoreticalMidFeed;
+  const midProductMm = Math.min(stagePlan[midIdx].product_mm, midFeedMm);
+  if (coarse && theoreticalMidFeed > coarse.dischargeMm[1]) {
+    warnings.push(`分段计划给中碎段 ${theoreticalMidFeed}mm，但粗碎设备 ${coarse.equipment} 的实际排矿口为 ${coarse.dischargeMm.join('-')}mm。已按真实排矿上界 **${midFeedMm}mm** 重算中碎段选型（理论等比给料不成立时以此为准）`);
+    stagePlan[midIdx].feed_mm = midFeedMm;
+    stagePlan[midIdx].reduction_ratio = pyRound(midFeedMm / stagePlan[midIdx].product_mm, 2);
+    stagePlan[midIdx].note = `给料上界已按粗碎实际排矿口 ${coarse.dischargeMm[1]}mm 修正（原理论值 ${theoreticalMidFeed}mm）`;
+  }
+  const cone = selectConeCrusher({
+    targetTph,
+    maxFeedMm: midFeedMm,
+    targetProductMm: midProductMm,
+    stage: '中碎',
+    ore,
+    closedCircuit,
+  });
+  const fineCone = stages >= 3
+    ? selectConeCrusher({
+      targetTph,
+      maxFeedMm: stagePlan[fineIdx].feed_mm,
+      targetProductMm: stagePlan[fineIdx].product_mm,
+      stage: '细碎',
+      ore,
+      closedCircuit,
+    })
+    : null;
+
+  // 筛分
+  const freshTph = targetTph;
+  const circulating = closedCircuit ? ENGINEERING_DEFAULTS.circulatingLoadClosedCircuit.value : [1, 1];
+  const screenThroughput = freshTph * ((circulating[0] + circulating[1]) / 2);
+  const unitCap = ENGINEERING_DEFAULTS.screeningUnitCapacityTphPerM2.value;
+  const screenArea = {
+    conservative_m2: pyRound(screenThroughput / unitCap[0], 1),
+    optimistic_m2: pyRound(screenThroughput / unitCap[1], 1),
+    throughput_tph: pyRound(screenThroughput, 1),
+    basis: 'A = Q / q，q 取经验区间',
+  };
+
+  // 输送带（MACKORN 自有标准：带宽同时受输送量与最大给料粒度两个约束）
+  const designTph = targetTph * 1.15;
+  const beltByFlow = MACKORN_BELT_TABLE.filter((b) => b.tph[1] >= designTph * 0.9);
+  const beltByFeed = maxFeedMm !== null ? MACKORN_BELT_TABLE.filter((b) => b.maxFeedMm >= maxFeedMm) : [];
+  const beltPick = (beltByFlow.length ? beltByFlow : MACKORN_BELT_TABLE.slice(-1))[0];
+  const beltFromFeed = beltByFeed.length ? beltByFeed[0] : null;
+  const beltWidth = beltFromFeed ? Math.max(beltFromFeed.widthMm, beltPick.widthMm) : beltPick.widthMm;
+  if (beltFromFeed && beltFromFeed.widthMm > beltPick.widthMm) {
+    warnings.push(`按输送量 ${pyRound(designTph, 0)} t/h 选 B${beltPick.widthMm} 即可，但给料最大 ${maxFeedMm}mm 要求带宽不小于 B${beltFromFeed.widthMm}（MACKORN《16-皮带输送机配置手册》：入料粒度越大要求带宽越宽）`);
+  }
+  if (maxFeedMm !== null && maxFeedMm * 3 > beltWidth) {
+    warnings.push(`给料最大粒度 ${maxFeedMm}mm 超过带宽 B${beltWidth} 的 1/3，须在受料点加装缓冲挡板`);
+  }
+
+  // 粗碎设备档位已在上方（圆锥破选型之前）算出并用于修正中碎给料
+
+  return {
+    request: { targetTph, maxFeedMm, productMm, ore, closedCircuit, washing },
+    total_reduction_ratio: pyRound(totalRatio, 2),
+    recommended_stages: stages,
+    stages_guide_note: guide ? guide.note : null,
+    stage_plan: stagePlan,
+    cone_crusher_coarse_side: cone.top_pick ? { ...cone.top_pick, units: cone.recommended_units, per_unit_tph: cone.per_unit_tph } : null,
+    cone_crusher_fine_side: fineCone && fineCone.top_pick ? { ...fineCone.top_pick, units: fineCone.recommended_units, per_unit_tph: fineCone.per_unit_tph } : null,
+    cone_selection_summary: {
+      medium: { units: cone.recommended_units, per_unit_tph: cone.per_unit_tph, cavity_pool: cone.recommended_cavity_pool, warnings: cone.warnings },
+      fine: fineCone ? { units: fineCone.recommended_units, per_unit_tph: fineCone.per_unit_tph, cavity_pool: fineCone.recommended_cavity_pool, warnings: fineCone.warnings } : null,
+      note: '各段台数由该段自己的给料/产品粒度与循环负荷独立算出，不要用整线产量直接除以单台额定能力',
+    },
+    coarse_crusher_recommendation: coarse
+      ? { equipment: coarse.equipment, maxFeedMm: coarse.maxFeedMm, dischargeMm: coarse.dischargeMm, source: 'S6 §1.1' }
+      : null,
+    stage_ratio_reference: MACKORN_STAGE_RATIO,
+    cone_alternatives: { medium: cone.alternatives, fine: fineCone ? fineCone.alternatives : [] },
+    screening: {
+      ...screenArea,
+      efficiency_range: ENGINEERING_DEFAULTS.screeningEfficiency.value,
+      note: '筛孔按最终产品粒度选取（通常为产品粒度 1.0-1.2 倍），须以筛机厂家选型表复核；湿粘矿石须加大面积 20%-40%',
+    },
+    conveying: {
+      design_throughput_tph: pyRound(designTph, 1),
+      recommended_width_mm: beltWidth,
+      width_basis: beltFromFeed && beltFromFeed.widthMm > beltPick.widthMm ? '由最大给料粒度控制' : '由输送量控制',
+      range_tph: beltPick.tph,
+      max_feed_for_width_mm: MACKORN_BELT_TABLE.find((b) => b.widthMm === beltWidth)?.maxFeedMm ?? null,
+      speed_ms_range: MACKORN_BELT_SPEED,
+      power_per_meter_kw: MACKORN_BELT_POWER_PER_M,
+      max_incline_deg: (() => { const w = beltWidth ? beltInclineMaxFor(beltWidth, false) : null; return w ? [w.maxDeg] : ENGINEERING_DEFAULTS.beltConveyorInclineMaxDeg.value; })(),
+      max_incline_deg_single: (() => { const w = beltWidth ? beltInclineMaxFor(beltWidth, false) : null; return w ? w.maxDeg : null; })(),
+      max_incline_basis: (() => { const w = beltWidth ? beltInclineMaxFor(beltWidth, false) : null; return w ? w.band + ' · ' + w.basis + ' · ' + w.source : '通用兜底区间（带宽未定）'; })(),
+      max_incline_table: MACKORN_BELT_INCLINE_MAX,
+      note: ENGINEERING_RULES.beltNote,
+      source: 'S5',
+    },
+    auxiliary: {
+      feeding: '振动给料机',
+      magnetSeparator: {
+        mandatory: MACKORN_MAGNET_SEPARATOR.mandatory,
+        position: MACKORN_MAGNET_SEPARATOR.primaryPosition,
+        optionalExtra: MACKORN_MAGNET_SEPARATOR.optionalPosition,
+        selectionBasis: MACKORN_MAGNET_SEPARATOR.selectionBasis,
+        note: MACKORN_MAGNET_SEPARATOR.selectionNote,
+        ironOreSpecial: MACKORN_IRON_ORE_METAL_DETECTION,
+        ironOreApplies: /铁|磁铁|magnetite|hematite/i.test(String(input.ore || '')),
+        source: MACKORN_MAGNET_SEPARATOR.source,
+      },
+      surge_bin_factor: ENGINEERING_RULES.hopperSurgeFactor.value,
+      dust: '各转运点设除尘罩 + 布袋除尘器',
+      washing: washing ? '配置洗砂/污水处理系统（见 MACKORN《17-洗砂污水处理系统》）' : '本方案不含洗砂系统',
+      automation: 'AORS 远程监控（美矿自营）',
+    },
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 5. 投资与运营成本估算
+ * ========================================================================== */
+
+export function estimateCost(input = {}) {
+  const model = findModel(input.model);
+  if (!model) throw new Error(`未知机型 "${input.model}"；可用机型：${ALL_MODELS.map((x) => x.model).join(', ')}`);
+  const units = Number.isFinite(Number(input.units)) ? Math.max(1, Math.round(Number(input.units))) : 1;
+  const hours = Number.isFinite(Number(input.hoursPerYear)) ? Number(input.hoursPerYear) : ENGINEERING_DEFAULTS.annualOperatingHours.value[0];
+  const price = Number.isFinite(Number(input.electricityPriceCnyPerKwh))
+    ? Number(input.electricityPriceCnyPerKwh)
+    : ENGINEERING_DEFAULTS.electricityPriceCnyPerKwh.value[0];
+  const loadFactor = Number.isFinite(Number(input.loadFactor)) ? Number(input.loadFactor) : ENGINEERING_DEFAULTS.loadFactor.value;
+  const tph = Number.isFinite(Number(input.tph)) ? Number(input.tph) : null;
+  const linerLifeHours = Number.isFinite(Number(input.linerLifeHours)) ? Number(input.linerLifeHours) : null;
+  const linerCostCnyPerSet = Number.isFinite(Number(input.linerCostCnyPerSet)) ? Number(input.linerCostCnyPerSet) : null;
+  const unitPriceWanCny = Number.isFinite(Number(input.unitPriceWanCny)) ? Number(input.unitPriceWanCny) : null;
+  // 数据模块可能被替换（如公开版不含价格/融资条款），取值一律带兜底，避免引擎崩
+  const downPaymentRatio = Number.isFinite(Number(input.downPaymentRatio))
+    ? Number(input.downPaymentRatio)
+    : (FINANCING?.downPaymentRatio?.[0] ?? 0.2);
+  const termYears = Number.isFinite(Number(input.termYears))
+    ? Number(input.termYears)
+    : (FINANCING?.termYears?.[0] ?? 3);
+  const annualRate = Number.isFinite(Number(input.annualRate)) ? Number(input.annualRate) : null;
+
+  const assumptions = [
+    A(`年运行小时数 ${hours} h/年`, 'ENGINEERING-DEFAULT(可覆写)'),
+    A(`电价 ${price} 元/kWh`, 'ENGINEERING-RANGE(可覆写)'),
+    A(`负荷率 ${loadFactor}`, 'ENGINEERING-DEFAULT(可覆写)'),
+    A(`主机参考价取自 S4 历史报价区间（万元/台）`, 'S4'),
+    A('不含土建、钢构、电气、安装、运费与税费；这些须按项目实际计入', 'SCOPE'),
+  ];
+  const warnings = [PRICE_DISCLAIMER];
+
+  const installedKw = model.powerKw * units;
+  const kwhPerYear = installedKw * loadFactor * hours;
+  const energyCnyPerYear = pyRound(kwhPerYear * price, 0);
+  const energyKwhPerTon = tph ? pyRound((installedKw * loadFactor) / tph, 3) : null;
+  const energyCnyPerTon = energyKwhPerTon !== null ? pyRound(energyKwhPerTon * price, 2) : null;
+
+  let linerCnyPerTon = null;
+  let linerCnyPerYear = null;
+  let linerLifeUsed = linerLifeHours;
+  let linerLifeBasis = linerLifeHours !== null ? '用户提供（项目实测/报价）' : null;
+  if (linerLifeUsed === null && model.model === 'NH700') {
+    // MACKORN 书面规范给出的花岗岩工况参考区间 6000-12000h，取中值并显式标注
+    linerLifeUsed = 9000;
+    linerLifeBasis = `MACKORN《09-选型设计规范与问答》Q3 给出的 NH700/800 花岗岩工况参考区间 6000-12000h 的中值（${MACKORN_LINER_LIFE.source}）`;
+    assumptions.push(A('未提供实测衬板寿命，按 MACKORN 规范的 NH700/800 花岗岩参考区间中值 9000h 代入；石灰石软岩可延长 1.5-2 倍，须按项目实测覆盖', 'S6'));
+  }
+  if (linerCostCnyPerSet !== null && linerLifeUsed !== null && tph) {
+    const setsPerYear = (hours / linerLifeUsed) * units;
+    linerCnyPerYear = pyRound(setsPerYear * linerCostCnyPerSet, 0);
+    linerCnyPerTon = pyRound(linerCnyPerYear / (tph * hours), 2);
+  } else {
+    warnings.push('未提供 linerLifeHours 与 linerCostCnyPerSet，无法计算衬板吨成本；请用 S4 备件价格（轧臼壁/破碎壁 1.5-5 万元/套）与本项目实测寿命填入');
+  }
+
+  const priceRef = findPrice(model.model);
+  const capexLow = priceRef ? priceRef.priceWanCny[0] * units * 10000 : null;
+  const capexHigh = priceRef ? priceRef.priceWanCny[1] * units * 10000 : null;
+  const quotedTotal = unitPriceWanCny !== null ? unitPriceWanCny * units * 10000 : null;
+
+  let financing = null;
+  const principal = quotedTotal ?? (capexLow !== null && capexHigh !== null ? (capexLow + capexHigh) / 2 : null);
+  if (principal !== null && annualRate !== null) {
+    const loan = principal * (1 - downPaymentRatio);
+    const months = termYears * 12;
+    const r = annualRate / 12;
+    const monthly = r === 0 ? loan / months : (loan * r) / (1 - Math.pow(1 + r, -months));
+    financing = {
+      principal_cny: pyRound(principal, 0),
+      down_payment_cny: pyRound(principal * downPaymentRatio, 0),
+      loan_cny: pyRound(loan, 0),
+      term_years: termYears,
+      annual_rate: annualRate,
+      monthly_payment_cny: pyRound(monthly, 0),
+      total_payment_cny: pyRound(monthly * months + principal * downPaymentRatio, 0),
+      note: FINANCING.note,
+      source: 'S4',
+    };
+  } else if (principal !== null) {
+    warnings.push('未提供 annualRate，融资租赁测算需要年利率；S4 注明"以商务洽谈为准"');
+  }
+
+  return {
+    unit: { model: model.model, power_kw: model.powerKw, units, installed_kw: installedKw, weight_t_each: pyRound(model.weightKg / 1000, 1) },
+    eccentric_throw: MACKORN_ECCENTRIC_THROW,
+    capex: {
+      quoted_total_cny: quotedTotal,
+      reference_band_cny: capexLow !== null ? [capexLow, capexHigh] : null,
+      reference_band_note: priceRef ? `${priceRef.priceWanCny[0]}-${priceRef.priceWanCny[1]} 万元/台${priceRef.note ? '（' + priceRef.note + '）' : ''}，共 ${units} 台` : null,
+      hydraulic_station_options: PRICE_HYDRAULIC_STATION,
+      installation_cost: (() => {
+        const wT = pyRound(model.weightKg / 1000, 1) * units;
+        return {
+          method: MACKORN_INSTALL_COST.method,
+          cny_per_ton: MACKORN_INSTALL_COST_CNY_PER_TON,
+          total_weight_t: wT,
+          estimated_total_cny: Math.round(wT * MACKORN_INSTALL_COST_CNY_PER_TON),
+          alt_method: MACKORN_INSTALL_COST.altMethod,
+          note: MACKORN_INSTALL_COST.note,
+          source: MACKORN_INSTALL_COST.source,
+        };
+      })(),
+      excluded_scope: ['土建', '钢构', '电气与控制', '运输与保险', '税费'],
+      source: 'S4',
+    },
+    opex: {
+      energy_kwh_per_year: pyRound(kwhPerYear, 0),
+      energy_cny_per_year: energyCnyPerYear,
+      energy_kwh_per_ton: energyKwhPerTon,
+      energy_cny_per_ton: energyCnyPerTon,
+      liner_cny_per_year: linerCnyPerYear,
+      liner_cny_per_ton: linerCnyPerTon,
+      liner_life_hours_used: linerLifeUsed,
+      liner_life_basis: linerLifeBasis,
+      liner_life_reference: MACKORN_LINER_LIFE,
+      cost_per_ton_cny: energyCnyPerTon !== null && linerCnyPerTon !== null ? pyRound(energyCnyPerTon + linerCnyPerTon, 2) : energyCnyPerTon,
+      excludes: ['人工', '备件（除衬板）', '检修', '油脂', '停机损失'],
+    },
+    financing,
+    spare_parts_reference: PRICE_SPARE_PARTS,
+    price_factors: PRICE_FACTORS,
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 6. 衬板磨损与多梯度设计
+ * ========================================================================== */
+
+export function analyzeWear(input = {}) {
+  const nSections = Number.isFinite(Number(input.sections)) ? Math.max(3, Math.min(12, Math.round(Number(input.sections)))) : 5;
+  const baseHardness = Number.isFinite(Number(input.baseHardness)) ? Number(input.baseHardness) : 58;
+  const gradientFactor = Number.isFinite(Number(input.gradientFactor)) ? Number(input.gradientFactor) : 1.12;
+  const measured = Array.isArray(input.wearRates) ? input.wearRates.map(Number) : null;
+  const uneven = measured ?? Array.from({ length: nSections }, (_, i) => pyRound(1.8 + 1.8 * Math.sin((Math.PI * i) / (nSections - 1)), 2));
+  const graded = Array.from({ length: nSections }, (_, i) => {
+    const base = uneven.reduce((a, b) => a + b, 0) / uneven.length;
+    return pyRound(base * (1 + 0.03 * Math.cos((Math.PI * i) / (nSections - 1))), 2);
+  });
+
+  const before = wearUniformity(uneven);
+  const after = wearUniformity(graded);
+  const hardness = gradientLinerDesign(nSections, baseHardness, gradientFactor);
+  const warnings = [];
+  const assumptions = [
+    A('磨损均匀度 = 1 − σ/μ；均等化条件 dW_i/dt ≈ const（源自 PY-MODEL · MackornCoreTheory.wear_uniformity）', 'PY-MODEL'),
+    A('多梯度分区硬度 H_i = H_base × k^i（源自 PY-MODEL · gradient_liner_design）', 'PY-MODEL'),
+  ];
+  if (!measured) {
+    assumptions.push(A('未提供实测 wearRates，示例磨损曲线由正弦分布合成，仅用于演示方法，不得用作设计依据', 'SYNTHETIC'));
+    warnings.push('输入为合成示例数据：请用现场测厚记录填入 wearRates 后重算');
+  }
+  const hCheck = validateHardnessDesign(hardness, hardness.unit || 'HRC');
+  if (!hCheck.ok) for (const p of hCheck.problems) warnings.push('硬度设计不可实现：' + p);
+  if (hardness.capped) warnings.push('分区硬度设计末段原始值 ' + hardness.raw_last + ' 超过物理上限 ' + hardness.limit + '，已截断至上限（物理不可实现的梯度无工程意义）');
+  assumptions.push(A('分区硬度单位为 ' + (hardness.unit || 'HRC') + '；物理上限 ' + HARDNESS_LIMITS[(hardness.unit || 'HRC')].max + '（' + HARDNESS_LIMITS[(hardness.unit || 'HRC')].note + '）', 'STANDARD'));
+  if (before.max_min_ratio !== null && before.max_min_ratio > 1.8) {
+    warnings.push(`最大/最小磨损速率比 ${before.max_min_ratio} 偏大，衬板寿命由最薄处决定，须做分区硬度或腔型修型`);
+  }
+
+  return {
+    sections: nSections,
+    wear_rates_before: uneven,
+    wear_rates_graded_design: graded,
+    uniformity_before: before,
+    uniformity_after_gradient_design: after,
+    improvement: {
+      uniformity_gain: pyRound(after.uniformity - before.uniformity, 4),
+      cv_reduction: pyRound(before.cv - after.cv, 4),
+    },
+    liner_hardness_schedule: hardness,
+    hardness_params: { base: baseHardness, gradient_factor: gradientFactor },
+    recommendations: [
+      '按 H_i 分区选材：下部细碎区用高梯度硬度，上部给料区保留一定韧性抗冲击',
+      '每 500 h 测厚一次并记录，用实测 wearRates 复算均匀度，形成本项目自学习基线',
+      '腔型一致性优先于单点寿命：磨损均匀度提升可减少 CSS 漂移与产品粒形波动',
+    ],
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 7. 孔隙率与粒级配比
+ * ========================================================================== */
+
+export function analyzeGrading(input = {}) {
+  const coarse = Number(input.coarseFrac);
+  const mid = Number(input.midFrac);
+  const fine = Number(input.fineFrac);
+  if (![coarse, mid, fine].every(Number.isFinite)) throw new Error('coarseFrac / midFrac / fineFrac 必须为数值');
+  const total = coarse + mid + fine;
+  if (total <= 0) throw new Error('三组分之和必须大于 0');
+  const porosity = porosityFromGrading(coarse, mid, fine);
+  const opt = optimalGrading();
+  const best = optimalGrading().porosity_min;
+  const warnings = [];
+  if (porosity > 0.35) warnings.push(`孔隙率 ${porosity} 偏高，料层密度不足，破碎腔内容易出现速度梯度过大`);
+  const assumptions = [
+    A('φ = 0.42 − 0.30·min(中料占比, 0.35) + 0.15·max(0, 细料占比 − 0.30)，并夹在 [0.15, 0.55]（源自 PY-MODEL · porosity_from_grading）', 'PY-MODEL'),
+    A('最优配比窗口 粗 50% / 中 30% / 细 20%（PY-MODEL · optimal_grading）', 'PY-MODEL'),
+  ];
+  const normalized = { coarse: pyRound(coarse / total, 4), mid: pyRound(mid / total, 4), fine: pyRound(fine / total, 4) };
+  const gapToOptimal = pyRound(porosity - best, 4);
+  return {
+    input_normalized: normalized,
+    porosity: porosity,
+    optimal_porosity_reference: best,
+    gap_to_optimal: gapToOptimal,
+    optimal_grading: opt,
+    verdict: porosity <= 0.3 ? '料层密度良好，模数易保持恒定' : porosity <= 0.35 ? '可接受，建议增加中间粒级充填' : '需调整配比：减少离析、强化均匀布料',
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 8. 市场纵深（五维 + 竞品）
+ * ========================================================================== */
+
+export function marketIntel(input = {}) {
+  const warnings = [PRICE_DISCLAIMER];
+  const assumptions = [
+    A('五维框架与打分口径源自 PY-MODEL · FiveDimAnalyzerV1（只移植框架，样本数值不入库）', 'PY-MODEL'),
+    A('竞品与价格结论取自 S3/S4 内部资料，属历史参考', 'S3/S4'),
+  ];
+  let scored = null;
+  if (input.scores && typeof input.scores === 'object') {
+    scored = fiveDimScore(input.scores);
+  } else {
+    warnings.push('未提供 scores，仅返回五维评估框架；请按每维 evidence 取证后再给 1-5 分');
+  }
+  const focus = input.focus ? String(input.focus) : null;
+  const matrix = focus
+    ? { ...COMPETITOR_MATRIX, columns: COMPETITOR_MATRIX.columns }
+    : COMPETITOR_MATRIX;
+
+  return {
+    focus,
+    framework: FIVE_DIMENSIONS,
+    scoring: scored,
+    leverage_chain: CRUSHING_LEVERAGE_CHAIN,
+    competitors: { brands: COMPETITOR_BRANDS, matrix },
+    mackorn: { advantages: MACKORN_ADVANTAGES, gaps: MACKORN_GAPS },
+    pain_point_playbook: PAIN_POINT_PLAYBOOK,
+    price_factors: PRICE_FACTORS,
+    price_reference: { nh: PRICE_NH, ns: PRICE_NS, hydraulic_station: PRICE_HYDRAULIC_STATION, financing: FINANCING },
+    evidence_discipline: [
+      '每个维度的结论必须能指到一份可核查的证据（报告页码 / 报价单 / 实测记录）',
+      '同一指标出现多来源冲突时，保留两个口径并标注统计边界，不要合并成一个数',
+      '禁止把研究样本数字当作标定值：标注时点、样本量、地域口径',
+    ],
+    assumptions,
+    warnings,
+  };
+}
+
+/* ==========================================================================
+ * 9. 选型报告（Markdown）
+ * ========================================================================== */
+
+function table(headers, rows) {
+  const head = `| ${headers.join(' | ')} |`;
+  const sep = `|${headers.map(() => ':---|').join('')}`;
+  const body = rows.map((r) => `| ${r.map((c) => (c === null || c === undefined ? '-' : String(c))).join(' | ')} |`).join('\n');
+  return `${head}\n${sep}\n${body}`;
+}
+
+export function buildSelectionReport(input = {}) {
+  const title = input.title ?? 'MACKORN 液压圆锥破碎机选型与生产线方案';
+  const project = input.project ?? '(未命名项目)';
+  const now = input.date ?? new Date().toISOString().slice(0, 10);
+  const sections = [];
+
+  sections.push(`# ${title}\n\n- 项目：${project}\n- 日期：${now}\n- 生成器：MACKORN DSH 插件 v1.0（数学内核源自 Mackorn 矿山选矿科研模型 V1）`);
+
+  const plant = input.targetTph ? sizePlant(input) : null;
+  if (plant) {
+    sections.push('## 1. 生产线总体方案\n\n' + [
+      `- 目标处理量：**${plant.request.targetTph} t/h**`,
+      `- 给料最大粒度：${plant.request.maxFeedMm} mm；最终产品：${plant.request.productMm} mm`,
+      `- 总破碎比：${plant.total_reduction_ratio}`,
+      `- 推荐破碎段数：**${plant.recommended_stages} 段**`,
+      `- 流程：${plant.stage_plan.map((s) => `${s.stage} ${s.feed_mm}→${s.product_mm}mm(i=${s.reduction_ratio})`).join(' → ')}`,
+    ].join('\n'));
+    sections.push('### 1.1 分段计划\n\n' + table(
+      ['段', '工序', '给料 mm', '产品 mm', '破碎比', '职责'],
+      plant.stage_plan.map((s) => [s.index, s.stage, s.feed_mm, s.product_mm, s.reduction_ratio, s.duty]),
+    ));
+  }
+
+  const sel = input.targetTph ? selectConeCrusher(input) : null;
+  if (sel) {
+    sections.push('## 2. 液压圆锥破碎机选型\n\n' + [
+      `- 单台需求：${sel.per_unit_tph} t/h × ${sel.recommended_units} 台`,
+      `- 首选：**${sel.top_pick ? `${sel.top_pick.model} ${sel.top_pick.cavity} 腔，CSS ${sel.top_pick.css_mm} mm，${sel.top_pick.power_kw} kW` : '无满足项'}**`,
+    ].join('\n'));
+    sections.push('### 2.1 候选机型排序\n\n' + table(
+      ['评分', '机型', '系列', '腔型', 'CSS mm', 'P80 估计 mm', '产能 t/h', '计入循环负荷', '功率 kW', '参考价 万元/台', '达标'],
+      sel.candidates.map((c) => [c.match_score, c.model, c.series, c.cavity, c.css_mm, c.p80_estimate_mm.join('-'), c.capacity_tph.join('-'), c.capacity_after_circulating_load_tph, c.power_kw, c.price_ref_wan_cny_per_unit ? c.price_ref_wan_cny_per_unit.join('-') : '-', c.capacity_ok ? '是' : '否']),
+    ));
+  }
+
+  const mcfm = Array.isArray(input.cumulativeRetained) ? analyzeMcfm(input) : null;
+  if (mcfm) {
+    sections.push('## 3. 给料模数 MCFM 诊断\n\n' + [
+      `- 模数 M = **${mcfm.mcfm}**（最优窗口 ${mcfm.optimal_range.join('-')}）`,
+      `- 判定：${mcfm.deviation ? mcfm.deviation.level : '-'}，偏离度 ${mcfm.deviation ? mcfm.deviation.deviation : '-'}`,
+      `- 工程含义：${mcfm.advice ? mcfm.advice.meaning : '-'}`,
+      `- 建议动作：${mcfm.advice ? mcfm.advice.action : '-'}`,
+    ].join('\n'));
+  }
+
+  const cost = input.costInput ? estimateCost(input.costInput) : null;
+  if (cost) {
+    sections.push('## 4. 投资与运营\n\n' + [
+      `- 主机参考价区间：${cost.capex.reference_band_cny ? `${cost.capex.reference_band_cny[0].toLocaleString()}-${cost.capex.reference_band_cny[1].toLocaleString()} 元` : '待商务确认'}`,
+      `- 年电耗：${cost.opex.energy_kwh_per_year.toLocaleString()} kWh；年电费：${cost.opex.energy_cny_per_year.toLocaleString()} 元`,
+      `- 吨电耗：${cost.opex.energy_kwh_per_ton ?? '-'} kWh/t；吨电费：${cost.opex.energy_cny_per_ton ?? '-'} 元/t`,
+      `- 不含范围：${cost.capex.excluded_scope.join('、')}`,
+    ].join('\n'));
+  }
+
+  const wear = input.wearInput ? analyzeWear(input.wearInput) : null;
+  if (wear) {
+    sections.push('## 5. 衬板磨损设计\n\n' + [
+      `- 磨损均匀度：设计前 ${wear.uniformity_before.uniformity} → 多梯度设计后 ${wear.uniformity_after_gradient_design.uniformity}`,
+      `- 分区硬度：${wear.liner_hardness_schedule.join(' / ')} HB`,
+      `- 最大/最小磨损比：${wear.uniformity_before.max_min_ratio ?? '-'}`,
+    ].join('\n'));
+  }
+
+  // 假设与警告汇总
+  const allAssumptions = [...(plant?.assumptions ?? []), ...(sel?.assumptions ?? []), ...(mcfm?.assumptions ?? []), ...(cost?.assumptions ?? []), ...(wear?.assumptions ?? [])];
+  const allWarnings = [...(plant?.warnings ?? []), ...(sel?.warnings ?? []), ...(mcfm?.warnings ?? []), ...(cost?.warnings ?? []), ...(wear?.warnings ?? [])];
+  sections.push('## 6. 假设与数据来源（必读）\n\n' + table(['假设', '来源'], allAssumptions.map((a) => [a.assumption, a.source])));
+  if (allWarnings.length) sections.push('## 7. 风险与待确认项\n\n' + allWarnings.map((w) => `- ⚠️ ${w}`).join('\n'));
+
+  sections.push('---\n\n> 本报告的厂商数据来自 MACKORN 内部资料（NH/NS 技术参数大全、竞品分析、报价参考）；所有工程经验区间已在「假设与数据来源」中显式标注。正式投标前须由 MACKORN 技术人员复核并出具盖章版选型书。');
+
+  return {
+    markdown: sections.join('\n\n'),
+    plant,
+    selection: sel,
+    mcfm,
+    cost,
+    wear,
+    assumptions: allAssumptions,
+    warnings: allWarnings,
+  };
+}
