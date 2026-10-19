@@ -34,6 +34,10 @@ import {
 } from './lib/evolve.mjs';
 import { ALL_MODELS, CAVITY_TYPES, SOURCES, NH_SERIES, NS_SERIES } from './lib/data.mjs';
 import { PRICE_DISCLAIMER } from './lib/data-market.mjs';
+import { evaluateDistributor, VERIFICATION_CHANNELS } from './lib/distributor.mjs';
+import { describe, concentration, residualAnalysis, weibullFit, growthWithBaseEffect } from './lib/stats.mjs';
+import { selectionKnowledge } from './lib/knowledge-bridge.mjs';
+import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
 export const inject = ['tools'];
@@ -88,6 +92,63 @@ const assumptionBlock = (assumptions = [], warnings = []) => {
   return parts.length ? `\n\n---\n\n${parts.join('\n\n')}` : '';
 };
 
+/**
+ * 知识体检渲染块 —— 把材料库/经验库/错误库/案例库的结论呈现在工具输出里。
+ *
+ * 为什么单独成块：这些不是"风险项"，而是【选型建议与工程判断】，
+ * 和 warnings 混在一起会被淹没。但严重级别（conflict）仍会同时进 warnings，
+ * 保证只看告警的人也不会漏掉。
+ */
+const knowledgeBlock = (k) => {
+  if (!k || !k.available) return '';
+  const parts = [];
+
+  if (k.material && k.material.name) {
+    const m = k.material;
+    parts.push('### 材料性质（' + m.name + (m.name_en ? ' / ' + m.name_en : '') + '）\n\n' + mdTable(['项', '值'], [
+      ['类别', m.group || '—'],
+      ['硬度', (m.hardness_grade || '—') + (m.hardness_basis ? '　（' + m.hardness_basis + '）' : '')],
+      ['磨蚀', (m.wear_grade || '—') + (m.wear_basis ? '　（' + m.wear_basis + '）' : '')],
+      ['可碎性', m.crushability || '—'],
+      ['抗压强度 MPa', m.ucs_range_mpa ? m.ucs_range_mpa[0] + '–' + m.ucs_range_mpa[1] : '—'],
+      ['磨蚀指数 AI', m.ai_range ? m.ai_range[0] + '–' + m.ai_range[1] : '—'],
+    ]));
+    if (m.notes) parts.push('> ' + m.notes);
+  } else if (k.material && k.material.found === false) {
+    parts.push('### 材料性质：未收录\n\n' + (k.material.note || '') + (k.material.available_materials ? '\n\n已收录：' + k.material.available_materials.join(' / ') : ''));
+  }
+
+  const conf = (k.compatibility || []).filter((x) => x.level === 'conflict');
+  const attn = (k.compatibility || []).filter((x) => x.level === 'attention');
+  const info = (k.compatibility || []).filter((x) => x.level === 'info');
+  if (conf.length) {
+    parts.push('### ⚠️ 需要你判断的冲突\n\n' + conf.map((x) => '**' + x.item + '**\n\n' + x.detail + '\n\n*来源：' + x.source + '*').join('\n\n---\n\n'));
+  }
+  if (attn.length) {
+    parts.push('### 需要关注\n\n' + attn.map((x) => '- **' + x.item + '**：' + x.detail).join('\n'));
+  }
+  if (info.length) {
+    parts.push('### 选型建议\n\n' + info.map((x) => '- ' + x.item + '：' + x.detail).join('\n'));
+  }
+
+  if (k.known_error_guard && k.known_error_guard.length) {
+    parts.push('### 已知错误拦截（来自错误库）\n\n' + mdTable(['编号', '状态', '要点'],
+      k.known_error_guard.slice(0, 6).map((x) => [x.id, x.verdict, x.check + (x.fix ? '　→ ' + x.fix : '')])));
+  }
+
+  if (k.reference_cases && k.reference_cases.matched && k.reference_cases.matched.length) {
+    parts.push('### 公开对标案例（' + k.reference_cases.total_effective + ' 条有效记录中匹配 ' + k.reference_cases.matched.length + ' 条）\n\n'
+      + mdTable(['编号', '品牌', '机型', '产量 t/h', '物料', '国家'],
+        k.reference_cases.matched.map((x) => [x.id, x.brand || '—', x.model || '—', x.tph || '—', x.material || '—', x.country || '—']))
+      + '\n\n> ' + (k.reference_cases.disclaimer || ''));
+  }
+
+  if (k.sources && k.sources.length) parts.push('*知识来源：' + k.sources.join(' · ') + '*');
+  if (k.rule) parts.push('> ' + k.rule);
+
+  return parts.length ? '\n\n---\n\n## 知识体检\n\n' + parts.join('\n\n') : '';
+};
+
 /* --------------------------------------------------------------------------
  * 工具 1：MCFM 粒度分布诊断
  * ------------------------------------------------------------------------ */
@@ -95,7 +156,7 @@ const assumptionBlock = (assumptions = [], warnings = []) => {
 const toolMcfm = {
   name: 'mackorn_mcfm_analysis',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 计算 MACKORN 粗粒级给料模数 MCFM（M=(A1+…+A7−7A8)/(100−A8)），判定是否落在工程最优窗口 4.0-4.5，并给出"均匀布料 → 速度均匀化 → 磨损稳定 → 模数恒定"的杠杆调整建议。用于诊断破碎腔给料级配是否稳定、是否应先改布料而不是换设备。当用户提到给料级配、筛余、模数、离析、布料、细碎台时产量偏低时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 计算 MACKORN 粗粒级给料模数 MCFM（M=(A1+…+A7−7A8)/(100−A8)），判定是否落在工程最优窗口 4.0-4.5，并给出"均匀布料 → 速度均匀化 → 磨损稳定 → 模数恒定"的杠杆调整建议。用于诊断破碎腔给料级配是否稳定、是否应先改布料而不是换设备。当用户提到给料级配、筛余、模数、离析、布料、细碎台时产量偏低时调用。' + ' 【适用边界】本工具诊断【粗粒级给料模数】，回答"给料级配稳不稳"；不回答"配比孔隙率"（见 grading_porosity）。',
   parameters: obj(
     {
       cumulative_retained: S.arrayOfNumbers(
@@ -144,7 +205,7 @@ const toolMcfm = {
 const toolSelection = {
   name: 'mackorn_cone_selection',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破碎机选型主工具：按目标处理量 t/h、给料最大粒度、目标产品粒度与工序（中碎/细碎/超细碎）从 NH 标准型与 NS 高速型单缸液压圆锥破中选出机型 + 腔型 + 紧边排矿口 CSS + 台数，给出候选排序、P80 估计、参考价区间与达标判定。数据源为 MACKORN《NH_NS系列技术参数大全》。当用户问"选什么型号/几台/多大功率/什么腔型/CSS 定多少"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破碎机选型主工具：按目标处理量 t/h、给料最大粒度、目标产品粒度与工序（中碎/细碎/超细碎）从 NH 标准型与 NS 高速型单缸液压圆锥破中选出机型 + 腔型 + 紧边排矿口 CSS + 台数，给出候选排序、P80 估计、参考价区间与达标判定。数据源为 MACKORN《NH_NS系列技术参数大全》。当用户问"选什么型号/几台/多大功率/什么腔型/CSS 定多少"时调用。' + ' 【适用边界】本工具只针对【单台圆锥破】。整条生产线请用 plant_design；给料 >350mm 会被拒绝（圆锥破是中细碎设备）。',
   parameters: obj(
     {
       target_tph: S.number('目标处理量 t/h（必填，正数）。'),
@@ -179,6 +240,7 @@ const toolSelection = {
           ),
           '',
           `> 腔型建议池：${v.recommended_cavity_pool.join(' / ')}`,
+          knowledgeBlock(v.knowledge_check),
           assumptionBlock(v.assumptions, v.warnings),
           jsonBlock(v),
         ].join('\n'),
@@ -202,14 +264,55 @@ const toolSelection = {
  * 工具 3：产能校核
  * ------------------------------------------------------------------------ */
 
+/**
+ * 产能达标判定 —— 回答用户真正想问的那句话："我这台机能不能做到 X t/h？"
+ *
+ * 由来（UAT-3 发现）：用户问 NH400 C腔 CSS16 能否做 350 t/h，
+ *   工具返回了产能区间却没给判定，连 target_tph 参数都没有。
+ *
+ * 判据（基于已有表值，不引入新假设）：
+ *   rated ≥ target 且余量 ≥15%  → 达标（舒适）
+ *   rated ≥ target 但余量 <15%  → 临界达标（须核实现场条件）
+ *   rated <  target              → 不达标，给缺口与可选路径
+ */
+function buildCapacityVerdict(cap, targetTph) {
+  const t = Number(targetTph);
+  if (!Number.isFinite(t) || t <= 0) {
+    return { asked: false, note: '未提供目标产量 —— 如需【能否达到】的判定，请填 target_tph。' };
+  }
+  const rated = Number(cap.capacity_rated_tph);
+  const min = Number(cap.capacity_min_tph);
+  if (!Number.isFinite(rated)) return { asked: true, target_tph: t, verdict: 'unknown', note: '该腔型×CSS 组合没有可用产能数据，无法判定' };
+  const marginPct = +(((rated - t) / t) * 100).toFixed(1);
+  let verdict, advice;
+  if (rated >= t) {
+    verdict = marginPct >= 15 ? 'achievable_comfortable' : 'achievable_tight';
+    advice = verdict === 'achievable_comfortable'
+      ? ('额定能力 ' + rated + ' t/h ≥ 目标 ' + t + ' t/h，余量 ' + marginPct + '%。可执行。但实际产量仍受给料级配、含水、闭路循环负荷影响 —— 建议按额定值的 80–85% 作为生产计划值。')
+      : ('额定能力 ' + rated + ' t/h 刚够目标 ' + t + ' t/h（余量仅 ' + marginPct + '%）。风险：给料级配波动、含水偏高或衬板磨损后产量会掉到目标以下。建议核实现场给料条件，并预留降产预案。');
+  } else {
+    verdict = 'not_achievable';
+    const gap = +(t - rated).toFixed(0);
+    advice = '额定能力 ' + rated + ' t/h < 目标 ' + t + ' t/h，缺口约 ' + gap + ' t/h。可选路径：① 开大 CSS（若产品粒度允许）；② 提高转速（须确认不超过堵料边界 400 rpm）；③ 并联第二台；④ 换更大机型。';
+  }
+  return {
+    asked: true, target_tph: t, verdict, achievable: rated >= t,
+    rated_tph: rated, conservative_min_tph: min, margin_pct: marginPct,
+    conservative_ok: Number.isFinite(min) ? min >= t : null,
+    advice,
+    basis: 'S1 腔型×CSS 详表（额定值）；达标判据为工程常用口径，非厂商标定',
+    caveat: '本判定基于【额定表值】。实际产量受给料级配、含水、闭式循环负荷与衬板磨损影响，标定前不应视作承诺值。',
+  };
+}
 const toolCapacity = {
   name: 'mackorn_capacity_check',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 给定 MACKORN 机型 + 腔型 + 紧边排矿口 CSS，从《NH_NS系列技术参数大全》腔型×CSS 详表查出生产能力区间 t/h（无详表的机型按系列区间外推并标注为近似），同时返回排矿口范围合规性、最大给料限制、外形尺寸与重量。用于复核既有设备能力或验证选型结论。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 给定 MACKORN 机型 + 腔型 + 紧边排矿口 CSS，从《NH_NS系列技术参数大全》腔型×CSS 详表查出生产能力区间 t/h（无详表的机型按系列区间外推并标注为近似），同时返回排矿口范围合规性、最大给料限制、外形尺寸与重量。用于复核既有设备能力或验证选型结论。' + ' 【适用边界】本工具【复核已知机型的产能】，不做选型。选新型号请用 cone_selection。产能为表值，实际受给料与工况影响。',
   parameters: obj(
     {
       model: S.stringEnum('机型型号。', MODEL_ENUM),
       cavity: S.stringEnum('腔型代码。', CAVITY_ENUM),
+      target_tph: S.number('目标产量 t/h（可选）。填了本工具会直接给出【能否达到】的判定 —— 复核既有设备时必填。'),
       css: S.number('紧边排矿口 CSS，mm。'),
     },
     ['model', 'css'],
@@ -218,6 +321,16 @@ const toolCapacity = {
     schema: ANY_OBJECT,
     render: (_args, v) => text(
       [
+        /* 达标判定放最前 —— 用户问「能不能做 X t/h」时，这是他要看的第一行 */
+        v.verdict && v.verdict.asked
+          ? (v.verdict.achievable
+            ? `## 结论：✅ 能达到 ${v.verdict.target_tph} t/h（额定 ${v.verdict.rated_tph} t/h，余量 ${v.verdict.margin_pct}%）`
+            : `## 结论：❌ 达不到 ${v.verdict.target_tph} t/h（额定 ${v.verdict.rated_tph} t/h，缺 ${(v.verdict.target_tph - v.verdict.rated_tph).toFixed(0)} t/h）`)
+          : null,
+        v.verdict && v.verdict.asked ? '' : null,
+        v.verdict && v.verdict.asked ? v.verdict.advice : null,
+        v.verdict && v.verdict.asked ? '' : null,
+        v.verdict && v.verdict.asked ? '---' : null,
         `## 产能校核 · ${v.model} ${v.cavity ?? ''}腔 @ CSS ${v.css} mm`,
         '',
         `- 生产能力：**${v.capacity_min_tph} - ${v.capacity_rated_tph} t/h**`,
@@ -233,7 +346,14 @@ const toolCapacity = {
     ),
   },
   async execute(args) {
-    return checkCapacity({ model: args.model, cavity: args.cavity, css: args.css });
+    const r = checkCapacity({ model: args.model, cavity: args.cavity, css: args.css });
+    /* 用户验收测试发现（UAT-3）：用户问「我这台机能不能做 350 t/h」时，
+     * 工具只回产能区间而不给判定 —— 而那正是用户问这个问题的唯一原因。
+     * 这里直接给出 verdict，不让用户自己去比数字。 */
+    if (r && typeof r === 'object' && !Array.isArray(r)) {
+      r.verdict = buildCapacityVerdict(r, args && args.target_tph);
+    }
+    return r;
   },
 };
 
@@ -244,7 +364,7 @@ const toolCapacity = {
 const toolPlant = {
   name: 'mackorn_plant_design',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 破碎筛分生产线总体配置：按原矿最大粒度与目标产品粒度计算总破碎比、推荐破碎段数、各段给料/产品/破碎比分配，并对中碎段与细碎段各做一次液压圆锥破选型，同时给出筛分面积、输送带带宽、辅机（给料机/除铁器/除尘/洗砂/AORS）配置建议。用于从"客户要一条 X t/h 的线"走到"每段放什么设备"。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 破碎筛分生产线总体配置：按原矿最大粒度与目标产品粒度计算总破碎比、推荐破碎段数、各段给料/产品/破碎比分配，并对中碎段与细碎段各做一次液压圆锥破选型，同时给出筛分面积、输送带带宽、辅机（给料机/除铁器/除尘/洗砂/AORS）配置建议。用于从"客户要一条 X t/h 的线"走到"每段放什么设备"。' + ' 【适用边界】本工具给【整线配置建议】。单台机型细选请用 cone_selection。原矿给料可以很大，但进入圆锥破那一段必须 ≤350mm。',
   parameters: obj(
     {
       target_tph: S.number('目标成品处理量 t/h（必填）。'),
@@ -276,10 +396,11 @@ const toolPlant = {
         '',
         '### 筛分与输送',
         `- 筛分处理量 ${v.screening.throughput_tph} t/h；建议筛分面积 **${v.screening.optimistic_m2} - ${v.screening.conservative_m2} m²**（效率 ${v.screening.efficiency_range.join('-')}）`,
-        `- 输送设计能力 ${v.conveying.design_throughput_tph} t/h；建议带宽 **${v.conveying.recommended_width_mm ?? '待核算'} mm**，最大倾角 ${v.conveying.max_incline_deg.join('-')}°`,
+        `- 输送设计能力 ${v.conveying.design_throughput_tph} t/h；建议带宽 **${v.conveying.recommended_width_mm ?? '待核算'} mm**，最大倾角 ${(v.conveying.max_incline_deg_single ?? v.conveying.max_incline_deg.join('-'))}°`,
         '',
         '### 辅机',
         mdTable(['项', '配置'], Object.entries(v.auxiliary).map(([k, val]) => [k, Array.isArray(val) ? val.join('-') : val])),
+        knowledgeBlock(v.knowledge_check),
         assumptionBlock(v.assumptions, v.warnings),
         jsonBlock(v),
       ]
@@ -306,7 +427,7 @@ const toolPlant = {
 const toolCost = {
   name: 'mackorn_cost_estimate',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破投资与运营成本估算：按机型与台数算装机功率、年电耗、年电费、吨电耗与吨电费；按项目实际电价/年运行小时/负荷率/衬板寿命与衬板价算衬板吨成本；给出 S4 历史报价区间、液压站分档报价、备件参考价、报价影响因素与融资租赁月供测算。明确列出未含范围（土建/钢构/电气/安装/运输/税费）。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破投资与运营成本估算：按机型与台数算装机功率、年电耗、年电费、吨电耗与吨电费；按项目实际电价/年运行小时/负荷率/衬板寿命与衬板价算衬板吨成本；给出 S4 历史报价区间、液压站分档报价、备件参考价、报价影响因素与融资租赁月供测算。明确列出未含范围（土建/钢构/电气/安装/运输/税费）。' + ' 【适用边界】本工具只做【成本量级估算】，不构成报价。未含土建/钢构/电气/安装/运输/税费，须逐项确认。',
   parameters: obj(
     {
       model: S.stringEnum('机型型号。', MODEL_ENUM),
@@ -377,7 +498,7 @@ const toolCost = {
 const toolWear = {
   name: 'mackorn_wear_design',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 沿破碎腔高度离散截面评估衬板磨损均匀度（均匀度 = 1 − σ/μ，均等化条件 dW/dt ≈ const），给出多梯度分区硬度设计 H_i = H_base × k^i，并给出磨损均匀度提升量。可输入现场实测磨损速率（各截面测厚差值）；不输入则用合成示例曲线演示方法（输出会明确标注为合成数据）。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 沿破碎腔高度离散截面评估衬板磨损均匀度（均匀度 = 1 − σ/μ，均等化条件 dW/dt ≈ const），给出多梯度分区硬度设计 H_i = H_base × k^i，并给出磨损均匀度提升量。可输入现场实测磨损速率（各截面测厚差值）；不输入则用合成示例曲线演示方法（输出会明确标注为合成数据）。' + ' 【适用边界】本工具做【衬板磨损均匀度评估与分区硬度设计】。未提供实测磨损速率时用合成曲线演示，结果会明确标注。',
   parameters: obj(
     {
       sections: S.integer('沿腔高离散截面数（3-12，默认 5）。', { default: 5 }),
@@ -421,7 +542,7 @@ const toolWear = {
 const toolGrading = {
   name: 'mackorn_grading_porosity',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 按粗/中/细三组分配比计算料层孔隙率 φ（经验模型 φ = 0.42 − 0.30·min(中料占比,0.35) + 0.15·max(0, 细料占比 − 0.30)），与最优配比窗口（粗 50% / 中 30% / 细 20%，最优孔隙率 0.28）对比，判断料层密度是否足以维持模数恒定。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 按粗/中/细三组分配比计算料层孔隙率 φ（经验模型 φ = 0.42 − 0.30·min(中料占比,0.35) + 0.15·max(0, 细料占比 − 0.30)），与最优配比窗口（粗 50% / 中 30% / 细 20%，最优孔隙率 0.28）对比，判断料层密度是否足以维持模数恒定。' + ' 【适用边界】本工具算【三级配比下的料层孔隙率】；不诊断给料模数（见 mcfm_analysis）。',
   parameters: obj(
     {
       coarse_frac: S.number('粗骨料占比（可为任意一致单位，内部归一化）。'),
@@ -462,10 +583,88 @@ const scoreSchema = obj(
   ['score'],
 );
 
+/**
+ * 市场机会判定 —— 回答用户真正想问的："这个市场该不该去打？下一步干什么？"
+ *
+ * 由来（UAT-10 发现）：用户问「哈萨克斯坦有没有机会」，工具给了五维框架与竞品矩阵，
+ *   却没给判断。用户要的不是框架，是"去还是不去"。
+ *
+ * 判定口径（三档，基于用户提供的五维分；未提供则给出打分行动）：
+ *   加权总分 ≥4.0             → 优先推进（建议派人/投市场费用）
+ *   3.0 ≤ 加权总分 < 4.0      → 有条件推进（先补齐短板维度再投入）
+ *   加权总分 < 3.0            → 暂缓（先观察或找代理试水）
+ * 另有两条一票否决：无合规渠道 / 已有强竞品独家绑定
+ */
+function buildMarketVerdict(scoring, focus, competitors) {
+  const dims = [
+    ['industry', '行业'], ['technology', '技术'], ['timeliness', '时效'],
+    ['economics', '经济'], ['operability', '可操作'],
+  ];
+  if (!scoring || typeof scoring !== 'object') {
+    return {
+      decided: false,
+      verdict: 'need_scoring',
+      focus: focus || null,
+      what_to_do_next: '本工具需要五维打分才能给出推进判定。五个维度各给 1–5 分（1=差，5=好）后重新调用，即可得到【优先推进 / 有条件推进 / 暂缓】的结论与理由。',
+      dimensions: dims.map(([k, cn]) => ({
+        key: k, name: cn,
+        how_to_score: ({
+          industry: '目标国该品类进口规模与增速（可用公开海关数据）',
+          technology: '客户对自动化/粒形/能耗的技术要求，与我方产品匹配度',
+          timeliness: '当地在建/规划项目数量与节奏，是否处于采购窗口',
+          economics: '客户预算水平、付款条件、汇率与融资可得性',
+          operability: '物流可达性、安装服务半径、备件供应能力、语言与合规门槛',
+        })[k],
+      })),
+      caveat: '本判定基于框架与用户提供的分数，不是市场调研结论。下结论前应有可核查的证据（见 evidence_discipline）。',
+    };
+  }
+  let num = 0, den = 0;
+  const detail = [];
+  for (const [k, cn] of dims) {
+    const s = scoring[k];
+    const score = s && typeof s === 'object' ? Number(s.score) : Number(s);
+    const weight = s && typeof s === 'object' && Number.isFinite(Number(s.weight)) ? Number(s.weight) : 1;
+    if (!Number.isFinite(score)) continue;
+    num += score * weight; den += weight;
+    detail.push({ key: k, name: cn, score, weight, weighted: +(score * weight).toFixed(2) });
+  }
+  if (den === 0) return { decided: false, verdict: 'need_scoring', focus: focus || null, what_to_do_next: '未收到有效的五维分数（需 1–5 的数值）。' };
+  const weighted = +(num / den).toFixed(2);
+  const sorted = detail.slice().sort((a, b) => a.score - b.score);
+  const weakest = sorted[0], strongest = sorted[sorted.length - 1];
+  const gaps = detail.filter((d) => d.score <= 2);
+  let verdict, action;
+  if (weighted >= 4.0) {
+    verdict = 'priority_go';
+    action = '加权 ' + weighted + '/5 —— 建议【优先推进】：派人实地走访 + 投入市场费用。最强维度是「' + strongest.name + '」（' + strongest.score + '/5）。' +
+      (gaps.length ? '但「' + gaps.map((g) => g.name).join('、') + '」仍为短板，投入前应补齐。' : '五维无明显短板。');
+  } else if (weighted >= 3.0) {
+    verdict = 'conditional_go';
+    action = '加权 ' + weighted + '/5 —— 【有条件推进】：先补齐短板再投入。最弱维度是「' + weakest.name + '」（' + weakest.score + '/5），建议先针对它做一轮验证（如找一个当地代理试水、或先做一单小项目）。';
+  } else {
+    verdict = 'hold';
+    action = '加权 ' + weighted + '/5 —— 建议【暂缓】：当前条件不成熟。最弱维度「' + weakest.name + '」（' + weakest.score + '/5）是主要障碍。可先低成本观察（参加当地展会、维护代理关系），待条件改善再评估。';
+  }
+  return {
+    decided: true, verdict, focus: focus || null,
+    weighted_score: weighted, scale: '1–5（1=差，5=好）',
+    per_dimension: detail,
+    weakest_dimension: weakest, strongest_dimension: strongest,
+    critical_gaps: gaps,
+    recommended_action: action,
+    next_3_steps: [
+      '补齐证据：按 evidence_discipline 收集可核查数据（海关/项目/客户）',
+      '验证短板：「' + weakest.name + '」是当前最大不确定性，先解决它',
+      verdict === 'hold' ? '低成本观察：展会/代理关系维护，不投入市场费用' : '实地走访：确认项目节奏与采购窗口',
+    ],
+    caveat: '本判定基于用户提供的五维分数，不是市场调研结论。分数质量决定结论质量；下结论前应有可核查证据。',
+  };
+}
 const toolMarket = {
   name: 'mackorn_market_intel',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破市场纵深分析：返回"行业/技术/时效/经济/可操作"五维评估框架与打分口径、破碎效率核心杠杆链、竞品对标矩阵（美卓 HP / 山特维克 CS / 特雷克斯 / 克虏伯）、美矿优势与差距、客户痛点应对话术、报价影响因素与价格参考区间。若用户提供各维度 1-5 分与权重，则直接输出五维加权得分与推进结论。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破市场纵深分析：返回"行业/技术/时效/经济/可操作"五维评估框架与打分口径、破碎效率核心杠杆链、竞品对标矩阵（美卓 HP / 山特维克 CS / 特雷克斯 / 克虏伯）、美矿优势与差距、客户痛点应对话术、报价影响因素与价格参考区间。若用户提供各维度 1-5 分与权重，则直接输出五维加权得分与推进结论。' + ' 【适用边界】本工具做【市场纵深定性分析】；定量统计（集中度/回归/威布尔）请用 market_stats。不做价格承诺。',
   parameters: obj(
     {
       focus: S.string('分析焦点（区域市场/客户类型/竞品品牌等）。'),
@@ -486,6 +685,24 @@ const toolMarket = {
     schema: ANY_OBJECT,
     render: (_args, v) => {
       const lines = ['## 市场纵深分析' + (v.focus ? ` · ${v.focus}` : ''), ''];
+      /* 机会判定放最前 —— 用户问「有没有机会」时，这是他要看的第一行（UAT-10 发现） */
+      if (v.verdict) {
+        const vd = v.verdict;
+        if (vd.decided) {
+          const tag = vd.verdict === 'priority_go' ? '✅ 优先推进' : vd.verdict === 'conditional_go' ? '🟡 有条件推进' : '⛔ 暂缓';
+          lines.push('## 结论：' + tag + '（加权 ' + vd.weighted_score + '/5）', '', vd.recommended_action, '');
+          if (vd.next_3_steps && vd.next_3_steps.length) {
+            lines.push('**下一步 3 件事**', '', vd.next_3_steps.map((s, i) => (i + 1) + '. ' + s).join('\n'), '');
+          }
+        } else {
+          lines.push('## 结论：还缺打分', '', vd.what_to_do_next, '');
+          if (vd.dimensions) {
+            lines.push(mdTable(['维度', '怎么打分'], vd.dimensions.map((d) => [d.name + '（' + d.key + '）', d.how_to_score])), '');
+          }
+        }
+        if (vd.caveat) lines.push('> ' + vd.caveat, '');
+        lines.push('---', '');
+      }
       if (v.scoring) {
         lines.push(
           `### 五维加权得分：**${v.scoring.weighted_score} / 5**`,
@@ -521,7 +738,14 @@ const toolMarket = {
     },
   },
   async execute(args) {
-    return marketIntel({ focus: args.focus, scores: args.scores });
+    const r = marketIntel({ focus: args.focus, scores: args.scores });
+    /* 用户问「这个市场有没有机会」时，必须直接给判断，不能只给五维框架
+     * （UAT-10 发现：原实现连"建议"字段都没有，用户拿不到"去还是不去"的答案）。
+     * 未提供分数时不空手 —— 返回【怎么打分】的可执行下一步。 */
+    if (r && typeof r === 'object' && !Array.isArray(r)) {
+      r.verdict = buildMarketVerdict(args && args.scores, args && args.focus, r.competitors);
+    }
+    return r;
   },
 };
 
@@ -532,7 +756,7 @@ const toolMarket = {
 const toolReport = {
   name: 'mackorn_selection_report',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破生产线选型报告一键生成：把生产线配置、圆锥破选型、MCFM 诊断、成本估算、衬板设计串成一份 Markdown 报告，并自动汇总全部"假设与来源"和"风险与待确认项"。当用户要"出一份方案/选型书/报告"时调用，可先单独跑前几个工具确认参数再收口。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 液压圆锥破生产线选型报告一键生成：把生产线配置、圆锥破选型、MCFM 诊断、成本估算、衬板设计串成一份 Markdown 报告，并自动汇总全部"假设与来源"和"风险与待确认项"。当用户要"出一份方案/选型书/报告"时调用，可先单独跑前几个工具确认参数再收口。' + ' 【适用边界】本工具产出【内部技术选型报告】，面向工程判断；面向客户的方案书请用 proposal。',
   parameters: obj(
     {
       title: S.string('报告标题。'),
@@ -594,7 +818,7 @@ const toolReport = {
 const toolCatalog = {
   name: 'mackorn_equipment_catalog',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 列出 MACKORN 液压圆锥破全部可选机型与腔型枚举值：NH 标准型 9 个型号、NS 高速型 4 个型号的基本参数（最大给料/排矿口范围/功率/重量/产能），以及 9 种腔型代码的含义与适用场景。当选型工具报"未知机型"或需要向用户展示可选范围时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 列出 MACKORN 液压圆锥破全部可选机型与腔型枚举值：NH 标准型 9 个型号、NS 高速型 4 个型号的基本参数（最大给料/排矿口范围/功率/重量/产能），以及 9 种腔型代码的含义与适用场景。当选型工具报"未知机型"或需要向用户展示可选范围时调用。' + ' 【适用边界】本工具只列【机型与腔型枚举值】；查材料性质与经验教训请用 knowledge。不含报价。',
   parameters: obj({}, []),
   output: {
     schema: ANY_OBJECT,
@@ -634,7 +858,7 @@ const toolCatalog = {
 const toolIntake = {
   name: 'mackorn_requirement_intake',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【销售主入口】把 MACKORN《砂石骨料/金属矿山生产线客户需求信息输入表》的内容 + 客户要求的产量，一次性变成「还缺什么要问客户」+「该配什么设备」的完整解答。两种用法可混用：①把表里的文字（或 Word 转出的文本）整段贴进 form_text，自动抽取数值字段；②逐项填结构化字段。工具会：抽取并逐字段标注来源 → 检查必填/建议字段缺失并生成追问话术 → 归一化工况 → 调用整线配置与液压圆锥破选型 → 核算年产量与矿山服务年限 → 给出除土/湿法/除尘/制砂/整形等派生建议。当客户发来需求表、或销售问"这张表能不能配线"，以及任何时候缺参数需要知道"还要问客户什么"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【销售主入口】把 MACKORN《砂石骨料/金属矿山生产线客户需求信息输入表》的内容 + 客户要求的产量，一次性变成「还缺什么要问客户」+「该配什么设备」的完整解答。两种用法可混用：①把表里的文字（或 Word 转出的文本）整段贴进 form_text，自动抽取数值字段；②逐项填结构化字段。工具会：抽取并逐字段标注来源 → 检查必填/建议字段缺失并生成追问话术 → 归一化工况 → 调用整线配置与液压圆锥破选型 → 核算年产量与矿山服务年限 → 给出除土/湿法/除尘/制砂/整形等派生建议。当客户发来需求表、或销售问"这张表能不能配线"，以及任何时候缺参数需要知道"还要问客户什么"时调用。' + ' 【适用边界】本工具只做【需求抽取与缺口分析】，不代替客户确认；抽取到的数值须回读给客户核对。',
   parameters: obj(
     {
       capacity_tph: S.number('客户要求的成品产量 t/h（必填）。若表里已填，请从表中抽取后填入此处。'),
@@ -724,7 +948,7 @@ const toolIntake = {
         lines.push(f(p.cone_crusher_fine_side, '细碎段圆锥破'));
         if (p.coarse_crusher_recommendation) lines.push(`- 粗碎设备：**${p.coarse_crusher_recommendation.equipment}**（最大给料 ${p.coarse_crusher_recommendation.maxFeedMm} mm，排矿 ${p.coarse_crusher_recommendation.dischargeMm.join('-')} mm）`);
         lines.push(`- 筛分：处理量 ${p.screening.throughput_tph} t/h，面积 **${p.screening.optimistic_m2}-${p.screening.conservative_m2} m²**`);
-        lines.push(`- 输送：设计能力 ${p.conveying.design_throughput_tph} t/h，带宽 **B${p.conveying.recommended_width_mm}**（${p.conveying.width_basis}），倾角 ≤ ${p.conveying.max_incline_deg.join('-')}°`);
+        lines.push(`- 输送：设计能力 ${p.conveying.design_throughput_tph} t/h，带宽 **B${p.conveying.recommended_width_mm}**（${p.conveying.width_basis}），倾角 ≤ ${(p.conveying.max_incline_deg_single ?? p.conveying.max_incline_deg.join('-'))}°`);
         lines.push('');
         lines.push('> 依据标注：`S1 腔型×CSS 详表` = 厂商硬数据；`系列区间近似` = 须经 MACKORN 技术复核。');
         lines.push('');
@@ -769,7 +993,7 @@ export const formFields = FORM_FIELDS;
 const toolProposal = {
   name: 'mackorn_proposal',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【交付主入口】按 MACKORN 标准方案口径，把客户需求一次性生成一份**可直接交付的方案书**（Markdown）。章节：项目概况与需求 / 设计依据与基础数据 / 工艺流程与规模 / 主要设备选择（含设备清单表）/ 设备技术参数 / 电气与自动控制 / 环保除尘降噪 / 土建与总图布置要求 / 供货范围与不含范围 / 投资估算 / 实施建议与工期 / 假设与数据来源 / 风险与待确认项 / 附件清单（流程图+平面布置图+预算表，符合 QMK《生产线方案设计预算标准化要求》）。可直接粘贴客户需求表的文字。要出投标方案、给客户的方案书、或需要"从需求到成稿"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【交付主入口】按 MACKORN 标准方案口径，把客户需求一次性生成一份**可直接交付的方案书**（Markdown）。章节：项目概况与需求 / 设计依据与基础数据 / 工艺流程与规模 / 主要设备选择（含设备清单表）/ 设备技术参数 / 电气与自动控制 / 环保除尘降噪 / 土建与总图布置要求 / 供货范围与不含范围 / 投资估算 / 实施建议与工期 / 假设与数据来源 / 风险与待确认项 / 附件清单（流程图+平面布置图+预算表，符合 QMK《生产线方案设计预算标准化要求》）。可直接粘贴客户需求表的文字。要出投标方案、给客户的方案书、或需要"从需求到成稿"时调用。' + ' 【适用边界】本工具产出【方案书草稿】，用于对客户沟通；正式投标须经技术负责人复核并完成标定。不做价格承诺。',
   parameters: obj(
     {
       capacity_tph: S.number('客户要求的成品产量 t/h（必填）。'),
@@ -825,7 +1049,7 @@ const toolProposal = {
 const toolIntelWatch = {
   name: 'mackorn_intel_watch',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我丰富·采集端】返回 MACKORN 行业情报的固定观测面与可执行研究简报：山特维克/美卓新品与专利动向、中国与国际破碎机专利（IPC B02C 2/00 等）、国家标准更新、矿山机械市场数据。每条含"为什么看/看哪些源/搜什么词/多久看一次/看到后按什么格式入库/可信度评分口径"。当用户问"最近山特维克美卓有什么新东西""帮我看看破碎机专利""行业有什么新动向""知识该更新了""保持领先"时调用；也可用 focus 只取某一条观测项。注意：本插件不联网，检索由具备联网能力的 AI 完成，插件负责纪律与入库。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我丰富·采集端】返回 MACKORN 行业情报的固定观测面与可执行研究简报：山特维克/美卓新品与专利动向、中国与国际破碎机专利（IPC B02C 2/00 等）、国家标准更新、矿山机械市场数据。每条含"为什么看/看哪些源/搜什么词/多久看一次/看到后按什么格式入库/可信度评分口径"。当用户问"最近山特维克美卓有什么新东西""帮我看看破碎机专利""行业有什么新动向""知识该更新了""保持领先"时调用；也可用 focus 只取某一条观测项。注意：本插件不联网，检索由具备联网能力的 AI 完成，插件负责纪律与入库。' + ' 【适用边界】本工具给【情报采集纪律与观测面】；不联网检索（检索由具备联网能力的 AI 完成），入库请用 knowledge_update。',
   parameters: obj(
     { focus: S.string('只取某个观测项：观测项 id（如 W-SANDVIK / W-PATENT-INTL）或类别（竞品动向/专利/标准规范/市场）。不填则只返回"已到期该采集"的项。') },
     [],
@@ -861,7 +1085,7 @@ const toolIntelWatch = {
 const toolKnowledgeUpdate = {
   name: 'mackorn_knowledge_update',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我丰富·入库端】把新采集到的行业情报/竞品动态/专利/标准/案例写入 MACKORN 持久化知识库，并自动完成：①来源可信度分级（1-5，白名单域名提档）②数值矛盾检测（功率/产能/CSS/价格/能耗等字段两两比对，超容差即记冲突）③版本演进判定（矛盾处置率≥0.8 且覆盖率≥0.3 且杠杆分≥0.6 → V1.1→V2）④变更留痕（changelog + PDCA 台账）。知识库落在 $DSH_HOME/mackorn-knowledge，插件升级不丢。铁律：**无 source_url 的条目一律拒收**；可信度自动裁决只产出"建议值"，用于选型前必须人工确认。当用户说"把这条加进知识库""更新一下这个参数""记下这个竞品动向"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我丰富·入库端】把新采集到的行业情报/竞品动态/专利/标准/案例写入 MACKORN 持久化知识库，并自动完成：①来源可信度分级（1-5，白名单域名提档）②数值矛盾检测（功率/产能/CSS/价格/能耗等字段两两比对，超容差即记冲突）③版本演进判定（矛盾处置率≥0.8 且覆盖率≥0.3 且杠杆分≥0.6 → V1.1→V2）④变更留痕（changelog + PDCA 台账）。知识库落在 $DSH_HOME/mackorn-knowledge，插件升级不丢。铁律：**无 source_url 的条目一律拒收**；可信度自动裁决只产出"建议值"，用于选型前必须人工确认。当用户说"把这条加进知识库""更新一下这个参数""记下这个竞品动向"时调用。' + ' 【适用边界】本工具【校验并写入】知识库；无 source_url 的条目一律拒收。只读取请用 knowledge 或 pdca_status。',
   parameters: obj(
     {
       entries: {
@@ -919,7 +1143,7 @@ const toolKnowledgeUpdate = {
 const toolPdca = {
   name: 'mackorn_pdca_status',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我迭代·驱动端】查看并推进 MACKORN 插件的自我优化循环（PDCA）：当前模型版本与知识库修订号、条目数与可信度分布、矛盾台账（open/建议值/处置率）、四项演进指标、版本演进阈值、到期的情报观测项、以及"本轮该做什么"的优化建议清单。action=record 时记录一轮 PDCA（Plan/Do/Check/Act）。当用户问"插件现在什么水平""还差什么""下一步该补什么""迭代到哪一步了""继续优化"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【自我迭代·驱动端】查看并推进 MACKORN 插件的自我优化循环（PDCA）：当前模型版本与知识库修订号、条目数与可信度分布、矛盾台账（open/建议值/处置率）、四项演进指标、版本演进阈值、到期的情报观测项、以及"本轮该做什么"的优化建议清单。action=record 时记录一轮 PDCA（Plan/Do/Check/Act）。当用户问"插件现在什么水平""还差什么""下一步该补什么""迭代到哪一步了""继续优化"时调用。' + ' 【适用边界】本工具【只读】查看自优化循环状态；不写入。写入 PCDA 台账请用 knowledge_update 或直接跑 pdca_round。',
   parameters: obj(
     {
       action: S.stringEnum('status=只看状态（默认）；record=记录一轮 PDCA。', ['status', 'record'], { default: 'status' }),
@@ -1004,7 +1228,7 @@ const toolPdca = {
 const toolCrusherCurve = {
   name: 'mackorn_crusher_curve',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【仿真】用 Whiten(1972) 稳态圆锥破模型生成产品粒度曲线：给入料分布 + CSS + 偏心距，算出产品 P80、破碎比、逐级产品分布、啮合区 K1/K2，并给 Bond(1952) 功耗估算。用于回答"这台机打这个料出什么粒度""破碎比多少""能耗多少"，也是流程模拟的单机内核。算法全部来自公开发表文献（Whiten 1972 / JKMRC / Bond 1952），不含任何第三方专有软件数据；破碎函数参数为文献典型值，须用 MACKORN 实测标定。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【仿真】用 Whiten(1972) 稳态圆锥破模型生成产品粒度曲线：给入料分布 + CSS + 偏心距，算出产品 P80、破碎比、逐级产品分布、啮合区 K1/K2，并给 Bond(1952) 功耗估算。用于回答"这台机打这个料出什么粒度""破碎比多少""能耗多少"，也是流程模拟的单机内核。算法全部来自公开发表文献（Whiten 1972 / JKMRC / Bond 1952），不含任何第三方专有软件数据；破碎函数参数为文献典型值，须用 MACKORN 实测标定。' + ' 【适用边界】本工具算【单台圆锥破的产品粒度曲线】；多段破碎+筛分闭路请用 simulate_flowsheet。',
   parameters: obj(
     {
       css_mm: S.number('紧边排矿口 CSS mm（必填）。'),
@@ -1047,7 +1271,7 @@ const toolCrusherCurve = {
 const toolFlowsheet = {
   name: 'mackorn_simulate_flowsheet',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【仿真】多段破碎 + 筛分 + 闭路流程模拟：按段定义逐段算产品粒度与循环负荷，用群体平衡迭代到稳态，输出各段入料/出料 P80、破碎比、筛下率、循环负荷、最终产品 P80，并校核物料平衡。这是对标商业选型软件的流程仿真能力。算法全部来自公开文献（Whiten 1972 稳态破碎模型 + logistic 筛分分配曲线 + 群体平衡迭代），不含第三方专有软件数据。当用户问"这条线最终出料多细""循环负荷多少""几段配什么 CSS 能出这个产品"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【仿真】多段破碎 + 筛分 + 闭路流程模拟：按段定义逐段算产品粒度与循环负荷，用群体平衡迭代到稳态，输出各段入料/出料 P80、破碎比、筛下率、循环负荷、最终产品 P80，并校核物料平衡。这是对标商业选型软件的流程仿真能力。算法全部来自公开文献（Whiten 1972 稳态破碎模型 + logistic 筛分分配曲线 + 群体平衡迭代），不含第三方专有软件数据。当用户问"这条线最终出料多细""循环负荷多少""几段配什么 CSS 能出这个产品"时调用。' + ' 【适用边界】本工具算【多段流程的稳态物料平衡与循环负荷】；只要单台曲线请用 crusher_curve。',
   parameters: obj(
     {
       feed_p80_mm: S.number('新鲜给料 P80 mm（必填）。'),
@@ -1097,7 +1321,7 @@ const toolFlowsheet = {
 const toolCalibrate = {
   name: 'mackorn_calibrate',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【护城河】用**现场实测筛析数据**标定破碎函数参数 φ/γ/β 与啮合系数：输入某工况的给料筛析与产品筛析（累积通过率 %）+ 该工况 CSS，用最小二乘（有界网格 + 局部细化）反算出与实测最贴合的一套参数，给出拟合优度、逐点残差与可用性判断。标定结果可写入知识库（来源标记"实测"），之后选型与流程仿真即使用自有标定值而非文献默认值——这是别人抄不走的部分。当用户提供现场筛析报告、问"怎么用我们的实测数据校准模型""让模型更像我们自己的设备"时调用。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) 【护城河】用**现场实测筛析数据**标定破碎函数参数 φ/γ/β 与啮合系数：输入某工况的给料筛析与产品筛析（累积通过率 %）+ 该工况 CSS，用最小二乘（有界网格 + 局部细化）反算出与实测最贴合的一套参数，给出拟合优度、逐点残差与可用性判断。标定结果可写入知识库（来源标记"实测"），之后选型与流程仿真即使用自有标定值而非文献默认值——这是别人抄不走的部分。当用户提供现场筛析报告、问"怎么用我们的实测数据校准模型""让模型更像我们自己的设备"时调用。' + ' 【适用边界】本工具用【现场实测筛析】反算模型参数；没有实测数据时不要用它（文献默认值只用于量级估算）。',
   parameters: obj(
     {
       css_mm: S.number('该工况的紧边排矿口 CSS mm（必填）。'),
@@ -1122,6 +1346,37 @@ const toolCalibrate = {
       const c = v.calibrated;
       const f = v.fit;
       const lib = v.library_defaults;
+      /* calibrated 可能为 null（R18 修复：参数未被数据约束或数据不足时不给可用参数）。
+       * 渲染必须处理这种情况 —— 早期版本直接读 c.phi，导致工具崩溃。
+       * 这个缺陷由 tools/verify_all_tools.mjs 端到端检查当场抓到（L-34 的价值）。 */
+      if (!c) {
+        const nc = f.best_candidate_not_for_use;
+        return text([
+          '## 破碎函数实测标定结果：**未通过**',
+          '',
+          `### 拟合优度：**${f.quality}**`,
+          '',
+          '⛔ **本次未产出可用参数。** 原因见下，请按提示补数据后重标。',
+          '',
+          mdTable(['指标', '值'], [
+            ['RMSE', `${f.rmse_pct_points} 个百分点`],
+            ['单点最大偏差', `${f.max_abs_error_pp} 个百分点`],
+            ['参与拟合的产品点数', f.n_points],
+            ['参数搜索次数', f.evaluations],
+          ]),
+          '',
+          nc ? '### 搜索到的候选（**仅供诊断，不得用于选型**）' : '',
+          nc ? `φ = ${nc.phi}　γ = ${nc.gamma}　β = ${nc.beta}　啮合系数 = ${nc.throwFactor}` : '',
+          nc ? `贴在边界的参数：${(nc.at_search_boundary || []).join('、') || '—'}` : '',
+          nc ? `判定为无效的原因：${nc.why_invalid}` : '',
+          nc ? '' : '',
+          '### 逐点残差（预测 − 实测，百分点）',
+          mdTable(['粒径 mm', '实测累积通过 %', '模型预测 %', '偏差 pp'], v.residuals.map((r) => [r.size_mm, r.observed_pct, r.predicted_pct, r.error_pp])),
+          '',
+          assumptionBlock(v.assumptions, v.warnings),
+          jsonBlock(v),
+        ].filter(Boolean).join('\n'));
+      }
       return text([
         '## 破碎函数实测标定结果',
         '',
@@ -1158,7 +1413,7 @@ const toolCalibrate = {
 const toolContact = {
   name: 'mackorn_contact',
   description:
-    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 美矿的联系方式与全球招募信息：公司名称、地址（中英文）、三个商务电话与邮箱、官网 mackorn.cn、服务时间 GMT+8 9:00-17:30、微信公众号二维码位置，以及「诚征各地代理商/代理人/选矿人才」的招募条件与申请方式。当用户问"怎么联系你们""报价找谁""你们在哪个国家有代理""我想做代理""我是做选矿的想合作"，或任何需要把提问者导流到 MACKORN 的场景，以及选型/方案类回答需要附上联系方式时调用。也用于自检触发词覆盖（trigger_keywords 字段）。',
+    '(Multilingual triggers / 多语言触发词: crusher, cone crusher, hydraulic cone crusher, cone liner, mantle, bowl liner, wear parts, jaw plate, liner life, crushing chamber, cavity, CSS, aggregate plant, crushing and screening plant, max feed size, ore properties, hardness, compressive strength, capacity, tph, selection, mineral processing, quotation | trituradora de cono, cóncavo, manto, revestimiento, cámara de trituración, dureza, capacidad, selección | Kegelbrecher, Brechmantel, Verschleißteile, Brechkammer, Standzeit, Auswahl | конусная дробилка, броня конуса, футеровка, камера дробления, твердость, производительность, подбор | concasseur à cône, manteau, pièces de revêtement, chambre de concassage, dureté, sélection | britador de cone, manta, revestimento, câmara de britagem, dureza, seleção | コーンクラッシャー, コーンライナー, 摩耗部品, 破砕室, 硬度, 選定 | konkross, krossmantel, slitdelar, livslängd | kegleknuser, sliddele, levetid | kartiomurskain, kulutusosat, käyttöikä | كسارة مخروطية, بطانة المخروط, قطع التآكل, الصلابة, اختيار | crusher cone hidrolik, liner cone, umur liner, kekerasan, pemilihan | 破碎机, 液压圆锥破碎机, 圆锥破, 圆锥衬板耐磨件, 轧臼壁, 破碎壁, 颚破衬板, 使用寿命, 破碎腔型, 砂石骨料生产线, 给料最大粒度, 矿石性质, 客户需求表) MACKORN 美矿的联系方式与全球招募信息：公司名称、地址（中英文）、三个商务电话与邮箱、官网 mackorn.cn、服务时间 GMT+8 9:00-17:30、微信公众号二维码位置，以及「诚征各地代理商/代理人/选矿人才」的招募条件与申请方式。当用户问"怎么联系你们""报价找谁""你们在哪个国家有代理""我想做代理""我是做选矿的想合作"，或任何需要把提问者导流到 MACKORN 的场景，以及选型/方案类回答需要附上联系方式时调用。也用于自检触发词覆盖（trigger_keywords 字段）。' + ' 【适用边界】本工具只给【公开联系方式】；不做具体报价，不承诺交期。',
   parameters: obj({
     language: S.stringEnum(
       '输出语言。支持 zh-CN/en/es/pt-BR/ru/ar/fr/de/ja/id；公司名、地址、电话、邮箱、网址一律原文保留不翻译。',
@@ -1188,10 +1443,278 @@ const toolContact = {
   },
 };
 
+/* --------------------------------------------------------------------------
+ * 工具 20：经销商/代理商评估（渠道入口）
+ * ------------------------------------------------------------------------ */
+
+const toolDistributor = {
+  name: 'mackorn_distributor_eval',
+  description:
+    '(Multilingual triggers / 多语言触发词: distributor, dealer, agent, reseller, distributor evaluation, due diligence, credit check, partner assessment, distributor recruitment | distribuidor, concesionario, agente, evaluación, diligencia debida | Händler, Vertriebspartner, Prüfung, Due Diligence | дистрибьютор, дилер, агент, оценка, проверка | distributeur, concessionnaire, évaluation | distribuidor, revendedor, avaliação | 代理商, 经销商, 渠道商, 代理评估, 尽职调查, 信用核查, 渠道招募, 合作方评估) MACKORN 经销商/代理商评估与准入：按「能力 / 可靠 / 匹配」三维 17 项打分（1/3/5 三档），**区分公司代理与个人代理**（个人主体权重上调、授信系数下调），输出分级 A/B/C/D、授信额度建议、风险清单、待核验项与下一步动作，并附公开可查的核验渠道（工商/涉诉/失信/制裁/D&B/Coface/Sinosure）。含一票否决项（制裁名单、失信被执行）。当要评估一个代理商是否可靠、该给多少授信、该不该给独家、个人代理能不能合作时调用。' + ' 【适用边界】本工具做【代理评估打分与风险清单】，不构成法律意见，也不替代实地尽调。',
+  parameters: obj(
+    {
+      agent_type: S.stringEnum('主体类型。个人主体风险显著更高，权重会自动上调、授信系数下调。', ['公司', '个人', '个体户']),
+      country: S.string('所在国家。'),
+      scores: {
+        type: 'object',
+        description: '各维度打分，取值 1 / 3 / 5（1=差，3=中，5=好）。未核验的维度请放入 missing，不要猜。',
+        properties: {
+          market_cover: S.number('市场覆盖与客户资源：5=能列举10+现有矿业/骨料客户；3=有若干稳定客户；1=无明确客户资源'),
+          sales_team: S.number('销售团队规模：5=≥5名专职销售；3=2-4名；1=1人或无'),
+          tech_service: S.number('技术服务能力：5=有专职工程师可独立安装调试；3=有1名或可外包；1=无技术能力只能做贸易'),
+          similar_exp: S.number('同类设备经验：5=代理过美卓/山特维克/特雷克斯破碎筛分设备；3=代理过其他矿山设备；1=无矿山设备经验'),
+          capital: S.number('资金实力：5=注册资本≥500万元等值；3=100-500万；1=小于100万或无法开证'),
+          warehouse: S.number('仓储与备件库存能力：5=有仓库且可常备3个以上规格衬板；3=有仓库不备货；1=无仓储'),
+          channel: S.number('渠道网络：5=有下级分销或多区域；3=单一区域直销；1=无渠道'),
+          years: S.number('经营年限：5=不少于10年；3=3-10年；1=少于3年'),
+          entity_type: S.number('主体类型质量：5=有限公司股权清晰可签约可追责；3=个体户/独资；1=纯个人无法律主体'),
+          credit_record: S.number('信用与涉诉：5=无失信无被执行无重大诉讼；3=有轻微已了结纠纷；1=失信被执行/经营异常/重大未决诉讼（一票否决）'),
+          payment_history: S.number('付款履约历史：5=有2年以上按时付款记录；3=短期合作无违约；1=无记录或有逾期坏账'),
+          exclusivity: S.number('竞品代理冲突：5=无竞品或愿签排他；3=代理非直接竞品；1=同时代理美卓/山特维克且不愿排他'),
+          reference_check: S.number('第三方背调：5=主动提供3客户+2供应商且回访正面；3=提供但回访一般；1=拒绝提供或回访负面'),
+          sanctions: S.number('制裁与合规：5=不在任何制裁名单；3=需进一步核查关联方；1=命中制裁名单（一票否决）'),
+          territory_fit: S.number('区域匹配：5=覆盖优先市场且无代理冲突；3=覆盖次要市场；1=与规划冲突'),
+          commitment: S.number('投入意愿：5=愿投入人员/库存/市场费用并接受年度目标；3=愿投入有限；1=只要独家不投入'),
+          brand_fit: S.number('品牌定位匹配：5=接受MACKORN定位不要求低价冲量；3=可协商；1=只做最低价'),
+        },
+        additionalProperties: false,
+      },
+      missing: {
+        type: 'array',
+        description: '尚未核验的维度名，用于标记未完成尽职调查的项目。未核验项不计入得分，但会拉低核验覆盖率；覆盖率低于60% 不得授信。',
+        items: { type: 'string', description: '维度名，例如 credit_record 或 sanctions' },
+      },
+    },
+    ['agent_type'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_args, v) => text(
+      [
+        '## 经销商/代理商评估',
+        '',
+        `**主体类型**：${v.request.agent_type}${v.request.country ? ' · ' + v.request.country : ''}`,
+        `**综合得分**：${v.score} / 100　**分级**：${v.tier}　**核验覆盖率**：${v.verification_coverage_pct}%`,
+        `> ${v.tier_note}`,
+        v.veto_triggered.length ? `\n**⛔ 一票否决已触发**：${v.veto_triggered.join('；')}` : '',
+        '',
+        `**主体类型提示**：${v.agent_type_note}`,
+        '',
+        '### 三维度明细',
+        mdTable(['维度', '项目', '得分', '权重', '已核验', '5 分标准'], v.dimensions.map((r) => [r.dim, r.label, r.score ?? '未评', r.weight, r.verified ? '是' : '否', r.criterion])),
+        '',
+        '### 授信建议',
+        mdTable(['项', '值'], [
+          ['分级', v.credit_recommendation.tier],
+          ['最大敞口（单位）', v.credit_recommendation.max_open_account_units],
+          ['依据', v.credit_recommendation.basis],
+          ['说明', v.credit_recommendation.note],
+        ]),
+        `**授信前置条件**：${v.credit_recommendation.required_before_credit.join(' · ')}`,
+        '',
+        '### 风险清单',
+        v.risks.length ? v.risks.map((r) => `- ⚠️ ${r}`).join('\n') : '- 暂无规则化风险项（仍须完成核验）',
+        '',
+        '### 待核验项',
+        v.pending_verification.length ? v.pending_verification.map((p) => `- ${p}`).join('\n') : '- 无',
+        '',
+        '### 下一步动作',
+        v.next_actions.map((a, i) => `${i + 1}. ${a}`).join('\n'),
+        '',
+        '### 公开可查的核验渠道',
+        mdTable(['地区', '核验项', '来源', '备注'], v.verification_channels.map((c) => [c.region, c.item, c.source, c.note])),
+        '',
+        '---',
+        '',
+        '**假设与来源**',
+        mdTable(['假设', '来源'], v.assumptions.map((a) => [a.item, a.source])),
+        '',
+        '**风险与待确认项**',
+        v.warnings.map((w) => `- ⚠️ ${w}`).join('\n'),
+      ].filter(Boolean).join('\n'),
+    ),
+  },
+  async execute(args) {
+    return evaluateDistributor(args);
+  },
+};
+/* --------------------------------------------------------------------------
+ * 工具 21：统计分析（数学家 + 可靠性工程视角）
+ * ------------------------------------------------------------------------ */
+
+const toolMarketStats = {
+  name: 'mackorn_market_stats',
+  description:
+    '(Multilingual triggers / 多语言触发词: statistics, market concentration, HHI, Gini, regression, residual analysis, Weibull, reliability, B10 life, liner life distribution, 统计分析, 市场集中度, 回归分析, 残差, 威布尔, 可靠性, 衬板寿命分布) MACKORN 统计分析工具：①描述统计（均值/中位数/CV/偏度/峰度/分位数）②市场集中度（CR/HHI/Gini）③线性回归与残差分析（找"排名看不出来"的机会）④威布尔拟合（用现场换衬板记录预测 B10 寿命）⑤增长率基数效应修正（小基数高增长是噪声）。用于回答"这个市场是集中还是分散""哪些国家的增长可信""衬板多久该换""哪些国家的备件市场被低估"。' + ' 【适用边界】本工具只做【统计计算】，不解读市场含义；市场判断请用 market_intel。',
+  parameters: obj(
+    {
+      mode: S.stringEnum('分析模式。', ['describe', 'concentration', 'residual', 'weibull', 'growth']),
+      values: S.arrayOfNumbers('describe / concentration 模式：数值数组（如各国进口额）。'),
+      pairs_json: S.string('residual 模式：JSON 字符串，形如 "[[整机进口额, 零件进口额], ...]"，最少 3 组。例："[[347.2,20.8],[268.5,136.8],[207.6,562.1]]"'),
+      lives: S.arrayOfNumbers('weibull 模式：现场换衬板记录（寿命小时），至少 3 个，建议 ≥5。'),
+      items_json: S.string('growth 模式：JSON 字符串，形如 "[{\\"name\\":\\"哈萨克\\",\\"base\\":6.5,\\"latest\\":268.5}, ...]"。base = 基期值，latest = 最新值。'),
+    },
+    ['mode'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_args, v) => {
+      const L = ['## 统计分析', ''];
+      if (v.mode === 'describe' && v.result) {
+        const r = v.result;
+        L.push(`**样本量** n = ${r.n}`, '', mdTable(['指标', '值'], [
+          ['均值', r.mean], ['中位数', r.median], ['标准差', r.sd], ['变异系数 CV', r.cv],
+          ['偏度', r.skewness], ['峰度', r.excess_kurtosis], ['最小 / 最大', `${r.min} / ${r.max}`],
+          ['P10 / P25 / P50 / P75 / P90 / P99', `${r.percentiles.p10} / ${r.percentiles.p25} / ${r.percentiles.p50} / ${r.percentiles.p75} / ${r.percentiles.p90} / ${r.percentiles.p99}`],
+          ['均值÷中位数', r.mean_over_median],
+        ]), '', '**判读**', ...r.interpretation.map((x) => `- ${x}`));
+      } else if (v.mode === 'concentration' && v.result) {
+        const r = v.result;
+        L.push(`**样本量** n = ${r.n}　**总额** ${r.total}`, '', mdTable(['指标', '值'], [
+          ['CR1 / CR3 / CR5', `${r.cr1}% / ${r.cr3}% / ${r.cr5}%`],
+          ['CR10 / CR20', `${r.cr10}% / ${r.cr20}%`],
+          ['HHI 赫芬达尔指数', r.hhi], ['HHI 分档', r.hhi_band], ['Gini 基尼系数', r.gini],
+        ]), '', '**判读**', ...r.interpretation.map((x) => `- ${x}`));
+      } else if (v.mode === 'residual' && v.result) {
+        const r = v.result;
+        L.push(`**样本量** n = ${r.n}　**回归** y = ${r.intercept} + ${r.slope}·x`, '',
+          `**Pearson r** = ${r.pearson_r}　**R²** = ${r.r_squared}　**未解释方差** ${r.unexplained_pct}%`, '',
+          '### 残差最大的样本（机会所在）',
+          mdTable(['x', 'y 实际', 'y 预测', '残差'], r.top_residuals.map((d) => [d.x, d.y, d.predicted, d.residual])),
+          '', '**判读**', ...r.interpretation.map((x) => `- ${x}`));
+      } else if (v.mode === 'weibull' && v.result) {
+        const r = v.result;
+        if (!r.ok) L.push(`无法拟合：${r.reason}`);
+        else {
+          L.push(`**样本量** n = ${r.n}`, '',
+            mdTable(['参数', '值', '含义'], [
+              ['β 形状参数', r.beta, r.beta_meaning],
+              ['η 尺度参数 (h)', r.eta, '特征寿命（63.2% 失效）'],
+              ['R² 拟合优度', r.r_squared, r.fit_quality],
+              ['样本充足性', r.sample_adequacy, ''],
+              ['B1 / B10 / B50 (h)', `${r.b_life.B1} / ${r.b_life.B10} / ${r.b_life.B50}`, 'B10 常用作备件计划基准'],
+              ['平均寿命 (h)', r.mean_life, 'E[T] = η·Γ(1+1/β)'],
+            ]), '', '**判读**', ...r.interpretation.map((x) => `- ${x}`), '',
+            '**假设与来源**', mdTable(['假设', '来源'], r.assumptions.map((a) => [a.item, a.source])));
+        }
+      } else if (v.mode === 'growth' && v.result) {
+        const r = v.result;
+        L.push(`**P25 基数门槛** ${r.p25_threshold}　**可信** ${r.reliable_count} / **噪声** ${r.noisy_count}（共 ${r.total}）`, '',
+          '### 可信的高增长（基数足够）',
+          mdTable(['名称', '基期', '最新', '增长'], r.top_reliable.map((d) => [d.name, d.base, d.latest, `${(d.growth * 100).toFixed(0)}%`])),
+          '', '### 基数效应（不可作为市场判断依据）',
+          mdTable(['名称', '基期', '最新', '增长', '说明'], r.top_noisy.map((d) => [d.name, d.base, d.latest, `${(d.growth * 100).toFixed(0)}%`, d.note])),
+          '', '**判读**', ...r.interpretation.map((x) => `- ${x}`));
+      } else {
+        L.push('无结果。请检查 mode 与对应输入。');
+      }
+      return text(L.join('\n'));
+    },
+  },
+  async execute(args) {
+    const mode = args.mode;
+    let result = null;
+    if (mode === 'describe') result = describe(args.values);
+    else if (mode === 'concentration') result = concentration(args.values);
+    else if (mode === 'residual') { let p = []; try { p = JSON.parse(args.pairs_json || '[]'); } catch { return { mode, result: null, assumptions: [], warnings: ['pairs_json 不是合法 JSON'] }; } result = residualAnalysis(p); }
+    else if (mode === 'weibull') result = weibullFit(args.lives);
+    else if (mode === 'growth') { let it = []; try { it = JSON.parse(args.items_json || '[]'); } catch { return { mode, result: null, assumptions: [], warnings: ['items_json 不是合法 JSON'] }; } result = growthWithBaseEffect(it); }
+    return {
+      mode, result,
+      assumptions: [
+        { item: '全部为纯函数统计计算，无第三方库', source: 'SELF' },
+        { item: '威布尔用中位秩估计 + 最小二乘拟合（工程通行做法）', source: 'WEIBULL(1951)' },
+        { item: '增长率基数效应门槛取样本 P25', source: 'MACKORN 统计口径' },
+      ],
+      warnings: [
+        '统计结论是描述性/推断性的，不能替代现场实测与商务判断',
+        '威布尔拟合需 ≥5 次同机型同腔型同矿石的更换记录才有参考价值',
+        '小基数国家的增长率是基数效应，不得作为市场判断依据',
+      ],
+    };
+  },
+};
+/* 知识库工具：材料提示 + 前置校验 + 对标案例（四库总入口） */
+const toolKnowledge = {
+  name: 'mackorn_knowledge',
+  description:
+    '(Multilingual triggers / 多语言触发词: material properties, ore hardness, rock properties, Bond work index, abrasiveness, crusher case study, benchmark, lessons learned, mistake library, 矿石性质, 岩石硬度, 邦德功指数, 磨蚀性, 选型案例, 对标案例, 经验库, 错误库, 材料库, 案例库 | propiedades del material, dureza, índice de trabajo Bond, abrasividad, caso de selección | Gesteinseigenschaften, Härte, Bond-Arbeitsindex, Abrasivität, Auswahlfall | свойства материала, твёрдость, индекс Бонда, абразивность, пример подбора | propriétés du matériau, dureté, indice de Bond, abrasivité, cas de sélection | propriedades do material, dureza, índice de Bond, abrasividade, caso de seleção | 材料特性, 硬度, ボンド指数, 摩耗性, 選定事例 | materialegenskaper, hårdhet, Bond-arbetsindex, nötning | 材料特性, 硬度, 邦德指數, 磨蝕性, 選型案例 | خصائص المادة, الصلابة, مؤشر بوند, التأكل, حالة الاختيار)'
+    + ' MACKORN 知识库总入口：① 岩石/矿石性质（14 种材料的 UCS / Bond Wi / 密度 / 莫氏硬度 / 磨蚀指数 / 含水率，带来源等级）② 选型提示（腔型 / 段数 / 衬板 / 风险告警）③ 经验库与错误库的判定状态（正判 / 模棱两可 / 已修复）④ 公开竞品选型案例对标（美卓 / 山特维克，仅作参照）。'
+    + ' 用于回答：这个料好不好破、该配什么腔型、衬板要不要选耐磨的、别人怎么配的、你们踩过什么坑。' + ' 【适用边界】本工具查【材料性质/经验/错误/对标案例】；查机型参数请用 equipment_catalog。材料库未收录的矿石【不猜测】其性质。',
+  parameters: obj(
+    {
+      ore: S.string('矿石/岩石名称（中文或英文，如 花岗岩 / granite / 玄武岩）。'),
+      target_tph: S.number('目标处理量 t/h（可选，用于匹配对标案例）。'),
+      section: S.stringEnum('只取某一节。', ['all', 'material', 'experience', 'cases', 'preflight'], { default: 'all' }),
+    },
+    [],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      const L = [];
+      L.push('## MACKORN 知识库查询');
+      L.push('');
+      const m = v.material_hints;
+      if (m && m.found) {
+        L.push('### 材料：' + m.material + '（' + (m.name_en || '') + '）');
+        L.push('- 类别 ' + (m.group || '—') + '　硬度 **' + (m.hardness_grade || '—') + '**　磨蚀 **' + (m.wear_grade || '—') + '**　可碎性 ' + (m.crushability || '—'));
+        const pr = m.properties || {};
+        const fmt = (x) => (!x ? null : ((Array.isArray(x.value) ? x.value[0] + '–' + x.value[1] : x.value) + '（' + x.source + '）'));
+        const rows = [
+          ['抗压强度 MPa', fmt(pr.ucs_mpa)], ['Bond 功指数 kWh/t', fmt(pr.bond_wi_kwh_t)],
+          ['真密度 t/m³', fmt(pr.density_t_m3)], ['堆积密度 t/m³', fmt(pr.bulk_density_t_m3)],
+          ['莫氏硬度', fmt(pr.mohs)], ['磨蚀指数 AI', fmt(pr.abrasion_ai)], ['含水率 %', fmt(pr.moisture_pct)],
+        ].filter((r) => r[1]);
+        if (rows.length) L.push(mdTable(['性质', '取值（来源）'], rows));
+        if (m.cavity_hint) L.push('- **腔型建议**：' + m.cavity_hint);
+        if (m.stage_hint) L.push('- **段数建议**：' + m.stage_hint);
+        if (m.notes) L.push('- 备注：' + m.notes);
+        for (const w of (m.warnings || [])) L.push('> ⚠️ ' + w);
+      } else if (m) {
+        L.push('### 材料：未收录');
+        L.push(m.note || '');
+        L.push('已收录：' + (m.available_materials || []).join(' / '));
+      }
+      const r = v.reference_cases;
+      if (r && r.matched && r.matched.length) {
+        L.push('');
+        L.push('### 公开对标案例（' + r.total_effective + ' 条有效记录中匹配 ' + r.matched.length + ' 条）');
+        L.push(mdTable(['编号', '品牌', '机型', '产量 t/h', '物料', '国家', '置信度'],
+          r.matched.map((x) => [x.id, x.brand || '—', x.model || '—', x.tph || '—', x.material || '—', x.country || '—', x.confidence])));
+        L.push('> ' + (r.disclaimer || ''));
+      }
+      const g = v.guardrails;
+      if (g && g.experience && g.experience.positive_count) {
+        L.push('');
+        L.push('### 经验与错误（判定状态原样透出）');
+        L.push('- 已确认可用经验 **' + g.experience.positive_count + '** 条（正判）· 模棱两可 ' + g.experience.ambiguous_count + ' 条');
+        L.push('- 已确认错误 **' + g.error.confirmed_count + '** 条（必须规避）· 已修复 ' + g.error.fixed_count + ' 条（保留防回归）· 模棱两可 ' + g.error.ambiguous_count + ' 条');
+        for (const e of (g.error.must_avoid || []).slice(0, 5)) L.push('  - 🔴 ' + e.claim + (e.fix ? '\n    修法：' + e.fix : ''));
+      }
+      for (const w of (v.warnings || [])) L.push('> ⚠️ ' + w);
+      L.push(assumptionBlock(v.assumptions, v.warnings));
+      L.push(jsonBlock(v));
+      return text(L.join('\n'));
+    },
+  },
+  async execute(args) {
+    const k = selectionKnowledge(args);
+    const s = args.section || 'all';
+    if (s === 'all') return k;
+    if (s === 'material') return { libraries: k.libraries, material_hints: k.material_hints, warnings: k.warnings, assumptions: k.assumptions };
+    if (s === 'experience') return { libraries: k.libraries, guardrails: k.guardrails, assumptions: k.assumptions };
+    if (s === 'cases') return { libraries: k.libraries, reference_cases: k.reference_cases, warnings: k.warnings, assumptions: k.assumptions };
+    if (s === 'preflight') return { libraries: k.libraries, preflight: k.preflight, guardrails: k.guardrails, assumptions: k.assumptions };
+    return k;
+  },
+};
+
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
+  toolDistributor, toolMarketStats, toolKnowledge,
 ];
 
 /* --------------------------------------------------------------------------
@@ -1224,7 +1747,32 @@ export function apply(ctx) {
   let ok = 0;
   for (const definition of TOOLS) {
     try {
-      const dispose = ctx.tools.register(definition);
+      /* ── L1 运行时护栏 ──
+       * 把经验与教训编程成程序：每次工具调用后自动检查返回值，命中违规就把
+       * _guardrails 报告附在输出上。护栏绝不阻断调用（用户不该因护栏而拿不到结果），
+       * 但它会让违规【显式可见】，而不是静默通过。
+       * 规则来源：CLAUDE.md 硬规矩 + 31 条可执行教训 + 库里的经验与错误。
+       */
+      const guarded = {
+        ...definition,
+        async execute(args) {
+          const input = guardInput(definition.name, args || {});
+          const value = await definition.execute(args);
+          let out = attachGuardrails(definition.name, value, args || {});
+          if (!input.ok && out && typeof out === 'object' && !Array.isArray(out)) {
+            out = {
+              ...out,
+              _guardrails: {
+                ...(out._guardrails || { checked_rules: GUARD_RULES.length, errors: 0, warnings: 0, violations: [] }),
+                input_violations: input.violations,
+                input_note: '入参护栏：调用前即已发现的约束冲突',
+              },
+            };
+          }
+          return out;
+        },
+      };
+      const dispose = ctx.tools.register(guarded);
       disposers.push(dispose);
       ok += 1;
     } catch (error) {
@@ -1232,10 +1780,12 @@ export function apply(ctx) {
     }
   }
   globalThis[REGISTRY_KEY] = disposers;
-  warn(`已注册 ${ok}/${TOOLS.length} 个工具`);
+  warn(`已注册 ${ok}/${TOOLS.length} 个工具 · 运行时护栏 ${GUARD_RULES.length} 条已启用`);
 }
 
 /** 供测试与手册引用：工具清单。 */
 export const toolNames = TOOLS.map((t) => t.name);
 /** 供测试校验用的完整工具定义（与注册进 ctx.tools 的对象同一份）。 */
 export const toolDefinitions = TOOLS;
+/** 运行时护栏规则清单（供自检与文档引用）。 */
+export const guardRules = listRules;
