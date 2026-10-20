@@ -40,6 +40,8 @@ const SAMPLE = {
   mackorn_automation_design: { section: '破碎', target_tph: 2000, has_plc: true, has_scada: true, has_online_analyzer: false, has_dedicated_staff: true, mode: 'recommend' },
   mackorn_mining_interface: { target_tph: 2000, max_feed_mm: 800, rock_type: '花岗岩', stripping_ratio: 2.5, haul_km: 2, muddy: false, mode: 'recommend' },
   mackorn_full_chain: { target_tph: 1000, max_feed_mm: 800, target_product_mm: 20, ore: '花岗岩' },
+  mackorn_jaw_selection: { target_tph: 380, max_feed_mm: 500, ore: '铂金矿', ucs_mpa: 180, muddy: false },
+  mackorn_screen_selection: { feed_tph: 380, aperture_mm: 19, target_efficiency: 85, feed_p80_mm: 100, closed_circuit: true },
   mackorn_distributor_eval: { agent_type: '公司', country: '智利', scores: { credit_record: 5, sanctions: 5 } },
   mackorn_market_stats: { mode: 'describe', values: [10, 20, 30, 40, 50] },
   mackorn_knowledge: { ore: '玄武岩', target_tph: 300 },
@@ -79,6 +81,42 @@ for (const def of m.toolDefinitions) {
  * 这些真值来自厂商参数表（S1）与确定性算法，稳定可复现。
  * ══════════════════════════════════════════════════════════════════ */
 const GOLDEN_ASSERTIONS = [
+  /* R124：颚破与筛分的真值断言（补 2026-10-20 调用失败的 P0 缺口） */
+  {
+    tool: 'mackorn_jaw_selection',
+    args: { target_tph: 380, max_feed_mm: 500, ucs_mpa: 180 },
+    checks: [
+      ['进料口需求 = 500/0.85 向上取整 = 589mm', (v) => v.required_feed_opening_mm === 589],
+      ['硬岩工况系数 0.72（0.85×0.85=0.7225 保留2位）', (v) => v.condition_factor === 0.72],
+      ['名义产能需求 = ceil(380/0.7225) = 526（0.85×0.85 不是 0.72）', (v) => v.required_nominal_tph === 526],
+      ['选出具体档位机型', (v) => !!v.recommended_model],
+      ['诚实标注 vendor_params_pending', (v) => v.vendor_params_pending === true],
+    ],
+  },
+  {
+    tool: 'mackorn_jaw_selection',
+    args: { target_tph: 500, max_feed_mm: 2000 },
+    checks: [
+      ['给料 2000mm 被拒绝', (v) => v.recommended_model === null && (v.rejections || []).length > 0],
+    ],
+  },
+  {
+    tool: 'mackorn_screen_selection',
+    args: { feed_tph: 380, aperture_mm: 19, feed_p80_mm: 100, closed_circuit: true },
+    checks: [
+      ['算出筛分面积', (v) => typeof v.area_total_m2 === 'number' && v.area_total_m2 > 0],
+      ['闭路时给循环负荷', (v) => typeof v.circulating_load_pct === 'number'],
+      ['面积偏乐观告警存在', (v) => (v.warnings || []).some((w) => w.includes('下限估计'))],
+      ['诚实标注 vendor_params_pending', (v) => v.vendor_params_pending === true],
+    ],
+  },
+  {
+    tool: 'mackorn_screen_selection',
+    args: { feed_tph: 380, aperture_mm: 19, target_efficiency: 98 },
+    checks: [
+      ['效率 98% 被拒绝', (v) => (v.rejections || []).length > 0],
+    ],
+  },
   {
     tool: 'mackorn_full_chain',
     args: { target_tph: 1000, max_feed_mm: 800, target_product_mm: 20, ore: '花岗岩' },
