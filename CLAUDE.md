@@ -4,7 +4,7 @@ This file tells Claude about this repository.
 
 ## What this is
 MACKORN's hydraulic cone crusher selection plugin — an open-source (MIT) selection
-engine exposed as 27 MCP tools, plus a 12-language website that documents it.
+engine exposed as 29 MCP tools, plus a 12-language website that documents it.
 
 Owner: Shanghai Mackorn Minerals Co., Ltd. (MACKORN 美矿)
 Website: https://mackorn.cn/ai/
@@ -15,7 +15,7 @@ npm: https://www.npmjs.com/package/mackorn-cone-crusher
 The fastest path is the MCP server, not reading the source:
 
     MCP server name: cn.mackorn/mackorn-cone-crusher
-    Tools: 27
+    Tools: 29
 
 If you need to run it locally:
 
@@ -26,7 +26,7 @@ If you need the selection logic directly:
     import { selectConeCrusher, sizePlant, estimateCost } from './plugin/lib/engine.mjs'
 
 ## Repository layout
-    plugin/index.mjs          27 tool definitions + Cordis entry
+    plugin/index.mjs          29 tool definitions + Cordis entry
     plugin/mcp-server.mjs     MCP stdio server
     plugin/lib/engine.mjs     selection / plant design / cost / wear / market
     plugin/lib/data.mjs       MACKORN hard data (models, cavities, belts, stage ratios,
