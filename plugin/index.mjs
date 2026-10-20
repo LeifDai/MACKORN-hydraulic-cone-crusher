@@ -41,6 +41,7 @@ import { selectGrinding, grindingCatalog } from './lib/grinding-engine.mjs';
 import { recommendBeneficiation, beneficiationCatalog } from './lib/processing-engine.mjs';
 import { recommendAutomation, automationCatalog } from './lib/automation-engine.mjs';
 import { recommendMining, miningCatalog, kuzRam } from './lib/mining-engine.mjs';
+import { fullChain, stageRatios } from './lib/fullchain-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -2141,11 +2142,102 @@ const toolMining = {
     });
   },
 };
+/* --------------------------------------------------------------------------
+ * 整线贯通（R118 · P6）—— 五段一次串完
+ *
+ * 用户目标：以破碎设备为基础，把矿山设备、选矿设备在 AI 加持下串起来
+ * -------------------------------------------------------------------------- */
+const toolFullChain = {
+  name: 'mackorn_full_chain',
+  description:
+    '(Multilingual triggers / 多语言触发词: full chain, end to end, complete plant, flowsheet, mine to concentrate, whole process, 整线, 全流程, 端到端, 全链条, 从采矿到精矿, 矿山全流程, 一体化方案 | cadena completa, proceso completo | Gesamtprozess, Anlagenkette | полная цепочка, весь процесс | chaîne complète, procédé complet | cadeia completa, processo completo | 全体フロー, 全プロセス | hela kedjan, hela processen | hele kæden, hele processen | koko ketju, koko prosessi | السلسلة الكاملة | rantai penuh, proses lengkap) MACKORN 整线贯通工具（P6）：一次调用从【原矿/爆破产物】一路算到【精矿指标】，串起来五段：采矿（爆破块度）→ 粗碎（颚破/旋回）→ 中碎（圆锥破）→ 细碎（圆锥破）→ 磨矿 → 选矿 → 自动化。每段输出产品粒度、选型结果、来源等级（S1 厂商 / S3-S5 文献 / ENGINEERING-RANGE 估算），并明确标注【整线可信度受最弱环节限制】。主动拦截：细碎台数 >8 台时告警台数爆炸（通常说明目标粒度过细或机型选小）；粗碎段无独立选型引擎（只做工程估算）。用于回答：一条 X t/h 的线从采矿到精矿该怎么配、每段出什么粒度、哪一段最不可靠。 【适用边界】这是【量级贯通】不是施工图设计。破碎段可信度高（S1），磨矿/选矿/采矿是文献区间（S3-S5），粗碎是工程估算。段间未考虑循环负荷放大，未做全局最优组合优化。',
+  parameters: obj(
+    {
+      target_tph: S.number('目标成品处理量 t/h（必填）。'),
+      max_feed_mm: S.number('原矿最大块度 mm（默认 800）。'),
+      target_product_mm: S.number('最终产品粒度 mm（默认 20）。'),
+      ore: S.string('矿石类型（如 花岗岩 / 铜矿石）。'),
+      to_beneficiation: S.boolean('是否含磨矿+选矿段（金属矿山）。'),
+      liberation_um: S.number('解离粒度 μm（选矿段用）。'),
+      muddy: S.boolean('原矿是否含泥/黏土夹层。'),
+      has_plc: S.boolean('是否已有 PLC。'),
+      has_scada: S.boolean('是否已有 SCADA/DCS。'),
+      has_online_analyzer: S.boolean('是否有在线品位/粒度分析。'),
+      has_dedicated_staff: S.boolean('是否有专职维护人员。'),
+    },
+    ['target_tph'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      const out = [];
+      out.push('## 整线贯通方案');
+      out.push('');
+      if (v.error) {
+        out.push('### 无法计算：' + (v.message || v.error));
+        for (const w of (v.warnings || [])) out.push('- ' + w);
+        return text(out.join('\n'));
+      }
+      if (v.summary) {
+        out.push('### 物料水线');
+        out.push('**' + v.summary.stone_flow_note + '**');
+        out.push('');
+        out.push('### 可信度（按最弱环节）');
+        out.push('最弱环节：**' + (v.summary.weakest_link || '—') + '**');
+        out.push('');
+        out.push('> ' + v.summary.credibility_rule);
+        out.push('');
+      }
+      out.push('### 各段明细（' + ((v.stages || []).length) + ' 段）');
+      out.push('| # | 工序 | 来源等级 | 关键输出 |');
+      out.push('|:--|:---|:---|:---|');
+      for (const s of (v.stages || [])) {
+        const o = s.output || {};
+        const bits = [];
+        if (o.product_p80_mm_estimate != null) bits.push('产品 P80 ' + o.product_p80_mm_estimate + ' mm');
+        if (o.selected_model) bits.push(o.selected_model + '/' + (o.selected_cavity || '') + ' · ' + (o.power_kw || '?') + 'kW · ' + (o.units || '?') + '台');
+        if (o.required_feed_opening_mm) bits.push('进料口需 >= ' + o.required_feed_opening_mm + ' mm');
+        if (o.recommended_method) bits.push(o.recommended_method);
+        if (o.primary_method) bits.push(o.primary_method + (o.recovery_pct_range ? ' · 回收率 ' + o.recovery_pct_range.join('-') + '%' : ''));
+        if (o.layers) bits.push(o.layers.join(' / '));
+        out.push('| ' + s.stage + ' | ' + s.name + ' | ' + String(s.source_grade || '').slice(0, 28) + ' | ' + (bits.join('；') || '—') + ' |');
+      }
+      out.push('');
+      if (v.warnings && v.warnings.length) {
+        out.push('### 告警');
+        for (const w of v.warnings) out.push('- ' + w);
+        out.push('');
+      }
+      if (v.known_gaps && v.known_gaps.length) {
+        out.push('### 已知缺口');
+        for (const g of v.known_gaps) out.push('- ' + g);
+        out.push('');
+      }
+      return text(out.join('\n'));
+    },
+  },
+  async execute(args) {
+    if (args.mode === 'ratios') return { stage_ratios: stageRatios() };
+    return fullChain({
+      targetTph: args.target_tph,
+      maxFeedMm: args.max_feed_mm,
+      targetProductMm: args.target_product_mm,
+      ore: args.ore,
+      toBeneficiation: args.to_beneficiation === true,
+      liberationUm: args.liberation_um,
+      muddy: args.muddy === true,
+      hasPlc: args.has_plc === true,
+      hasScada: args.has_scada === true,
+      hasOnlineAnalyzer: args.has_online_analyzer === true,
+      hasDedicatedStaff: args.has_dedicated_staff === true,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation, toolMining,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation, toolMining, toolFullChain,
 ];
 
 /* --------------------------------------------------------------------------
