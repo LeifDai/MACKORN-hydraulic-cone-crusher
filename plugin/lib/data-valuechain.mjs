@@ -52,7 +52,7 @@ export const VALUE_CHAIN = [
     scope: ['过程控制（DCS/PLC）', '在线检测（粒度/品位）', '模型预测控制 MPC', '数字孪生', '专家系统'],
     key_outputs: ['控制回路', '仪表清单', '模型精度', '节能量'],
     downstream_link: '自动化把前面各段的经验固化成可复现的控制策略',
-    status: 'planned',
+    status: 'in_progress',  /* R112：自动化知识库 + mackorn_automation_design 已上线 */
   },
 ];
 
