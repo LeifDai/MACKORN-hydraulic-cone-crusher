@@ -38,12 +38,16 @@ console.log('  真相：' + TOOLS + ' 个工具' + (LANGS ? ' · ' + LANGS + ' �
 
 /* ── 陈述式替换 ── */
 const FIXES = [
-  [/\b19 tools\b/g, TOOLS + ' tools'],
-  [/19 个工具/g, TOOLS + ' 个工具'],
-  [/\b21 tools\b/g, TOOLS + ' tools'],
-  [/22 个工具/g, TOOLS + ' 个工具'],
-  [/\b19 MCP tools\b/g, TOOLS + ' MCP tools'],
-  [/19 个 MCP 工具/g, TOOLS + ' 个 MCP 工具'],
+  /* R113 通用规则：任何不等于真相的 "NN tools / NN 个工具 / NN MCP tools / NN 个 MCP 工具"
+   * 都要替换成真相。旧版只列死 19/21/22，且 22 只有中文形式，导致 "22 tools" 漏改。
+   * 实测：工具数 22→24→25 后 README/llms.txt 仍写 22，sync 却报"0 处待改"。 */
+  [/(^|[^0-9])(\d{1,3})(\s*)(MCP tools)\b/g, (m, pre, num, sp, unit) => (Number(num) === TOOLS ? m : pre + TOOLS + sp + unit)],
+  [/(^|[^0-9])(\d{1,3})(\s*)(个 MCP 工具)\b/g, (m, pre, num, sp, unit) => (Number(num) === TOOLS ? m : pre + TOOLS + sp + unit)],
+  [/(^|[^0-9])(\d{1,3})(\s*)(tools)\b/g, (m, pre, num, sp, unit) => (Number(num) === TOOLS ? m : pre + TOOLS + sp + unit)],
+  /* R114：还有「数字在后」的写法（如 CLAUDE.md 的 Tools: 24）—— 前一类规则抓不到。 */
+  [/(Tools|tools)(\s*[:：]\s*)(\d{1,3})\b/g, (m, w, sep, num) => (Number(num) === TOOLS ? m : w + sep + TOOLS)],
+  [/(\d{1,3})(\s+)(tool definitions)/g, (m, num, sp, w) => (Number(num) === TOOLS ? m : TOOLS + sp + w)],
+  [/(^|[^0-9])(\d{1,3})(\s*)(个工具)\b/g, (m, pre, num, sp, unit) => (Number(num) === TOOLS ? m : pre + TOOLS + sp + unit)],
 ];
 if (LANGS) {
   FIXES.push(
@@ -105,7 +109,9 @@ const walk = (d, dep = 0) => {
       /* R77：同时含【旧值】与【新值】的行 = 映射表/对比表（如 ['19 tools','22 tools']），
        *   那是修复逻辑或证据，不是过时陈述 —— 跳过。
        *   血泪来源：工具曾把裸的 ['19 tools','22 tools'] 改成 ['22 tools','22 tools']。 */
-      const staleTool = /(^|[^0-9])(19|21)(\s*)(tools|个工具)/.test(l);
+      /* R113：任何不等于 TOOLS 的 NN tools/个工具 都算过时 */
+        const mTool = l.match(/(^|[^0-9])(\d{1,3})(\s*)(tools|个工具)/);
+        const staleTool = !!mTool && Number(mTool[2]) !== TOOLS;
       const freshTool = new RegExp('(^|[^0-9])' + TOOLS + '\\s*(tools|个工具)').test(l);
       const staleLang = LANGS ? /(^|[^0-9])10(\s*)(languages|种语言)/.test(l) : false;
       const freshLang = LANGS ? new RegExp('(^|[^0-9])' + LANGS + '\\s*(languages|种语言)').test(l) : false;
