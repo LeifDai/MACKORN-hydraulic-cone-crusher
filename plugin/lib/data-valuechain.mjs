@@ -45,14 +45,14 @@ export const VALUE_CHAIN = [
     scope: ['浮选 Flotation', '重选 Gravity', '光电选 Ore sorting（激光/图像/XRT）', '磁选 Magnetic', '浸出 Leaching'],
     key_outputs: ['回收率', '精矿品位', '尾矿品位', '选比', '单位处理成本'],
     downstream_link: '选别指标决定最终经济效益',
-    status: 'in_progress',  /* R108：选矿知识库 + mackorn_beneficiation_selection 已上线 */
+    status: 'done',  /* R108：选矿知识库 + mackorn_beneficiation_selection 已上线 */
   },
   {
     stage: 5, id: 'automation', name: '自动化与模型选矿', name_en: 'Automation & Model-based Selection',
     scope: ['过程控制（DCS/PLC）', '在线检测（粒度/品位）', '模型预测控制 MPC', '数字孪生', '专家系统'],
     key_outputs: ['控制回路', '仪表清单', '模型精度', '节能量'],
     downstream_link: '自动化把前面各段的经验固化成可复现的控制策略',
-    status: 'in_progress',  /* R112：自动化知识库 + mackorn_automation_design 已上线 */
+    status: 'done',  /* R112：自动化知识库 + mackorn_automation_design 已上线 */
   },
 ];
 
