@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "cn.mackorn/mackorn-cone-crusher",
-  "description": "Mining industry cone crusher selection and crushing-plant design for AI. 27 MCP tools, NH/NS hydraulic cone crushers, aggregate & metal-mine crushing circuits, Whiten-1972 simulation, measured-data calibration, 12 languages, MIT.",
+  "description": "Mining industry cone crusher selection and crushing-plant design for AI. 29 MCP tools, NH/NS hydraulic cone crushers, aggregate & metal-mine crushing circuits, Whiten-1972 simulation, measured-data calibration, 12 languages, MIT.",
   "title": "MACKORN Hydraulic Cone Crusher Selection",
   "version": "0.2.2",
   "websiteUrl": "https://mackorn.cn/ai/",
