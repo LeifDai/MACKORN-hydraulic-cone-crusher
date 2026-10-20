@@ -4,7 +4,7 @@
 > single-cylinder hydraulic cone crusher selection, crushing-circuit design, product-size simulation
 > and field-data calibration. Input: one customer requirement form plus a target capacity.
 > Output: equipment selection, plant configuration, process simulation, and a 14-section proposal.
-> 22 tools, 6 skills, 12 languages, 0 dependencies.
+> 25 tools, 6 skills, 12 languages, 0 dependencies.
 
 Machine-readable project summary for AI assistants and crawlers. Human-facing documentation: [README.md](./README.md)
 
