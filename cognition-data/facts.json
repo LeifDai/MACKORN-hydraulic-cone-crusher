@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "facts": [
+    {
+      "id": "F0001",
+      "title": "Whiten 模型在圆锥破上的质量不守恒问题",
+      "fact": "Whiten(1972) 破碎函数原本为磨机落重试验拟合，直接代入圆锥破会让质量不守恒，实测 Σ 偏差最坏达 1.36。必须做归一化修正后再用。",
+      "source": "plugin/lib/simulate.mjs L157 注释（实测记录）",
+      "tags": [
+        "LITERATURE",
+        "模型",
+        "Whiten"
+      ],
+      "added_at": "2026-10-20T09:19:16.425Z",
+      "ease": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "due_at": "2026-10-23T09:19:38.787Z",
+      "last_quiz_at": "2026-10-20T09:19:38.808Z",
+      "correct": 1,
+      "wrong": 0
+    },
+    {
+      "id": "F0002",
+      "title": "Kuz-Ram 爆破块度公式的形式与参数含义",
+      "fact": "X50 = A·(V/Q)^0.8·Q^0.167·(115/E)^0.633，其中 A 是岩石系数（中硬7/硬10/非常硬13）、V 每孔爆破体积 m³、Q 单孔装药 kg、E 炸药相对威力（ANFO=100）。误差 ±20-30%，A 必须现场标定。",
+      "source": "Kuznetsov(1973) + Cunningham(1983)，见 plugin/lib/data-mining.mjs",
+      "tags": [
+        "LITERATURE",
+        "爆破",
+        "Kuz-Ram"
+      ],
+      "added_at": "2026-10-20T09:19:17.316Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:17.288Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0003",
+      "title": "SAG 半自磨与球磨的经济分界",
+      "fact": "SAG 单机 <300 t/d 不经济（单位投资过高）；≥5000 t/d 通常半自磨更经济。球磨给料上限约 25mm，SAG 给料上限约 350mm。",
+      "source": "plugin/lib/data-grinding.mjs（S3/S5 文献区间）",
+      "tags": [
+        "S3",
+        "磨矿",
+        "选型"
+      ],
+      "added_at": "2026-10-20T09:19:17.688Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:17.674Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0004",
+      "title": "光电选（Ore Sorting）的抛废率必须做工业试验",
+      "fact": "光电选经验抛废率区间 15-50%，但盈利性完全取决于具体矿石的可识别性。参数表上的\"理论抛废率\"没有意义，必须取代表性矿样做工业试验。禁止把经验区间直接写进投资决策。",
+      "source": "plugin/lib/data-processing.mjs GRINDING/PROCESSING_GAPS",
+      "tags": [
+        "S4",
+        "选矿",
+        "光电选"
+      ],
+      "added_at": "2026-10-20T09:19:19.596Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:19.554Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0005",
+      "title": "先进控制（L3/MPC）的 5 项就绪条件",
+      "fact": "① L0-L2 稳定运行 ≥6 个月 ② 关键仪表已装且标定 ③ 有可用工艺模型 ④ 有专人维护（MPC 通常 6-12 个月后漂移失效）⑤ 有明确经济目标。无 PLC 时绝对不能上 L3（沙地上盖楼）。",
+      "source": "plugin/lib/data-automation.mjs ADVANCED_CONTROL_READINESS",
+      "tags": [
+        "S6",
+        "自动化",
+        "MPC"
+      ],
+      "added_at": "2026-10-20T09:19:19.909Z",
+      "ease": 2.6,
+      "interval_days": 3,
+      "repetitions": 1,
+      "due_at": "2026-10-23T09:19:38.787Z",
+      "last_quiz_at": "2026-10-20T09:19:38.808Z",
+      "correct": 1,
+      "wrong": 0
+    },
+    {
+      "id": "F0006",
+      "title": "GitHub OAuth Device Flow 不需要预装 git/gh",
+      "fact": "GitHub 提供设备授权流程：申请 8 位 user_code，用户在 github.com/login/device 输入并授权，程序轮询即得 token。不需要预装任何工具、不需要手动建 token。推 .github/workflows/ 还需额外 workflow scope（public_repo 不够，会 404 而非 403）。",
+      "source": "tools/github_device_auth.mjs 实测，两轮授权成功",
+      "tags": [
+        "实测",
+        "GitHub",
+        "授权"
+      ],
+      "added_at": "2026-10-20T09:19:20.183Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:20.181Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0007",
+      "title": "云端 Actions 的依赖是传递闭包",
+      "fact": "工作流里直接 node 调用的文件不够——被 import 的模块也必须推。实例：工作流跑 enforce_lessons.mjs，而它 import lessons.mjs，后者没推导致 Cloud 报 Cannot find module。正确做法是推整个 tools/ 目录。",
+      "source": "云端日志 + 补推 211 个 tools 模块后成功步数 8→18",
+      "tags": [
+        "实测",
+        "CI",
+        "依赖"
+      ],
+      "added_at": "2026-10-20T09:19:20.892Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:20.890Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0008",
+      "title": "项目里有两套独立的工具验证器",
+      "fact": "tests/run.mjs 与 tools/verify_all_tools.mjs 各有独立样本表。只补前者，后者会报\"无样本，跳过\"，导致 L-34 的判据 passed===total 不成立。新增工具必须两套都补，且 verify_all_tools 还要补真值断言防桩实现。",
+      "source": "verify_all_tools 实测 22/26 → 补样本后 27/27",
+      "tags": [
+        "实测",
+        "测试",
+        "验证器"
+      ],
+      "added_at": "2026-10-20T09:19:21.575Z",
+      "ease": 2.3,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:38.787Z",
+      "last_quiz_at": "2026-10-20T09:19:38.808Z",
+      "correct": 0,
+      "wrong": 1
+    },
+    {
+      "id": "F0009",
+      "title": "sync_tool_count_facts 的映射表保护判据",
+      "fact": "一行里出现 ≥2 个不同工具数 = 映射表/证据行，必须跳过不改。原始判据「同时含旧值与新值」只认当前 TOOLS 这一个\"新值\"，遇到 [19 tools, 22 tools] 这种历史映射（新值早已不是当前值）就漏判，会破坏证据行。",
+      "source": "G4b 负控实测抓到，改多值判据后通过",
+      "tags": [
+        "实测",
+        "门禁",
+        "同步"
+      ],
+      "added_at": "2026-10-20T09:19:23.600Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:23.595Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    },
+    {
+      "id": "F0010",
+      "title": "render 必须返回 [{type,text}] 数组",
+      "fact": "MCP server L71 要求 def.output.render() 返回数组并 .map 取 .text。返回裸字符串会报 blocks.map is not a function。项目里已有 text() 辅助函数（const text = (value) => [{type:\"text\", text:value}]）必须用它包裹。",
+      "source": "mcp-server.mjs L71-72 + selftest 报错实测",
+      "tags": [
+        "实测",
+        "MCP",
+        "契约"
+      ],
+      "added_at": "2026-10-20T09:19:24.275Z",
+      "ease": 2.5,
+      "interval_days": 1,
+      "repetitions": 0,
+      "due_at": "2026-10-21T09:19:24.272Z",
+      "last_quiz_at": null,
+      "correct": 0,
+      "wrong": 0
+    }
+  ]
+}
