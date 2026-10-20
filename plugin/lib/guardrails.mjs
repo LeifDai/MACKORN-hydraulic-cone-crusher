@@ -6,8 +6,8 @@
  *
  * 三层结构：
  *   L1 本文件 —— 运行时护栏，每次工具调用后检查返回值与入参
- *   L26 tools/enforce_lessons.mjs —— 构建期门禁，跑不过不许发布
- *   L26 tools/self_iterate.mjs    —— 自迭代循环，跑全部检查并把结果写回库
+ *   L27 tools/enforce_lessons.mjs —— 构建期门禁，跑不过不许发布
+ *   L27 tools/self_iterate.mjs    —— 自迭代循环，跑全部检查并把结果写回库
  *
  * 规则来源：
  *   · CLAUDE.md 硬规矩（不编数字/带来源/冲突并列/不做价格/圆锥破给料上限）
