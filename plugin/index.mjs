@@ -39,6 +39,7 @@ import { describe, concentration, residualAnalysis, weibullFit, growthWithBaseEf
 import { selectionKnowledge } from './lib/knowledge-bridge.mjs';
 import { selectGrinding, grindingCatalog } from './lib/grinding-engine.mjs';
 import { recommendBeneficiation, beneficiationCatalog } from './lib/processing-engine.mjs';
+import { recommendAutomation, automationCatalog } from './lib/automation-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -1909,11 +1910,123 @@ const toolBeneficiation = {
     });
   },
 };
+/* --------------------------------------------------------------------------
+ * 自动化与模型选矿方案（R112 · P5）—— 全价值链第 5 段
+ *
+ * 用户目标：「自动化模型选矿」「擅长电气驱动，自动化程序」
+ *
+ * 诚实边界：不含 PLC/DCS 品牌组态、不含 PID 整定值（必须现场调试）、
+ *   不含仪表型号量程、不含电气单线图、不含报价。
+ * -------------------------------------------------------------------------- */
+const toolAutomation = {
+  name: 'mackorn_automation_design',
+  description:
+    '(Multilingual triggers / 多语言触发词: automation, PLC, DCS, SCADA, HMI, model predictive control, MPC, expert system, soft sensor, digital twin, instrumentation, interlock, variable frequency drive, VFD, soft starter, electrical drive, 自动化, 模型选矿, 先进控制, 专家系统, 软测量, 数字孪生, 仪表, 联锁, 变频器, 软启动, 电气驱动, 配电 | automatización, PLC, SCADA, control predictivo | Automatisierung, SPS, Leittechnik, prädiktive Regelung | автоматизация, ПЛК, АСУ ТП, предиктивное управление | automatisation, API, supervision, commande prédictive | automação, CLP, supervisão, controle preditivo | 自動化, PLC, 監視制御, モデル予測制御 | automation, PLC, övervakning | automatisering, PLC, overvågning | automaatio, PLC, valvonta | أتمتة, PLC, تحكم تنبؤي | otomasi, PLC, SCADA, kontrol prediktif) '
+    + 'MACKORN 自动化与模型选矿方案工具（全价值链第 5 段）：按工序与处理量，给自动化分层建议（L0 现场层 / L1 PLC / L2 DCS-SCADA / L3 先进控制）、关键仪表清单（破碎/磨矿/选矿分列，标注哪些是关键）、控制回路清单（给料量/CSS/磨机负荷/浓度/旋流器压力/联锁）、电气驱动要点（高压vs低压、变频适用、软启动、过铁硬线联锁、谐波）。'
+    + ' ★ 并主动拦截「没基础就上先进控制」：无 PLC / 无 SCADA / 无在线分析 / 无专职维护人员时，明确判定【不具备上 L3 条件】并说明原因。'
+    + ' 用于回答：这条线该配几层自动化、要装哪些仪表、有什么控制回路、能不能上模型选矿。'
+    + ' 【适用边界】本工具只管【自动化架构与仪表清单】；不含品牌组态、PID 整定值、仪表型号、电气单线图，正式设计须由有资质设计院出图 + 现场调试。',
+  parameters: obj(
+    {
+      section: S.stringEnum('工序。', ['破碎', '磨矿', '选矿', '全部'], { default: '全部' }),
+      target_tph: S.number('处理量 t/h。'),
+      has_plc: S.boolean('是否已有 PLC（L1）。'),
+      has_scada: S.boolean('是否已有 SCADA/DCS（L2）。'),
+      has_online_analyzer: S.boolean('是否有在线品位/粒度分析仪表。'),
+      has_dedicated_staff: S.boolean('是否有专职维护人员。'),
+      mode: S.stringEnum('只查目录或只做推荐。', ['recommend', 'catalog'], { default: 'recommend' }),
+    },
+    [],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const L = ['## 自动化知识目录', ''];
+        L.push('### 四层架构');
+        for (const l of (v.catalog.layers || [])) L.push('- **' + l.level + ' ' + l.name + '**：' + String(l.scope || '').slice(0, 60));
+        L.push('');
+        L.push('### 控制回路（' + ((v.catalog.control_loops || []).length) + ' 个）');
+        for (const c of (v.catalog.control_loops || [])) L.push('- **' + c.id + ' ' + c.name + '**：' + String(c.purpose || '').slice(0, 40));
+        L.push('');
+        L.push('### 先进控制就绪条件（' + ((v.catalog.advanced_control_readiness || []).length) + ' 条）');
+        for (const r of (v.catalog.advanced_control_readiness || [])) L.push('- **' + r.id + '** ' + r.requirement);
+        L.push('');
+        L.push('> ' + (v.catalog.basis || ''));
+        L.push('>');
+        L.push('> ⚠️ 已知缺口：' + ((v.catalog.known_gaps || []).slice(0, 3).join('；')));
+        return text(L.join('\n'));
+      }
+      const L = [];
+      L.push('## 自动化与模型选矿方案');
+      L.push('');
+      if (v.error) {
+        L.push('### ❌ ' + (v.message || v.error));
+        for (const w of (v.warnings || [])) L.push('- ' + w);
+        return text(L.join('\n'));
+      }
+      if (v.recommended_layers && v.recommended_layers.length) {
+        L.push('### 推荐自动化分层');
+        L.push('| 层 | 建议 | 理由 |');
+        L.push('|:---|:---|:---|');
+        for (const x of v.recommended_layers) L.push('| ' + x.level + ' | **' + x.recommend + '** | ' + x.reason + ' |');
+        L.push('');
+      }
+      if (v.advanced_control_verdict) {
+        const av = v.advanced_control_verdict;
+        L.push('### 先进控制（L3 模型选矿）判定');
+        L.push('**' + (av.go ? '✅ 可评估上 L3' : '❌ 暂不具备条件') + '** —— ' + av.reason);
+        L.push('');
+      }
+      if (v.instruments && Object.keys(v.instruments).length) {
+        L.push('### 关键仪表清单');
+        for (const [secName, list] of Object.entries(v.instruments)) {
+          L.push('#### ' + secName);
+          L.push('| 仪表 | 类型 | 用途 | 重要性 |');
+          L.push('|:---|:---|:---|:---|');
+          for (const i of list) L.push('| ' + i.name + ' | ' + i.type + ' | ' + i.purpose + ' | ' + (i.critical ? '**关键**' : '建议') + ' |');
+          L.push('');
+        }
+      }
+      if (v.control_loops && v.control_loops.length) {
+        L.push('### 控制回路（' + v.control_loops.length + ' 个）');
+        for (const c of v.control_loops) {
+          L.push('- **' + c.id + ' ' + c.name + '**：' + c.purpose);
+          if (c.risk) L.push('  - ⚠️ ' + c.risk);
+        }
+        L.push('');
+      }
+      if (v.drive_notes && v.drive_notes.length) {
+        L.push('### 电气驱动要点');
+        for (const d of v.drive_notes) L.push('- **' + d.item + '**：' + d.rule + (d.why ? '（' + d.why + '）' : ''));
+        L.push('');
+      }
+      if (v.warnings && v.warnings.length) {
+        L.push('### ⚠️ 告警');
+        for (const w of v.warnings) L.push('- ' + w);
+        L.push('');
+      }
+      return text(L.join('\n'));
+    },
+  },
+  async execute(args) {
+    const mode = args.mode || 'recommend';
+    if (mode === 'catalog') return { catalog: automationCatalog() };
+    return recommendAutomation({
+      section: args.section,
+      targetTph: args.target_tph,
+      hasPlc: args.has_plc === true,
+      hasScada: args.has_scada === true,
+      hasOnlineAnalyzer: args.has_online_analyzer === true,
+      hasDedicatedStaff: args.has_dedicated_staff === true,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation,
 ];
 
 /* --------------------------------------------------------------------------
