@@ -2106,6 +2106,30 @@ export const LESSONS = [
       };
     },
   },
+  {
+    id: 'L-91', area: '工程', title: '每天必须提升认知力：以"推翻自己的频率与深度"为可测判据',
+    origin: 'R111 用户要求「每天提升认知力，请编程写到规则里面」。但"提升认知"本身是愿望，无法验证。辩证规则 §6.4 给了判据：「从不推翻自己 = 没在验证」（不是一直正确，是没检查）。所以认知力必须落成可测台账：纠正次数 / 深度 / 连续性，且每条必须带可核查证据。',
+    fix: 'tools/cognition_log.mjs 建认知台账：① --record 强制四要素（原来以为什么 / 现在实际是什么 / 可核查证据 / 影响层级 L2-L4），缺证据或只改口径一律拒绝 ② 不接受 L1（单次任务产物，不迁移） ③ --check 门禁：24 小时内至少 1 条、7 天内至少 3 条、平均深度 ≥1.5 ④ 计算连续天数（断档即归零）。当前已记录 7 条真实纠正（材料库假阴性、GitHub 三处展示位、云端传递依赖、Device Flow、render 契约、sync 预演、npm CDN 延迟）。',
+    check() {
+      const p = join(HERE, 'cognition_log.mjs');
+      if (!exists(p)) return { pass: false, detail: '缺少 cognition_log.mjs（认知力无台账）' };
+      const cp = join(D, "03_验证与基准", "cognition.json");
+      let j = null;
+      if (exists(cp)) { try { j = JSON.parse(read(cp)); } catch { } }
+      const has = !!j && j.metrics && typeof j.metrics.daily_correction === "number";
+      const t = j && j.thresholds ? j.thresholds : {};
+      const c1 = j ? j.metrics.daily_correction >= (t.daily_min || 1) : false;
+      const c2 = j ? j.metrics.week_correction >= (t.week_min || 3) : false;
+      const c3 = j ? j.metrics.avg_depth >= (t.avg_depth_min || 1.5) : false;
+      /* 强制四要素：最近一条必须同时有 wrong/now/evidence/impact */
+      const last = j && Array.isArray(j.recent) && j.recent.length ? j.recent[0] : null;
+      const fourOk = !!last && !!last.wrong && !!last.now && !!last.evidence && !!last.impact;
+      return {
+        pass: has && c1 && c2 && c3 && fourOk,
+        detail: "**真读**认知台账：今日 " + (j ? j.metrics.daily_correction : "?") + " 条 · 7天 " + (j ? j.metrics.week_correction : "?") + " 条 · 平均深度 " + (j ? j.metrics.avg_depth : "?") + " · 四要素 " + (fourOk ? "✅" : "❌") + " · 累计 " + (j ? j.counts.total : "?") + " 条",
+      };
+    },
+  },
 ];
 
 /* ══════════════════════════════════════════════════════════════════
