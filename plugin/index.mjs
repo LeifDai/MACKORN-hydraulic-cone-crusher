@@ -40,6 +40,7 @@ import { selectionKnowledge } from './lib/knowledge-bridge.mjs';
 import { selectGrinding, grindingCatalog } from './lib/grinding-engine.mjs';
 import { recommendBeneficiation, beneficiationCatalog } from './lib/processing-engine.mjs';
 import { recommendAutomation, automationCatalog } from './lib/automation-engine.mjs';
+import { recommendMining, miningCatalog, kuzRam } from './lib/mining-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -2022,11 +2023,129 @@ const toolAutomation = {
     });
   },
 };
+/* --------------------------------------------------------------------------
+ * 采矿与破碎接口（R115 · P4）—— 全价值链第 1 段
+ *  *
+ *  * 用户目标：采矿（开采和爆破，剥离，短倒（短驳））
+ *  *
+ *  * 诚实边界：不含爆破设计与审批（需民爆资质）、不含开采设计（需资质）、
+ *  *   岩石系数 A 必须现场标定；Kuz-Ram 为经验模型误差 ±20-30%。
+ * -------------------------------------------------------------------------- */
+const toolMining = {
+  name: 'mackorn_mining_interface',
+  description:
+    '(Multilingual triggers / 多语言触发词: mining, blasting, drilling, fragmentation, Kuz-Ram, stripping ratio, overburden, haulage, haul truck, loading, excavation, open pit, 采矿, 爆破, 钻孔, 炸药单耗, 块度分布, 爆破块度, 剥离, 剥采比, 覆盖层, 铲装, 短倒, 短驳, 运输, 矿卡, 露天开采 | minería, voladura, fragmentación | Bergbau, Sprengstoff, Fragmentierung | горное дело, взрывные работы | exploitation minière, abattage | mineração, detonação | 採鉱, 発破 | gruvdrift, sprängning | minedrift, sprængning | louhinta, räjäytys | التعدين, التفجير | penambangan, peledakan) MACKORN 采矿与破碎接口工具（全价值链第 1 段）：① 采矿工序链（剥离 / 钻孔爆破 / 铲装 / 短倒短驳）与关键指标 ② Kuz-Ram 爆破块度预测（给 A/V/Q 算爆堆 P50/P80/P90） ③ 爆破块度对粗碎选型的影响（最关键接口） ④ 剥采比要点 ⑤ 运输能力校核（破碎机吃不饱最常见原因是运输跟不上，不是破碎机小）。并主动拦截：含泥/黏土夹层必须配预筛分除土、剥采比过高需核算经济性、原矿块度过大需二次破碎。用于回答：这个矿爆破出来多大块、对破碎有什么影响、运输要配多少。 【适用边界】本工具只管采矿与破碎的接口关系；不含爆破设计（需民爆资质）、不含开采设计。Kuz-Ram 经验模型误差 ±20-30%，岩石系数 A 必须现场标定不能照搬。',
+  parameters: obj(
+    {
+      target_tph: S.number('下游处理量 t/h。'),
+      max_feed_mm: S.number('原矿最大块度 mm。'),
+      rock_type: S.string('岩石类型（如 花岗岩 / 石灰石）。'),
+      stripping_ratio: S.number('剥采比（剥离量/采矿量）。'),
+      haul_km: S.number('运距 km（短倒/短驳）。'),
+      muddy: S.boolean('是否含泥/黏土夹层。'),
+      blast_A: S.number('Kuz-Ram 岩石系数 A（中硬 7 / 硬 10 / 非常硬 13）——必须现场标定。'),
+      blast_V: S.number('Kuz-Ram 每孔爆破体积 m³。'),
+      blast_Q: S.number('Kuz-Ram 单孔装药量 kg。'),
+      mode: S.stringEnum('模式。', ['recommend', 'kuzram', 'catalog'], { default: 'recommend' }),
+    },
+    [],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const out = ['## 采矿知识目录', ''];
+        out.push('### 工序链');
+        for (const s of (v.catalog.stages || [])) out.push('- **' + s.id + ' ' + s.name + '**：' + String(s.scope || '').slice(0, 50));
+        out.push('');
+        const bf = v.catalog.blast_fragmentation;
+        if (bf) {
+          out.push('### 爆破块度模型');
+          out.push('- 模型：' + bf.model);
+          out.push('- 公式：`' + bf.formula + '`');
+          out.push('- 【警告】' + bf.honest_note);
+          out.push('');
+        }
+        out.push('> ' + (v.catalog.basis || ''));
+        out.push('>');
+        out.push('> 已知缺口：' + ((v.catalog.known_gaps || []).slice(0, 3).join('；')));
+        return text(out.join('\n'));
+      }
+      if (v.kuzram) {
+        const k = v.kuzram;
+        const out = ['## Kuz-Ram 爆破块度预测', ''];
+        out.push('输入：A=' + k.inputs.A + ' · V=' + k.inputs.V + ' m3 · Q=' + k.inputs.Q + ' kg · E=' + k.inputs.E);
+        out.push('');
+        out.push('| 指标 | 值 |');
+        out.push('|:---|:---|');
+        out.push('| X50（中值块度）| **' + k.x50_cm + ' cm** |');
+        out.push('| P20 | ' + k.percentiles_cm.p20 + ' cm |');
+        out.push('| P80 | **' + k.percentiles_cm.p80 + ' cm** |');
+        out.push('| P90 | ' + k.percentiles_cm.p90 + ' cm |');
+        out.push('');
+        out.push('> 【警告】' + k.note);
+        return text(out.join('\n'));
+      }
+      const out = [];
+      out.push('## 采矿与破碎接口分析');
+      out.push('');
+      if (v.error) {
+        out.push('### 无法计算：' + (v.message || v.error));
+        for (const w of (v.warnings || [])) out.push('- ' + w);
+        return text(out.join('\n'));
+      }
+      if (v.crusher_interface && v.crusher_interface.length) {
+        out.push('### 与破碎段的接口（最关键）');
+        for (const x of v.crusher_interface) out.push('- [' + x.level + '] ' + x.msg);
+        out.push('');
+      }
+      if (v.haulage && v.haulage.length) {
+        out.push('### 运输校核');
+        for (const h of v.haulage) {
+          out.push('- ' + h.rule);
+          if (h.required_tph) out.push('  - 需要运力 >= ' + h.required_tph + ' t/h');
+          if (h.why) out.push('  - ' + h.why);
+        }
+        out.push('');
+      }
+      if (v.stages && v.stages.length) {
+        out.push('### 采矿工序链');
+        out.push('| 工序 | 范围 | 关键指标 |');
+        out.push('|:---|:---|:---|');
+        for (const s of v.stages) out.push('| ' + s.name + ' | ' + String(s.scope || '').slice(0, 30) + ' | ' + (s.key_metrics || []).join('、') + ' |');
+        out.push('');
+      }
+      if (v.warnings && v.warnings.length) {
+        out.push('### 告警');
+        for (const w of v.warnings) out.push('- ' + w);
+        out.push('');
+      }
+      return text(out.join('\n'));
+    },
+  },
+  async execute(args) {
+    const mode = args.mode || 'recommend';
+    if (mode === 'catalog') return { catalog: miningCatalog() };
+    if (mode === 'kuzram') {
+      const k = kuzRam({ A: args.blast_A ?? 10, V: args.blast_V, Q: args.blast_Q });
+      if (!k) return { error: 'missing_required', message: 'Kuz-Ram 需要 blast_V 与 blast_Q', warnings: ['缺少爆破参数，无法计算块度'] };
+      return { kuzram: k };
+    }
+    return recommendMining({
+      targetTph: args.target_tph,
+      maxFeedMm: args.max_feed_mm,
+      rockType: args.rock_type,
+      strippingRatio: args.stripping_ratio,
+      haulKm: args.haul_km,
+      muddy: args.muddy === true,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation, toolMining,
 ];
 
 /* --------------------------------------------------------------------------
