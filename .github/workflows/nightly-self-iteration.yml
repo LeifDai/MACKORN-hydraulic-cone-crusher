@@ -127,6 +127,9 @@ jobs:
       - name: 导出 Harness 约束（供接手的 Agent 读）
         run: node tools/export_harness.mjs || true
 
+      - name: 认知力台账（每天必须推翻自己）
+        run: node tools/cognition_log.mjs --check || true
+
       - name: 线上健康（证书/官网/API/llms.txt）
         run: node tools/check_live_health.mjs || true
 
