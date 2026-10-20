@@ -109,9 +109,17 @@ const walk = (d, dep = 0) => {
       /* R77：同时含【旧值】与【新值】的行 = 映射表/对比表（如 ['19 tools','22 tools']），
        *   那是修复逻辑或证据，不是过时陈述 —— 跳过。
        *   血泪来源：工具曾把裸的 ['19 tools','22 tools'] 改成 ['22 tools','22 tools']。 */
-      /* R113：任何不等于 TOOLS 的 NN tools/个工具 都算过时 */
-        const mTool = l.match(/(^|[^0-9])(\d{1,3})(\s*)(tools|个工具)/);
-        const staleTool = !!mTool && Number(mTool[2]) !== TOOLS;
+      /* R113 + R116：一行里出现 ≥2 个【不同】的工具数 = 映射表/对比表/证据行 → 跳过。
+       *   R77 的原始判断是「同时含旧值与新值」，但那个判断只认 TOOLS 这一个"新值"，
+       *   所以遇到 ['19 tools', '22 tools'] 这种历史映射（新值早已不是 26）就漏判了。
+       *   G4b 负控抓到的就是这个：证据行被改写。
+       *   正确判据：把行内所有 NN tools/个工具 的数字收集起来，去重后 >1 个 → 一定是映射表。 */
+      const nums = [...l.matchAll(/(^|[^0-9])(\d{1,3})(\s*)(tools|个工具)/g)]
+        .map((m) => Number(m[2]))
+        .filter((x) => Number.isFinite(x));
+      const distinct = [...new Set(nums)];
+      if (distinct.length > 1) { meta += 1; return l; }
+      const staleTool = distinct.length === 1 && distinct[0] !== TOOLS;
       const freshTool = new RegExp('(^|[^0-9])' + TOOLS + '\\s*(tools|个工具)').test(l);
       const staleLang = LANGS ? /(^|[^0-9])10(\s*)(languages|种语言)/.test(l) : false;
       const freshLang = LANGS ? new RegExp('(^|[^0-9])' + LANGS + '\\s*(languages|种语言)').test(l) : false;
