@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-live-health/1",
-  "generated": "2026-10-20T01:12:27.380Z",
+  "generated": "2026-10-20T07:34:23.311Z",
   "host": "mackorn.cn",
   "cert_warn_days": 14,
   "expected_tools": 22,
@@ -9,10 +9,10 @@
       "id": "cert",
       "name": "SSL 证书有效且不临期",
       "pass": false,
-      "detail": "❌ **已过期 5.1 天**（Oct 14 23:59:59 2026 GMT）",
+      "detail": "❌ **已过期 5.3 天**（Oct 14 23:59:59 2026 GMT）",
       "cert": {
         "ok": false,
-        "days": -5.1,
+        "days": -5.3,
         "validTo": "Oct 14 23:59:59 2026 GMT",
         "issuer": "DigiCert Inc",
         "subject": "mackorn.cn",

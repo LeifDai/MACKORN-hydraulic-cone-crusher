@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-20T01:11:21.065Z",
-  "total": 24,
-  "passed": 22,
+  "generated": "2026-10-20T07:33:20.568Z",
+  "total": 27,
+  "passed": 27,
   "failed": 1,
   "results": [
     {
@@ -22,12 +22,12 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_capacity_check",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_cost_estimate",
@@ -52,7 +52,7 @@
     {
       "name": "mackorn_market_intel",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_selection_report",
@@ -72,27 +72,27 @@
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 5
+      "ms": 6
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 33
+      "ms": 44
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 111
+      "ms": 131
     },
     {
       "name": "mackorn_contact",
@@ -102,7 +102,7 @@
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_stats",
@@ -112,15 +112,32 @@
     {
       "name": "mackorn_knowledge",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_grinding_selection",
-      "status": "no-sample"
+      "status": "ok",
+      "ms": 0
     },
     {
       "name": "mackorn_beneficiation_selection",
-      "status": "no-sample"
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_automation_design",
+      "status": "ok",
+      "ms": 1
+    },
+    {
+      "name": "mackorn_mining_interface",
+      "status": "ok",
+      "ms": 0
+    },
+    {
+      "name": "mackorn_full_chain",
+      "status": "ok",
+      "ms": 1
     }
   ]
 }

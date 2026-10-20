@@ -1,0 +1,70 @@
+{
+  "schema": "mackorn-cognition/1",
+  "generated": "2026-10-20T07:34:23.345Z",
+  "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
+  "counts": {
+    "total": 16,
+    "today": 16,
+    "last7": 16,
+    "last30": 16
+  },
+  "metrics": {
+    "daily_correction": 16,
+    "week_correction": 16,
+    "depth_score_7d": 31,
+    "avg_depth": 1.94,
+    "streak_days": 1
+  },
+  "thresholds": {
+    "daily_min": 1,
+    "week_min": 3,
+    "avg_depth_min": 1.5
+  },
+  "recent": [
+    {
+      "id": "C016",
+      "at": "2026-10-20T02:05:39.691Z",
+      "wrong": "我以为加完工具、补完 tests/run.mjs 的样本参数就完成了集成",
+      "now": "项目里有【两套】验证器各有独立样本表：tests/run.mjs 与 tools/verify_all_tools.mjs。只补前者，后者会报「无样本，跳过」，导致 L-34 的判据 passed===total 不成立（22/26）。必须两套都补，且 verify_all_tools 还要补【真值断言】防桩实现",
+      "evidence": "verify_all_tools 实测：\"工具 26 个 · 通过 22 · 失败 0 · 跳过 4\"；补样本+6 组真值断言后变 \"通过 26 · 失败 0 · 跳过 0\"",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C015",
+      "at": "2026-10-20T01:51:21.902Z",
+      "wrong": "我以为把 sync 的\"过时数字\"判据改成通用正则（任何不等于 TOOLS 的数字都算过时）是纯改进",
+      "now": "通用判据把【映射表/证据行】也当成过时陈述改了。像 ['19 tools', '22 tools'] 这种历史对照，第二个数字是\"当年改成的值\"而不是当前值，通用判据一视同仁全改，破坏了 R77 的证据保护。正确判据是「一行里出现 ≥2 个不同工具数 = 映射表 → 跳过」",
+      "evidence": "G4b 负控实测报\"证据行被改写/丢失：[19 tools, 22 tools]\"；改成多值判据后 G4b 全部通过（证据行原样保留、陈述式被正确改写）",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C014",
+      "at": "2026-10-20T01:40:12.576Z",
+      "wrong": "我以为扩到全价值链 5 段需要很久",
+      "now": "实际每段只需要「数据文件 + 引擎 + 工具注册 + 样本参数 + 同步」五步，单段约 1-1.5 小时。一夜之间从 1 段（破碎）扩到 3 段 done + 2 段 in_progress，工具从 22 到 26",
+      "evidence": "实测：mining/grinding/beneficiation/automation 四个知识库 + 四个引擎 + 四个工具全部上线；tests 112→120，selftest 29→33；价值链 3/5 done",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C013",
+      "at": "2026-10-20T01:40:12.334Z",
+      "wrong": "我以为「提升认知力」需要一套复杂的认知科学框架",
+      "now": "按辩证规则 §6.4 只需要一个判据：「从不推翻自己 = 没在验证」。所以三个数字（今日≥1 / 7天≥3 / 平均深度≥1.5）加四要素强制（wrong/now/evidence/impact）就够了，可测、可拒、可累积",
+      "evidence": "cognition_log.mjs 拒绝逻辑实测：只给 wrong+now 不给 evidence 时被 NO_EVIDENCE 拒绝；11 条真实纠正已入账，平均深度 1.82",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C012",
+      "at": "2026-10-20T01:40:12.160Z",
+      "wrong": "我以为写进 CLAUDE.md 的规则就等于\"编程写到规则里\"了",
+      "now": "CLAUDE.md 只是文档，AI 读不读要看是否被加载。真正的\"编程\"必须同时有：可执行工具（cognition_log.mjs）+ 门禁（G14）+ 云端工作流步骤 + 文档。四者缺一，规则就会退化成愿望",
+      "evidence": "本次做了四件：tools/cognition_log.mjs（工具）、G14 门禁、nightly-self-iterating.yml 加步骤、CLAUDE.md 加章节；cognition_log --check 实测 exit 0",
+      "impact": "L4",
+      "why": null
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-20T01:12:27.414Z",
+  "generated": "2026-10-20T07:34:23.388Z",
   "passed": 14,
   "total": 17,
   "results": [
@@ -37,7 +37,7 @@
       "gate": "G3",
       "item": "工具名唯一",
       "pass": true,
-      "evidence": "24 个名称全唯一"
+      "evidence": "27 个名称全唯一"
     },
     {
       "gate": "G4",

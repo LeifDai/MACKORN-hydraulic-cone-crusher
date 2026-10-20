@@ -1,29 +1,29 @@
 {
   "schema": "mackorn-rsi/1",
-  "generated": "2026-10-20T01:12:20.036Z",
+  "generated": "2026-10-20T07:34:18.034Z",
   "level": 3,
   "ceiling": 4,
   "ceiling_reason": "严格意义的 L5 需要能改进【自身基础模型（权重/架构/训练方法）】—— 本项目改的是工具链与判据，改不了自己的权重。所以天花板 = L4。这不是谦虚，是事实。",
   "metrics": {
     "persistence": {
-      "value": 0.9555555555555556,
-      "passed": 86,
-      "total": 90
+      "value": 0.9560439560439561,
+      "passed": 87,
+      "total": 91
     },
     "application": {
       "value": 1,
-      "passed": 90,
-      "total": 90
+      "passed": 91,
+      "total": 91
     },
     "meta_ratio": {
-      "value": 0.5222222222222223,
-      "passed": 47,
-      "total": 90
+      "value": 0.5274725274725275,
+      "passed": 48,
+      "total": 91
     },
     "ratchet": {
-      "mechanisms": 137,
+      "mechanisms": 139,
       "baseline": 99,
-      "delta": 38,
+      "delta": 40,
       "ok": true
     },
     "neg_control": {
@@ -32,9 +32,9 @@
       "coverage": 1
     },
     "transfer": {
-      "rate": 0.1,
+      "rate": 0.0989010989010989,
       "count": 9,
-      "total": 90,
+      "total": 91,
       "records": [
         {
           "id": "L-03",
@@ -109,7 +109,7 @@
       "late": 196,
       "improving": false
     },
-    "gates": 47,
+    "gates": 48,
     "rounds": 93
   },
   "checks": [
@@ -117,7 +117,7 @@
       "key": "L2-persist",
       "level": 2,
       "name": "持久化率 ≥ 90%",
-      "value": 0.9555555555555556,
+      "value": 0.9560439560439561,
       "pass": true
     },
     {
@@ -131,14 +131,14 @@
       "key": "L3-meta",
       "level": 3,
       "name": "元层改进占比 ≥ 50%",
-      "value": 0.5222222222222223,
+      "value": 0.5274725274725275,
       "pass": true
     },
     {
       "key": "L3-ratchet",
       "level": 3,
       "name": "棘轮未倒退（机制数只增不减）",
-      "value": 38,
+      "value": 40,
       "pass": true
     },
     {
@@ -152,11 +152,11 @@
       "key": "L4-transfer",
       "level": 4,
       "name": "迁移率 ≥ 30%（跨域救场）",
-      "value": 0.1,
+      "value": 0.0989010989010989,
       "pass": false
     }
   ],
-  "next_step": "升到 L4 的最小一步：让「迁移率 ≥ 30%（跨域救场）」达标（当前 10.0%）。",
+  "next_step": "升到 L4 的最小一步：让「迁移率 ≥ 30%（跨域救场）」达标（当前 9.9%）。",
   "honest_notes": [
     "本判级只测【本项目】（工具链层面），不测\"模型本身变强了没有\"。",
     "迁移率用 PDCA 台账里的实际引用做证据，不采信任何自我描述。",

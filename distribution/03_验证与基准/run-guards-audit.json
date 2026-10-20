@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-20T01:11:19.474Z",
-  "total": 214,
-  "debt": 183,
+  "generated": "2026-10-20T07:33:18.387Z",
+  "total": 215,
+  "debt": 184,
   "high_risk": [],
   "debt_files": [
     "tools/add_hreflang.mjs",
@@ -62,6 +62,7 @@
     "tools/clean_10k_projects.mjs",
     "tools/clean_case_library.mjs",
     "tools/cloud_heartbeat.mjs",
+    "tools/cognition_log.mjs",
     "tools/crawl_cases.mjs",
     "tools/crawl_cases2.mjs",
     "tools/debug_intake.mjs",
