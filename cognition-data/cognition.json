@@ -87,7 +87,7 @@
       "id": "C010",
       "at": "2026-10-20T01:31:40.301Z",
       "wrong": "我以为「数字 + tools」这一种模式就覆盖了所有工具数表述",
-      "now": "还有「数字在后」的写法：CLAUDE.md 写的是 `Tools: 26` 和 `26 tool definitions`，前者是\"词在前数字在后\"，第一类正则抓不到",
+      "now": "还有「数字在后」的写法：CLAUDE.md 写的是 `Tools: 27` 和 `27 tool definitions`，前者是\"词在前数字在后\"，第一类正则抓不到",
       "evidence": "加 R114 规则「(Tools|tools)\\s*[:：]\\s*(\\d{1,3})」后，CLAUDE.md 的 Tools: 24 → Tools: 25、24 tool definitions → 25 生效（3 文件 6 处）",
       "impact": "L3",
       "why": null
@@ -135,6 +135,15 @@
       "now": "通用判据把【映射表/证据行】也当成过时陈述改了。像 ['19 tools', '22 tools'] 这种历史对照，第二个数字是\"当年改成的值\"而不是当前值，通用判据一视同仁全改，破坏了 R77 的证据保护。正确判据是「一行里出现 ≥2 个不同工具数 = 映射表 → 跳过」",
       "evidence": "G4b 负控实测报\"证据行被改写/丢失：[19 tools, 22 tools]\"；改成多值判据后 G4b 全部通过（证据行原样保留、陈述式被正确改写）",
       "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C016",
+      "at": "2026-10-20T02:05:39.691Z",
+      "wrong": "我以为加完工具、补完 tests/run.mjs 的样本参数就完成了集成",
+      "now": "项目里有【两套】验证器各有独立样本表：tests/run.mjs 与 tools/verify_all_tools.mjs。只补前者，后者会报「无样本，跳过」，导致 L-34 的判据 passed===total 不成立（22/26）。必须两套都补，且 verify_all_tools 还要补【真值断言】防桩实现",
+      "evidence": "verify_all_tools 实测：\"工具 26 个 · 通过 22 · 失败 0 · 跳过 4\"；补样本+6 组真值断言后变 \"通过 26 · 失败 0 · 跳过 0\"",
+      "impact": "L2",
       "why": null
     }
   ]
