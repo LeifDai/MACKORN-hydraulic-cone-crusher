@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-20T07:33:18.387Z",
-  "total": 215,
-  "debt": 184,
+  "generated": "2026-10-20T16:49:52.305Z",
+  "total": 218,
+  "debt": 186,
   "high_risk": [],
   "debt_files": [
     "tools/add_hreflang.mjs",
@@ -112,6 +112,7 @@
     "tools/integrate_flowsheet_uq.mjs",
     "tools/integrate_knowledge_into_selection.mjs",
     "tools/integrate_uncertainty.mjs",
+    "tools/iteration_ratchet.mjs",
     "tools/keyword_gate.mjs",
     "tools/merge_and_analyze.mjs",
     "tools/mine_chalmers_data.mjs",
@@ -187,6 +188,7 @@
     "tools/verify_goal_deliverables.mjs",
     "tools/verify_search_index.mjs",
     "tools/workflow_dryrun.mjs",
+    "tests/regression_user_platinum.mjs",
     "tests/run.mjs"
   ],
   "high_risk_count": 0

@@ -1,10 +1,10 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-10-20T07:34:20.592Z",
+  "generated": "2026-10-20T16:50:57.558Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
-    "tools": 27,
+    "tools": 29,
     "skills": 6
   },
   "local_mirrors": [
@@ -36,7 +36,7 @@
       "id": "F-facts",
       "name": "对外文件硬事实（工具数/版本）",
       "pass": false,
-      "detail": "❌ 发现 2 处过时：README.md 写 工具数=22（应为 27） · llms.txt 写 工具数=23（应为 27）"
+      "detail": "❌ 发现 2 处过时：README.md 写 工具数=22（应为 29） · llms.txt 写 工具数=23（应为 29）"
     }
   ],
   "remote_surfaces": [],

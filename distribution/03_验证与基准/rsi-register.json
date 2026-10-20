@@ -1,17 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-20T07:34:20.111Z",
+  "generated": "2026-10-20T16:50:57.174Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
-  "alive": 68,
-  "dead": 23,
+  "alive": 69,
+  "dead": 22,
   "broken": 0,
-  "recurrence": 0.25274725274725274,
+  "recurrence": 0.24175824175824176,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
   "neg_coverage": 0.5824175824175825,
   "by_status": {
-    "failed": 23,
-    "alive": 68
+    "failed": 22,
+    "alive": 69
   },
   "register": [
     {
@@ -359,7 +359,7 @@
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
       "status": "failed",
-      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：215 脚本 / 缺守卫 184 / **被"
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：218 脚本 / 缺守卫 186 / **被"
     },
     {
       "id": "L-33",
@@ -554,7 +554,7 @@
       "negctl": [],
       "origin": "R26：收录规律 P2 驱动检查硬事实一致性时，发现工具数从 21 升 22 时漏改了三处【裸 21】：① monitor_live.mjs 写 \"应为 21\" —— 升到 22 后该判断恒为 false，静默失效；② preflight_checklist.mjs 写 \"= 21\" 且阈值 >= 21 —— 就算工具",
       "status": "failed",
-      "detail": "实际工具 27 · monitor 无裸21:✅ · preflight 无裸21:✅ · version.json 一致:❌ · 有生成器:✅"
+      "detail": "实际工具 29 · monitor 无裸21:✅ · preflight 无裸21:✅ · version.json 一致:❌ · 有生成器:✅"
     },
     {
       "id": "L-49",
@@ -573,7 +573,7 @@
       "negctl": [],
       "origin": "R27：修\"构建产物工具数 21 vs 声明 22\"时，逐层挖出三处不同性质的遗漏：① gen_php_mcp.mjs 的 $add 注册块只有 22 个工具（缺 mackorn_knowledge —— 而它是材料库入口，我们最重要的差异化能力）② PHP 的 switch 里只有 21 个 case（$add 注册",
       "status": "failed",
-      "detail": "工具定义=27 · PHP注册=22 · PHP路由=22 · 三处一致=false"
+      "detail": "工具定义=29 · PHP注册=22 · PHP路由=22 · 三处一致=false"
     },
     {
       "id": "L-51",
@@ -1016,7 +1016,7 @@
       "negctl": [],
       "origin": "R100 用户明确指出：昨天讲过要先升级再上传，但 GitHub 上的根 README 仍是旧版（写 19 tools、编码还坏了），而真相源 public-overrides/README.md 早已是 22 tools / V000022。结果 Glama 读根 README 认为我们只有 19 tools，质量分",
       "status": "failed",
-      "detail": "**真跑**上传前一致性：镜像 4/5 ❌ 对外文件硬事实（工具数/版本） · 真相源 27 工具 / v0.2.2"
+      "detail": "**真跑**上传前一致性：镜像 4/5 ❌ 对外文件硬事实（工具数/版本） · 真相源 29 工具 / v0.2.2"
     },
     {
       "id": "L-89",
@@ -1047,8 +1047,7 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R111 用户要求「每天提升认知力，请编程写到规则里面」。但\"提升认知\"本身是愿望，无法验证。辩证规则 §6.4 给了判据：「从不推翻自己 = 没在验证」（不是一直正确，是没检查）。所以认知力必须落成可测台账：纠正次数 / 深度 / 连续性，且每条必须带可核查证据。",
-      "status": "failed",
-      "detail": "**真读**认知台账：今日 ? 条 · 7天 ? 条 · 平均深度 ? · 四要素 ❌ · 累计 ? 条"
+      "status": "alive"
     }
   ],
   "global_rule_alignment": {

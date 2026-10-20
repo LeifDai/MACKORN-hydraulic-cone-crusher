@@ -1,18 +1,18 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-20T07:34:23.345Z",
+  "generated": "2026-10-20T16:51:02.943Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 16,
-    "today": 16,
-    "last7": 16,
-    "last30": 16
+    "total": 23,
+    "today": 23,
+    "last7": 23,
+    "last30": 23
   },
   "metrics": {
-    "daily_correction": 16,
-    "week_correction": 16,
-    "depth_score_7d": 31,
-    "avg_depth": 1.94,
+    "daily_correction": 23,
+    "week_correction": 23,
+    "depth_score_7d": 48,
+    "avg_depth": 2.09,
     "streak_days": 1
   },
   "thresholds": {
@@ -22,48 +22,48 @@
   },
   "recent": [
     {
-      "id": "C016",
-      "at": "2026-10-20T02:05:39.691Z",
-      "wrong": "我以为加完工具、补完 tests/run.mjs 的样本参数就完成了集成",
-      "now": "项目里有【两套】验证器各有独立样本表：tests/run.mjs 与 tools/verify_all_tools.mjs。只补前者，后者会报「无样本，跳过」，导致 L-34 的判据 passed===total 不成立（22/26）。必须两套都补，且 verify_all_tools 还要补【真值断言】防桩实现",
-      "evidence": "verify_all_tools 实测：\"工具 26 个 · 通过 22 · 失败 0 · 跳过 4\"；补样本+6 组真值断言后变 \"通过 26 · 失败 0 · 跳过 0\"",
+      "id": "C023",
+      "at": "2026-10-20T15:52:11.822Z",
+      "wrong": "我以为只要把颚破和筛分工具注册上，插件就能回答「颚破+圆锥+筛子」",
+      "now": "工具注册只是第一步。真正能回答需要 ① 三段之间参数能传递（颚破产品 P80 → 圆锥给料 → 圆锥产品 → 筛孔）② 有一个回归测试证明三段串起来能出完整答案 ③ 价格能汇总。缺任一项，用户看到的仍是碎片",
+      "evidence": "tests/regression_user_platinum.mjs 实测 26 通过 0 失败：颚破CJ1113·1台·160kW + 圆锥NH700/M·CSS10mm·2台 + 筛分圆振14.9m²·1台 + 价格汇总",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C022",
+      "at": "2026-10-20T15:51:59.913Z",
+      "wrong": "我以为筛分面积用 A=Q/q 一算就准",
+      "now": "实际差了 1.3-2.5 倍。手册典型 q=30 t/(m²·h) 在\"给料中含大量细粒\"时成立；实际给料越粗（要筛出来的越多），K1 越小，面积越大。本引擎拿不到给料粒度分布，算出 14.9 m² 而工程案例多为 25-40 m²。必须强制告警\"这是下限估计\"",
+      "evidence": "screen-engine 380t/h筛19mm 算 14.9m²，加告警后输出「实际工程通常放大1.3-2.5倍，同类案例25-40m²」",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C021",
+      "at": "2026-10-20T15:51:55.947Z",
+      "wrong": "我以为颚破选型只需按\"目标产能\"直接匹配型号表就行",
+      "now": "实际必须三重校核：① 进料口 ≥ 最大给料/0.85（否则卡料）② 工况打折（硬岩/大块/含水/含泥，最狠叠加后只剩 0.55-0.72）③ 用打折后的\"名义产能\"去匹配型号。实测：380 t/h 硬岩需求，算出来要 526 t/h 名义产能，直接从 PE900×1200 跳到 CJ1113",
+      "evidence": "jaw-engine 实测 required_feed_opening_mm=589 · condition_factor=0.72 · required_nominal_tph=526 · 推荐 CJ1113",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C020",
+      "at": "2026-10-20T12:35:29.833Z",
+      "wrong": "我以为补上采矿/磨矿/选矿/自动化四段 + 整线贯通，就把全价值链覆盖完整了",
+      "now": "全链条缺了破碎流程本身最核心的两个环节：颚破（粗碎）与振动筛（筛分）。用户在问「颚破+圆锥+筛子」时插件只能答圆锥那三分之一，导致模型判定\"用了反而更麻烦\"而绕开插件。这是调用失败的致命根因，不是提示词问题",
+      "evidence": "plugin/lib/fullchain-engine.mjs 里我自己写着「★ 粗碎段是唯一没有独立选型引擎的环节」；plugin/index.mjs 27 个工具里没有 jaw / screen 任何选型工具",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C019",
+      "at": "2026-10-20T02:12:59.988Z",
+      "wrong": "我以为工具返回结构可以猜（selected.model 之类）",
+      "now": "selectConeCrusher 的实际返回是 top_pick / recommended_units / candidates / recommended_cavity_pool，不是 selected/model。我猜的结构全返回 null，而 null 不会报错——只会静默给出空结果",
+      "evidence": "实测打印返回顶层键才发现是 top_pick；改成正确路径后 8 处全部生效，中碎选型从 null 变成 NH860/EC·500kW·3台",
       "impact": "L2",
-      "why": null
-    },
-    {
-      "id": "C015",
-      "at": "2026-10-20T01:51:21.902Z",
-      "wrong": "我以为把 sync 的\"过时数字\"判据改成通用正则（任何不等于 TOOLS 的数字都算过时）是纯改进",
-      "now": "通用判据把【映射表/证据行】也当成过时陈述改了。像 ['19 tools', '22 tools'] 这种历史对照，第二个数字是\"当年改成的值\"而不是当前值，通用判据一视同仁全改，破坏了 R77 的证据保护。正确判据是「一行里出现 ≥2 个不同工具数 = 映射表 → 跳过」",
-      "evidence": "G4b 负控实测报\"证据行被改写/丢失：[19 tools, 22 tools]\"；改成多值判据后 G4b 全部通过（证据行原样保留、陈述式被正确改写）",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C014",
-      "at": "2026-10-20T01:40:12.576Z",
-      "wrong": "我以为扩到全价值链 5 段需要很久",
-      "now": "实际每段只需要「数据文件 + 引擎 + 工具注册 + 样本参数 + 同步」五步，单段约 1-1.5 小时。一夜之间从 1 段（破碎）扩到 3 段 done + 2 段 in_progress，工具从 22 到 26",
-      "evidence": "实测：mining/grinding/beneficiation/automation 四个知识库 + 四个引擎 + 四个工具全部上线；tests 112→120，selftest 29→33；价值链 3/5 done",
-      "impact": "L4",
-      "why": null
-    },
-    {
-      "id": "C013",
-      "at": "2026-10-20T01:40:12.334Z",
-      "wrong": "我以为「提升认知力」需要一套复杂的认知科学框架",
-      "now": "按辩证规则 §6.4 只需要一个判据：「从不推翻自己 = 没在验证」。所以三个数字（今日≥1 / 7天≥3 / 平均深度≥1.5）加四要素强制（wrong/now/evidence/impact）就够了，可测、可拒、可累积",
-      "evidence": "cognition_log.mjs 拒绝逻辑实测：只给 wrong+now 不给 evidence 时被 NO_EVIDENCE 拒绝；11 条真实纠正已入账，平均深度 1.82",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C012",
-      "at": "2026-10-20T01:40:12.160Z",
-      "wrong": "我以为写进 CLAUDE.md 的规则就等于\"编程写到规则里\"了",
-      "now": "CLAUDE.md 只是文档，AI 读不读要看是否被加载。真正的\"编程\"必须同时有：可执行工具（cognition_log.mjs）+ 门禁（G14）+ 云端工作流步骤 + 文档。四者缺一，规则就会退化成愿望",
-      "evidence": "本次做了四件：tools/cognition_log.mjs（工具）、G14 门禁、nightly-self-iterating.yml 加步骤、CLAUDE.md 加章节；cognition_log --check 实测 exit 0",
-      "impact": "L4",
       "why": null
     }
   ]
