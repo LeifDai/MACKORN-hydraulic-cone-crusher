@@ -227,6 +227,8 @@ const samples = {
   mackorn_automation_design: { section: '破碎', target_tph: 2000, has_plc: true, has_scada: true, has_online_analyzer: false, has_dedicated_staff: true, mode: 'recommend' },
   mackorn_mining_interface: { target_tph: 2000, max_feed_mm: 800, rock_type: '花岗岩', stripping_ratio: 2.5, haul_km: 2, muddy: false, mode: 'recommend' },
   mackorn_full_chain: { target_tph: 1000, max_feed_mm: 800, target_product_mm: 20, ore: '花岗岩', to_beneficiation: false },
+  mackorn_jaw_selection: { target_tph: 380, max_feed_mm: 500, ore: '铂金矿', ucs_mpa: 180, moisture_pct: 3, muddy: false, closed_circuit: false, mode: 'select' },
+  mackorn_screen_selection: { feed_tph: 380, aperture_mm: 19, target_efficiency: 85, screen_type: '圆振动筛（YK/YA）', moisture_pct: 3, feed_p80_mm: 100, closed_circuit: true, bulk_density: 1.6, mode: 'select' },
   mackorn_requirement_intake: {
     capacity_tph: 500,
     form_text: '砂石骨料生产线客户需求信息输入表 客户名称：某某建材 项目地点：安徽池州 '
