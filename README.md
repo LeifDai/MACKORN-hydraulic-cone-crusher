@@ -25,7 +25,7 @@
 
 <p align="center">
 <b>Turn one customer requirement form + one target capacity into a deliverable crushing &amp; screening plant proposal —
-with a product-size simulation engine and field-data calibration. 25 tools, 6 skills, 12 languages.</b>
+with a product-size simulation engine and field-data calibration. 26 tools, 6 skills, 12 languages.</b>
 </p>
 
 <p align="center">
@@ -198,7 +198,7 @@ it does not know — the harness becomes useful well beyond software development
 
 ## Tool catalog — inputs and outputs
 
-All 25 tools share one input convention: **all parameters are optional except those marked (required)**,
+All 26 tools share one input convention: **all parameters are optional except those marked (required)**,
 and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 
 ### Core sales flow
@@ -298,7 +298,7 @@ powershell -ExecutionPolicy Bypass -File .\tools\verify.ps1 -BootTest
 ### 2. MCP server — any MCP-capable AI client
 
 ```powershell
-node plugin\mcp-server.mjs --list        # list all 25 tools
+node plugin\mcp-server.mjs --list        # list all 26 tools
 node plugin\mcp-server.mjs --selftest    # protocol + every tool, self-check
 node plugin\mcp-server.mjs               # start the stdio server
 ```
