@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-20T09:21:50.243Z",
+  "metrics": {
+    "gates": 17,
+    "lessons": 92,
+    "tools": 27,
+    "tests_pass": null,
+    "refutations": 19,
+    "facts": 10,
+    "compliance_hits": null,
+    "rsi_level": null,
+    "recurrence": null
+  },
+  "evidence": {
+    "gates": "tools/enforce_lessons.mjs 里 rec('Gxx' 的个数",
+    "lessons": "tools/lessons.mjs 里 id: 'L-xx' 的个数",
+    "tools": "plugin/index.mjs 里 name: 'mackorn_xxx' 的个数",
+    "tests_pass": "tests 有失败但能读到通过数",
+    "compliance_hits": "build_public 非零退出，已解析"
+  }
+}
