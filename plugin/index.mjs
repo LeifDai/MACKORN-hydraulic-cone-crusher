@@ -42,6 +42,8 @@ import { recommendBeneficiation, beneficiationCatalog } from './lib/processing-e
 import { recommendAutomation, automationCatalog } from './lib/automation-engine.mjs';
 import { recommendMining, miningCatalog, kuzRam } from './lib/mining-engine.mjs';
 import { fullChain, stageRatios } from './lib/fullchain-engine.mjs';
+import { selectJaw, jawCatalog } from './lib/jaw-engine.mjs';
+import { selectScreen, screenCatalog } from './lib/screen-engine.mjs';
 import { guardInput, attachGuardrails, GUARD_RULES, listRules } from './lib/guardrails.mjs';
 
 export const name = 'mackorn-cone-crusher';
@@ -2233,11 +2235,202 @@ const toolFullChain = {
     });
   },
 };
+/* --------------------------------------------------------------------------
+ * 颚破选型（R124）—— 补 2026-10-20 调用失败暴露的 P0 缺口
+ *
+ * 用户问「颚破+圆锥+筛子」时，旧插件只能答圆锥那三分之一，
+ * 模型判定"用了更麻烦"就绕开插件。本工具补上粗碎段。
+ *
+ * 诚实边界：不含 MACKORN 颚破厂商参数（MACKORN 主要做圆锥破），
+ *   数据来自公开文献 S3/S5，输出恒带 vendor_params_pending。
+ * -------------------------------------------------------------------------- */
+const toolJaw = {
+  name: 'mackorn_jaw_selection',
+  description:
+    '(Multilingual triggers / 多语言触发词: jaw crusher, primary crusher, coarse crushing, jaw plate, feed opening, PE jaw, CJ jaw, CGE jaw, 颚破, 颚式破碎机, 粗碎, 颚板, 进料口, 一次破碎, 头破 | trituradora de mandíbula, trituración primaria | Backenbrecher, Primärbrecher | щековая дробилка, первичное дробление | concasseur à mâchoires, concassage primaire | britador de mandíbula, britagem primária | ジョークラッシャー, 一次破砕 | käftkross, primärkrossning | kæbeknuser, primær knusning | leukamurskain, esimurskaus | كسارة فكية, سحق أولي | jaw crusher, penghancuran primer) '
+    + 'MACKORN 颚破选型工具（粗碎段）：按目标产能 t/h + 最大给料粒度，反推进料口需求（进料口 ≥ 最大给料 / 0.85），按工况打折（硬岩 ×0.85 / 大块 ×0.85 / 含水 ×0.85 / 含泥 ×0.75），输出档位机型 + 台数 + 功率 + 产品 P80 + 价格参考区间。'
+    + ' 用于回答：这条线粗碎配什么颚破、多大进料口、几台、多大功率。'
+    + ' ★ 重要提示：本工具【不含 MACKORN 颚破厂商参数】（MACKORN 主要做圆锥破），数据来自公开文献 S3/S5。型号只到档位级别，不能用于采购定点。正式选型须向厂家索取功率曲线。'
+    + ' 【适用边界】只做颚破；圆锥破请用 cone_selection，筛分请用 screen_selection，整线请用 plant_design / full_chain。',
+  parameters: obj(
+    {
+      target_tph: S.number('目标产能 t/h（必填）。'),
+      max_feed_mm: S.number('最大给料粒度 mm（必填）。'),
+      ore: S.string('矿石类型（如 铂金矿 / 花岗岩）。'),
+      ucs_mpa: S.number('抗压强度 MPa（用于工况打折）。'),
+      moisture_pct: S.number('含水率 %。'),
+      muddy: S.boolean('是否含泥/黏性。'),
+      closed_circuit: S.boolean('是否闭路（粗碎通常开路，默认 false）。'),
+      mode: S.stringEnum('模式。', ['select', 'catalog'], { default: 'select' }),
+    },
+    ['target_tph', 'max_feed_mm'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const out = ['## 颚破知识目录', ''];
+        out.push('### 型号库（文献值，非厂商实测）');
+        out.push('| 型号 | 进料口 mm | 最大给料 mm | 产能 t/h | 功率 kW |');
+        out.push('|:---|:---|:---|:---|:---|');
+        for (const m of (v.catalog.models || [])) out.push('| ' + m.model + ' | ' + (m.feed_opening_mm || []).join('×') + ' | ' + m.max_feed_mm + ' | ' + (m.capacity_tph || []).join('-') + ' | ' + (m.power_kw || '—') + ' |');
+        out.push('');
+        out.push('> ' + (v.catalog.meta ? v.catalog.meta.note : ''));
+        return text(out.join('\n'));
+      }
+      const out = [];
+      out.push('## 颚破选型');
+      out.push('');
+      if (v.error) { out.push('### 无法计算：' + (v.message || v.error)); for (const w of (v.warnings || [])) out.push('- ' + w); return text(out.join('\n')); }
+      if (v.rejections && v.rejections.length) {
+        out.push('### 无法选出机型');
+        for (const r of v.rejections) { out.push('- **' + r.rule + '**'); if (r.detail) out.push('  ' + r.detail); if (r.action) out.push('  → ' + r.action); }
+        out.push('');
+      }
+      if (v.recommended_model) {
+        out.push('**推荐档位：' + v.recommended_model + '（' + (v.recommended_series || '') + '）**');
+        out.push('');
+        out.push('- 台数：**' + v.units + ' 台**（单台名义 ' + v.per_unit_nominal_tph + ' t/h）');
+        out.push('- 总功率：' + (v.total_power_kw || '—') + ' kW');
+        out.push('- 进料口需求：≥ ' + v.required_feed_opening_mm + ' mm（最大给料 ' + v.request.maxFeedMm + ' ÷ 0.85）');
+        out.push('- 名义产能需求：' + v.required_nominal_tph + ' t/h（工况系数 ' + v.condition_factor + '）');
+        if (v.condition_notes && v.condition_notes.length) out.push('  - 打折原因：' + v.condition_notes.join(' / '));
+        out.push('- 产品 P80 估计：' + ((v.product_p80_mm_estimate || []).join('-') || '—') + ' mm（破碎比 ' + (v.reduction_ratio_estimate || '—') + '）');
+        out.push('');
+      }
+      if (v.price_reference) {
+        out.push('### 价格参考（S4 历史区间，非报价）');
+        out.push('**' + v.price_reference.capacity_class + ' → ' + v.price_reference.wan_cny.join('-') + ' 万元/台**');
+        out.push('');
+        out.push('> ' + v.price_disclaimer);
+        out.push('');
+      }
+      if (v.warnings && v.warnings.length) {
+        out.push('### 告警');
+        for (const w of v.warnings) out.push('- ' + w);
+        out.push('');
+      }
+      return text(out.join('\n'));
+    },
+  },
+  async execute(args) {
+    if (args.mode === 'catalog') return { catalog: jawCatalog() };
+    return selectJaw({
+      targetTph: args.target_tph,
+      maxFeedMm: args.max_feed_mm,
+      ore: args.ore,
+      ucsMpa: args.ucs_mpa,
+      moisturePct: args.moisture_pct,
+      muddy: args.muddy === true,
+      closedCircuit: args.closed_circuit === true,
+    });
+  },
+};
+/* --------------------------------------------------------------------------
+ * 筛分选型（R124）—— 补 2026-10-20 调用失败暴露的 P0 缺口
+ *
+ * 诚实边界：不含 MACKORN 筛分厂商参数；面积公式来自设计手册 S5。
+ *   面积结果是【下限估计】，实际通常要放大 1.3-2.5 倍。
+ * -------------------------------------------------------------------------- */
+const toolScreen = {
+  name: 'mackorn_screen_selection',
+  description:
+    '(Multilingual triggers / 多语言触发词: vibrating screen, screen, screening, sieve, aperture, mesh, screen deck, circular screen, linear screen, high frequency screen, dewatering screen, 振动筛, 筛分, 筛子, 筛网, 筛孔, 筛面, 圆振筛, 直线筛, 高频筛, 脱水筛, 检查筛, 预先筛, 循环负荷 | criba vibratoria, tamiz, cribado | Sieb, Siebmaschine, Klassierung | вибросито, грохот, грохочение | crible vibrant, tamisage | peneira vibratória, peneiramento | 振動ふるい, ふるい分け | vibrerande sikt, siktning | vibrationssigte, sigtning | täryseula, seulonta | غربال اهتزازي, نخل | layar getar, penyaringan) '
+    + 'MACKORN 筛分选型工具：按给料量 t/h + 筛孔 mm + 目标效率，算筛分面积（A = Q/(q·K1..K6)）、台数、层数、推荐尺寸（宽×长）、闭路循环负荷与上游放大倍数，并给价格参考区间。'
+    + ' 用于回答：这条线筛子配多大、几层、闭路循环负荷多少、上游要放大多少。'
+    + ' ★ 重要提示：本工具【不含 MACKORN 筛分厂商参数】，数据来自设计手册通用公式。面积是【下限估计】，实际工程通常要放大 1.3-2.5 倍（拿不到给料粒度分布，无法精确算细粒含量系数）。必须用厂家软件或筛分试验校核。'
+    + ' 【适用边界】只做筛分；颚破请用 jaw_selection，圆锥破请用 cone_selection，整线请用 plant_design / full_chain。',
+  parameters: obj(
+    {
+      feed_tph: S.number('给料量 t/h（必填）。'),
+      aperture_mm: S.number('筛孔 mm（必填）。'),
+      target_efficiency: S.number('目标筛分效率 %（默认 85）。'),
+      screen_type: S.stringEnum('筛型（默认自动）。', ['圆振动筛（YK/YA）', '直线振动筛（ZK/ZKR）', '高频筛（GPS）', '概率筛（GLS）'], { default: '圆振动筛（YK/YA）' }),
+      moisture_pct: S.number('含水率 %。>8% 会强制告警防堵。'),
+      feed_p80_mm: S.number('给料 P80 mm（用于检查筛孔是否合理）。'),
+      closed_circuit: S.boolean('是否闭路（默认 true，检查筛通常闭路）。'),
+      bulk_density: S.number('松散密度 t/m³（默认 1.6）。'),
+      mode: S.stringEnum('模式。', ['select', 'catalog'], { default: 'select' }),
+    },
+    ['feed_tph', 'aperture_mm'],
+  ),
+  output: {
+    schema: ANY_OBJECT,
+    render: (_a, v) => {
+      if (v.catalog) {
+        const out = ['## 筛分知识目录', ''];
+        out.push('### 筛型');
+        for (const s of (v.catalog.series || [])) out.push('- **' + s.screen_type + '**：' + String(s.principle || '').slice(0, 40));
+        out.push('');
+        out.push('### 单位筛分能力 q（手册典型值）');
+        out.push('| 筛孔 mm | q t/(m²·h) |');
+        out.push('|:---|:---|');
+        for (const t of ((v.catalog.formulas || {}).unit_capacity || {}).table || []) out.push('| ' + t.aperture_mm + ' | ' + t.q_tph_m2 + ' |');
+        out.push('');
+        out.push('> ' + (v.catalog.meta ? v.catalog.meta.note : ''));
+        return text(out.join('\n'));
+      }
+      const out = [];
+      out.push('## 筛分选型');
+      out.push('');
+      if (v.error) { out.push('### 无法计算：' + (v.message || v.error)); for (const w of (v.warnings || [])) out.push('- ' + w); return text(out.join('\n')); }
+      if (v.recommended_screen_type) {
+        out.push('**筛型：' + v.recommended_screen_type + '**');
+        out.push('');
+        out.push('- 筛分面积：**' + v.area_total_m2 + ' m²**（' + v.units + ' 台 × ' + v.area_per_unit_m2 + ' m²）');
+        out.push('- 层数：' + v.layers + ' 层');
+        out.push('- 推荐尺寸：宽 ' + v.recommended_dimensions.width_m + ' m × 长 ' + v.recommended_dimensions.length_m + ' m');
+        out.push('');
+      }
+      if (v.circulating_load_pct !== null && v.circulating_load_pct !== undefined) {
+        out.push('### 闭路循环负荷');
+        out.push('- 循环负荷：**' + v.circulating_load_pct + '%**');
+        out.push('- 上游放大：**' + v.upstream_amplification + ' 倍**');
+        out.push('');
+        out.push('> ' + v.circulating_note);
+        out.push('');
+      }
+      if (v.calculation) {
+        out.push('### 计算依据');
+        out.push('- 公式：`' + v.calculation.formula + '`');
+        out.push('- 单位筛分能力 q = ' + v.calculation.unit_capacity_q + ' t/(m²·h)');
+        out.push('- 系数：' + JSON.stringify(v.calculation.coefficients));
+        out.push('');
+      }
+      if (v.price_reference) {
+        out.push('### 价格参考（S4 历史区间，非报价）');
+        out.push('**' + v.price_reference.area_class + ' → ' + v.price_reference.wan_cny.join('-') + ' 万元/台**');
+        out.push('');
+        out.push('> ' + v.price_disclaimer);
+        out.push('');
+      }
+      if (v.warnings && v.warnings.length) {
+        out.push('### 告警');
+        for (const w of v.warnings) out.push('- ' + w);
+        out.push('');
+      }
+      return text(out.join('\n'));
+    },
+  },
+  async execute(args) {
+    if (args.mode === 'catalog') return { catalog: screenCatalog() };
+    return selectScreen({
+      feedTph: args.feed_tph,
+      apertureMm: args.aperture_mm,
+      targetEfficiency: args.target_efficiency,
+      screenType: args.screen_type,
+      moisturePct: args.moisture_pct,
+      feedP80Mm: args.feed_p80_mm,
+      closedCircuit: args.closed_circuit !== false,
+      bulkDensity: args.bulk_density,
+    });
+  },
+};
 const TOOLS = [
   toolIntake, toolProposal, toolSelection, toolPlant, toolCapacity, toolCost, toolMcfm,
   toolWear, toolGrading, toolMarket, toolReport, toolCatalog,
   toolIntelWatch, toolKnowledgeUpdate, toolPdca, toolCrusherCurve, toolFlowsheet, toolCalibrate, toolContact,
-  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation, toolMining, toolFullChain,
+  toolDistributor, toolMarketStats, toolKnowledge, toolGrinding, toolBeneficiation, toolAutomation, toolMining, toolFullChain, toolJaw, toolScreen,
 ];
 
 /* --------------------------------------------------------------------------
