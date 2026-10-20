@@ -33,13 +33,19 @@ const SAMPLE = {
   mackorn_simulate_flowsheet: { feed_p80_mm: 300, stages: [{ type: 'crusher', name: '中碎', css_mm: 40 }, { type: 'screen', name: '筛', aperture_mm: 20 }] },
   mackorn_calibrate: { css_mm: 16, feed_points: [{ size_mm: 100, cum_pct: 100 }, { size_mm: 60, cum_pct: 85 }], product_points: [{ size_mm: 0.5, cum_pct: 12 }, { size_mm: 2, cum_pct: 35 }, { size_mm: 8, cum_pct: 62 }, { size_mm: 16, cum_pct: 88 }] },
   mackorn_contact: {},
+
+  /* R117：全价值链 4 个新工具的样本（此前缺失 → 被跳过 → L-34 判据 passed===total 不成立） */
+  mackorn_grinding_selection: { target_tph: 1000, feed_p80_mm: 15, product_p80_mm: 0.075, ore: '铜矿石', closed_circuit: true, mode: 'select' },
+  mackorn_beneficiation_selection: { ore: '硫化铜矿石', target_mineral: '铜', liberation_um: 50, feed_p80_mm: 12, target_tph: 2000, slime_pct: 8, mode: 'recommend' },
+  mackorn_automation_design: { section: '破碎', target_tph: 2000, has_plc: true, has_scada: true, has_online_analyzer: false, has_dedicated_staff: true, mode: 'recommend' },
+  mackorn_mining_interface: { target_tph: 2000, max_feed_mm: 800, rock_type: '花岗岩', stripping_ratio: 2.5, haul_km: 2, muddy: false, mode: 'recommend' },
   mackorn_distributor_eval: { agent_type: '公司', country: '智利', scores: { credit_record: 5, sanctions: 5 } },
   mackorn_market_stats: { mode: 'describe', values: [10, 20, 30, 40, 50] },
   mackorn_knowledge: { ore: '玄武岩', target_tph: 300 },
 };
 
 console.log('\n' + '═'.repeat(100));
-console.log('  23 个工具端到端验证');
+console.log('  ' + m.toolDefinitions.length + ' 个工具端到端验证');
 console.log('═'.repeat(100) + '\n');
 
 const results = [];
@@ -72,6 +78,53 @@ for (const def of m.toolDefinitions) {
  * 这些真值来自厂商参数表（S1）与确定性算法，稳定可复现。
  * ══════════════════════════════════════════════════════════════════ */
 const GOLDEN_ASSERTIONS = [
+  /* R117：全价值链 4 个新工具的真值断言（防桩实现）。
+   * 这些值来自公开文献区间与确定性算法，稳定可复现。 */
+  {
+    tool: 'mackorn_mining_interface',
+    args: { target_tph: 2000, max_feed_mm: 800, muddy: true },
+    checks: [
+      ['含泥时给出预筛分提示', (v) => JSON.stringify(v.warnings || []).includes('预筛分')],
+      ['运输要求 = 处理量 × 1.15', (v) => !v.haulage || !v.haulage[0] || v.haulage[0].required_tph === 2300],
+    ],
+  },
+  {
+    tool: 'mackorn_grinding_selection',
+    args: { target_tph: 1000, feed_p80_mm: 15, product_p80_mm: 0.075 },
+    checks: [
+      ['1000 t/h 推荐球磨', (v) => String(v.recommended_method || '').includes('球磨')],
+      ['诚实返回 null 型号', (v) => v.equipment_model_recommendation === null],
+    ],
+  },
+  {
+    tool: 'mackorn_grinding_selection',
+    args: { target_tph: 1000, feed_p80_mm: 500 },
+    checks: [
+      ['给料 500mm 被拒绝', (v) => (v.rejections || []).length > 0 && v.recommended_method === null],
+    ],
+  },
+  {
+    tool: 'mackorn_beneficiation_selection',
+    args: { ore: '硫化铜矿石', liberation_um: 5 },
+    checks: [
+      ['解离 5μm 触发告警', (v) => JSON.stringify(v.warnings || []).includes('10μm')],
+    ],
+  },
+  {
+    tool: 'mackorn_beneficiation_selection',
+    args: {},
+    checks: [
+      ['无输入被拒绝', (v) => v.error === 'insufficient_input'],
+    ],
+  },
+  {
+    tool: 'mackorn_automation_design',
+    args: { section: '磨矿', target_tph: 2000, has_plc: false },
+    checks: [
+      ['无 PLC 判定不能上 L3', (v) => v.advanced_control_verdict && v.advanced_control_verdict.go === false],
+      ['无 PLC 有拒绝项', (v) => (v.rejections || []).length > 0],
+    ],
+  },
   {
     tool: 'mackorn_capacity_check',
     /* R48 修正：原写 cavity:'C' —— 但 C 腔 CSS16 的详表值是哨兵 999（已加告警）。
