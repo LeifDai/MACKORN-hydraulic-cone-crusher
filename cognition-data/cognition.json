@@ -87,7 +87,7 @@
       "id": "C010",
       "at": "2026-10-20T01:31:40.301Z",
       "wrong": "我以为「数字 + tools」这一种模式就覆盖了所有工具数表述",
-      "now": "还有「数字在后」的写法：CLAUDE.md 写的是 `Tools: 24` 和 `24 tool definitions`，前者是\"词在前数字在后\"，第一类正则抓不到",
+      "now": "还有「数字在后」的写法：CLAUDE.md 写的是 `Tools: 26` 和 `26 tool definitions`，前者是\"词在前数字在后\"，第一类正则抓不到",
       "evidence": "加 R114 规则「(Tools|tools)\\s*[:：]\\s*(\\d{1,3})」后，CLAUDE.md 的 Tools: 24 → Tools: 25、24 tool definitions → 25 生效（3 文件 6 处）",
       "impact": "L3",
       "why": null
