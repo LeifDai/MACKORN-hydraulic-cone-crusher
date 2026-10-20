@@ -224,6 +224,7 @@ const samples = {
   /* R108：新增的磨矿与选矿工具样本参数 */
   mackorn_grinding_selection: { target_tph: 1000, feed_p80_mm: 15, product_p80_mm: 0.075, ore: '铜矿石', closed_circuit: true, mode: 'select' },
   mackorn_beneficiation_selection: { ore: '硫化铜矿石', target_mineral: '铜', liberation_um: 50, feed_p80_mm: 12, target_tph: 2000, slime_pct: 8, mode: 'recommend' },
+  mackorn_automation_design: { section: '破碎', target_tph: 2000, has_plc: true, has_scada: true, has_online_analyzer: false, has_dedicated_staff: true, mode: 'recommend' },
   mackorn_requirement_intake: {
     capacity_tph: 500,
     form_text: '砂石骨料生产线客户需求信息输入表 客户名称：某某建材 项目地点：安徽池州 '
