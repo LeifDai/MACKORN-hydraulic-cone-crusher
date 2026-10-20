@@ -257,6 +257,48 @@ if (!QUICK) {
     if (exists(cp)) { try { const j = JSON.parse(read(join(D, "03_验证与基准", "cognition.json"))); cd = j.metrics.daily_correction; cw = j.metrics.week_correction; ca = j.metrics.avg_depth; } catch { } }
     rec('G14', '认知力达标（今日≥1 · 7天≥3 · 深度≥1.5）', r.status === 0, '今日 ' + cd + ' · 7天 ' + cw + ' · 平均深度 ' + ca);
   }
+  /* ══════ R121/R122：用户 2026-10-20 明令两条编入生存规则 ══════ */
+
+  /* G15：每天提升认知力（全局规则 §2.6）—— 四件事：学/疑/炼/测 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'cognition.mjs'), '--daily'], { stdio: 'ignore', windowsHide: true, timeout: 300000 });
+    const cp = join(ROOT, 'cognition-data', 'cognition.json');
+    let facts = "?", refu = "?", test = "?", corr = "?";
+    try {
+      const j = JSON.parse(read(cp));
+      const m = j.metrics || {};
+      facts = m.facts; refu = m.refutations;
+      const t = j.today || {};
+      test = t.tested; corr = t.correct;
+    } catch { }
+    rec('G15', '认知力日课达标（学/疑/炼/测 四件事）', r.status === 0,
+      '知识 ' + facts + ' 条 · 自我推翻 ' + refu + ' 条 · 今日回忆 ' + test + ' 题 ' + corr + ' 正确');
+  }
+
+  /* G16：不断更新迭代（棘轮）—— 有基线 / 有净增量 / 无倒退 / 合规零命中 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'iteration_ratchet.mjs'), '--check'], { stdio: 'ignore', windowsHide: true, timeout: 900000 });
+    const hp = join(ROOT, 'iteration-data', 'ratchet-history.json');
+    let snaps = 0, latest = null, prev = null;
+    try {
+      const h = JSON.parse(read(hp));
+      snaps = (h.snapshots || []).length;
+      if (snaps) latest = h.snapshots[snaps - 1];
+      if (snaps >= 2) prev = h.snapshots[snaps - 2];
+    } catch { }
+    let delta = "—";
+    if (latest && prev) {
+      const ks = ["gates", "lessons", "tools", "facts", "refutations"];
+      const parts = [];
+      for (const k of ks) {
+        const a = latest.metrics[k]; const b = prev.metrics[k];
+        if (a !== null && b !== null && a !== b) parts.push(k + " " + b + "→" + a);
+      }
+      delta = parts.length ? parts.join(" · ") : "无净增量";
+    }
+    rec('G16', '迭代棘轮（有基线 · 有净增量 · 无倒退 · 合规0）', r.status === 0,
+      '快照 ' + snaps + ' 次 · ' + delta);
+  }
   }
   }
   }
