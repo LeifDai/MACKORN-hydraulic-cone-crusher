@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "created_at": "2026-10-20T01:23:25.658Z",
+  "entries": [
+    {
+      "id": "C001",
+      "at": "2026-10-20T01:23:25.673Z",
+      "wrong": "我以为\"材料库接入\"未完成——因为搜不到 MATERIALS 字面量",
+      "now": "materialHints() 函数早已在 buildKnowledgeCheck 里接入，五项功能（给料体检/腔型/段数/衬板/错误拦截）全在。是我的判据错了：查功能存在性要看【函数调用】不是数据结构名",
+      "evidence": "真调 selectConeCrusher({ore:花岗岩}) 返回 material=花岗岩/compatibility 3 条/known_error_guard 6 条",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C002",
+      "at": "2026-10-20T01:23:26.297Z",
+      "wrong": "我以为工具数 19→22 只需改 GitHub README",
+      "now": "GitHub 有 3 处独立展示位：README / Description / Release notes。三者都可用 API 直接改（PATCH /repos 与 PATCH /releases/{id}）",
+      "evidence": "API 实测：PATCH description 后 GitHub Description 变 22；PATCH releases/{id} 后 Release notes 变 24",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C003",
+      "at": "2026-10-20T01:23:26.821Z",
+      "wrong": "我以为工作流写好就等于\"云端自迭代做实\"",
+      "now": "工作流从没真跑通：缺【传递依赖】——工作流跑 enforce_lessons.mjs，而它 import lessons.mjs，后者不在直接引用列表所以没推。修后云端成功步数 8→18",
+      "evidence": "云端日志 Cannot find module lessons.mjs；补推 tools/ 全部 211 模块后成功步数从 8 变 18",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C004",
+      "at": "2026-10-20T01:23:27.102Z",
+      "wrong": "我以为缺 git/gh/凭据就永远推不了 GitHub",
+      "now": "GitHub OAuth Device Flow 不需要任何预装工具：用户输 8 位代码即授权，程序直接拿 token",
+      "evidence": "tools/github_device_auth.mjs 实测：两轮授权后成功推送 54+38+211+58 个文件，GitHub 显示 24 工具",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C005",
+      "at": "2026-10-20T01:23:28.016Z",
+      "wrong": "我以为 render 返回字符串就可以",
+      "now": "mcp-server L71 要求 render 返回 [{type,text}] 数组。项目里有 text() 辅助函数必须用它包裹",
+      "evidence": "云端与本地 selftest 报 blocks.map is not a function；改成 return text(L.join()) 后 31 通过 / 0 失败",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C006",
+      "at": "2026-10-20T01:23:28.269Z",
+      "wrong": "我以为跑 sync_version.mjs 打印 ok 就是改了文件",
+      "now": "不加 --write 是预演模式，只打印不改。这是 L-55「命令没报错≠成功」的复发形态",
+      "evidence": "加 --write 后同步 6 个文件；此前 L-02 门禁一直报版本不一致",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C007",
+      "at": "2026-10-20T01:23:28.655Z",
+      "wrong": "我以为 npm publish 打印成功就立即可见",
+      "now": "npm 与 CDN 之间有延迟：发布后立刻查 404，约 1 分钟后 0.2.2 才上线。不能用第一次查询结果断言失败",
+      "evidence": "R97 实测：publish exit=0 → 立刻查 HTTP 404 → 60 秒后 0.2.2 正常出现在 registry",
+      "impact": "L2",
+      "why": null
+    }
+  ]
+}
