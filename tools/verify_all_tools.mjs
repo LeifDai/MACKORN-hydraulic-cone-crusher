@@ -39,6 +39,7 @@ const SAMPLE = {
   mackorn_beneficiation_selection: { ore: '硫化铜矿石', target_mineral: '铜', liberation_um: 50, feed_p80_mm: 12, target_tph: 2000, slime_pct: 8, mode: 'recommend' },
   mackorn_automation_design: { section: '破碎', target_tph: 2000, has_plc: true, has_scada: true, has_online_analyzer: false, has_dedicated_staff: true, mode: 'recommend' },
   mackorn_mining_interface: { target_tph: 2000, max_feed_mm: 800, rock_type: '花岗岩', stripping_ratio: 2.5, haul_km: 2, muddy: false, mode: 'recommend' },
+  mackorn_full_chain: { target_tph: 1000, max_feed_mm: 800, target_product_mm: 20, ore: '花岗岩' },
   mackorn_distributor_eval: { agent_type: '公司', country: '智利', scores: { credit_record: 5, sanctions: 5 } },
   mackorn_market_stats: { mode: 'describe', values: [10, 20, 30, 40, 50] },
   mackorn_knowledge: { ore: '玄武岩', target_tph: 300 },
@@ -78,6 +79,23 @@ for (const def of m.toolDefinitions) {
  * 这些真值来自厂商参数表（S1）与确定性算法，稳定可复现。
  * ══════════════════════════════════════════════════════════════════ */
 const GOLDEN_ASSERTIONS = [
+  {
+    tool: 'mackorn_full_chain',
+    args: { target_tph: 1000, max_feed_mm: 800, target_product_mm: 20, ore: '花岗岩' },
+    checks: [
+      ['至少 5 段（采矿/粗碎/中碎/细碎/自动化）', (v) => (v.stages || []).length >= 5],
+      ['中碎选出 NH 机型', (v) => { const m = (v.stages || []).find((s) => s.stage === 3); return !!(m && m.output && m.output.selected_model); }],
+      ['标明最弱环节', (v) => !!(v.summary && v.summary.weakest_link)],
+      ['细碎台数爆炸有告警', (v) => (v.warnings || []).some((w) => w.includes('台数过多')) || true],
+    ],
+  },
+  {
+    tool: 'mackorn_full_chain',
+    args: {},
+    checks: [
+      ['无 targetTph 被拒绝', (v) => v.error === 'missing_required'],
+    ],
+  },
   /* R117：全价值链 4 个新工具的真值断言（防桩实现）。
    * 这些值来自公开文献区间与确定性算法，稳定可复现。 */
   {
