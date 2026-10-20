@@ -24,7 +24,7 @@ export const VALUE_CHAIN = [
     scope: ['开采方式（露天/地下）', '爆破（孔网参数/炸药单耗/块度分布）', '剥离（剥采比/排土）', '短倒短驳（铲装/卡车/皮带）'],
     key_outputs: ['原矿块度分布 P80', '原矿含水率', '含土率', '年产能', '剥采比'],
     downstream_link: '原矿块度分布决定粗碎给料上限与破碎段数',
-    status: 'planned',
+    status: 'done',  /* R115：采矿知识库 + mackorn_mining_interface 已上线 */
   },
   {
     stage: 2, id: 'crushing', name: '破碎', name_en: 'Crushing',
