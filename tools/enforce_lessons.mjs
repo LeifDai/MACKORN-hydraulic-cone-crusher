@@ -249,6 +249,14 @@ if (!QUICK) {
     let lv = "?", lcert = "?";
     if (exists(lp)) { try { const j = JSON.parse(read(join(D, "03_验证与基准", "live-health.json"))); lv = j.verdict; const cf = (j.checks || []).find((x) => x.id === "cert"); lcert = cf ? String(cf.detail).slice(0, 60) : "?"; } catch { } }
     rec('G13', '线上健康检查（非阻塞·状态可见）', true, '判定 ' + lv + ' · 证书 ' + lcert);
+  /* R111：每天提升认知力 —— 用户明令。以"推翻自己的频率与深度"为判据（辩证规则 §6.4）。 */
+  {
+    const r = spawnSync(process.execPath, [join(HERE, 'cognition_log.mjs'), '--check'], { stdio: 'ignore', windowsHide: true, timeout: 120000 });
+    const cp = join(D, '03_验证与基准', 'cognition.json');
+    let cd = "?", cw = "?", ca = "?";
+    if (exists(cp)) { try { const j = JSON.parse(read(join(D, "03_验证与基准", "cognition.json"))); cd = j.metrics.daily_correction; cw = j.metrics.week_correction; ca = j.metrics.avg_depth; } catch { } }
+    rec('G14', '认知力达标（今日≥1 · 7天≥3 · 深度≥1.5）', r.status === 0, '今日 ' + cd + ' · 7天 ' + cw + ' · 平均深度 ' + ca);
+  }
   }
   }
   }
