@@ -244,6 +244,24 @@
       "evidence": "Glama 页面 HTTP 200 · 257684 字节 · \"19 tools\" · \"Responsiveness\" · \"cannot be deployed\" · 含 mackorn ✅",
       "impact": "L3",
       "why": null
+    },
+    {
+      "id": "C028",
+      "at": "2026-10-21T00:55:52.071Z",
+      "wrong": "我担心「工具描述不够自包含」是 AI 不调用我们的原因之一",
+      "now": "实测 29 个工具：触发词 29/29 有、边界说明 29/29 有、描述长度 436-1576 字全部 ≥200。描述层没有问题。真正卡住的只有自有域名 DNS+SSL 双故障，以及 Glama 的 19 工具旧缓存。这推翻了我自己提的第 3 层根因（价值密度不够）",
+      "evidence": "实测脚本统计 toolDefinitions：触发词缺失 0 · 边界缺失 0 · 过短 0 · 完整 29/29",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C029",
+      "at": "2026-10-21T00:55:53.152Z",
+      "wrong": "我以为「让 AI 收录我们」需要去 20 个平台逐个提交",
+      "now": "实测 18 个平台：已收录 6（含 Official MCP Registry / Glama / Smithery / skills.sh），真未收录只有 4（mcp.so/MCP-X/MCPList/Claude Directory），2 个被反爬挡住。所以「提交」不是主要矛盾——主要矛盾是自有域名打不开，导致已收录的平台也判定我们 Unresponsive",
+      "evidence": "tools/ai_coverage.mjs 实测：收录6/未收录4/被挡2/错误6（自有域名全挂）",
+      "impact": "L4",
+      "why": null
     }
   ],
   "generated": "2026-10-20T09:21:49.290Z",
