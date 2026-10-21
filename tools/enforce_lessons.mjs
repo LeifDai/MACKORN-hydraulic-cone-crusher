@@ -373,6 +373,24 @@ if (!QUICK) {
     rec('G20', 'AI 目录台账完整（平台状态+经验库）', ok20,
       total + ' 个平台 · 已收录 ' + listed + ' · 经验库 ' + (hasExp ? '有' : '缺') + (noStatus.length ? ' · 缺状态: ' + noStatus.slice(0,3).join(',') : ''));
   }
+  /* G21：证书剩余天数预警（2026-10-14 过期拖了 7 天才发现，加此门禁）
+   * 读 cert-monitor.json，<0 已过期 / <=7 立即续 / <=14 本周续 / <=30 计划续
+   * 非阻塞（本地改不了证书），但必须在门禁输出里明确可见。 */
+  {
+    let days = null; let level21 = null; let issuer21 = null;
+    try {
+      const cm = JSON.parse(read(join(D, '03_验证与基准', 'cert-monitor.json')));
+      if (cm.cert && cm.cert.main) { days = cm.cert.main.days_left; issuer21 = cm.cert.main.issuer; }
+      level21 = cm.cert ? cm.cert.level : null;
+    } catch { }
+    const txt = days === null ? '⚠ 尚无 cert-monitor.json（先跑 node tools/cert_monitor.mjs）'
+      : (days < 0 ? ('🔴 已过期 ' + Math.abs(days) + ' 天（' + (issuer21 || '?') + '）→ 立即续期')
+        : days <= 7 ? ('🔴 仅剩 ' + days + ' 天 → 立即续期')
+        : days <= 14 ? ('🟠 剩 ' + days + ' 天 → 本周内续期')
+        : days <= 30 ? ('🟡 剩 ' + days + ' 天 → 计划续期')
+        : ('🟢 剩 ' + days + ' 天'));
+    rec('G21', 'SSL 证书有效期（非阻塞但必须可见）', true, txt);
+  }
   }
   }
   }
