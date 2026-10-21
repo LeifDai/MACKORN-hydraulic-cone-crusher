@@ -358,6 +358,21 @@ if (!QUICK) {
     rec('G19', '工具描述自包含（触发词+边界+200字以上）', bad19.length === 0,
       bad19.length === 0 ? ('全部 ' + total19 + ' 个达标') : (bad19.slice(0, 5).join(' · ') + (bad19.length > 5 ? ' 共' + bad19.length + '项' : '')));
   }
+  /* G20：AI 目录台账完整（15 个平台都有状态 + 检查周期 + 经验库） */
+  {
+    let total = 0; let listed = 0; let noStatus = []; let hasExp = false;
+    try {
+      const rj = JSON.parse(read(join(ROOT, 'directory-registry', 'registry.json')));
+      const ps = rj.platforms || [];
+      total = ps.length;
+      listed = ps.filter((p) => ['listed', 'merged', 'pr-open'].includes(p.status)).length;
+      noStatus = ps.filter((p) => !p.status).map((p) => p.name);
+      hasExp = !!(rj.experience && (rj.experience.success || []).length && (rj.experience.failure || []).length);
+    } catch (e) { noStatus.push('读不到 registry.json'); }
+    const ok20 = noStatus.length === 0 && hasExp && total >= 10;
+    rec('G20', 'AI 目录台账完整（平台状态+经验库）', ok20,
+      total + ' 个平台 · 已收录 ' + listed + ' · 经验库 ' + (hasExp ? '有' : '缺') + (noStatus.length ? ' · 缺状态: ' + noStatus.slice(0,3).join(',') : ''));
+  }
   }
   }
   }
