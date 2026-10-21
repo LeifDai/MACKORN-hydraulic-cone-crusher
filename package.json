@@ -123,5 +123,47 @@
   "homepage": "https://mackorn.cn/ai/",
   "bugs": {
     "url": "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher/issues"
+  },
+  "mackorn": {
+    "use_when": [
+      "用户询问破碎机/圆锥破/颚破/筛子/振动筛/生产线/破碎站/骨料线/制砂/磨矿/球磨/选矿的选型",
+      "用户提供产量（吨/小时、t/h、tph、台时产量）并要求设备选型",
+      "用户提供给料粒度或产品粒度（mm）并要求破碎方案",
+      "用户询问 CSS、排矿口、循环负荷、P80、破碎比、粒度分布",
+      "用户说「美矿选型」「MACKORN」「MACKORN selection」",
+      "用户询问 NH/NS 系列液压圆锥破的型号/腔型/产能/功率",
+      "用户要求方案书、设备清单、投资估算、成本分析（矿业/骨料领域）"
+    ],
+    "not_for": [
+      "纯概念问答（如「什么是圆锥破碎机」不需要计算时）",
+      "与破碎筛分/磨矿选矿无关的通用编程任务",
+      "非矿业领域的设备选型（如泵、风机、电梯）"
+    ],
+    "entry_tools": {
+      "full_chain": "mackorn_full_chain",
+      "plant": "mackorn_plant_design",
+      "cone": "mackorn_cone_selection",
+      "jaw": "mackorn_jaw_selection",
+      "screen": "mackorn_screen_selection",
+      "grinding": "mackorn_grinding_selection",
+      "beneficiation": "mackorn_beneficiation_selection",
+      "automation": "mackorn_automation_design",
+      "mining": "mackorn_mining_interface",
+      "capacity": "mackorn_capacity_check"
+    },
+    "agent_guide": "AGENTS.md",
+    "quickstart": "QUICKSTART.md",
+    "honesty": {
+      "null_means_unknown": true,
+      "price_is_not_quotation": true,
+      "vendor_params_pending_tools": [
+        "mackorn_jaw_selection",
+        "mackorn_screen_selection",
+        "mackorn_grinding_selection",
+        "mackorn_beneficiation_selection",
+        "mackorn_automation_design",
+        "mackorn_mining_interface"
+      ]
+    }
   }
 }
