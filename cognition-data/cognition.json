@@ -217,6 +217,33 @@
       "evidence": "distribution/⻫关机前-开机后第一眼.md 已重写为 R125 版，含 8 章：紧急事项/现状/本轮工作/认知/待办/命令/未完成/诚实清单/收尾一行",
       "impact": "L3",
       "why": null
+    },
+    {
+      "id": "C025",
+      "at": "2026-10-21T00:53:58.740Z",
+      "wrong": "我一直判断 mackorn.cn 打不开是因为 SSL 证书过期（从 10-19 说到 10-21，连续三天）",
+      "now": "实际是【两个问题叠加】，而且 DNS 问题在前面：① 裸域 mackorn.cn 的 A 记录丢失 → Node dns.lookup 返回 ENOTFOUND ② www.mackorn.cn 解析正常但证书过期 → CERT_HAS_EXPIRED。Glama 探测 https://mackorn.cn/ai/api/mcp.php 用的是裸域，所以在 DNS 阶段就失败，根本轮不到检查证书。只修证书不修 DNS 等于没修",
+      "evidence": "Resolve-DnsName 实测：mackorn.cn 无 A 记录（ENOTFOUND）；www.mackorn.cn → 47.110.80.123。Node fetch 实测：裸域 cause=ENOTFOUND；www 域名 cause=CERT_HAS_EXPIRED。两个不同错误码证明是两个独立问题",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C026",
+      "at": "2026-10-21T00:53:59.555Z",
+      "wrong": "我以为「AI 没收录我们」是主要问题，需要去 20 个平台逐个提交",
+      "now": "实际探测 18 个平台后发现：✅ 已收录 6 个（Official MCP Registry / npm / Glama / Smithery / skills.sh / unpkg server.json）—— 包括我以为没收录的 Glama 和 Smithery。真正的问题是：① Glama 页面显示 \"19 tools\" 旧缓存 ② cannot be deployed（DNS+证书）③ 4 个平台真未收录（mcp.so/MCP-X/MCPList/Claude Directory）",
+      "evidence": "tools/ai_coverage.mjs 实测 18 平台：收录 6 · 未收录 4 · 被挡 2 · 错误 6（自有域名全挂）",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C027",
+      "at": "2026-10-21T00:54:00.220Z",
+      "wrong": "我以为 Glama 的 PR #15410 卡在「没收录」",
+      "now": "实际 Glama 页面早已存在（HTTP 200 · 257KB · 含 mackorn），PR 卡的是三件事：① 工具数显示 19（旧缓存，需重新抓取）② Responsiveness 评估失败（探测裸域 DNS 失败）③ cannot be deployed。所以修好 DNS+证书后，Glama 需要【重新触发评估】而不是\"重新提交收录\"",
+      "evidence": "Glama 页面 HTTP 200 · 257684 字节 · \"19 tools\" · \"Responsiveness\" · \"cannot be deployed\" · 含 mackorn ✅",
+      "impact": "L3",
+      "why": null
     }
   ],
   "generated": "2026-10-20T09:21:49.290Z",
