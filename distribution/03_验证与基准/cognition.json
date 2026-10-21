@@ -1,19 +1,19 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-21T00:38:22.274Z",
+  "generated": "2026-10-21T07:31:42.792Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 24,
-    "today": 24,
-    "last7": 24,
-    "last30": 24
+    "total": 29,
+    "today": 10,
+    "last7": 29,
+    "last30": 29
   },
   "metrics": {
-    "daily_correction": 24,
-    "week_correction": 24,
-    "depth_score_7d": 50,
-    "avg_depth": 2.08,
-    "streak_days": 0
+    "daily_correction": 10,
+    "week_correction": 29,
+    "depth_score_7d": 63,
+    "avg_depth": 2.17,
+    "streak_days": 2
   },
   "thresholds": {
     "daily_min": 1,
@@ -22,47 +22,47 @@
   },
   "recent": [
     {
-      "id": "C024",
-      "at": "2026-10-20T21:40:16.908Z",
-      "wrong": "我以为交付完成后就等着下次开工，不需要专门写交接",
-      "now": "实际至少要有：① 两件必须用户处理的事（SSL 证书 + CSS 逻辑待确认）② 本轮三个重要认知 ③ 未完成清单 ④ 命令速查 ⑤ 本轮收尾一行。缺一项，下次开机就要重新摸索半小时",
-      "evidence": "distribution/⻫关机前-开机后第一眼.md 已重写为 R125 版，含 8 章：紧急事项/现状/本轮工作/认知/待办/命令/未完成/诚实清单/收尾一行",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C023",
-      "at": "2026-10-20T15:52:11.822Z",
-      "wrong": "我以为只要把颚破和筛分工具注册上，插件就能回答「颚破+圆锥+筛子」",
-      "now": "工具注册只是第一步。真正能回答需要 ① 三段之间参数能传递（颚破产品 P80 → 圆锥给料 → 圆锥产品 → 筛孔）② 有一个回归测试证明三段串起来能出完整答案 ③ 价格能汇总。缺任一项，用户看到的仍是碎片",
-      "evidence": "tests/regression_user_platinum.mjs 实测 26 通过 0 失败：颚破CJ1113·1台·160kW + 圆锥NH700/M·CSS10mm·2台 + 筛分圆振14.9m²·1台 + 价格汇总",
+      "id": "C029",
+      "at": "2026-10-21T00:55:53.152Z",
+      "wrong": "我以为「让 AI 收录我们」需要去 20 个平台逐个提交",
+      "now": "实测 18 个平台：已收录 6（含 Official MCP Registry / Glama / Smithery / skills.sh），真未收录只有 4（mcp.so/MCP-X/MCPList/Claude Directory），2 个被反爬挡住。所以「提交」不是主要矛盾——主要矛盾是自有域名打不开，导致已收录的平台也判定我们 Unresponsive",
+      "evidence": "tools/ai_coverage.mjs 实测：收录6/未收录4/被挡2/错误6（自有域名全挂）",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C022",
-      "at": "2026-10-20T15:51:59.913Z",
-      "wrong": "我以为筛分面积用 A=Q/q 一算就准",
-      "now": "实际差了 1.3-2.5 倍。手册典型 q=30 t/(m²·h) 在\"给料中含大量细粒\"时成立；实际给料越粗（要筛出来的越多），K1 越小，面积越大。本引擎拿不到给料粒度分布，算出 14.9 m² 而工程案例多为 25-40 m²。必须强制告警\"这是下限估计\"",
-      "evidence": "screen-engine 380t/h筛19mm 算 14.9m²，加告警后输出「实际工程通常放大1.3-2.5倍，同类案例25-40m²」",
+      "id": "C028",
+      "at": "2026-10-21T00:55:52.071Z",
+      "wrong": "我担心「工具描述不够自包含」是 AI 不调用我们的原因之一",
+      "now": "实测 29 个工具：触发词 29/29 有、边界说明 29/29 有、描述长度 436-1576 字全部 ≥200。描述层没有问题。真正卡住的只有自有域名 DNS+SSL 双故障，以及 Glama 的 19 工具旧缓存。这推翻了我自己提的第 3 层根因（价值密度不够）",
+      "evidence": "实测脚本统计 toolDefinitions：触发词缺失 0 · 边界缺失 0 · 过短 0 · 完整 29/29",
       "impact": "L3",
       "why": null
     },
     {
-      "id": "C021",
-      "at": "2026-10-20T15:51:55.947Z",
-      "wrong": "我以为颚破选型只需按\"目标产能\"直接匹配型号表就行",
-      "now": "实际必须三重校核：① 进料口 ≥ 最大给料/0.85（否则卡料）② 工况打折（硬岩/大块/含水/含泥，最狠叠加后只剩 0.55-0.72）③ 用打折后的\"名义产能\"去匹配型号。实测：380 t/h 硬岩需求，算出来要 526 t/h 名义产能，直接从 PE900×1200 跳到 CJ1113",
-      "evidence": "jaw-engine 实测 required_feed_opening_mm=589 · condition_factor=0.72 · required_nominal_tph=526 · 推荐 CJ1113",
+      "id": "C027",
+      "at": "2026-10-21T00:54:00.220Z",
+      "wrong": "我以为 Glama 的 PR #15410 卡在「没收录」",
+      "now": "实际 Glama 页面早已存在（HTTP 200 · 257KB · 含 mackorn），PR 卡的是三件事：① 工具数显示 19（旧缓存，需重新抓取）② Responsiveness 评估失败（探测裸域 DNS 失败）③ cannot be deployed。所以修好 DNS+证书后，Glama 需要【重新触发评估】而不是\"重新提交收录\"",
+      "evidence": "Glama 页面 HTTP 200 · 257684 字节 · \"19 tools\" · \"Responsiveness\" · \"cannot be deployed\" · 含 mackorn ✅",
       "impact": "L3",
       "why": null
     },
     {
-      "id": "C020",
-      "at": "2026-10-20T12:35:29.833Z",
-      "wrong": "我以为补上采矿/磨矿/选矿/自动化四段 + 整线贯通，就把全价值链覆盖完整了",
-      "now": "全链条缺了破碎流程本身最核心的两个环节：颚破（粗碎）与振动筛（筛分）。用户在问「颚破+圆锥+筛子」时插件只能答圆锥那三分之一，导致模型判定\"用了反而更麻烦\"而绕开插件。这是调用失败的致命根因，不是提示词问题",
-      "evidence": "plugin/lib/fullchain-engine.mjs 里我自己写着「★ 粗碎段是唯一没有独立选型引擎的环节」；plugin/index.mjs 27 个工具里没有 jaw / screen 任何选型工具",
+      "id": "C026",
+      "at": "2026-10-21T00:53:59.555Z",
+      "wrong": "我以为「AI 没收录我们」是主要问题，需要去 20 个平台逐个提交",
+      "now": "实际探测 18 个平台后发现：✅ 已收录 6 个（Official MCP Registry / npm / Glama / Smithery / skills.sh / unpkg server.json）—— 包括我以为没收录的 Glama 和 Smithery。真正的问题是：① Glama 页面显示 \"19 tools\" 旧缓存 ② cannot be deployed（DNS+证书）③ 4 个平台真未收录（mcp.so/MCP-X/MCPList/Claude Directory）",
+      "evidence": "tools/ai_coverage.mjs 实测 18 平台：收录 6 · 未收录 4 · 被挡 2 · 错误 6（自有域名全挂）",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C025",
+      "at": "2026-10-21T00:53:58.740Z",
+      "wrong": "我一直判断 mackorn.cn 打不开是因为 SSL 证书过期（从 10-19 说到 10-21，连续三天）",
+      "now": "实际是【两个问题叠加】，而且 DNS 问题在前面：① 裸域 mackorn.cn 的 A 记录丢失 → Node dns.lookup 返回 ENOTFOUND ② www.mackorn.cn 解析正常但证书过期 → CERT_HAS_EXPIRED。Glama 探测 https://mackorn.cn/ai/api/mcp.php 用的是裸域，所以在 DNS 阶段就失败，根本轮不到检查证书。只修证书不修 DNS 等于没修",
+      "evidence": "Resolve-DnsName 实测：mackorn.cn 无 A 记录（ENOTFOUND）；www.mackorn.cn → 47.110.80.123。Node fetch 实测：裸域 cause=ENOTFOUND；www 域名 cause=CERT_HAS_EXPIRED。两个不同错误码证明是两个独立问题",
       "impact": "L4",
       "why": null
     }

@@ -1,43 +1,49 @@
 {
-  "generated": "2026-10-19T06:17:19.468Z",
-  "pages": 97,
-  "total_mb": 1.55,
+  "generated": "2026-10-21T07:26:28.480Z",
+  "pages": 1,
+  "total_mb": 0,
   "issues": {
-    "title": [],
-    "desc": [],
-    "canonical": [],
-    "hreflang": [],
-    "lang": [],
-    "jsonld": [],
+    "title": [
+      "ai/privacy.html"
+    ],
+    "desc": [
+      "ai/privacy.html"
+    ],
+    "canonical": [
+      "ai/privacy.html"
+    ],
+    "hreflang": [
+      "ai/privacy.html"
+    ],
+    "lang": [
+      "ai/privacy.html"
+    ],
+    "jsonld": [
+      "ai/privacy.html"
+    ],
     "big": [],
     "deadlink": []
   },
   "ai_index": {
     "llms.txt": {
       "exists": true,
-      "kb": 14,
-      "refs": 98
+      "kb": 4,
+      "refs": 3
     },
     "llms-full.txt": {
       "exists": true,
-      "kb": 26,
-      "refs": 96
+      "kb": 0,
+      "refs": 0
     },
     ".well-known/keywords.json": {
-      "exists": true,
-      "kb": 24,
-      "refs": 97
+      "exists": false
     },
     ".well-known/agent.json": {
-      "exists": true,
-      "kb": 9,
-      "refs": 60
+      "exists": false
     },
     "sitemap.xml": {
-      "exists": true,
-      "kb": 24,
-      "refs": 0
+      "exists": false
     }
   },
-  "jsonld_pages": 97
+  "jsonld_pages": 0
 }

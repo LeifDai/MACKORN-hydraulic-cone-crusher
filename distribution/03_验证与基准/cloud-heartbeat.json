@@ -1,7 +1,7 @@
 {
   "schema": "mackorn-cloud-heartbeat/1",
   "first_at": "2026-10-15T18:54:19.695Z",
-  "total_beats": 9,
+  "total_beats": 10,
   "beats": [
     {
       "at": "2026-10-15T18:54:19.695Z",
@@ -101,7 +101,18 @@
       "version": "0.2.2",
       "pdca_rounds": 93,
       "last_check": "R93"
+    },
+    {
+      "at": "2026-10-21T07:20:27.752Z",
+      "run": "251",
+      "event": "schedule",
+      "tools": 29,
+      "lessons": 91,
+      "gates": 57,
+      "version": "0.2.2",
+      "pdca_rounds": 93,
+      "last_check": "R93"
     }
   ],
-  "last_at": "2026-10-21T00:28:02.635Z"
+  "last_at": "2026-10-21T07:20:27.752Z"
 }

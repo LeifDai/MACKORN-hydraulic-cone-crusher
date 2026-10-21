@@ -1,17 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-21T00:38:17.152Z",
+  "generated": "2026-10-21T07:31:38.932Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
-  "alive": 69,
-  "dead": 22,
+  "alive": 70,
+  "dead": 21,
   "broken": 0,
-  "recurrence": 0.24175824175824176,
+  "recurrence": 0.23076923076923078,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
   "neg_coverage": 0.5824175824175825,
   "by_status": {
-    "failed": 22,
-    "alive": 69
+    "failed": 21,
+    "alive": 70
   },
   "register": [
     {
@@ -80,7 +80,7 @@
       "negctl": [],
       "origin": "R1：keyword_gate 测\"词与品牌同页\"是自证式弱检测，275 词 100% 通过但内容未必有用",
       "status": "failed",
-      "detail": "结果文件缺少 pages_with_questions/html_pages 字段（审计器可能被改坏）"
+      "detail": "⚠ 有问题页面占比 0.0% < 60%；可引用段占比 0.0% < 50%；审计报出 4 项 issue"
     },
     {
       "id": "L-07",
@@ -295,7 +295,7 @@
       "negctl": [],
       "origin": "R19：建了 47 个新页面（工具页/语言FAQ/国别页），但 llms.txt / keywords.json / agent.json 还是旧的",
       "status": "failed",
-      "detail": "**真跑**索引同步：站点 0 个 HTML 页 · llms.txt 引用 5 个路径（0%）"
+      "detail": "**真跑**索引同步：站点 1 个 HTML 页 · llms.txt 引用 5 个路径（500%）"
     },
     {
       "id": "L-27",
@@ -344,8 +344,7 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R29：核验目标交付时发现 llms.txt 不含 /ai/validation/ —— 原因是 sync_ai_index.mjs 用模式匹配把页面分成 tools/faq/markets/guides/langs/core/other 七组，但【other 组从不输出到 llms.txt】。任何不匹配模式的新页面都",
-      "status": "failed",
-      "detail": "**真跑**索引生成：站点 0 页 · llms.txt 引用 5 个路径 · 兜底分组 ✅"
+      "status": "alive"
     },
     {
       "id": "L-32",
@@ -359,7 +358,7 @@
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
       "status": "failed",
-      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：218 脚本 / 缺守卫 186 / **被"
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：221 脚本 / 缺守卫 189 / **被"
     },
     {
       "id": "L-33",

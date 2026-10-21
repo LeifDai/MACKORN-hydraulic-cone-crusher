@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-21T00:38:17.581Z",
+  "generated": "2026-10-21T07:31:39.277Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,24 +12,24 @@
     "error": null
   },
   "last_commit": {
-    "sha": "e506443",
-    "date": "2026-10-20T21:40:43Z",
-    "message": "docs: handoff R125"
+    "sha": "7ce6ab3",
+    "date": "2026-10-21T01:05:03Z",
+    "message": "feat(discoverability): rejection diagnoser + smithery.yaml + privacy policy + 29-tool sync"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 2.4,
+    "days_since": 2.68,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.12,
-  "days_since_publish": 0.12,
+  "effective_days": 0.27,
+  "days_since_publish": 0.27,
   "changed_since_publish": {
-    "count": 289,
+    "count": 292,
     "files": [
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/index.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/automation-engine.mjs",
@@ -77,7 +77,9 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/_verify_unified.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/add_hreflang.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/ai_appeal.mjs",
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/ai_coverage.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/ai_index_reality_check.mjs",
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/ai_rejection_diagnoser.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/align_version_020.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/analyze_customs_deep.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/append_full_termset.mjs",
@@ -88,13 +90,11 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_qa_coverage.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_run_guards.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_site.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_term_language_gap.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_tool_descriptions_v2.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/build_agent_entrypoints.mjs"
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_term_language_gap.mjs"
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.1 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.3 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
