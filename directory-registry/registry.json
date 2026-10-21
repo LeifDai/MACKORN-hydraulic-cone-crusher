@@ -1,0 +1,604 @@
+{
+  "schema": "mackorn-directory-registry/1",
+  "updated": "2026-10-21",
+  "purpose": "AI 目录收录台账 —— 记录每个平台的收录条件、当前状态、历史、经验与失败教训。定期（每3天）检查并更新。",
+  "our_identity": {
+    "name": "MACKORN Hydraulic Cone Crusher Selection",
+    "name_cn": "MACKORN 美矿液压圆锥破碎机及生产线选型",
+    "repo": "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher",
+    "npm": "https://www.npmjs.com/package/mackorn-cone-crusher",
+    "mcp_name": "cn.mackorn/mackorn-cone-crusher",
+    "site": "https://mackorn.cn/ai/",
+    "license": "MIT",
+    "tools": 29,
+    "languages": 12,
+    "contact": "leif.dai@mackorn.cn"
+  },
+  "platforms": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "type": "repo-host",
+      "url": "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "probe": "https://api.github.com/repos/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "status": "listed",
+      "status_since": "2026-10-17",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "repo-public",
+          "desc": "仓库公开",
+          "satisfied": true
+        },
+        {
+          "id": "readme",
+          "desc": "有 README.md",
+          "satisfied": true
+        },
+        {
+          "id": "license",
+          "desc": "有 LICENSE（MIT）",
+          "satisfied": true
+        },
+        {
+          "id": "description",
+          "desc": "有 description",
+          "satisfied": true
+        },
+        {
+          "id": "topics",
+          "desc": "有 topics（mcp-server 等）",
+          "satisfied": true,
+          "note": "2026-10-21 设为 20 个"
+        },
+        {
+          "id": "agents-md",
+          "desc": "根目录有 AGENTS.md（AI 代理读）",
+          "satisfied": true,
+          "note": "2026-10-21 新建"
+        }
+      ],
+      "submit_method": "git push / GitHub API",
+      "update_method": "node tools/finish_all.mjs --write（需 GITHUB_TOKEN）",
+      "check_method": "node tools/directory_checker.mjs --only github",
+      "notes": "主仓库。AI 读仓库时会读 README + AGENTS.md + llms.txt",
+      "priority": 1
+    },
+    {
+      "id": "npm",
+      "name": "npm registry",
+      "type": "package-registry",
+      "url": "https://www.npmjs.com/package/mackorn-cone-crusher",
+      "probe": "https://registry.npmjs.org/mackorn-cone-crusher",
+      "status": "listed",
+      "status_since": "2026-10-19",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "published",
+          "desc": "包已发布",
+          "satisfied": true,
+          "note": "v0.2.2"
+        },
+        {
+          "id": "bin",
+          "desc": "有 bin 入口（npx 可跑）",
+          "satisfied": true
+        },
+        {
+          "id": "description",
+          "desc": "有 description",
+          "satisfied": true
+        },
+        {
+          "id": "license",
+          "desc": "有 license 字段",
+          "satisfied": true
+        },
+        {
+          "id": "keywords",
+          "desc": "有 keywords",
+          "satisfied": true
+        },
+        {
+          "id": "use-when-meta",
+          "desc": "有 use_when 元数据（为索引插件铺垫）",
+          "satisfied": true,
+          "note": "2026-10-21 新增"
+        }
+      ],
+      "submit_method": "npm publish",
+      "update_method": "npm version patch && npm publish",
+      "check_method": "node tools/directory_checker.mjs --only npm",
+      "notes": "★ 注意：npm 不是英伟达的。用户曾误以为 NPM 是 NVIDIA 的",
+      "priority": 1
+    },
+    {
+      "id": "mcp-registry",
+      "name": "Official MCP Registry",
+      "type": "official-registry",
+      "url": "https://registry.modelcontextprotocol.io/",
+      "probe": "https://registry.modelcontextprotocol.io/v0/servers?search=mackorn",
+      "status": "listed",
+      "status_since": "2026-10-19",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "server-json",
+          "desc": "有 server.json",
+          "satisfied": true
+        },
+        {
+          "id": "reverse-dns-name",
+          "desc": "name 是反向域名格式",
+          "satisfied": true,
+          "note": "cn.mackorn/mackorn-cone-crusher"
+        },
+        {
+          "id": "packages",
+          "desc": "声明 packages",
+          "satisfied": true
+        },
+        {
+          "id": "version-match",
+          "desc": "version 与 npm 一致",
+          "satisfied": true
+        },
+        {
+          "id": "description",
+          "desc": "有 description",
+          "satisfied": true
+        }
+      ],
+      "submit_method": "mcp-publisher CLI 或 API",
+      "update_method": "更新 server.json 版本后重新发布",
+      "check_method": "node tools/directory_checker.mjs --only mcp-registry",
+      "notes": "官方注册表，权重最高。5/5 条件全部满足",
+      "priority": 1
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "type": "directory",
+      "url": "https://smithery.ai/server/@LeifDai/mackorn-cone-crusher",
+      "probe": "https://smithery.ai/server/@LeifDai/mackorn-cone-crusher",
+      "status": "listed",
+      "status_since": "2026-10-19",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "stdio-startable",
+          "desc": "npx 能启动 stdio",
+          "satisfied": true
+        },
+        {
+          "id": "description",
+          "desc": "package.json 有 description",
+          "satisfied": true
+        },
+        {
+          "id": "smithery-yaml",
+          "desc": "有 smithery.yaml 声明配置",
+          "satisfied": true,
+          "note": "2026-10-21 新建"
+        }
+      ],
+      "submit_method": "自动抓取 npm + GitHub",
+      "update_method": "更新 npm 版本后自动同步",
+      "check_method": "node tools/directory_checker.mjs --only smithery",
+      "notes": "最大的 MCP 目录之一。3/3 条件全部满足",
+      "priority": 2
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "type": "skill-directory",
+      "url": "https://skills.sh/s/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "probe": "https://skills.sh/s/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "status": "listed",
+      "status_since": "2026-10-19",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "skill-frontmatter",
+          "desc": "SKILL.md 有 frontmatter（name+description）",
+          "satisfied": true,
+          "note": "6 个技能全部达标"
+        },
+        {
+          "id": "npx-skills-add",
+          "desc": "npx skills add 可收录",
+          "satisfied": true
+        }
+      ],
+      "submit_method": "npx skills add LeifDai/MACKORN-hydraulic-cone-crusher",
+      "update_method": "更新 skills/ 目录后自动同步",
+      "check_method": "node tools/directory_checker.mjs --only skills-sh",
+      "notes": "73 个 AI 编程助手通过这个装。2/2 条件满足",
+      "priority": 2
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "type": "directory",
+      "url": "https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "probe": "https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "status": "listed",
+      "status_since": "2026-10-18",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "page-exists",
+          "desc": "页面存在（HTTP 200）",
+          "satisfied": true,
+          "note": "257KB，含 mackorn"
+        },
+        {
+          "id": "mcp-endpoint-reachable",
+          "desc": "MCP 端点可被探测",
+          "satisfied": false,
+          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+        },
+        {
+          "id": "tools-enumerable",
+          "desc": "tools/list 可枚举",
+          "satisfied": false,
+          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+        },
+        {
+          "id": "tools-count-fresh",
+          "desc": "工具数缓存是最新（29）",
+          "satisfied": false,
+          "note": "页面显示 19（旧缓存）"
+        }
+      ],
+      "submit_method": "PR #15410（已开）+ Glama 自动抓取",
+      "update_method": "修 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+      "check_method": "node tools/directory_checker.mjs --only glama",
+      "blockers": [
+        "DNS：裸域 mackorn.cn 无 A 记录",
+        "SSL：证书 2026-10-14 已过期"
+      ],
+      "notes": "★ 关键：PR #15410 卡在 Responsiveness 评估。修 DNS+SSL 后需重新触发评估",
+      "priority": 2
+    },
+    {
+      "id": "claude-directory",
+      "name": "Claude Connectors Directory",
+      "type": "official-directory",
+      "url": "https://claude.com/docs/connectors/building/submission",
+      "probe": "https://claude.com/connectors",
+      "status": "not-listed",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "remote-endpoint",
+          "desc": "生产级远程 MCP 端点（HTTPS 有效）",
+          "satisfied": false,
+          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+        },
+        {
+          "id": "privacy-policy",
+          "desc": "隐私政策页面",
+          "satisfied": true,
+          "note": "2026-10-21 建 distribution/官网落地页/ai/privacy.html"
+        },
+        {
+          "id": "support-contact",
+          "desc": "支持联系方式",
+          "satisfied": true
+        },
+        {
+          "id": "anthropic-review",
+          "desc": "通过 Anthropic 审核",
+          "satisfied": null,
+          "note": "需先提交"
+        }
+      ],
+      "submit_method": "https://claude.com/docs/connectors/building/submission 表单",
+      "update_method": "提交后等审核",
+      "check_method": "node tools/directory_checker.mjs --only claude-directory",
+      "blockers": [
+        "DNS：裸域 mackorn.cn 无 A 记录"
+      ],
+      "notes": "门槛最高，需 Anthropic 人工审核。前置条件：生产级端点 + 隐私政策",
+      "priority": 3
+    },
+    {
+      "id": "mcp-so",
+      "name": "mcp.so",
+      "type": "directory",
+      "url": "https://mcp.so/",
+      "probe": "https://mcp.so/server/mackorn-cone-crusher",
+      "status": "not-listed",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "manual-submit",
+          "desc": "需手工提交（无纯自动收录）",
+          "satisfied": false
+        },
+        {
+          "id": "github-topic",
+          "desc": "GitHub 有 mcp-server topic",
+          "satisfied": true,
+          "note": "2026-10-21 已设"
+        }
+      ],
+      "submit_method": "https://mcp.so/ 提交表单 或 GitHub issue",
+      "update_method": "提交后等待收录",
+      "check_method": "node tools/directory_checker.mjs --only mcp-so",
+      "notes": "中文友好的 MCP 目录。材料见 distribution/📤AI目录提交材料包.md",
+      "priority": 3
+    },
+    {
+      "id": "mcpx",
+      "name": "MCP-X",
+      "type": "directory",
+      "url": "https://mcp-x.com/",
+      "probe": "https://mcp-x.com/server/mackorn-cone-crusher",
+      "status": "not-listed",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "manual-submit",
+          "desc": "需手工提交",
+          "satisfied": false
+        }
+      ],
+      "submit_method": "https://mcp-x.com/ 提交",
+      "update_method": "提交后等待",
+      "check_method": "node tools/directory_checker.mjs --only mcpx",
+      "priority": 4
+    },
+    {
+      "id": "mcplist",
+      "name": "MCPList",
+      "type": "directory",
+      "url": "https://mcplist.org/",
+      "probe": "https://mcplist.org/server/mackorn-cone-crusher",
+      "status": "not-listed",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "manual-submit",
+          "desc": "需手工提交",
+          "satisfied": false
+        }
+      ],
+      "submit_method": "https://mcplist.org/ 提交",
+      "update_method": "提交后等待",
+      "check_method": "node tools/directory_checker.mjs --only mcplist",
+      "priority": 4
+    },
+    {
+      "id": "awesome-mcp",
+      "name": "punkpeye/awesome-mcp-servers",
+      "type": "awesome-list",
+      "url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "probe": "https://api.github.com/repos/punkpeye/awesome-mcp-servers/pulls/15410",
+      "status": "pr-open",
+      "status_since": "2026-10-18",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "pr-opened",
+          "desc": "PR 已开",
+          "satisfied": true,
+          "note": "#15410"
+        },
+        {
+          "id": "glama-evaluated",
+          "desc": "Glama 评分已出",
+          "satisfied": false,
+          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+        },
+        {
+          "id": "pr-merged",
+          "desc": "PR 已合并",
+          "satisfied": false
+        }
+      ],
+      "submit_method": "GitHub PR",
+      "update_method": "修 DNS+SSL → Glama 评分 → PR 补评论催促合并",
+      "check_method": "node tools/directory_checker.mjs --only awesome-mcp",
+      "blockers": [
+        "DNS：裸域 mackorn.cn 无 A 记录"
+      ],
+      "notes": "96,380★ 最大的 awesome 列表。PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
+      "priority": 2
+    },
+    {
+      "id": "awesome-dsh",
+      "name": "awesome-dsh-plugin",
+      "type": "awesome-list",
+      "url": "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin",
+      "probe": "https://api.github.com/repos/awesome-dsh-plugin/awesome-dsh-plugin/pulls/6141",
+      "status": "merged",
+      "status_since": "2026-10-17",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "pr-merged",
+          "desc": "PR 已合并",
+          "satisfied": true,
+          "note": "#6141 MERGED 2026-10-17"
+        }
+      ],
+      "submit_method": "GitHub PR",
+      "update_method": "已合并，如需更新内容再提 PR",
+      "check_method": "node tools/directory_checker.mjs --only awesome-dsh",
+      "notes": "✅ 已完成。18,873★",
+      "priority": 1
+    },
+    {
+      "id": "pulsemcp",
+      "name": "PulseMCP",
+      "type": "directory",
+      "url": "https://www.pulsemcp.com/",
+      "probe": "https://www.pulsemcp.com/servers?q=mackorn",
+      "status": "blocked",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "github-topic",
+          "desc": "GitHub 有 mcp-server topic（自动抓取）",
+          "satisfied": true,
+          "note": "已设"
+        },
+        {
+          "id": "crawl-indexed",
+          "desc": "被其爬虫抓取到",
+          "satisfied": null,
+          "note": "403 反爬，无法自动验证"
+        }
+      ],
+      "submit_method": "自动抓 GitHub topic",
+      "update_method": "等它抓取（通常 1-2 周）",
+      "check_method": "node tools/directory_checker.mjs --only pulsemcp",
+      "notes": "403 反爬。已设 mcp-server topic，等它自己抓",
+      "priority": 5
+    },
+    {
+      "id": "mcpservers-org",
+      "name": "MCPServers.org",
+      "type": "directory",
+      "url": "https://mcpservers.org/",
+      "probe": "https://mcpservers.org/servers/LeifDai/mackorn-cone-crusher",
+      "status": "blocked",
+      "last_checked": "2026-10-21",
+      "requirements": [
+        {
+          "id": "github-pr",
+          "desc": "需向对应仓库提 PR",
+          "satisfied": null
+        }
+      ],
+      "submit_method": "GitHub PR",
+      "update_method": "提交 PR",
+      "check_method": "node tools/directory_checker.mjs --only mcpservers-org",
+      "notes": "403 反爬",
+      "priority": 5
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA（NIM / build.nvidia.com）",
+      "type": "not-applicable",
+      "url": "https://build.nvidia.com/",
+      "probe": null,
+      "status": "no-directory",
+      "last_checked": "2026-10-21",
+      "requirements": [],
+      "submit_method": "无 MCP 目录可提交",
+      "update_method": "无",
+      "check_method": "无",
+      "notes": "★ 查证结论（2026-10-21）：NVIDIA 没有「收录 MCP server 的目录」。build.nvidia.com 是【模型】目录（NIM 推理微服务），不是 MCP 目录。搜索到的 nvidia-nim-mcp 是第三方做的【调用 NVIDIA API 的 MCP server】，不是收录渠道。npm 也不是英伟达的（npm = Node 包管理器）。→ 所以 NVIDIA 这条路径不存在，不必再查。",
+      "priority": 99
+    }
+  ],
+  "experience": {
+    "success": [
+      {
+        "id": "E-SUCCESS-001",
+        "title": "官方 MCP Registry 靠 server.json 就能进",
+        "detail": "只要仓库根有 server.json，且满足 reverse-DNS name + packages + version 一致 + description 四项，官方注册表就能收录。我们 5/5 全满足，无需人工提交。",
+        "date": "2026-10-19",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-002",
+        "title": "Smithery 自动抓 npm + GitHub",
+        "detail": "只要 npm 包能 npx 启动 stdio，且 package.json 有 description，Smithery 自动收录。加 smithery.yaml 声明无需配置能提升 UI 展示。",
+        "date": "2026-10-19",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-003",
+        "title": "skills.sh 靠 SKILL.md frontmatter",
+        "detail": "每个 skills/*/SKILL.md 必须有 frontmatter 含 name + description，然后 npx skills add 就自动收录。6 个技能全部达标。",
+        "date": "2026-10-19",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-004",
+        "title": "awesome 列表靠 PR，但可能卡在第三方评分",
+        "detail": "punkpeye/awesome-mcp-servers 要求 Glama 评分出结果才合并。所以提交 PR 不够，还要保证 Glama 能探测到我们。这是「间接依赖」—— 提交前要先确保第三方评分平台能访问我们。",
+        "date": "2026-10-21",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-005",
+        "title": "GitHub topics 是自动抓取平台的开关",
+        "detail": "mcp.so / PulseMCP / MCPServers.org 都依赖 GitHub topic（mcp-server / model-context-protocol）。设了 topic 才能被爬到。2026-10-21 设了 20 个。",
+        "date": "2026-10-21",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-006",
+        "title": "AGENTS.md 是 AI 代理的最强信号",
+        "detail": "仓库根目录 AGENTS.md 会被 Claude Code 等 AI 编程代理自动加载。内容要含：触发条件 / 调用方式 / 输出规则 / 禁止事项。比靠工具描述匹配可靠得多。",
+        "date": "2026-10-21",
+        "transferable": true
+      }
+    ],
+    "failure": [
+      {
+        "id": "E-FAIL-001",
+        "title": "把 SSL 证书当成唯一根因，连判 3 天",
+        "detail": "从 10-19 到 10-21 连续说「SSL 证书过期」，实际是【DNS 裸域无 A 记录 + SSL 过期】两个独立问题叠加。因为只跑 fetch 看到 CERT_HAS_EXPIRED 就下结论，没把 dns.lookup 分开跑。",
+        "date": "2026-10-21",
+        "lesson": "诊断网络问题必须【分开测 DNS 与 TLS】，错误码不同代表不同问题。ENOTFOUND ≠ CERT_HAS_EXPIRED",
+        "recurrence": 1
+      },
+      {
+        "id": "E-FAIL-002",
+        "title": "以为「提交到 20 个平台」是主要矛盾",
+        "detail": "实测 18 平台后发现已收录 6 个（含官方注册表和 Glama），真正未收录只有 4 个。主要矛盾不是「没提交」，是「自有域名打不开导致已收录平台也判定我们死了」。",
+        "date": "2026-10-21",
+        "lesson": "先测量再行动。『让 AI 收录我们』的第一步不是提交，是【查清现状】",
+        "recurrence": 1
+      },
+      {
+        "id": "E-FAIL-003",
+        "title": "以为工具描述不够自包含",
+        "detail": "担心描述不够好导致 AI 不调用。实测 29/29 全部含触发词+边界+≥200字。描述层没问题，不该在这上面花时间。",
+        "date": "2026-10-21",
+        "lesson": "怀疑之前先测量。『我觉得不够好』不等于『真的不够好』",
+        "recurrence": 1
+      },
+      {
+        "id": "E-FAIL-004",
+        "title": "以为 NVIDIA 有 MCP 目录",
+        "detail": "用户提「英伟达的 nmp 还是 npm」。查证后发现：不存在 NVIDIA NMP；NVIDIA NIM 是推理微服务不是 MCP 目录；build.nvidia.com 是模型目录；npm 是 Node 包管理器跟 NVIDIA 无关。",
+        "date": "2026-10-21",
+        "lesson": "用户说的产品名可能是记混的。先查证再动手，不要基于错误前提设计系统",
+        "recurrence": 1
+      },
+      {
+        "id": "E-FAIL-005",
+        "title": "往圆锥破传了原矿粒度（800mm）",
+        "detail": "测试铁矿案例时给 selectConeCrusher 传 maxFeedMm=800，但圆锥破上限约 350mm。引擎返回空，我以为引擎坏了。实际是我传参错了——细碎段给料应该是中碎产品（40-60mm）。",
+        "date": "2026-10-21",
+        "lesson": "选型链路必须【逐段传参】：颚破吃原矿，中碎吃颚破产品，细碎吃中碎产品。跨段直接传原矿粒度是典型错误",
+        "recurrence": 1
+      },
+      {
+        "id": "E-FAIL-006",
+        "title": "细碎选出 10 台 NH300 以为是引擎 bug",
+        "detail": "实际引擎没算错——目标 10mm 要求小排口，NH300 单台被压到 50t/h，500/50=10 是「合理的数字但荒谬的工程」。缺的是【台数爆炸诊断】而不是修引擎。",
+        "date": "2026-10-21",
+        "lesson": "『数字算对了』不等于『方案合理』。工程工具必须有『合理性告警』层，不能只做算术",
+        "recurrence": 1
+      }
+    ]
+  },
+  "rhythm": {
+    "check_interval_days": 3,
+    "update_interval_days": 3,
+    "discovery_interval_days": 7,
+    "last_check": "2026-10-21",
+    "last_update": "2026-10-21",
+    "last_discovery": "2026-10-21",
+    "note": "每 3 天检查收录状态并更新，每 7 天搜寻新平台。由云端 nightly 工作流驱动，也可手动跑 tools/directory_checker.mjs"
+  }
+}
