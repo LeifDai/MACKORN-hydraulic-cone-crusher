@@ -1,18 +1,18 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-21T07:31:42.792Z",
+  "generated": "2026-10-21T17:10:02.722Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 29,
-    "today": 10,
-    "last7": 29,
-    "last30": 29
+    "total": 35,
+    "today": 12,
+    "last7": 35,
+    "last30": 35
   },
   "metrics": {
-    "daily_correction": 10,
-    "week_correction": 29,
-    "depth_score_7d": 63,
-    "avg_depth": 2.17,
+    "daily_correction": 12,
+    "week_correction": 35,
+    "depth_score_7d": 81,
+    "avg_depth": 2.31,
     "streak_days": 2
   },
   "thresholds": {
@@ -22,47 +22,47 @@
   },
   "recent": [
     {
-      "id": "C029",
-      "at": "2026-10-21T00:55:53.152Z",
-      "wrong": "我以为「让 AI 收录我们」需要去 20 个平台逐个提交",
-      "now": "实测 18 个平台：已收录 6（含 Official MCP Registry / Glama / Smithery / skills.sh），真未收录只有 4（mcp.so/MCP-X/MCPList/Claude Directory），2 个被反爬挡住。所以「提交」不是主要矛盾——主要矛盾是自有域名打不开，导致已收录的平台也判定我们 Unresponsive",
-      "evidence": "tools/ai_coverage.mjs 实测：收录6/未收录4/被挡2/错误6（自有域名全挂）",
+      "id": "C035",
+      "at": "2026-10-21T15:07:21.766Z",
+      "wrong": "我以为证书过期只要提醒一次就够了",
+      "now": "实际拖了 7 天才发现（10-14 过期 → 10-21 才发现），期间 Glama/Claude/awesome-mcp 三个平台全卡住。根本问题是【没有预警机制】。已建 cert_monitor.mjs：30天notice/14天warning/7天critical/已过期critical+门禁失败，并接进云端每天跑",
+      "evidence": "tools/cert_monitor.mjs 实测输出：DNS ✅✅ · SSL 🔴 已过期 7 天（Issuer: Encryption Everywhere DV TLS CA = 阿里云免费证书）· 端点 0/5 可访问",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C028",
-      "at": "2026-10-21T00:55:52.071Z",
-      "wrong": "我担心「工具描述不够自包含」是 AI 不调用我们的原因之一",
-      "now": "实测 29 个工具：触发词 29/29 有、边界说明 29/29 有、描述长度 436-1576 字全部 ≥200。描述层没有问题。真正卡住的只有自有域名 DNS+SSL 双故障，以及 Glama 的 19 工具旧缓存。这推翻了我自己提的第 3 层根因（价值密度不够）",
-      "evidence": "实测脚本统计 toolDefinitions：触发词缺失 0 · 边界缺失 0 · 过短 0 · 完整 29/29",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C027",
-      "at": "2026-10-21T00:54:00.220Z",
-      "wrong": "我以为 Glama 的 PR #15410 卡在「没收录」",
-      "now": "实际 Glama 页面早已存在（HTTP 200 · 257KB · 含 mackorn），PR 卡的是三件事：① 工具数显示 19（旧缓存，需重新抓取）② Responsiveness 评估失败（探测裸域 DNS 失败）③ cannot be deployed。所以修好 DNS+证书后，Glama 需要【重新触发评估】而不是\"重新提交收录\"",
-      "evidence": "Glama 页面 HTTP 200 · 257684 字节 · \"19 tools\" · \"Responsiveness\" · \"cannot be deployed\" · 含 mackorn ✅",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C026",
-      "at": "2026-10-21T00:53:59.555Z",
-      "wrong": "我以为「AI 没收录我们」是主要问题，需要去 20 个平台逐个提交",
-      "now": "实际探测 18 个平台后发现：✅ 已收录 6 个（Official MCP Registry / npm / Glama / Smithery / skills.sh / unpkg server.json）—— 包括我以为没收录的 Glama 和 Smithery。真正的问题是：① Glama 页面显示 \"19 tools\" 旧缓存 ② cannot be deployed（DNS+证书）③ 4 个平台真未收录（mcp.so/MCP-X/MCPList/Claude Directory）",
-      "evidence": "tools/ai_coverage.mjs 实测 18 平台：收录 6 · 未收录 4 · 被挡 2 · 错误 6（自有域名全挂）",
+      "id": "C034",
+      "at": "2026-10-21T15:07:21.589Z",
+      "wrong": "我以为\"想办法修好\"意味着我能把 DNS 和 SSL 都修好",
+      "now": "实际边界很清楚：DNS 已自动恢复（不用修）；SSL 必须由用户操作——因为 ① SSH 22 端口从本机不通 ② 没有阿里云账号 ③ 没有 certbot/openssl ④ HTTP-01 需写服务器文件 ⑤ DNS-01 需改 DNS。我能做的是【建监控+写手册+让系统在故障时降级可用】，不能替用户点控制台",
+      "evidence": "实测：Test-NetConnection 22 → 不通；80/443 → 通；Get-Command certbot/aliyun/openssl → 全部未安装。所以续期只能用户或运维做",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C025",
-      "at": "2026-10-21T00:53:58.740Z",
-      "wrong": "我一直判断 mackorn.cn 打不开是因为 SSL 证书过期（从 10-19 说到 10-21，连续三天）",
-      "now": "实际是【两个问题叠加】，而且 DNS 问题在前面：① 裸域 mackorn.cn 的 A 记录丢失 → Node dns.lookup 返回 ENOTFOUND ② www.mackorn.cn 解析正常但证书过期 → CERT_HAS_EXPIRED。Glama 探测 https://mackorn.cn/ai/api/mcp.php 用的是裸域，所以在 DNS 阶段就失败，根本轮不到检查证书。只修证书不修 DNS 等于没修",
-      "evidence": "Resolve-DnsName 实测：mackorn.cn 无 A 记录（ENOTFOUND）；www.mackorn.cn → 47.110.80.123。Node fetch 实测：裸域 cause=ENOTFOUND；www 域名 cause=CERT_HAS_EXPIRED。两个不同错误码证明是两个独立问题",
+      "id": "C033",
+      "at": "2026-10-21T15:07:21.370Z",
+      "wrong": "我判定 DNS 裸域 mackorn.cn 的 A 记录\"丢了\"，并写进交接文档让用户去阿里云加记录",
+      "now": "实际当晚 23:00 再测，DNS 已经自己恢复为 47.110.80.123。很可能是记录本来就存在、只是本地 DNS 缓存未刷新，或 TTL 到期后重新解析。我犯的错是【测一次就下结论】，没等 TTL 过了再测",
+      "evidence": "10-21 白天 Resolve-DnsName mackorn.cn → ENOTFOUND；10-21 23:05 再测 → 47.110.80.123。同一个命令两次结果不同，证明是临时性解析问题而非记录丢失",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C032",
+      "at": "2026-10-21T10:31:09.064Z",
+      "wrong": "我以为「让 AI 自动调用插件」靠改提示词就行",
+      "now": "实际要靠三层叠加：① 工具描述含多语言触发词（实测 29/29 已达标）② 仓库根目录 AGENTS.md（AI 读仓库时自动加载）③ 项目级 AGENTS.md（每轮强制预加载，不靠检索）。单靠提示词（第一层）最弱，因为模型可以判断\"我自己也能答\"",
+      "evidence": "AGENTS.md（7 大章节+29工具速查+6条不可协商输出规则）+ QUICKSTART.md + llms.txt 加 AI 调用规则 + package.json 加 use_when 元数据",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C031",
+      "at": "2026-10-21T10:31:08.807Z",
+      "wrong": "我以为细碎段选出 10 台 NH300 是引擎算错了",
+      "now": "引擎没算错——目标 10mm 要求小排口，NH300 单台产能被压到 50 t/h，500/50=10 是\"合理的数字但荒谬的工程\"。真正的问题是缺【台数爆炸诊断】：工程上细碎超过 3 台就该改方案（改大机型/HPGR/放宽粒度）。已建 diagnoseFineStage 做这件事",
+      "evidence": "diagnoseFineStage 实测：NH300/F·CSS8mm·10台 → 告警 + 量级估算改 NH700 约 2 台 + 三种替代方案（HPGR/放宽到15-20mm/三段串联）",
       "impact": "L4",
       "why": null
     }

@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-21T07:31:42.896Z",
-  "passed": 14,
+  "generated": "2026-10-21T17:10:02.837Z",
+  "passed": 15,
   "total": 17,
   "results": [
     {
@@ -102,8 +102,8 @@
     {
       "gate": "自检8",
       "item": "有一份给「理工男」看的按图索骥手册",
-      "pass": false,
-      "evidence": "❌ 无"
+      "pass": true,
+      "evidence": "有手册类文档"
     }
   ],
   "gaps": [
@@ -116,11 +116,6 @@
       "gate": "自检6",
       "item": "真 profile 里模型确实调用成功过",
       "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
-    },
-    {
-      "gate": "自检8",
-      "item": "有一份给「理工男」看的按图索骥手册",
-      "evidence": "❌ 无"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-10-21T07:31:39.371Z",
+  "generated": "2026-10-21T17:09:59.658Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
@@ -18,7 +18,7 @@
       "id": "M-llms.txt",
       "name": "llms.txt（AI 索引）",
       "pass": true,
-      "detail": "30KB ✅ 与真相源一致"
+      "detail": "31KB ✅ 与真相源一致"
     },
     {
       "id": "M-cordis.patch.yml",
