@@ -1,7 +1,7 @@
 {
   "gate": "L2 构建门禁",
-  "generated": "2026-10-20T21:37:12.836Z",
-  "elapsed_ms": 676726,
+  "generated": "2026-10-21T00:38:22.841Z",
+  "elapsed_ms": 619254,
   "total": 39,
   "passed": 31,
   "failed": 8,
@@ -281,7 +281,7 @@
       "area": "G10",
       "name": "发布节奏检查器可用（状态另见报告）",
       "pass": true,
-      "detail": "状态 HEALTHY · 上次发布 0.2 天前"
+      "detail": "状态 HEALTHY · 上次发布 0.12 天前"
     },
     {
       "area": "G11",
@@ -299,25 +299,25 @@
       "area": "G13",
       "name": "线上健康检查（非阻塞·状态可见）",
       "pass": true,
-      "detail": "判定 UNHEALTHY · 证书 ❌ **已过期 5.9 天**（Oct 14 23:59:59 2026 GMT）"
+      "detail": "判定 UNHEALTHY · 证书 ❌ **已过期 6 天**（Oct 14 23:59:59 2026 GMT）"
     },
     {
       "area": "G14",
       "name": "认知力达标（今日≥1 · 7天≥3 · 深度≥1.5）",
       "pass": true,
-      "detail": "今日 23 · 7天 23 · 平均深度 2.09"
+      "detail": "今日 24 · 7天 24 · 平均深度 2.08"
     },
     {
       "area": "G15",
       "name": "认知力日课达标（学/疑/炼/测 四件事）",
       "pass": true,
-      "detail": "知识 10 条 · 自我推翻 23 条 · 今日回忆 3 题 2 正确"
+      "detail": "知识 10 条 · 自我推翻 24 条 · 今日回忆 3 题 2 正确"
     },
     {
       "area": "G16",
       "name": "迭代棘轮（有基线 · 有净增量 · 无倒退 · 合规0）",
       "pass": true,
-      "detail": "快照 4 次 · tools 27→29 · refutations 19→23"
+      "detail": "快照 5 次 · refutations 23→24"
     },
     {
       "area": "蓝图",

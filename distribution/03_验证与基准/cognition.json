@@ -1,19 +1,19 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-20T21:37:12.402Z",
+  "generated": "2026-10-21T00:38:22.274Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 23,
-    "today": 23,
-    "last7": 23,
-    "last30": 23
+    "total": 24,
+    "today": 24,
+    "last7": 24,
+    "last30": 24
   },
   "metrics": {
-    "daily_correction": 23,
-    "week_correction": 23,
-    "depth_score_7d": 48,
-    "avg_depth": 2.09,
-    "streak_days": 1
+    "daily_correction": 24,
+    "week_correction": 24,
+    "depth_score_7d": 50,
+    "avg_depth": 2.08,
+    "streak_days": 0
   },
   "thresholds": {
     "daily_min": 1,
@@ -21,6 +21,15 @@
     "avg_depth_min": 1.5
   },
   "recent": [
+    {
+      "id": "C024",
+      "at": "2026-10-20T21:40:16.908Z",
+      "wrong": "我以为交付完成后就等着下次开工，不需要专门写交接",
+      "now": "实际至少要有：① 两件必须用户处理的事（SSL 证书 + CSS 逻辑待确认）② 本轮三个重要认知 ③ 未完成清单 ④ 命令速查 ⑤ 本轮收尾一行。缺一项，下次开机就要重新摸索半小时",
+      "evidence": "distribution/⻫关机前-开机后第一眼.md 已重写为 R125 版，含 8 章：紧急事项/现状/本轮工作/认知/待办/命令/未完成/诚实清单/收尾一行",
+      "impact": "L3",
+      "why": null
+    },
     {
       "id": "C023",
       "at": "2026-10-20T15:52:11.822Z",
@@ -55,15 +64,6 @@
       "now": "全链条缺了破碎流程本身最核心的两个环节：颚破（粗碎）与振动筛（筛分）。用户在问「颚破+圆锥+筛子」时插件只能答圆锥那三分之一，导致模型判定\"用了反而更麻烦\"而绕开插件。这是调用失败的致命根因，不是提示词问题",
       "evidence": "plugin/lib/fullchain-engine.mjs 里我自己写着「★ 粗碎段是唯一没有独立选型引擎的环节」；plugin/index.mjs 27 个工具里没有 jaw / screen 任何选型工具",
       "impact": "L4",
-      "why": null
-    },
-    {
-      "id": "C019",
-      "at": "2026-10-20T02:12:59.988Z",
-      "wrong": "我以为工具返回结构可以猜（selected.model 之类）",
-      "now": "selectConeCrusher 的实际返回是 top_pick / recommended_units / candidates / recommended_cavity_pool，不是 selected/model。我猜的结构全返回 null，而 null 不会报错——只会静默给出空结果",
-      "evidence": "实测打印返回顶层键才发现是 top_pick；改成正确路径后 8 处全部生效，中碎选型从 null 变成 NH860/EC·500kW·3台",
-      "impact": "L2",
       "why": null
     }
   ]
