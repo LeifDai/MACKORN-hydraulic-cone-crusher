@@ -1,0 +1,128 @@
+{
+  "schema": "mackorn-directory-check/1",
+  "at": "2026-10-21T10:45:53.484Z",
+  "summary": {
+    "total": 7,
+    "listed": 6,
+    "not_listed": 1,
+    "blocked": 0,
+    "error": 0
+  },
+  "err_types": {},
+  "results": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://api.github.com/repos/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "http": 200,
+      "ms": 1126,
+      "status": "listed",
+      "prev_status": "listed",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "MACKORN-hydraulic-cone-crusher"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "npm",
+      "name": "npm registry",
+      "url": "https://registry.npmjs.org/mackorn-cone-crusher",
+      "http": 200,
+      "ms": 782,
+      "status": "listed",
+      "prev_status": "listed",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "mcp-registry",
+      "name": "Official MCP Registry",
+      "url": "https://registry.modelcontextprotocol.io/v0/servers?search=mackorn",
+      "http": 200,
+      "ms": 1256,
+      "status": "listed",
+      "prev_status": "listed",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "url": "https://smithery.ai/server/@LeifDai/mackorn-cone-crusher",
+      "http": 200,
+      "ms": 2157,
+      "status": "listed",
+      "prev_status": "listed",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "url": "https://skills.sh/s/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "http": 200,
+      "ms": 1299,
+      "status": "listed",
+      "prev_status": "listed",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "MACKORN-hydraulic-cone-crusher"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "url": "https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "http": 200,
+      "ms": 1633,
+      "status": "listed",
+      "prev_status": "listed-but-unresponsive",
+      "matched": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "err_type": null,
+      "error": null
+    },
+    {
+      "id": "mcp-so",
+      "name": "mcp.so",
+      "url": "https://mcp.so/server/mackorn-cone-crusher",
+      "http": 404,
+      "ms": 2841,
+      "status": "not-listed",
+      "prev_status": "not-listed",
+      "matched": [],
+      "err_type": null,
+      "error": "HTTP 404"
+    }
+  ]
+}
