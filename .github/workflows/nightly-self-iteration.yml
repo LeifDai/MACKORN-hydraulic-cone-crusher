@@ -154,6 +154,10 @@ jobs:
       - name: 认知力台账（每天必须推翻自己）
         run: node tools/cognition_log.mjs --check || true
 
+      # ══════ R139：证书监控（提前 30/14/7 天预警）══════
+      - name: 证书与域名监控
+        run: node tools/cert_monitor.mjs || true
+
       - name: 线上健康（证书/官网/API/llms.txt）
         run: node tools/check_live_health.mjs || true
 
