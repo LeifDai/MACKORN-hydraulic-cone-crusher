@@ -1,0 +1,24 @@
+# Smithery 配置声明（R130）
+#
+# 为什么需要这个文件：
+#   Smithery 已经收录了我们（实测页面存在），但它的规范要求：
+#   「如果 server 有配置项（API key、路径等），必须在 smithery.yaml 里声明 schema」
+#   我们没有配置项（纯 stdio、零依赖、无需 API key），所以显式声明「无需配置」，
+#   能让 Smithery 的 UI 正确显示"直接可用"，提升被点击安装的概率。
+#
+# 来源：Smithery 官方文档（2026-10 抓取）
+# 判据：ai_rejection_diagnoser.mjs 的 smithery/config-schema-optional
+
+startCommand:
+  type: stdio
+  configSchema:
+    # 空 schema = 无需任何配置
+    type: object
+    properties: {}
+    required: []
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', 'mackorn-cone-crusher']
+    })
+  exampleConfig: {}
