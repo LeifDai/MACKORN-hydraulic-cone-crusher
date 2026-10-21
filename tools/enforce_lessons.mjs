@@ -299,6 +299,65 @@ if (!QUICK) {
     rec('G16', '迭代棘轮（有基线 · 有净增量 · 无倒退 · 合规0）', r.status === 0,
       '快照 ' + snaps + ' 次 · ' + delta);
   }
+  /* ══════ R127：可发现性（2026-10-21 用户要求「让领先的 AI 都收录我们」）══════ */
+
+  /* G17：AI 收录覆盖（至少 5 个平台已收录我们的条目） */
+  {
+    const cp = join(D, '03_验证与基准', 'ai-coverage.json');
+    let listed = null, total = null, notListed = null;
+    try {
+      const j = JSON.parse(read(cp));
+      if (j && j.summary) { listed = j.summary.listed; total = j.summary.total; notListed = j.summary.not_listed; }
+    } catch { }
+    /* 注意：本门禁不现场发 18 个网络请求（太慢），只读最近一次探测结果。
+     * 如果结果文件不存在，判为 UNKNOWN 并通过（不阻塞），但在 detail 里明说。 */
+    const ok = listed === null ? true : listed >= 5;
+    rec('G17', 'AI 收录覆盖 ≥5 个平台（读探测结果）', ok,
+      listed === null ? '⚠ 尚无 ai-coverage.json（先跑 node tools/ai_coverage.mjs）'
+        : ('已收录 ' + listed + '/' + total + ' · 未收录 ' + notListed));
+  }
+
+  /* G18：自有域名 DNS + SSL 双检（2026-10-21 发现两个独立问题叠加） */
+  {
+    const rp = join(D, '03_验证与基准', 'reachability.json');
+    let verdict = null, mainBlocker = null, dnsOk = null, sslOk = null;
+    try {
+      const j = JSON.parse(read(rp));
+      verdict = j.verdict; mainBlocker = j.main_blocker;
+      dnsOk = j.dns ? j.dns.ok : null;
+      sslOk = j.ssl ? j.ssl.ok : null;
+    } catch { }
+    /* 非阻塞：可发现性故障需要用户操作服务器（DNS/证书），本地改不了。
+     * 但如果 RED，必须在门禁输出里【明确可见】，不能静默。 */
+    rec('G18', '自有域名可达（DNS+SSL，非阻塞但必须可见）', true,
+      verdict === null ? '⚠ 尚无 reachability.json（先跑 node tools/reachability_health.mjs）'
+        : (verdict + (mainBlocker ? ' · 主要矛盾：' + mainBlocker : '') + ' · DNS ' + (dnsOk ? 'OK' : 'FAIL') + ' · SSL ' + (sslOk ? 'OK' : 'FAIL')));
+  }
+
+  /* G19：工具描述自包含（2026-10-21 实测 29/29 达标，加门禁防回归）。
+   * 判据三点：含触发词、含边界说明、长度不低于 200 字。
+   * 理由：AI 选工具时只看 description，缺任一项它就判断这个工具用不上。 */
+  {
+    let total19 = 0;
+    const bad19 = [];
+    try {
+      const idx19 = read(join(ROOT, 'plugin', 'index.mjs'));
+      const blocks19 = idx19.split(/\n  name: '/).slice(1);
+      total19 = blocks19.length;
+      for (const b19 of blocks19) {
+        const nm19 = (b19.match(/^(mackorn_[a-z_]+)/) || [])[1] || '?';
+        const dm19 = b19.match(/description:[\s\S]{0,4000}?\n  parameters:/);
+        const desc19 = dm19 ? dm19[0] : b19.slice(0, 4000);
+        const hasTrig19 = /Trigger|触发词|triggers/i.test(desc19);
+        const hasBound19 = /边界|不适用|不含|注意|限制|⚠️/.test(desc19);
+        if (!hasTrig19) bad19.push(nm19 + ' 缺触发词');
+        if (!hasBound19) bad19.push(nm19 + ' 缺边界');
+        if (desc19.length < 200) bad19.push(nm19 + ' 过短');
+      }
+    } catch (e19) { bad19.push(String(e19.message).slice(0, 40)); }
+    rec('G19', '工具描述自包含（触发词+边界+200字以上）', bad19.length === 0,
+      bad19.length === 0 ? ('全部 ' + total19 + ' 个达标') : (bad19.slice(0, 5).join(' · ') + (bad19.length > 5 ? ' 共' + bad19.length + '项' : '')));
+  }
   }
   }
   }
