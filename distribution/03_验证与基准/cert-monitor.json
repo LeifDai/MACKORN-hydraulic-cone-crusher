@@ -1,0 +1,173 @@
+{
+  "schema": "mackorn-cert-monitor/1",
+  "at": "2026-10-21T15:06:44.907Z",
+  "dns": {
+    "ok": true,
+    "results": [
+      {
+        "host": "mackorn.cn",
+        "ok": true,
+        "address": "47.110.80.123"
+      },
+      {
+        "host": "www.mackorn.cn",
+        "ok": true,
+        "address": "47.110.80.123"
+      }
+    ]
+  },
+  "cert": {
+    "main": {
+      "ok": true,
+      "sni": "mackorn.cn",
+      "subject": "mackorn.cn",
+      "issuer": "Encryption Everywhere DV TLS CA - G2",
+      "issuer_o": "DigiCert Inc",
+      "valid_from": "Jul 17 00:00:00 2026 GMT",
+      "valid_to": "Oct 14 23:59:59 2026 GMT",
+      "days_left": -7,
+      "expired": true,
+      "san": "DNS:mackorn.cn, DNS:www.mackorn.cn",
+      "fingerprint": "F8:F3:CF:34:10:28:D7:D6:F1:72:20:65:F7:90:C3:09:AF:D8:07:42:C9:AA:AD:0D:2F:6E:DA:E4:8A:2F:24:66"
+    },
+    "all": [
+      {
+        "ok": true,
+        "sni": "mackorn.cn",
+        "subject": "mackorn.cn",
+        "issuer": "Encryption Everywhere DV TLS CA - G2",
+        "issuer_o": "DigiCert Inc",
+        "valid_from": "Jul 17 00:00:00 2026 GMT",
+        "valid_to": "Oct 14 23:59:59 2026 GMT",
+        "days_left": -7,
+        "expired": true,
+        "san": "DNS:mackorn.cn, DNS:www.mackorn.cn",
+        "fingerprint": "F8:F3:CF:34:10:28:D7:D6:F1:72:20:65:F7:90:C3:09:AF:D8:07:42:C9:AA:AD:0D:2F:6E:DA:E4:8A:2F:24:66"
+      },
+      {
+        "ok": true,
+        "sni": "www.mackorn.cn",
+        "subject": "mackorn.cn",
+        "issuer": "Encryption Everywhere DV TLS CA - G2",
+        "issuer_o": "DigiCert Inc",
+        "valid_from": "Jul 17 00:00:00 2026 GMT",
+        "valid_to": "Oct 14 23:59:59 2026 GMT",
+        "days_left": -7,
+        "expired": true,
+        "san": "DNS:mackorn.cn, DNS:www.mackorn.cn",
+        "fingerprint": "F8:F3:CF:34:10:28:D7:D6:F1:72:20:65:F7:90:C3:09:AF:D8:07:42:C9:AA:AD:0D:2F:6E:DA:E4:8A:2F:24:66"
+      }
+    ],
+    "level": "critical",
+    "action": "★ 已过期 7 天 —— 立即续期",
+    "issuer_type": "商业 CA（阿里云/ DigiCert 免费证书）"
+  },
+  "endpoints": {
+    "bare_domain": {
+      "base": "https://mackorn.cn",
+      "ok_count": 0,
+      "total": 5,
+      "results": [
+        {
+          "path": "/ai/",
+          "url": "https://mackorn.cn/ai/",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/ai/llms.txt",
+          "url": "https://mackorn.cn/ai/llms.txt",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/robots.txt",
+          "url": "https://mackorn.cn/robots.txt",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/ai/api/mcp.php",
+          "url": "https://mackorn.cn/ai/api/mcp.php",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/.well-known/mcp/server-card.json",
+          "url": "https://mackorn.cn/.well-known/mcp/server-card.json",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        }
+      ]
+    },
+    "www": {
+      "base": "https://www.mackorn.cn",
+      "ok_count": 0,
+      "total": 5,
+      "results": [
+        {
+          "path": "/ai/",
+          "url": "https://www.mackorn.cn/ai/",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/ai/llms.txt",
+          "url": "https://www.mackorn.cn/ai/llms.txt",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/robots.txt",
+          "url": "https://www.mackorn.cn/robots.txt",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/ai/api/mcp.php",
+          "url": "https://www.mackorn.cn/ai/api/mcp.php",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        },
+        {
+          "path": "/.well-known/mcp/server-card.json",
+          "url": "https://www.mackorn.cn/.well-known/mcp/server-card.json",
+          "ok": false,
+          "http": null,
+          "bytes": null,
+          "err": "CERT_HAS_EXPIRED",
+          "err_type": "ssl"
+        }
+      ]
+    }
+  },
+  "verdict": "RED: ★ 已过期 7 天 —— 立即续期",
+  "renewal_guide": "distribution/🔐证书续期5分钟操作手册.md"
+}
