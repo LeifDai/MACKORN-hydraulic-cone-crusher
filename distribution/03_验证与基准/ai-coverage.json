@@ -1,0 +1,391 @@
+{
+  "schema": "mackorn-ai-coverage/1",
+  "what": "AI 收录探测器 —— 检查 20+ 个 AI 目录/注册表是否收录了 MACKORN 插件",
+  "judge": "判为「已收录」必须同时满足：① HTTP 200 ② 页面含 mackorn 标识符（排除\"未找到\"页与搜索空结果）",
+  "summary": {
+    "generated": "2026-10-21T00:52:28.101Z",
+    "total": 18,
+    "listed": 6,
+    "not_listed": 4,
+    "blocked": 2,
+    "render_required": 0,
+    "error": 6
+  },
+  "results": [
+    {
+      "id": "mcp-registry",
+      "name": "Official MCP Registry",
+      "type": "registry",
+      "url": "https://registry.modelcontextprotocol.io/v0/servers?search=mackorn",
+      "note": "官方注册表，有 API；搜索结果里应有我们的 server",
+      "submit": "npm 包 + server.json 已就绪，用 mcp-publisher 发布",
+      "known_issue": null,
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "error": null,
+      "ms": 5037,
+      "total_results": 4
+    },
+    {
+      "id": "npm",
+      "name": "npm registry",
+      "type": "registry",
+      "url": "https://registry.npmjs.org/mackorn-cone-crusher",
+      "note": "包已发布 0.2.2",
+      "submit": "已完成（npm publish）",
+      "known_issue": null,
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "error": null,
+      "ms": 825,
+      "package_name": "mackorn-cone-crusher",
+      "version": null
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "type": "directory",
+      "url": "https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "note": "★ 已提交 PR #15410，但卡在 Responsiveness（SSL 证书过期）",
+      "submit": "PR #15410 已开；需修 SSL 后重新评估",
+      "known_issue": "SSL 证书过期 → 探测失败 → 判定 Unresponsive",
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "error": null,
+      "ms": 1067
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "type": "directory",
+      "url": "https://smithery.ai/server/@LeifDai/mackorn-cone-crusher",
+      "note": "Smithery 是最大的 MCP 目录之一，支持 CLI 发布",
+      "submit": "npx -y @smithery/cli publish（需 GitHub 授权）",
+      "known_issue": null,
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher"
+      ],
+      "error": null,
+      "ms": 2005
+    },
+    {
+      "id": "mcp-so",
+      "name": "mcp.so",
+      "type": "directory",
+      "url": "https://mcp.so/server/mackorn-cone-crusher",
+      "note": "中文友好的 MCP 目录",
+      "submit": "网页提交表单 or GitHub issue",
+      "known_issue": null,
+      "status": "not_listed",
+      "http": 404,
+      "matched_identifiers": [],
+      "error": "HTTP 404",
+      "ms": 3098
+    },
+    {
+      "id": "pulsemcp",
+      "name": "PulseMCP",
+      "type": "directory",
+      "url": "https://www.pulsemcp.com/servers?q=mackorn",
+      "note": "PulseMCP 有搜索页，抓取 GitHub topic",
+      "submit": "自动抓取 GitHub topic: mcp-server",
+      "known_issue": null,
+      "status": "blocked",
+      "http": 403,
+      "matched_identifiers": [],
+      "error": "HTTP 403（反爬/需授权，不算未收录）",
+      "ms": 1176
+    },
+    {
+      "id": "mcpservers-org",
+      "name": "MCPServers.org",
+      "type": "directory",
+      "url": "https://mcpservers.org/servers/LeifDai/mackorn-cone-crusher",
+      "note": null,
+      "submit": "GitHub PR 到对应仓库",
+      "known_issue": null,
+      "status": "blocked",
+      "http": 403,
+      "matched_identifiers": [],
+      "error": "HTTP 403（反爬/需授权，不算未收录）",
+      "ms": 817
+    },
+    {
+      "id": "mcpx",
+      "name": "MCP-X",
+      "type": "directory",
+      "url": "https://mcp-x.com/server/mackorn-cone-crusher",
+      "note": null,
+      "submit": "网页提交",
+      "known_issue": null,
+      "status": "not_listed",
+      "http": 200,
+      "matched_identifiers": [],
+      "error": null,
+      "ms": 369
+    },
+    {
+      "id": "mcplist",
+      "name": "MCPList",
+      "type": "directory",
+      "url": "https://mcplist.org/server/mackorn-cone-crusher",
+      "note": null,
+      "submit": "网页提交",
+      "known_issue": null,
+      "status": "not_listed",
+      "http": 404,
+      "matched_identifiers": [],
+      "error": "HTTP 404",
+      "ms": 566
+    },
+    {
+      "id": "claude-directory",
+      "name": "Claude Connectors Directory",
+      "type": "directory",
+      "url": "https://claude.com/docs/connectors/building/submission",
+      "note": "Anthropic 官方目录，要求高（需 review）",
+      "submit": "表单提交，需 Anthropic 审核",
+      "known_issue": "需生产级稳定服务，SSL 必须有效",
+      "status": "not_listed",
+      "http": 200,
+      "matched_identifiers": [],
+      "error": null,
+      "ms": 904
+    },
+    {
+      "id": "awesome-mcp",
+      "name": "punkpeye/awesome-mcp-servers",
+      "type": "awesome",
+      "url": "https://raw.githubusercontent.com/punkpeye/awesome-mcp-servers/main/README.md",
+      "note": "★ 96,380★ 最大 awesome 列表；PR #15410 已开",
+      "submit": "PR #15410（已提交，待合并）",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 150
+    },
+    {
+      "id": "awesome-dsh",
+      "name": "awesome-dsh-plugin",
+      "type": "awesome",
+      "url": "https://raw.githubusercontent.com/awesome-dsh-plugin/awesome-dsh-plugin/main/README.md",
+      "note": "★ PR #6141 已合并（2026-10-17）",
+      "submit": "已合并",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 107
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "type": "skill",
+      "url": "https://skills.sh/s/LeifDai/MACKORN-hydraulic-cone-crusher",
+      "note": "npx skills add 安装的目录",
+      "submit": "npx skills add LeifDai/MACKORN-hydraulic-cone-crusher（自动收录）",
+      "known_issue": null,
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "MACKORN-hydraulic-cone-crusher"
+      ],
+      "error": null,
+      "ms": 702
+    },
+    {
+      "id": "own-llms",
+      "name": "自有 llms.txt",
+      "type": "own",
+      "url": "https://mackorn.cn/ai/llms.txt",
+      "note": "★ AI 爬虫读这个；SSL 过期会导致全部失败",
+      "submit": "已部署；需修 SSL",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 11
+    },
+    {
+      "id": "own-robots",
+      "name": "自有 robots.txt",
+      "type": "own",
+      "url": "https://mackorn.cn/robots.txt",
+      "note": "必须允许 AI 爬虫（GPTBot / ClaudeBot / PerplexityBot）",
+      "submit": "已部署；需确认允许规则",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 5
+    },
+    {
+      "id": "own-mcp-api",
+      "name": "自有 MCP API",
+      "type": "own",
+      "url": "https://mackorn.cn/ai/api/mcp.php",
+      "note": "★ PHP 版 MCP 端点；Glama 探测的就是这个",
+      "submit": "已部署；需修 SSL",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 15
+    },
+    {
+      "id": "own-mcp-card",
+      "name": "MCP Server Card",
+      "type": "own",
+      "url": "https://mackorn.cn/.well-known/mcp/server-card.json",
+      "note": "MCP 官方推荐的服务描述文件",
+      "submit": "已部署在 distribution/官网落地页/.well-known/",
+      "known_issue": null,
+      "status": "error",
+      "http": null,
+      "matched_identifiers": [],
+      "error": "fetch failed",
+      "ms": 4
+    },
+    {
+      "id": "own-server-json",
+      "name": "server.json (npm)",
+      "type": "own",
+      "url": "https://unpkg.com/mackorn-cone-crusher/server.json",
+      "note": "MCP Registry 抓取这个文件",
+      "submit": "已包含在 npm 包里",
+      "known_issue": null,
+      "status": "listed",
+      "http": 200,
+      "matched_identifiers": [
+        "mackorn",
+        "MACKORN",
+        "mackorn-cone-crusher",
+        "MACKORN-hydraulic-cone-crusher",
+        "cn.mackorn"
+      ],
+      "error": null,
+      "ms": 1482,
+      "package_name": "cn.mackorn/mackorn-cone-crusher",
+      "version": "0.2.0"
+    }
+  ],
+  "next_actions": [
+    {
+      "id": "mcp-so",
+      "name": "mcp.so",
+      "status": "not_listed",
+      "action": "网页提交表单 or GitHub issue",
+      "priority": 1
+    },
+    {
+      "id": "mcpx",
+      "name": "MCP-X",
+      "status": "not_listed",
+      "action": "网页提交",
+      "priority": 1
+    },
+    {
+      "id": "mcplist",
+      "name": "MCPList",
+      "status": "not_listed",
+      "action": "网页提交",
+      "priority": 1
+    },
+    {
+      "id": "claude-directory",
+      "name": "Claude Connectors Directory",
+      "status": "not_listed",
+      "action": "表单提交，需 Anthropic 审核",
+      "priority": 1
+    },
+    {
+      "id": "pulsemcp",
+      "name": "PulseMCP",
+      "status": "blocked",
+      "action": "自动抓取 GitHub topic: mcp-server",
+      "priority": 2
+    },
+    {
+      "id": "mcpservers-org",
+      "name": "MCPServers.org",
+      "status": "blocked",
+      "action": "GitHub PR 到对应仓库",
+      "priority": 2
+    },
+    {
+      "id": "awesome-mcp",
+      "name": "punkpeye/awesome-mcp-servers",
+      "status": "error",
+      "action": "PR #15410（已提交，待合并）",
+      "priority": 2
+    },
+    {
+      "id": "awesome-dsh",
+      "name": "awesome-dsh-plugin",
+      "status": "error",
+      "action": "已合并",
+      "priority": 2
+    },
+    {
+      "id": "own-llms",
+      "name": "自有 llms.txt",
+      "status": "error",
+      "action": "已部署；需修 SSL",
+      "priority": 2
+    },
+    {
+      "id": "own-robots",
+      "name": "自有 robots.txt",
+      "status": "error",
+      "action": "已部署；需确认允许规则",
+      "priority": 2
+    },
+    {
+      "id": "own-mcp-api",
+      "name": "自有 MCP API",
+      "status": "error",
+      "action": "已部署；需修 SSL",
+      "priority": 2
+    },
+    {
+      "id": "own-mcp-card",
+      "name": "MCP Server Card",
+      "status": "error",
+      "action": "已部署在 distribution/官网落地页/.well-known/",
+      "priority": 2
+    }
+  ]
+}
