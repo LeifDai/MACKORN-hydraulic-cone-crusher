@@ -49,7 +49,7 @@ Additional:
 - Never replace a null with an estimate to make output look complete.
 - Never average conflicting sources. Keep them side by side.
 - A cone crusher is a secondary/tertiary machine. Feed above ~350 mm must be refused.
-- Tests must pass: `node tests/run.mjs` (currently 112 pass / 0 fail / 1 skip, incl. 9 negative controls).
+- Tests must pass: `node tests/run.mjs` (currently 132 pass / 0 fail / 1 skip, incl. 9 negative controls).
 - Build gates must pass: `node tools/build_public.mjs`.
 
 ## Verify before claiming success
