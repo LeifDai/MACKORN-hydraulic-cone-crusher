@@ -1,0 +1,164 @@
+{
+  "schema": "mackorn-reachability/1",
+  "generated": "2026-10-21T00:54:24.322Z",
+  "what": "可发现性体检 —— DNS / SSL / 端点 / AI 爬虫 四重检查",
+  "why": "2026-10-21 实测发现 mackorn.cn 打不开是 DNS 与 SSL 两个独立问题叠加。连续三天误判为单纯 SSL 问题，因为没把 dns.lookup 与 fetch 分开跑。",
+  "main_blocker": "DNS：裸域 mackorn.cn 无 A 记录（5 个端点因此失败）",
+  "main_blocker_action": "在阿里云 DNS 添加 A 记录：主机记录 @ → 47.110.80.123",
+  "dns": {
+    "ok": false,
+    "results": [
+      {
+        "host": "mackorn.cn",
+        "role": "裸域（所有文档/PR 里用的地址）",
+        "critical": true,
+        "ok": false,
+        "address": null,
+        "error": "ENOTFOUND"
+      },
+      {
+        "host": "www.mackorn.cn",
+        "role": "www 域",
+        "critical": true,
+        "ok": true,
+        "address": "47.110.80.123",
+        "error": null
+      }
+    ]
+  },
+  "ssl": {
+    "ok": false,
+    "fail_count": 5,
+    "note": "证书过期或不受信",
+    "error_code": "CERT_HAS_EXPIRED"
+  },
+  "endpoints": {
+    "best_base": "https://mackorn.cn",
+    "best_base_ok": 0,
+    "total": 5,
+    "results": [
+      {
+        "name": "官网 AI 落地页",
+        "path": "/ai/",
+        "url": "https://mackorn.cn/ai/",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "dns",
+        "error": "ENOTFOUND",
+        "body_head": null,
+        "base": "https://mackorn.cn"
+      },
+      {
+        "name": "llms.txt（AI 索引）",
+        "path": "/ai/llms.txt",
+        "url": "https://mackorn.cn/ai/llms.txt",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "dns",
+        "error": "ENOTFOUND",
+        "body_head": null,
+        "base": "https://mackorn.cn"
+      },
+      {
+        "name": "robots.txt（爬虫规则）",
+        "path": "/robots.txt",
+        "url": "https://mackorn.cn/robots.txt",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "dns",
+        "error": "ENOTFOUND",
+        "body_head": null,
+        "base": "https://mackorn.cn"
+      },
+      {
+        "name": "MCP API 端点（Glama 探测的就是这个）",
+        "path": "/ai/api/mcp.php",
+        "url": "https://mackorn.cn/ai/api/mcp.php",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "dns",
+        "error": "ENOTFOUND",
+        "body_head": null,
+        "base": "https://mackorn.cn"
+      },
+      {
+        "name": "MCP Server Card",
+        "path": "/.well-known/mcp/server-card.json",
+        "url": "https://mackorn.cn/.well-known/mcp/server-card.json",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "dns",
+        "error": "ENOTFOUND",
+        "body_head": null,
+        "base": "https://mackorn.cn"
+      },
+      {
+        "name": "官网 AI 落地页",
+        "path": "/ai/",
+        "url": "https://www.mackorn.cn/ai/",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "ssl",
+        "error": "CERT_HAS_EXPIRED",
+        "body_head": null,
+        "base": "https://www.mackorn.cn"
+      },
+      {
+        "name": "llms.txt（AI 索引）",
+        "path": "/ai/llms.txt",
+        "url": "https://www.mackorn.cn/ai/llms.txt",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "ssl",
+        "error": "CERT_HAS_EXPIRED",
+        "body_head": null,
+        "base": "https://www.mackorn.cn"
+      },
+      {
+        "name": "robots.txt（爬虫规则）",
+        "path": "/robots.txt",
+        "url": "https://www.mackorn.cn/robots.txt",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "ssl",
+        "error": "CERT_HAS_EXPIRED",
+        "body_head": null,
+        "base": "https://www.mackorn.cn"
+      },
+      {
+        "name": "MCP API 端点（Glama 探测的就是这个）",
+        "path": "/ai/api/mcp.php",
+        "url": "https://www.mackorn.cn/ai/api/mcp.php",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "ssl",
+        "error": "CERT_HAS_EXPIRED",
+        "body_head": null,
+        "base": "https://www.mackorn.cn"
+      },
+      {
+        "name": "MCP Server Card",
+        "path": "/.well-known/mcp/server-card.json",
+        "url": "https://www.mackorn.cn/.well-known/mcp/server-card.json",
+        "ok": false,
+        "http": null,
+        "bytes": null,
+        "err_type": "ssl",
+        "error": "CERT_HAS_EXPIRED",
+        "body_head": null,
+        "base": "https://www.mackorn.cn"
+      }
+    ]
+  },
+  "robots": null,
+  "verdict": "RED: DNS 不完整"
+}
