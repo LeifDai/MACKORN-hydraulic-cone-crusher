@@ -127,6 +127,30 @@ jobs:
       - name: 导出 Harness 约束（供接手的 Agent 读）
         run: node tools/export_harness.mjs || true
 
+      # ══════ R138：AI 目录收录（每 3 天检查一次，其余时间跳过）══════
+      - name: 判断是否到了 AI 目录检查期（每3天）
+        id: dir_due
+        run: |
+          DUE=$(node -e "
+            const fs=require('fs');
+            try {
+              const j=JSON.parse(fs.readFileSync('directory-registry/registry.json','utf8'));
+              const last=new Date(j.rhythm?.last_check||'1970-01-01').getTime();
+              const days=(Date.now()-last)/86400000;
+              console.log(days >= 3 ? 'yes' : 'no');
+            } catch { console.log('yes'); }
+          ")
+          echo "due=$DUE" >> $GITHUB_OUTPUT
+          echo "AI 目录检查：$DUE（周期 3 天）"
+
+      - name: AI 目录收录检查（到期才跑）
+        if: steps.dir_due.outputs.due == 'yes'
+        run: node tools/directory_checker.mjs --check || true
+
+      - name: 生成目录更新材料（到期才跑）
+        if: steps.dir_due.outputs.due == 'yes'
+        run: node tools/directory_uploader.mjs --all || true
+
       - name: 认知力台账（每天必须推翻自己）
         run: node tools/cognition_log.mjs --check || true
 
