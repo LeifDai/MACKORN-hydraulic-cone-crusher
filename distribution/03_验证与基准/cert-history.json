@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "records": [
+    {
+      "at": "2026-10-21T15:06:44.907Z",
+      "dns_ok": true,
+      "cert_issuer": "Encryption Everywhere DV TLS CA - G2",
+      "cert_valid_to": "Oct 14 23:59:59 2026 GMT",
+      "cert_days_left": -7,
+      "cert_level": "critical",
+      "endpoints_ok": 0,
+      "verdict": "RED: ★ 已过期 7 天 —— 立即续期"
+    }
+  ]
+}
