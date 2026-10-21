@@ -237,13 +237,15 @@
           "id": "mcp-endpoint-reachable",
           "desc": "MCP 端点可被探测",
           "satisfied": false,
-          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+          "blocker": "SSL：证书 2026-10-14 已过期",
+          "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
           "id": "tools-enumerable",
           "desc": "tools/list 可枚举",
           "satisfied": false,
-          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+          "blocker": "SSL：证书 2026-10-14 已过期",
+          "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
           "id": "tools-count-fresh",
@@ -256,7 +258,6 @@
       "update_method": "修 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
       "check_method": "node tools/directory_checker.mjs --only glama",
       "blockers": [
-        "DNS：裸域 mackorn.cn 无 A 记录",
         "SSL：证书 2026-10-14 已过期"
       ],
       "notes": "★ 关键：PR #15410 卡在 Responsiveness 评估。修 DNS+SSL 后需重新触发评估",
@@ -275,7 +276,8 @@
           "id": "remote-endpoint",
           "desc": "生产级远程 MCP 端点（HTTPS 有效）",
           "satisfied": false,
-          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+          "blocker": "SSL：证书 2026-10-14 已过期",
+          "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
           "id": "privacy-policy",
@@ -298,9 +300,7 @@
       "submit_method": "https://claude.com/docs/connectors/building/submission 表单",
       "update_method": "提交后等审核",
       "check_method": "node tools/directory_checker.mjs --only claude-directory",
-      "blockers": [
-        "DNS：裸域 mackorn.cn 无 A 记录"
-      ],
+      "blockers": [],
       "notes": "门槛最高，需 Anthropic 人工审核。前置条件：生产级端点 + 隐私政策",
       "priority": 3
     },
@@ -391,7 +391,8 @@
           "id": "glama-evaluated",
           "desc": "Glama 评分已出",
           "satisfied": false,
-          "blocker": "DNS：裸域 mackorn.cn 无 A 记录"
+          "blocker": "SSL：证书 2026-10-14 已过期",
+          "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
           "id": "pr-merged",
@@ -402,9 +403,7 @@
       "submit_method": "GitHub PR",
       "update_method": "修 DNS+SSL → Glama 评分 → PR 补评论催促合并",
       "check_method": "node tools/directory_checker.mjs --only awesome-mcp",
-      "blockers": [
-        "DNS：裸域 mackorn.cn 无 A 记录"
-      ],
+      "blockers": [],
       "notes": "96,380★ 最大的 awesome 列表。PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
       "priority": 2
     },
@@ -537,6 +536,13 @@
         "id": "E-SUCCESS-006",
         "title": "AGENTS.md 是 AI 代理的最强信号",
         "detail": "仓库根目录 AGENTS.md 会被 Claude Code 等 AI 编程代理自动加载。内容要含：触发条件 / 调用方式 / 输出规则 / 禁止事项。比靠工具描述匹配可靠得多。",
+        "date": "2026-10-21",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-007",
+        "title": "DNS 裸域 A 记录会自己恢复（等 1-2 小时）",
+        "detail": "2026-10-21 白天 mackorn.cn 裸域返回 ENOTFOUND（A 记录缺失），当晚 23:00 再测已经恢复为 47.110.80.123。可能原因：阿里云 DNS 记录本来就存在但缓存未刷新、或 TTL 到期后重新解析。教训：DNS 问题先等 1-2 小时再判死，不要立刻下结论说\"记录丢了\"。",
         "date": "2026-10-21",
         "transferable": true
       }
