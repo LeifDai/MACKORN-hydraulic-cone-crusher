@@ -1,0 +1,890 @@
+{
+  "schema": "mackorn-ai-rejection/1",
+  "generated": "2026-10-21T01:04:40.739Z",
+  "what": "AI 收录原因诊断器 —— 对每个平台列收录条件，逐条比对，输出缺哪一条",
+  "state_snapshot": {
+    "tools": 29,
+    "skills": 6,
+    "has_server_json": true,
+    "has_readme": true,
+    "has_llms_txt": true,
+    "has_license": true,
+    "remote_ok": false,
+    "dns_ok": false,
+    "ssl_ok": false,
+    "pkg_version": "0.2.2"
+  },
+  "summary": {
+    "platforms": 12,
+    "listed": 4,
+    "not_listed": 4,
+    "unmet_total": 10,
+    "self_fixable": 1,
+    "external_blocked": 9
+  },
+  "root_causes": [
+    {
+      "desc": "★ 需手工提交",
+      "platforms": [
+        "MCP-X",
+        "MCPList"
+      ],
+      "fixable": false,
+      "how": "去 https://mcp-x.com/ 提交",
+      "source": "实测页面无我们的条目",
+      "confidence": "inferred"
+    },
+    {
+      "desc": "★ MCP 端点必须可被探测（Glama 会主动连）",
+      "platforms": [
+        "Glama"
+      ],
+      "fixable": false,
+      "how": "★ 修 DNS + SSL：目前主要矛盾是裸域 mackorn.cn 无 A 记录",
+      "source": "Glama 实测：页面显示 \"cannot be deployed\" + \"Responsiveness: Unresponsive\"",
+      "confidence": "inferred"
+    },
+    {
+      "desc": "端点必须能列出工具（tools/list）",
+      "platforms": [
+        "Glama"
+      ],
+      "fixable": false,
+      "how": "同上，先修 DNS+SSL",
+      "source": "Glama 会调 tools/list 统计工具数",
+      "confidence": "inferred"
+    },
+    {
+      "desc": "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取",
+      "platforms": [
+        "Glama"
+      ],
+      "fixable": false,
+      "how": "修好 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+      "source": "实测 Glama 页面显示 \"19 tools\"，仓库实际 29 个",
+      "confidence": "official"
+    },
+    {
+      "desc": "★ 需手工提交（mcp.so 无纯自动收录）",
+      "platforms": [
+        "mcp.so"
+      ],
+      "fixable": false,
+      "how": "去 https://mcp.so/ 提交，材料见 📤AI目录提交材料包.md",
+      "source": "实测 https://mcp.so/server/mackorn-cone-crusher 返回 404",
+      "confidence": "official"
+    },
+    {
+      "desc": "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+      "platforms": [
+        "Claude Connectors Directory"
+      ],
+      "fixable": false,
+      "how": "★ 先修 DNS+SSL。Claude 明确要求生产级稳定服务",
+      "source": "https://claude.com/docs/connectors/building/submission 官方要求",
+      "confidence": "official"
+    },
+    {
+      "desc": "需要隐私政策页面",
+      "platforms": [
+        "Claude Connectors Directory"
+      ],
+      "fixable": true,
+      "how": "建 /ai/privacy 页面 + 在提交表单里填链接",
+      "source": "Claude Connectors 提交要求含隐私政策",
+      "confidence": "official"
+    },
+    {
+      "desc": "需向对应仓库提 PR",
+      "platforms": [
+        "MCPServers.org"
+      ],
+      "fixable": false,
+      "how": "提交 PR",
+      "source": "实测 403（反爬），收录机制为 PR",
+      "confidence": "inferred"
+    },
+    {
+      "desc": "★ 合并前置条件：Glama 质量分必须评出来",
+      "platforms": [
+        "punkpeye/awesome-mcp-servers"
+      ],
+      "fixable": false,
+      "how": "★ 修 DNS+SSL → Glama 评分 → PR 才能合",
+      "source": "PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
+      "confidence": "official"
+    }
+  ],
+  "platforms": [
+    {
+      "id": "mcp-registry",
+      "name": "Official MCP Registry",
+      "listed_status": "listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 5,
+      "met": 5,
+      "unmet": [],
+      "unknown": [],
+      "reasons": [],
+      "self_fixable": [],
+      "external_blocked": [],
+      "reqs": [
+        {
+          "id": "server-json-exists",
+          "desc": "必须有 server.json（MCP Registry 的唯一抓取入口）",
+          "ok": true,
+          "fixable": true,
+          "how": "仓库根目录建 server.json",
+          "source": "https://registry.modelcontextprotocol.io/ 官方文档",
+          "confidence": "official"
+        },
+        {
+          "id": "name-reverse-dns",
+          "desc": "server.json 的 name 必须是反向域名格式（如 cn.mackorn/xxx）",
+          "ok": true,
+          "fixable": true,
+          "how": "server.json 的 name 改成 cn.mackorn/mackorn-cone-crusher",
+          "source": "MCP Registry schema：name 要求 reverse-DNS 命名空间",
+          "confidence": "official"
+        },
+        {
+          "id": "packages-declared",
+          "desc": "server.json 必须声明 packages（怎么安装）",
+          "ok": true,
+          "fixable": true,
+          "how": "加 packages 数组，含 registryType: npm, identifier, version",
+          "source": "MCP Registry schema 要求",
+          "confidence": "official"
+        },
+        {
+          "id": "version-match",
+          "desc": "server.json 的 version 必须与 npm 包版本一致",
+          "ok": true,
+          "fixable": true,
+          "how": "跑 node tools/sync_version.mjs --write",
+          "source": "MCP Registry 会校验版本一致性",
+          "confidence": "official"
+        },
+        {
+          "id": "description-present",
+          "desc": "必须有 description（≥10 字）",
+          "ok": true,
+          "fixable": true,
+          "how": "补 server.json 的 description",
+          "source": "MCP Registry schema",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "listed_status": "listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 4,
+      "met": 1,
+      "unmet": [
+        {
+          "id": "mcp-endpoint-reachable",
+          "desc": "★ MCP 端点必须可被探测（Glama 会主动连）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS + SSL：目前主要矛盾是裸域 mackorn.cn 无 A 记录",
+          "source": "Glama 实测：页面显示 \"cannot be deployed\" + \"Responsiveness: Unresponsive\"",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-enumerable",
+          "desc": "端点必须能列出工具（tools/list）",
+          "ok": false,
+          "fixable": false,
+          "how": "同上，先修 DNS+SSL",
+          "source": "Glama 会调 tools/list 统计工具数",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-count-fresh",
+          "desc": "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取",
+          "ok": false,
+          "fixable": false,
+          "how": "修好 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+          "source": "实测 Glama 页面显示 \"19 tools\"，仓库实际 29 个",
+          "confidence": "official"
+        }
+      ],
+      "unknown": [],
+      "reasons": [
+        "★ MCP 端点必须可被探测（Glama 会主动连）",
+        "端点必须能列出工具（tools/list）",
+        "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "mcp-endpoint-reachable",
+          "desc": "★ MCP 端点必须可被探测（Glama 会主动连）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS + SSL：目前主要矛盾是裸域 mackorn.cn 无 A 记录",
+          "source": "Glama 实测：页面显示 \"cannot be deployed\" + \"Responsiveness: Unresponsive\"",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-enumerable",
+          "desc": "端点必须能列出工具（tools/list）",
+          "ok": false,
+          "fixable": false,
+          "how": "同上，先修 DNS+SSL",
+          "source": "Glama 会调 tools/list 统计工具数",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-count-fresh",
+          "desc": "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取",
+          "ok": false,
+          "fixable": false,
+          "how": "修好 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+          "source": "实测 Glama 页面显示 \"19 tools\"，仓库实际 29 个",
+          "confidence": "official"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "mcp-endpoint-reachable",
+          "desc": "★ MCP 端点必须可被探测（Glama 会主动连）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS + SSL：目前主要矛盾是裸域 mackorn.cn 无 A 记录",
+          "source": "Glama 实测：页面显示 \"cannot be deployed\" + \"Responsiveness: Unresponsive\"",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-enumerable",
+          "desc": "端点必须能列出工具（tools/list）",
+          "ok": false,
+          "fixable": false,
+          "how": "同上，先修 DNS+SSL",
+          "source": "Glama 会调 tools/list 统计工具数",
+          "confidence": "inferred"
+        },
+        {
+          "id": "readme-has-name",
+          "desc": "README 必须含项目名（Glama 从 README 抓元数据）",
+          "ok": true,
+          "fixable": true,
+          "how": "已有 README",
+          "source": "Glama 页面显示的描述来自 GitHub README",
+          "confidence": "inferred"
+        },
+        {
+          "id": "tools-count-fresh",
+          "desc": "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取",
+          "ok": false,
+          "fixable": false,
+          "how": "修好 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+          "source": "实测 Glama 页面显示 \"19 tools\"，仓库实际 29 个",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "listed_status": "listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 3,
+      "met": 3,
+      "unmet": [],
+      "unknown": [],
+      "reasons": [],
+      "self_fixable": [],
+      "external_blocked": [],
+      "reqs": [
+        {
+          "id": "stdio-startable",
+          "desc": "必须能通过 npx 启动 stdio MCP server",
+          "ok": true,
+          "fixable": true,
+          "how": "package.json 的 bin 已配（mackorn-cone-crusher / mackorn-mcp）",
+          "source": "Smithery 通过 npx 启动并握手",
+          "confidence": "official"
+        },
+        {
+          "id": "description-present",
+          "desc": "package.json 必须有 description",
+          "ok": true,
+          "fixable": true,
+          "how": "已有",
+          "source": "Smithery 从 npm 元数据读取",
+          "confidence": "official"
+        },
+        {
+          "id": "config-schema-optional",
+          "desc": "可选：smithery.yaml 声明配置 schema（我们没有，但不阻塞）",
+          "ok": true,
+          "fixable": true,
+          "how": "可选：加 smithery.yaml 声明无需 API key",
+          "source": "Smithery 文档：有配置项时必须声明",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "mcp-so",
+      "name": "mcp.so",
+      "listed_status": "not_listed",
+      "listed_known": true,
+      "http": 404,
+      "total_reqs": 2,
+      "met": 0,
+      "unmet": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交（mcp.so 无纯自动收录）",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp.so/ 提交，材料见 📤AI目录提交材料包.md",
+          "source": "实测 https://mcp.so/server/mackorn-cone-crusher 返回 404",
+          "confidence": "official"
+        }
+      ],
+      "unknown": [
+        {
+          "id": "github-topic",
+          "desc": "GitHub 仓库必须有 mcp-server topic（mcp.so 自动抓）",
+          "ok": null,
+          "fixable": false,
+          "how": "去 GitHub 仓库 Settings → Topics 加 mcp-server / mcp",
+          "source": "mcp.so 从 GitHub topic 抓取",
+          "confidence": "inferred"
+        }
+      ],
+      "reasons": [
+        "★ 需手工提交（mcp.so 无纯自动收录）"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交（mcp.so 无纯自动收录）",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp.so/ 提交，材料见 📤AI目录提交材料包.md",
+          "source": "实测 https://mcp.so/server/mackorn-cone-crusher 返回 404",
+          "confidence": "official"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "github-topic",
+          "desc": "GitHub 仓库必须有 mcp-server topic（mcp.so 自动抓）",
+          "ok": null,
+          "fixable": false,
+          "how": "去 GitHub 仓库 Settings → Topics 加 mcp-server / mcp",
+          "source": "mcp.so 从 GitHub topic 抓取",
+          "confidence": "inferred"
+        },
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交（mcp.so 无纯自动收录）",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp.so/ 提交，材料见 📤AI目录提交材料包.md",
+          "source": "实测 https://mcp.so/server/mackorn-cone-crusher 返回 404",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "mcpx",
+      "name": "MCP-X",
+      "listed_status": "not_listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 1,
+      "met": 0,
+      "unmet": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp-x.com/ 提交",
+          "source": "实测页面无我们的条目",
+          "confidence": "inferred"
+        }
+      ],
+      "unknown": [],
+      "reasons": [
+        "★ 需手工提交"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp-x.com/ 提交",
+          "source": "实测页面无我们的条目",
+          "confidence": "inferred"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcp-x.com/ 提交",
+          "source": "实测页面无我们的条目",
+          "confidence": "inferred"
+        }
+      ]
+    },
+    {
+      "id": "mcplist",
+      "name": "MCPList",
+      "listed_status": "not_listed",
+      "listed_known": true,
+      "http": 404,
+      "total_reqs": 1,
+      "met": 0,
+      "unmet": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcplist.org/ 提交",
+          "source": "实测 404",
+          "confidence": "inferred"
+        }
+      ],
+      "unknown": [],
+      "reasons": [
+        "★ 需手工提交"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcplist.org/ 提交",
+          "source": "实测 404",
+          "confidence": "inferred"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "manual-submit",
+          "desc": "★ 需手工提交",
+          "ok": false,
+          "fixable": false,
+          "how": "去 https://mcplist.org/ 提交",
+          "source": "实测 404",
+          "confidence": "inferred"
+        }
+      ]
+    },
+    {
+      "id": "claude-directory",
+      "name": "Claude Connectors Directory",
+      "listed_status": "not_listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 4,
+      "met": 1,
+      "unmet": [
+        {
+          "id": "remote-endpoint",
+          "desc": "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 先修 DNS+SSL。Claude 明确要求生产级稳定服务",
+          "source": "https://claude.com/docs/connectors/building/submission 官方要求",
+          "confidence": "official"
+        },
+        {
+          "id": "privacy-policy",
+          "desc": "需要隐私政策页面",
+          "ok": false,
+          "fixable": true,
+          "how": "建 /ai/privacy 页面 + 在提交表单里填链接",
+          "source": "Claude Connectors 提交要求含隐私政策",
+          "confidence": "official"
+        }
+      ],
+      "unknown": [
+        {
+          "id": "anthropic-review",
+          "desc": "★ 需 Anthropic 人工审核（不可控）",
+          "ok": null,
+          "fixable": false,
+          "how": "提交后等审核",
+          "source": "Claude Directory 有 review 流程",
+          "confidence": "official"
+        }
+      ],
+      "reasons": [
+        "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+        "需要隐私政策页面"
+      ],
+      "self_fixable": [
+        {
+          "id": "privacy-policy",
+          "desc": "需要隐私政策页面",
+          "ok": false,
+          "fixable": true,
+          "how": "建 /ai/privacy 页面 + 在提交表单里填链接",
+          "source": "Claude Connectors 提交要求含隐私政策",
+          "confidence": "official"
+        }
+      ],
+      "external_blocked": [
+        {
+          "id": "remote-endpoint",
+          "desc": "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 先修 DNS+SSL。Claude 明确要求生产级稳定服务",
+          "source": "https://claude.com/docs/connectors/building/submission 官方要求",
+          "confidence": "official"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "remote-endpoint",
+          "desc": "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 先修 DNS+SSL。Claude 明确要求生产级稳定服务",
+          "source": "https://claude.com/docs/connectors/building/submission 官方要求",
+          "confidence": "official"
+        },
+        {
+          "id": "privacy-policy",
+          "desc": "需要隐私政策页面",
+          "ok": false,
+          "fixable": true,
+          "how": "建 /ai/privacy 页面 + 在提交表单里填链接",
+          "source": "Claude Connectors 提交要求含隐私政策",
+          "confidence": "official"
+        },
+        {
+          "id": "support-contact",
+          "desc": "需要支持联系方式",
+          "ok": true,
+          "fixable": true,
+          "how": "已有（sandy.zhao@mackorn.cn / leif.dai@mackorn.cn）",
+          "source": "Claude 要求提供支持渠道",
+          "confidence": "official"
+        },
+        {
+          "id": "anthropic-review",
+          "desc": "★ 需 Anthropic 人工审核（不可控）",
+          "ok": null,
+          "fixable": false,
+          "how": "提交后等审核",
+          "source": "Claude Directory 有 review 流程",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "pulsemcp",
+      "name": "PulseMCP",
+      "listed_status": "blocked",
+      "listed_known": true,
+      "http": 403,
+      "total_reqs": 1,
+      "met": 0,
+      "unmet": [],
+      "unknown": [
+        {
+          "id": "github-topic",
+          "desc": "PulseMCP 抓 GitHub topic: mcp-server",
+          "ok": null,
+          "fixable": false,
+          "how": "确认 GitHub 仓库 topics 含 mcp-server",
+          "source": "PulseMCP 说明：自动抓 GitHub topic",
+          "confidence": "inferred"
+        }
+      ],
+      "reasons": [],
+      "self_fixable": [],
+      "external_blocked": [],
+      "reqs": [
+        {
+          "id": "github-topic",
+          "desc": "PulseMCP 抓 GitHub topic: mcp-server",
+          "ok": null,
+          "fixable": false,
+          "how": "确认 GitHub 仓库 topics 含 mcp-server",
+          "source": "PulseMCP 说明：自动抓 GitHub topic",
+          "confidence": "inferred"
+        }
+      ]
+    },
+    {
+      "id": "mcpservers-org",
+      "name": "MCPServers.org",
+      "listed_status": "blocked",
+      "listed_known": true,
+      "http": 403,
+      "total_reqs": 1,
+      "met": 0,
+      "unmet": [
+        {
+          "id": "github-pr",
+          "desc": "需向对应仓库提 PR",
+          "ok": false,
+          "fixable": false,
+          "how": "提交 PR",
+          "source": "实测 403（反爬），收录机制为 PR",
+          "confidence": "inferred"
+        }
+      ],
+      "unknown": [],
+      "reasons": [
+        "需向对应仓库提 PR"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "github-pr",
+          "desc": "需向对应仓库提 PR",
+          "ok": false,
+          "fixable": false,
+          "how": "提交 PR",
+          "source": "实测 403（反爬），收录机制为 PR",
+          "confidence": "inferred"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "github-pr",
+          "desc": "需向对应仓库提 PR",
+          "ok": false,
+          "fixable": false,
+          "how": "提交 PR",
+          "source": "实测 403（反爬），收录机制为 PR",
+          "confidence": "inferred"
+        }
+      ]
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "listed_status": "listed",
+      "listed_known": true,
+      "http": 200,
+      "total_reqs": 2,
+      "met": 2,
+      "unmet": [],
+      "unknown": [],
+      "reasons": [],
+      "self_fixable": [],
+      "external_blocked": [],
+      "reqs": [
+        {
+          "id": "skill-frontmatter",
+          "desc": "每个 SKILL.md 必须有 frontmatter（name + description）",
+          "ok": true,
+          "fixable": true,
+          "how": "检查 skills/*/SKILL.md 的 frontmatter",
+          "source": "Agent Skills 规范",
+          "confidence": "official"
+        },
+        {
+          "id": "npx-skills-add",
+          "desc": "通过 npx skills add 自动收录",
+          "ok": true,
+          "fixable": true,
+          "how": "已完成（skills.sh 页面已存在）",
+          "source": "实测 skills.sh 已有我们的页面",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "awesome-mcp",
+      "name": "punkpeye/awesome-mcp-servers",
+      "listed_status": "error",
+      "listed_known": true,
+      "http": null,
+      "total_reqs": 2,
+      "met": 1,
+      "unmet": [
+        {
+          "id": "glama-score",
+          "desc": "★ 合并前置条件：Glama 质量分必须评出来",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS+SSL → Glama 评分 → PR 才能合",
+          "source": "PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
+          "confidence": "official"
+        }
+      ],
+      "unknown": [],
+      "reasons": [
+        "★ 合并前置条件：Glama 质量分必须评出来"
+      ],
+      "self_fixable": [],
+      "external_blocked": [
+        {
+          "id": "glama-score",
+          "desc": "★ 合并前置条件：Glama 质量分必须评出来",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS+SSL → Glama 评分 → PR 才能合",
+          "source": "PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
+          "confidence": "official"
+        }
+      ],
+      "reqs": [
+        {
+          "id": "pr-opened",
+          "desc": "PR 已开（#15410）",
+          "ok": true,
+          "fixable": false,
+          "how": "已提交",
+          "source": "PR #15410 OPEN",
+          "confidence": "official"
+        },
+        {
+          "id": "glama-score",
+          "desc": "★ 合并前置条件：Glama 质量分必须评出来",
+          "ok": false,
+          "fixable": false,
+          "how": "★ 修 DNS+SSL → Glama 评分 → PR 才能合",
+          "source": "PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
+          "confidence": "official"
+        }
+      ]
+    },
+    {
+      "id": "awesome-dsh",
+      "name": "awesome-dsh-plugin",
+      "listed_status": "error",
+      "listed_known": true,
+      "http": null,
+      "total_reqs": 1,
+      "met": 1,
+      "unmet": [],
+      "unknown": [],
+      "reasons": [],
+      "self_fixable": [],
+      "external_blocked": [],
+      "reqs": [
+        {
+          "id": "pr-merged",
+          "desc": "PR 已合并（#6141）",
+          "ok": true,
+          "fixable": false,
+          "how": "已合并（2026-10-17）",
+          "source": "PR #6141 MERGED",
+          "confidence": "official"
+        }
+      ]
+    }
+  ],
+  "action_plan": [
+    {
+      "priority": 0,
+      "type": "external",
+      "what": "★ 需手工提交",
+      "affects": [
+        "MCP-X",
+        "MCPList"
+      ],
+      "how": "去 https://mcp-x.com/ 提交",
+      "source": "实测页面无我们的条目"
+    },
+    {
+      "priority": 1,
+      "type": "self-fixable",
+      "what": "需要隐私政策页面",
+      "affects": [
+        "Claude Connectors Directory"
+      ],
+      "how": "建 /ai/privacy 页面 + 在提交表单里填链接",
+      "source": "Claude Connectors 提交要求含隐私政策"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "★ MCP 端点必须可被探测（Glama 会主动连）",
+      "affects": [
+        "Glama"
+      ],
+      "how": "★ 修 DNS + SSL：目前主要矛盾是裸域 mackorn.cn 无 A 记录",
+      "source": "Glama 实测：页面显示 \"cannot be deployed\" + \"Responsiveness: Unresponsive\""
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "端点必须能列出工具（tools/list）",
+      "affects": [
+        "Glama"
+      ],
+      "how": "同上，先修 DNS+SSL",
+      "source": "Glama 会调 tools/list 统计工具数"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "★ Glama 缓存的工具数是 19，实际 29 —— 需重新抓取",
+      "affects": [
+        "Glama"
+      ],
+      "how": "修好 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+      "source": "实测 Glama 页面显示 \"19 tools\"，仓库实际 29 个"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "★ 需手工提交（mcp.so 无纯自动收录）",
+      "affects": [
+        "mcp.so"
+      ],
+      "how": "去 https://mcp.so/ 提交，材料见 📤AI目录提交材料包.md",
+      "source": "实测 https://mcp.so/server/mackorn-cone-crusher 返回 404"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "★ 必须有生产级远程 MCP 端点（HTTPS，证书有效）",
+      "affects": [
+        "Claude Connectors Directory"
+      ],
+      "how": "★ 先修 DNS+SSL。Claude 明确要求生产级稳定服务",
+      "source": "https://claude.com/docs/connectors/building/submission 官方要求"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "需向对应仓库提 PR",
+      "affects": [
+        "MCPServers.org"
+      ],
+      "how": "提交 PR",
+      "source": "实测 403（反爬），收录机制为 PR"
+    },
+    {
+      "priority": 2,
+      "type": "external",
+      "what": "★ 合并前置条件：Glama 质量分必须评出来",
+      "affects": [
+        "punkpeye/awesome-mcp-servers"
+      ],
+      "how": "★ 修 DNS+SSL → Glama 评分 → PR 才能合",
+      "source": "PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\""
+    }
+  ]
+}
