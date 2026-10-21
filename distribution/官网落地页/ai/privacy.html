@@ -1,0 +1,140 @@
+# 隐私政策 / Privacy Policy
+
+> 最后更新：2026-10-21
+> 适用：MACKORN 美矿液压圆锥破碎机选型插件（MCP Server / Agent Skill）
+
+---
+
+## 一句话总结
+
+**本插件不收集、不上传、不存储任何用户数据。** 所有计算在你的本机完成。
+
+---
+
+## 1. 我们收集什么
+
+**什么都不收集。**
+
+本插件是一个**纯本地计算工具**：
+
+```
+✅ 所有选型计算在你的机器上完成
+✅ 不联网（除用户主动要求的线上检查）
+✅ 不发送遥测 / 不上报使用情况
+✅ 不记录调用日志
+✅ 不需要登录、不需要 API key
+✅ 不读写你的任何文件（除你显式提供的输入）
+```
+
+---
+
+## 2. 数据流向
+
+```
+你的输入（处理量、矿石类型、粒度等）
+    ↓
+本机 Node.js 进程
+    ↓
+计算结果返回给 AI 助手
+    ↓
+结束
+
+★ 全程不离开你的机器。
+```
+
+**唯一的例外**（且需你主动触发）：
+- `mackorn_knowledge_update` 工具会**在你本机**写文件到 `$DSH_HOME/mackorn-knowledge/`
+- 这是本地写盘，不涉及网络
+
+---
+
+## 3. 第三方
+
+```
+❌ 不使用任何第三方分析服务（无 Google Analytics / 无 Sentry / 无 Mixpanel）
+❌ 不调用任何第三方 API（除 MCP 协议本身）
+❌ 不包含任何追踪代码
+```
+
+**依赖层面**：本插件**零外部 npm 依赖**，只用 Node.js 内置模块。
+
+---
+
+## 4. 你的数据权利
+
+因为你没给我们数据，所以：
+
+```
+✅ 无数据可删
+✅ 无数据可导出
+✅ 无数据可撤回
+```
+
+**本地产生的文件**（如知识库缓存）完全在你机器上，你自己随时可删。
+
+---
+
+## 5. 儿童隐私
+
+本插件是工业设备选型工具，不面向儿童，不收集任何个人信息。
+
+---
+
+## 6. 政策变更
+
+如有变更，会更新上方"最后更新"日期。
+但本插件的核心设计（纯本地、零收集）不会变。
+
+---
+
+## 7. 联系方式
+
+```
+上海美矿机械有限公司 / Shanghai Mackorn Minerals Co., Ltd.
+地址：江苏省苏州市太仓市浏河镇钱江路 33 号
+      33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China
+
+商务：Sandy Zhao  sandy.zhao@mackorn.cn  +86 139 1648 5025
+技术：Leif Dai     leif.dai@mackorn.cn    +86 134 8218 0158
+官网：https://mackorn.cn/ai/
+```
+
+---
+
+## English Version
+
+# Privacy Policy
+
+**Summary: this plugin collects, uploads and stores nothing. Everything runs on your machine.**
+
+### What we collect
+
+**Nothing.** This is a pure local computation tool:
+
+- All selection calculations run on your machine
+- No telemetry, no usage reporting
+- No request logging
+- No login, no API key
+- No file access except inputs you explicitly provide
+
+### Data flow
+
+Your inputs → local Node.js process → results returned to your AI assistant → done.
+Nothing leaves your machine.
+
+The only exception (user-triggered): `mackorn_knowledge_update` writes files to
+`$DSH_HOME/mackorn-knowledge/` locally. Local disk write, no network.
+
+### Third parties
+
+No analytics, no third-party APIs, no tracking code, zero npm dependencies.
+
+### Your rights
+
+No data to delete, export or revoke. Local cache files are entirely on your machine.
+
+### Contact
+
+Shanghai Mackorn Minerals Co., Ltd.
+33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China
+leif.dai@mackorn.cn · https://mackorn.cn/ai/
