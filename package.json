@@ -40,7 +40,9 @@
     "AGENTS.md",
     "QUICKSTART.md",
     "smithery.yaml",
-    "CITATION.cff"
+    "CITATION.cff",
+    "glama.json",
+    ".dockerignore"
   ],
   "engines": {
     "node": ">=18"
