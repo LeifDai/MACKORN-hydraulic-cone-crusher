@@ -162,9 +162,12 @@ if (has('--next')) {
    * 会被拆成多条。改成【归一到 canonical 根因】：
    *   DNS / SSL / 第三方评分 / 手工提交 / 审核 */
   const canonical = (s) => {
+    /* R145：Glama 的阻塞已纠正为「需做 containerized release」，不再依赖 SSL。
+     * 顺序很重要：先判 containerized，再判 DNS/SSL，否则会被误归并。 */
+    if (/containerized|容器化|Deploy|Make Release/i.test(s)) return 'Glama：需做 containerized release（三件套已备，去 admin 页面 Deploy）';
     if (/DNS/i.test(s)) return 'DNS：裸域 mackorn.cn 无 A 记录';
-    if (/SSL|证书|HTTPS/i.test(s)) return 'SSL：证书 2026-10-14 已过期';
-    if (/评分|Glama/i.test(s)) return 'Glama 评分未出（依赖 DNS+SSL）';
+    if (/SSL|证书/i.test(s)) return 'SSL：证书 2026-10-14 已过期';
+    if (/评分|Glama/i.test(s)) return 'Glama 评分未出';
     if (/提交|submit/i.test(s)) return '需手工提交（材料已备）';
     if (/审核|review/i.test(s)) return '需平台人工审核';
     return s;
@@ -187,9 +190,11 @@ if (has('--next')) {
   const sorted = [...blockerMap.entries()].sort((a, b) => b[1].length - a[1].length);
   let i = 1;
   for (const [blocker, plats] of sorted) {
-    const fixHint = /DNS/i.test(blocker) ? '阿里云 DNS 加 A 记录：@ → 47.110.80.123'
-      : /SSL|证书/i.test(blocker) ? 'certbot --apache -d mackorn.cn -d www.mackorn.cn'
-      : /Glama/i.test(blocker) ? '修 DNS+SSL 后去 Glama 后台点 Refresh'
+    const fixHint = /containerized|容器化|Deploy|Make Release/i.test(blocker)
+        ? '去 https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher/admin/dockerfile 配置 → Deploy → Make Release（三件套已备，不需等 SSL）'
+      : /DNS/i.test(blocker) ? '阿里云 DNS 加 A 记录：@ → 47.110.80.123'
+      : /SSL|证书/i.test(blocker) ? 'certbot --apache -d mackorn.cn -d www.mackorn.cn（或宝塔 Let\'s Encrypt）'
+      : /Glama/i.test(blocker) ? '去 Glama admin/dockerfile 做 containerized release'
       : /提交/i.test(blocker) ? '按 distribution/📤AI目录提交材料包.md 提交'
       : '人工确认';
     console.log('  P' + (plats.length >= 2 ? 0 : 1) + ' [' + i + '] ' + blocker);
