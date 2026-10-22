@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-22T00:41:45.374Z",
+  "generated": "2026-10-22T07:32:15.889Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,16 +12,16 @@
     "error": null
   },
   "last_commit": {
-    "sha": "0d4752d",
-    "date": "2026-10-21T21:38:13Z",
-    "message": "chore(nightly): 云端自迭代 2026-10-21 21:38 [skip ci]"
+    "sha": "af718f9",
+    "date": "2026-10-22T04:20:30Z",
+    "message": "fix(publish): AGENTS.md/QUICKSTART/smithery now shipped in dist (R142)"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 3.4,
+    "days_since": 3.68,
     "local_version": "0.2.2",
     "version_pending": false
   },
@@ -29,7 +29,7 @@
   "effective_days": 0.13,
   "days_since_publish": 0.13,
   "changed_since_publish": {
-    "count": 296,
+    "count": 297,
     "files": [
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/index.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/automation-engine.mjs",

@@ -1,15 +1,15 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-22T00:41:49.762Z",
+  "generated": "2026-10-22T07:32:18.555Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
     "total": 35,
-    "today": 11,
+    "today": 6,
     "last7": 35,
     "last30": 35
   },
   "metrics": {
-    "daily_correction": 11,
+    "daily_correction": 6,
     "week_correction": 35,
     "depth_score_7d": 81,
     "avg_depth": 2.31,
