@@ -316,49 +316,202 @@
       "evidence": "tools/cert_monitor.mjs 实测输出：DNS ✅✅ · SSL 🔴 已过期 7 天（Issuer: Encryption Everywhere DV TLS CA = 阿里云免费证书）· 端点 0/5 可访问",
       "impact": "L4",
       "why": null
+    },
+    {
+      "id": "C036",
+      "at": "2026-10-21T17:00:11.662Z",
+      "wrong": "mcpb 包、GitHub 上传包、部署暂存目录都是构建产物，build_public 跑一遍它们就会自动同步",
+      "now": "它们大多是**人工触发的暂存目录**，构建不会刷新：实测 mcpb 停在 0.0.9/19 工具、上传包 llms.txt 还是 38KB 旧版、_deploy/version.json 版本说明还写 semver 0.2.0。现已把三者纳入 check_publish_artifact 门禁（41 条断言）",
+      "evidence": "distribution/mcpb/mackorn-cone-crusher/manifest.json 与 _upload-github/ 重建前后对比；tools/check_publish_artifact.mjs",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C037",
+      "at": "2026-10-21T17:00:11.797Z",
+      "wrong": "tools/bump_package_version.mjs 是安全的版本升级脚本，可以随时用来改版本号",
+      "now": "它把 j.version 硬编码成 '0.2.0'，且把 VERSION 文件写成 semver 而非 V 号。误跑一次会把已发布版本写回 0.2.0。已加 --to 守卫（缺参数 exit 2）并修正 VERSION 格式为 V 号",
+      "evidence": "tools/bump_package_version.mjs 守卫自测 exit=2；根 VERSION 由 V000020 修正为 V000022",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C038",
+      "at": "2026-10-21T18:38:32.011Z",
+      "wrong": "远程 PHP 端点与本地 Node 定义了 29 个工具、数量一致，就能对得上；参数层无需单独校验",
+      "now": "数量一致只说明名字齐了。实写 PHP schema 比对器后测出 15/29 个工具的**参数**不一致：requirement_intake 少 24 个参数、distributor_eval 参数名完全不同（旧设计）、多个工具 required 不一致（intake 的 capacity_tph 远程不再必填）。远程 AI 会传错参数并静默失败。已让 gen_php_mcp.mjs 从 plugin/index.mjs 生成 schema，参数一致性成为产物门禁第 12 段",
+      "evidence": "tools/check_php_schema_parity.mjs：修复前 15 个不一致 → 修复后 29/29 一致；mcp.php 111KB→125.5KB 且 lint 0 错误",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C039",
+      "at": "2026-10-21T18:38:32.173Z",
+      "wrong": "site 的部署目录只要文件齐全（mcp.php / version.json / 12 语言页都在）就算可用",
+      "now": "还要检查**布局与 URL 形态**：实测 _deploy 曾被另一个构建器的扁平旧布局覆盖（/en/ /api/ 而不是 /ai/en/），而 sitemap 96/98 条 URL 都在 /ai/ 下；同时 LINK_MAP 的裸子串规则把 /ai/api/ 叠成 /ai/ai/api/，污染了给 AI 读的 llms.txt；robots.txt 还写着 22 个工具并宣传一个不存在的 /ai/llms.txt。已把布局/叠层/robots 工具数/zip 新鲜度做成 6 条门禁",
+      "evidence": "tools/check_publish_artifact.mjs 第 11 段；_deploy 校验 ai/api/mcp.php ✓ 12 语言页 ✓ 无扁平残留 ✓ 无叠层 ✓",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C040",
+      "at": "2026-10-21T19:54:55.545Z",
+      "wrong": "zip_deploy.mjs 报『已打包 146 文件 · ai/api/mcp.php ✓ · 12 语言页 ✓ · 无扁平旧布局 ✓』就说明交付包可以上传了",
+      "now": "不够。把 zip 真解开逐字节比对，发现部署版 mcp.php 与源差 12 字节 —— 因为 restructure_deploy 会改写 .php 里的旧站点路径（/api/mcp.php→/ai/api/mcp.php、/contact/→/ai/contact/）。差异良性，但暴露源文件里的旧链接只靠部署期兜底：跳过那一步直接上传，用户会在工具输出的 source/qr 字段看到旧 URL。已让 gen_php_mcp 直接产出 canonical 路径，并加门禁『部署版 mcp.php 无旧站点路径』",
+      "evidence": "把 官网部署包.zip 解压后逐字节比对；复验：部署版与源哈希一致（164,264 B）；check_publish_artifact 新增该断言 → 54/0",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C041",
+      "at": "2026-10-21T20:10:16.825Z",
+      "wrong": "MCPB 包（Claude Desktop 一键装）只要 manifest 对、工具数对、能 selftest 通过就算合格",
+      "now": "还要检查包里有没有不该带的东西。实测 build_mcpb 无过滤地 cpSync(plugin/lib)，把 engine.mjs.bak / simulate.mjs.bak / guardrails.mjs.prev 等 6 个源码备份（约 140 KB）一起装给用户 —— 那是旧版本代码（engine.mjs.bak 比现行版少 12.5 KB），既占空间又可能被 AI 误当成现行算法。dist 干净是因为 build_public 的禁止清单挡了，MCPB 这条路没人挡。已加过滤 + 门禁『MCPB 包内无源码备份/临时文件』",
+      "evidence": "rebuild 后 MCPB 46→40 文件、0 备份、--selftest 仍 36/0；check_publish_artifact 55/0",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C042",
+      "at": "2026-10-21T20:10:16.949Z",
+      "wrong": "两个构建产物用不同文件名就不会互相干扰",
+      "now": "错。zip_deploy 写 官网部署包.zip，而 build_delta.mjs 第 158 行会**显式删除**同名文件（注释：已被更新包取代）。于是每次生成增量包，全量包就消失，门禁随即报『未找到』。这是两个工具争同一个**文件名**（与第四阶段两个构建器争同一个**目录**同类）。已改名 官网全量部署包.zip 并在脚本里写明两者分工：全量=首次部署/整站恢复，增量=日常更新",
+      "evidence": "build_delta 跑两次后两包并存：全量 747.4KB / 增量 506.7KB；build_delta.mjs L158-159 读过确认删除行为",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C043",
+      "at": "2026-10-21T20:28:41.944Z",
+      "wrong": "上传清单是自动生成的，所以里面的文件数一定对",
+      "now": "错。清单确实是生成的，但**生成它的源列表 TO_UPLOAD 里有重复项**（tools/rsi_record.mjs 与 tools/rsi_register.mjs 各写两遍），于是清单出现重复行、头部写 57 个文件而磁盘实际只有 55 个；第五节还硬写着『应显示 23 个工具（线上 21）』『官网只有 9 个语言目录』（实际 29 工具 / 11 语言目录）。生成≠正确：生成器的输入和模板同样会腐化。已去重 + 告警 + 把它做成 3 条门禁（无重复行 / 清单与包内容一致 / 工具数与实际一致）",
+      "evidence": "build_github_upload_bundle.mjs 重建：55 个文件 546.8 KB；check_publish_artifact 58/0；清单头部与 §5 数字已改为派生",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C044",
+      "at": "2026-10-21T20:43:25.380Z",
+      "wrong": "版本号只要 package.json 对就行，其它对外文件里的 version 字段不影响",
+      "now": "错。实测 agent.json(A2A 智能体卡) 里 version 硬编码为 1.0.0，而 package.json/dist/_upload/MCPB manifest/version.json/server.json 全是 0.2.2 —— AI 目录读 agent.json 会看到一个与产品不符的版本，且它永远不会随发版更新。已让 build_agent_entrypoints 从 package.json 派生 version 与 tools，并新增门禁『跨交付物版本号一致（7 处矩阵比对）』",
+      "evidence": "agent.json version 1.0.0 → 0.2.2；check_publish_artifact 新增矩阵断言 → 59/0，输出『跨交付物版本号一致 0.2.2 × 7 处』",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C045",
+      "at": "2026-10-21T20:54:55.954Z",
+      "wrong": "sync_tool_count_facts 的映射表保护判据是：映射目标文件里找不到锚点或匹配 0 次时必须报错终止",
+      "now": "不是这个意思。真实判据是**按行判断**：一行里出现 ≥2 个不同的工具数 → 说明这是映射表/证据行，必须**跳过不改**。原来的判据『同时含旧值与新值』只认当前 TOOLS 这一个新值，遇到 [19 tools, 22 tools] 这类历史映射（新值早已不是当前值）就漏判，会破坏证据行。来自 G4b 负控实测",
+      "evidence": "F0009 主动回忆判错（:n）；原文见 cognition-data/facts.json F0009，出处 G4b 负控抓到",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C046",
+      "at": "2026-10-21T20:56:24.174Z",
+      "wrong": "站内链接改写规则写全了站内相对路径（\\",
+      "now": "错。LINK_MAP 里三个维度要分别写：① 站内相对（双引号）② 站内相对（单引号）③ **绝对 URL**。我原先只手写了 en/ru/es/de 四种语言的绝对规则 → 部署后 ar/fr/id/pt/vi 五个语言页的 canonical 与 29 处 hreflang 仍指向站点根旧路径（/ar/ 等），而根目录已无该路径 → 爬虫照 canonical 去访问会 404。已改为按语言表批量生成三套规则；门禁 +2 条（部署页 canonical/hreflang 必须全部指向 /ai/）",
+      "evidence": "扫描 _deploy 96 个 HTML：修复前 canonical 异常 5、hreflang 异常 29；批量规则后均为 0；check_publish_artifact 61/0",
+      "impact": "L2",
+      "why": null
+    },
+    {
+      "id": "C047",
+      "at": "2026-10-21T21:12:08.385Z",
+      "wrong": "部署包里页面访问正常，就说明链接都是对的",
+      "now": "错。把部署目录 126 个文件的内部链接逐一映射回本地文件，抓出 14 类死链：guides/ 整目录不在 MOVE_DIRS（8 篇矿石指南从未上线，agent.json 里 9 条链接 404）、repo-qrcode.png 与 mackorn-logo.jpg 从未进包、markets 缺入口页、robots 写了不存在的 /ai/sitemap.xml。更严重的是 sync_ai_index 的 urlOf() 按源站扁平路径拼 URL，导致 llms.txt 里 55 条链接指向部署后不存在的路径 —— 而 llms.txt 是给 AI 读的第一份文件。已全部修复并新增『部署产物死链扫描』门禁（扫 126 文件）",
+      "evidence": "部署包 146→159 文件，sitemap 98→108 URL，死链 14 类→0；check_publish_artifact 62/0",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C048",
+      "at": "2026-10-22T04:23:34.217Z",
+      "wrong": "我以为写完 AGENTS.md / QUICKSTART.md / smithery.yaml 就等于\"AI 能读到了\"",
+      "now": "实际它们从未进过发布包！package.json 的 files 字段没列它们、build_public 的放行清单也没加它们 → dist 里根本没有 → AI 装 npm 包时读不到。写了 ≠ 发出去了。这和 R141 记录的 Dockerfile 缺失是同一个坑的第二次发作",
+      "evidence": "实测 dist/mackorn-cone-crusher 根目录：AGENTS.md ❌ / QUICKSTART.md ❌ / smithery.yaml ❌（Dockerfile ✅ 因为 R141 已修）。修复后三个全部 ✅，check_publish_artifact 从 61/1 变 62/0",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C049",
+      "at": "2026-10-22T04:23:34.815Z",
+      "wrong": "我以为有了 check_publish_artifact 就不会再漏",
+      "now": "实际它没检查 AGENTS.md/QUICKSTART.md/smithery.yaml 这三个\"AI 可发现性文件\"。门禁只覆盖它已知的清单，新增文件必须【同时】加到 files 字段 + build_public 放行清单 + 验收器检查项，三处缺一就会被漏",
+      "evidence": "加 R142 检查块后 check_publish_artifact 立刻抓到 package.json 与上传包不一致（因为 files 改了但上传包没重建），重建后 62/0",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C050",
+      "at": "2026-10-22T07:44:55.761Z",
+      "wrong": "我一直以为 Glama 判定「cannot be deployed」是因为它探测 https://mackorn.cn/ai/api/mcp.php 时 SSL 证书过期导致的",
+      "now": "实际 Glama 官方文档明确写着：\"A Glama release is not a GitHub release. It is a containerized build of your MCP server that Glama uses to run security checks and to let users deploy the server.\" —— 它【自己构建 Docker 镜像跑我们的 server】，根本不探测我们的 HTTPS 端点。所以 SSL 和 Glama Release 是两件独立的事，SSL 过期【不会阻塞】Glama。真因是我们从来没做过 containerized release",
+      "evidence": "glama.ai/blog/2026-03-15-how-to-make-a-release 原文；且搜索结果里多个项目（vestige/hubd/skyvern/ateam-mcp）都专门加 Dockerfile + glama.json 为了 Glama",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C051",
+      "at": "2026-10-22T07:44:56.122Z",
+      "wrong": "我以为只要有 Dockerfile 就够了",
+      "now": "实际需要三件套 + 一个关键优化：① Dockerfile（已有但中文注释有编码风险，已改英文）② .dockerignore（缺！构建上下文会含 dist/ 20MB+）③ glama.json（缺！声明维护者）④ .dockerignore 必须排除 knowledge/_refs（17.48MB 报价截图 + 违反 No pricing）。补齐后镜像从 20MB 降到 ~0.6MB",
+      "evidence": "实测：knowledge/ 20.13MB 其中 _refs/ 19.59MB（40 张 PNG 17.48MB + 8 张 JPG 1.87MB）；移走 _refs 后 selftest 依然 36 通过 0 失败，证明运行时不依赖",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C052",
+      "at": "2026-10-22T07:44:56.908Z",
+      "wrong": "我以为往 check_publish_artifact 里加检查项，加完就会生效",
+      "now": "实际加了两次都没生效：第一次块插在 if(!existsSync(OUT)) 内部（dist 存在时整块跳过），第二次用了不存在的 exists() 函数（报 ReferenceError）。教训：【加门禁后必须看输出里有没有那一行】，不能只看总通过数。70/0 比 62/0 多了 8 项才说明真生效",
+      "evidence": "实测：加块后 check_publish_artifact 仍报 62/0 且 grep Glama 无输出；移到 if 块外 + 改 exists→existsSync 后变 70/0 且能看到 Glama 那 7 行",
+      "impact": "L3",
+      "why": null
     }
   ],
-  "generated": "2026-10-20T09:21:49.290Z",
+  "generated": "2026-10-21T21:32:25.494Z",
   "rule": "全局规则 §2.6 每天提升认知力（四件事：学 / 疑 / 炼 / 测）",
   "metrics": {
-    "facts": 10,
-    "recall_pass": 66.7,
-    "refutations": 19,
-    "rules_distilled": 17,
+    "facts": 14,
+    "recall_pass": 45.5,
+    "refutations": 47,
+    "rules_distilled": 22,
     "recurrence": null,
-    "today_facts": 10,
-    "today_quiz": 3,
-    "today_correct": 2,
-    "today_refutations": 19,
-    "last7_refutations": 19,
+    "today_facts": 4,
+    "today_quiz": 8,
+    "today_correct": 3,
+    "today_refutations": 24,
+    "last7_refutations": 47,
     "due_now": 0
   },
   "today": {
-    "learned": 10,
-    "doubted": 19,
-    "distilled": 17,
-    "tested": 3,
-    "correct": 2
+    "learned": 4,
+    "doubted": 24,
+    "distilled": 22,
+    "tested": 8,
+    "correct": 3
   },
   "due_facts": [],
   "recent_corrections": [
     {
-      "id": "C019",
-      "wrong": "我以为工具返回结构可以猜（selected.model 之类）",
-      "now": "selectConeCrusher 的实际返回是 top_pick / recommended_units / candidates / recommended_cavity_pool，不是 selected/model。我猜的结构全返回 null，而 null 不会报错——只会静默给出空结果",
+      "id": "C047",
+      "wrong": "部署包里页面访问正常，就说明链接都是对的",
+      "now": "错。把部署目录 126 个文件的内部链接逐一映射回本地文件，抓出 14 类死链：guides/ 整目录不在 MOVE_DIRS（8 篇矿石指南从未上线，agent.json 里 9 条链接 404）、repo-qrcode.png 与 mackorn-logo.jpg 从未进包、markets 缺入口页、robots 写了不存在的 /ai/sitemap.xml。更严重的是 sync_ai_index 的 urlOf() 按源站扁平路径拼 URL，导致 llms.txt 里 55 条链接指向部署后不存在的路径 —— 而 llms.txt 是给 AI 读的第一份文件。已全部修复并新增『部署产物死链扫描』门禁（扫 126 文件）",
+      "impact": "L3"
+    },
+    {
+      "id": "C046",
+      "wrong": "站内链接改写规则写全了站内相对路径（\\",
+      "now": "错。LINK_MAP 里三个维度要分别写：① 站内相对（双引号）② 站内相对（单引号）③ **绝对 URL**。我原先只手写了 en/ru/es/de 四种语言的绝对规则 → 部署后 ar/fr/id/pt/vi 五个语言页的 canonical 与 29 处 hreflang 仍指向站点根旧路径（/ar/ 等），而根目录已无该路径 → 爬虫照 canonical 去访问会 404。已改为按语言表批量生成三套规则；门禁 +2 条（部署页 canonical/hreflang 必须全部指向 /ai/）",
       "impact": "L2"
     },
     {
-      "id": "C018",
-      "wrong": "我以为整线算出来就说明方案可用",
-      "now": "实测立刻暴露：细碎段选出 20 台 NH300 —— 台数爆炸。原因是目标粒度过细（10mm）时只有小机型小排口能满足。这说明整线引擎必须自带【合理性告警】，否则会输出看似完整实则荒谬的方案",
-      "impact": "L4"
-    },
-    {
-      "id": "C017",
-      "wrong": "我以为 P6 整线贯通就是\"把五个工具顺序调一遍\"",
-      "now": "顺序调用只是拼装。真正要做的是【段间参数传递】——每段的输出必须能直接喂给下一段（粗碎产品 P80 → 中碎给料 → 中碎产品 P80 → 细碎给料…），而且必须标出每段的来源等级，因为整线可信度受最弱环节限制",
-      "impact": "L4"
+      "id": "C045",
+      "wrong": "sync_tool_count_facts 的映射表保护判据是：映射目标文件里找不到锚点或匹配 0 次时必须报错终止",
+      "now": "不是这个意思。真实判据是**按行判断**：一行里出现 ≥2 个不同的工具数 → 说明这是映射表/证据行，必须**跳过不改**。原来的判据『同时含旧值与新值』只认当前 TOOLS 这一个新值，遇到 [19 tools, 22 tools] 这类历史映射（新值早已不是当前值）就漏判，会破坏证据行。来自 G4b 负控实测",
+      "impact": "L2"
     }
   ]
 }
