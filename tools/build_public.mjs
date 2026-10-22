@@ -32,6 +32,13 @@ const ALLOW = {
   files: [
     'README.md',
     'package.json',
+    // 2026-10-21 夜班修：这两个文件原来不在放行清单里，写了却永远发不出去。
+    //   · Dockerfile      —— Glama / MCP Registry 自动构建部署靠它；
+    //                        没有它评估器只能报 "This server cannot be deployed"。
+    //   · skills.sh.json  —— skills.sh 的技能分组索引，npx skills 走这个。
+    // 守卫：tools/check_publish_artifact.mjs 断言 dist 必须含这两个文件且写进 files 清单。
+    'Dockerfile', 'AGENTS.md', 'QUICKSTART.md', 'smithery.yaml', 'CITATION.cff',
+    'skills.sh.json',
   ],
   dirs: [
     'plugin',
@@ -75,6 +82,9 @@ const FORBIDDEN_FILES = [
   /^_[^/]*$/i,
   /* R45：脚本产生的备份/临时文件一律不提交、不进合规扫描（本次 data.mjs.r44bak 曾被扫到并误报） */
   /\.(bak|prev|r\d+bak|strbak|mutbak|oneoff|oneoff-done|dupfixbak|linebak|b6bak)$/i,
+  /* R140（2026-10-21 夜班）：package.json 的历史备份曾被带进 dist（package.json.prekeywordfix），
+   * 虽不在 files 清单里不会被 npm 发布，但会污染产物、误导人工核对。 */
+  /^package\.json\..+/i,
   /^verify_changed_syntax\.mjs$/i,
   /^_archive\//i,
   /^sync_hard_facts\.mjs$/i, /^sync_version_json\.mjs$/i, /^_fix_hardcoded21\.mjs$/i,
@@ -110,6 +120,12 @@ const FORBIDDEN_FILES = [
   /plant-cases\.json$/i, /competitors\.json$/i, /_sample-proposal-output/,
   // 内部研发/引导脚本，不随公开包发布
   /^build_public\.mjs$/i, /^debug_intake\.mjs$/i, /^seed_knowledge\.mjs$/i,
+  /* R141（2026-10-21 夜班）：两个内部验收工具不发布 —— 它们引用 dist/ 与项目结构，
+   * 发给用户后跑不起来，只会误导。 */
+  /^check_publish_artifact\.mjs$/i, /^check_lessons_subset\.mjs$/i,
+  /* R142（2026-10-22 夜班）：一次性版本脚本不发布 —— bump_package_version 曾把版本
+   * 硬编码成 0.2.0，随包发出去别人误跑就是事故（现已被 --to 守卫拦住）。 */
+  /^bump_package_version\.mjs$/i, /^align_version_020\.mjs$/i,
   /^probe-plugin\.mjs$/i, /^dump_docx_structure\.py$/i, /^dump_xlsx\.py$/i,
   /^早晨一键上传\.ps1$/i, /^upload_to_github\.ps1$/i, /^github_publish\.ps1$/i, /^fixup_publish\.ps1$/i, /^fix_description_encoding\.ps1$/i, /^npm_publish\.ps1$/i, /^update_pr\.ps1$/i, /^analyze_registry\.ps1$/i, /^prune_remote\.ps1$/i, /^submit_awesome_mcp\.ps1$/i, /^fix_tests_sdk_portability\.mjs$/i, /^fix_skill_frontmatter\.mjs$/i, /rpm|sandvik.*manual|rockprocessing/i,
 ];
@@ -527,6 +543,23 @@ if (t2.spawnErr) {
 } else {
   console.log('  ❌ MCP selftest 失败');
   console.log(t2.text.split('\n').slice(-8).join('\n'));
+  process.exitCode = 1;
+}
+
+/* ---------- 7.5 发布产物验收（2026-10-21 夜班新增）----------
+ * 为什么加在这里：之前所有门禁都只校验**源码**与内容合规，
+ * 没人校验 dist 里那份**产物本身** —— 结果 Dockerfile 写了却从没进过发布包，
+ * Glama/Registry 因此无法自动部署。从今往后"构建成功"包含"产物可用"。 */
+const t3 = runToFile('artifact', [join(ROOT, 'tools/check_publish_artifact.mjs')]);
+if (t3.spawnErr) {
+  console.log(`  ⚠ 发布产物验收无法启动子进程（${t3.spawnErr.code ?? t3.spawnErr.message}）`);
+  console.log('    这是沙箱限制；请在非受限终端重跑以取得正式结论。');
+} else if (t3.status === 0) {
+  const lastLine = t3.text.trim().split('\n').filter((l) => /结果：/.test(l)).slice(-1)[0] ?? '';
+  console.log(`  发布产物验收 → 通过（${lastLine}）`);
+} else {
+  console.log('  ❌ 发布产物验收失败：');
+  console.log(t3.text.split('\n').filter((l) => /FAIL|阻断|^\s+- /.test(l)).slice(0, 15).join('\n'));
   process.exitCode = 1;
 }
 
