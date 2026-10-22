@@ -1,30 +1,38 @@
-# MACKORN 液压圆锥破选型 MCP 服务器
+# MACKORN Hydraulic Cone Crusher Selection MCP Server
 #
-# 为什么有这个 Dockerfile（R85）：
-#   Glama（MCP 目录，awesome-mcp-servers 的自动评估方）需要能【构建并启动】服务器
-#   才能算出质量分。它页面上写着 "This server cannot be deployed" ——
-#   而我们又没有 Dockerfile，于是它无从下手，质量分一直是 '?'。
-#   而维护者明确说：「任何等级都行 —— 只要它被设置出来」就能合并 PR。
+# Why this Dockerfile exists (R85, revised R144 on 2026-10-22):
+#   Glama (MCP directory, the auto-evaluator behind awesome-mcp-servers) must be
+#   able to BUILD AND START this server to compute a quality score.
+#   Without a buildable container it reports "This server cannot be deployed"
+#   and the quality score stays '?'.
 #
-#   所以这个文件的作用不是"我们自己要部署"，而是**让自动评估器能跑起来我们**。
+#   Glama official doc (blog 2026-03-15):
+#     "A Glama release is not a GitHub release. It is a containerized build of
+#      your MCP server that Glama uses to run security checks and to let users
+#      deploy the server."
 #
-# 零依赖：只需 Node 运行时与仓库里的源码。
+#   So this file is NOT for our own deployment. It exists so the evaluator can
+#   run us. This is INDEPENDENT of our website's SSL certificate.
+#
+# Zero external dependencies: only the Node runtime plus the source in this repo.
+# MCP over stdio: no listening port, JSON-RPC via stdin/stdout.
+
 FROM node:20-alpine
 
-# 无 npm 依赖，所以不用 npm install —— 直接把源码放进去即可
+# No npm dependencies, so no npm install step is needed.
 WORKDIR /app
 
-# 只拷运行必需的部分（镜像小、构建快）
+# Copy only what is needed at runtime (keeps the image small, build fast).
+# knowledge/ is required because several knowledge tools read it at runtime.
 COPY package.json ./
 COPY plugin ./plugin
 COPY skills ./skills
 COPY knowledge ./knowledge
 
-# MCP over stdio：不监听端口，通过标准输入输出通信
-# 评估器会用 `docker run -i` 的方式喂 JSON-RPC
+# MCP over stdio. The evaluator feeds JSON-RPC via `docker run -i`.
 ENTRYPOINT ["node", "plugin/mcp-server.mjs"]
 
-# 便于人工自检：
+# Manual self-check:
 #   docker build -t mackorn-cone-crusher .
 #   docker run --rm -i mackorn-cone-crusher --list
 #   docker run --rm mackorn-cone-crusher --selftest
