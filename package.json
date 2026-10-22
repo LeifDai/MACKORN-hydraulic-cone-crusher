@@ -1,7 +1,7 @@
 {
   "name": "mackorn-cone-crusher",
   "version": "0.2.2",
-  "description": "MACKORN 美矿液压圆锥破（NH/NS）与破碎筛分生产线选型：22 个工具覆盖客户需求表录入、机型/腔型/CSS 选型、整线配置、粒度曲线仿真（Whiten 1972）、实测数据标定、能耗成本估算、衬板磨损设计、经销商评估与 14 章方案书生成。DeepSeek Harness 插件 + MCP 服务器（stdio 与远程 HTTP 双通道），零依赖。",
+  "description": "MACKORN 美矿液压圆锥破（NH/NS）与破碎筛分生产线选型：29 个工具覆盖客户需求表录入、机型/腔型/CSS 选型、整线配置、粒度曲线仿真（Whiten 1972）、实测数据标定、能耗成本估算、衬板磨损设计、经销商评估与 14 章方案书生成。DeepSeek Harness 插件 + MCP 服务器（stdio 与远程 HTTP 双通道），零依赖。",
   "type": "module",
   "license": "MIT",
   "private": false,
@@ -36,7 +36,11 @@
     "CHANGELOG.md",
     "LICENSE",
     "VERSION",
-    "发布清单.md"
+    "发布清单.md",
+    "AGENTS.md",
+    "QUICKSTART.md",
+    "smithery.yaml",
+    "CITATION.cff"
   ],
   "engines": {
     "node": ">=18"
