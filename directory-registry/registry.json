@@ -235,9 +235,9 @@
         },
         {
           "id": "mcp-endpoint-reachable",
-          "desc": "MCP 端点可被探测",
+          "desc": "Glama 能 docker build 并启动我们的 server",
           "satisfied": false,
-          "blocker": "SSL：证书 2026-10-14 已过期",
+          "blocker": "需在 glama.ai/mcp/servers/.../admin/dockerfile 配置并 Deploy",
           "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
@@ -251,16 +251,17 @@
           "id": "tools-count-fresh",
           "desc": "工具数缓存是最新（29）",
           "satisfied": false,
-          "note": "页面显示 19（旧缓存）"
+          "note": "页面显示 19（旧缓存）",
+          "blocker": "做 Release 后会重新抓取工具数"
         }
       ],
       "submit_method": "PR #15410（已开）+ Glama 自动抓取",
-      "update_method": "修 DNS+SSL 后去 Glama 后台点 Refresh / Re-evaluate",
+      "update_method": "去 https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher/admin/dockerfile 配置 → Deploy → Make Release",
       "check_method": "node tools/directory_checker.mjs --only glama",
       "blockers": [
-        "SSL：证书 2026-10-14 已过期"
+        "需要做 containerized release（Dockerfile/.dockerignore/glama.json 已备，需去 admin 页面 Deploy+Make Release）"
       ],
-      "notes": "★ 关键：PR #15410 卡在 Responsiveness 评估。修 DNS+SSL 后需重新触发评估",
+      "notes": "★ 2026-10-22 认知纠正：Glama 的 Release 是【容器化构建】，不探测我们的 HTTPS 端点。所以 SSL 过期不阻塞它。三件套（Dockerfile/.dockerignore/glama.json）已备好。指南见 distribution/🎯Glama容器化部署配置指南.md",
       "priority": 2
     },
     {
@@ -544,6 +545,13 @@
         "title": "DNS 裸域 A 记录会自己恢复（等 1-2 小时）",
         "detail": "2026-10-21 白天 mackorn.cn 裸域返回 ENOTFOUND（A 记录缺失），当晚 23:00 再测已经恢复为 47.110.80.123。可能原因：阿里云 DNS 记录本来就存在但缓存未刷新、或 TTL 到期后重新解析。教训：DNS 问题先等 1-2 小时再判死，不要立刻下结论说\"记录丢了\"。",
         "date": "2026-10-21",
+        "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-008",
+        "title": "Glama 用容器化构建，不探测源站 —— SSL 不阻塞它",
+        "detail": "Glama 官方文档：A Glama release is a containerized build of your MCP server. 它自己 docker build + docker run -i 跑我们的 server，不需要访问我们的 HTTPS 端点。所以证书过期与 Glama 评分无关。需要三件套：Dockerfile + .dockerignore + glama.json，且 .dockerignore 要排除大文件（我们的 knowledge/_refs 有 19.59MB 截图）。",
+        "date": "2026-10-22",
         "transferable": true
       }
     ],
