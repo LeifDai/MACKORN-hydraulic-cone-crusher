@@ -244,7 +244,7 @@
           "id": "tools-enumerable",
           "desc": "tools/list 可枚举",
           "satisfied": false,
-          "blocker": "SSL：证书 2026-10-14 已过期",
+          "blocker": "需做 containerized release",
           "note": "DNS 已于 2026-10-21 晚恢复"
         },
         {
@@ -404,7 +404,9 @@
       "submit_method": "GitHub PR",
       "update_method": "修 DNS+SSL → Glama 评分 → PR 补评论催促合并",
       "check_method": "node tools/directory_checker.mjs --only awesome-mcp",
-      "blockers": [],
+      "blockers": [
+        "Glama 评分未出（需 Glama 做 containerized release）"
+      ],
       "notes": "96,380★ 最大的 awesome 列表。PR #15410 最新评论：\"still showing as '?' and needs to be evaluated\"",
       "priority": 2
     },
