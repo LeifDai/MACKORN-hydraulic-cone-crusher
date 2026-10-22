@@ -37,7 +37,7 @@ const ALLOW = {
     //                        没有它评估器只能报 "This server cannot be deployed"。
     //   · skills.sh.json  —— skills.sh 的技能分组索引，npx skills 走这个。
     // 守卫：tools/check_publish_artifact.mjs 断言 dist 必须含这两个文件且写进 files 清单。
-    'Dockerfile', 'AGENTS.md', 'QUICKSTART.md', 'smithery.yaml', 'CITATION.cff',
+    'Dockerfile', 'AGENTS.md', 'QUICKSTART.md', 'smithery.yaml', 'CITATION.cff', 'glama.json', '.dockerignore',
     'skills.sh.json',
   ],
   dirs: [
