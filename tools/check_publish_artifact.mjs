@@ -58,13 +58,21 @@ console.log('='.repeat(66));
 /* ---------- 1. 产物存在 ---------- */
 if (!existsSync(OUT)) {
   bad('dist 目录存在', OUT);
+
+
+  console.log(`\n结果：${pass} 通过 / ${fail} 失败`);
+  process.exit(1);
+}
+ok('dist 目录存在');
+
+/* ---------- 24. AI 可发现性 + Glama 容器化（R142/R144，2026-10-22）---------- */
 /* ══════ R142：AGENTS.md 必须进发布包（2026-10-22 实测发现缺失）══════
  * 血泪：10-21 写了 AGENTS.md 提升 AI 可发现性，但 package.json files 与
  *       build_public 放行清单都没加它 → 从未进过 dist → AI 装 npm 包读不到。
  *       这正是 R141 的不变量「写了 ≠ 发出去了」。 */
 for (const f of ['AGENTS.md', 'QUICKSTART.md', 'smithery.yaml']) {
   const p = join(ROOT, 'dist', 'mackorn-cone-crusher', f);
-  ok(`发布包含 ${f}（AI 可发现性文件）`, exists(p), exists(p) ? f + ' 已在 dist' : '⚠️ ' + f + ' 不在 dist —— AI 装包读不到');
+  ok(`发布包含 ${f}（AI 可发现性文件）`, existsSync(p), existsSync(p) ? f + ' 已在 dist' : '⚠️ ' + f + ' 不在 dist —— AI 装包读不到');
 }
 /* files 清单必须与 dist 一致 */
 try {
@@ -74,10 +82,25 @@ try {
 } catch { ok('package.json 可解析', false); }
 
 
-  console.log(`\n结果：${pass} 通过 / ${fail} 失败`);
-  process.exit(1);
+/* ══════ R144：Glama 容器化部署必需文件（2026-10-22）══════
+ * 血泪：Glama 官方文档明确 "A Glama release is a containerized build" ——
+ *       它自己构建镜像跑我们的 server，不探测我们的 HTTPS 端点。
+ *       所以 Dockerfile / .dockerignore / glama.json 三个是【硬性前置】。
+ *       之前只有 Dockerfile 且缺 .dockerignore（构建上下文 20MB+）→ 可能构建失败。 */
+for (const f of ['Dockerfile', '.dockerignore', 'glama.json']) {
+  const p = join(ROOT, f);
+  const inDist = existsSync(join(ROOT, 'dist', 'mackorn-cone-crusher', f));
+  ok(`Glama 容器化文件 ${f}`, existsSync(p) && inDist,
+    !existsSync(p) ? '⚠️ 根目录缺 ' + f : (!inDist ? '⚠️ 不在 dist（Glama 构建读不到）' : '✓ 根目录+dist 都有'));
 }
-ok('dist 目录存在');
+/* .dockerignore 必须排除 knowledge/_refs（17.48MB 报价截图 + 违反 No pricing） */
+try {
+  const di = read(join(ROOT, '.dockerignore'));
+  const excludesRefs = /knowledge\/_refs\//.test(di);
+  ok('.dockerignore 排除 knowledge/_refs（17.48MB 报价截图）', excludesRefs,
+    excludesRefs ? '✓ 已排除，镜像从 20MB 降到 ~0.6MB' : '⚠️ 未排除 → 镜像 20MB+ 且含报价截图');
+} catch { ok('.dockerignore 可读', false); }
+
 
 const rootPkg = readJson(join(ROOT, 'package.json'));
 const ovrPkg = readJson(join(ROOT, 'public-overrides', 'package.json'));
