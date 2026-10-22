@@ -1,17 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-22T07:32:15.662Z",
+  "generated": "2026-10-22T17:08:02.014Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
-  "alive": 70,
-  "dead": 21,
+  "alive": 69,
+  "dead": 22,
   "broken": 0,
-  "recurrence": 0.23076923076923078,
+  "recurrence": 0.24175824175824176,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
   "neg_coverage": 0.5824175824175825,
   "by_status": {
-    "failed": 21,
-    "alive": 70
+    "failed": 22,
+    "alive": 69
   },
   "register": [
     {
@@ -673,7 +673,8 @@
         "plugin_negative_controls.mjs"
       ],
       "origin": "R83 用户指令（原文）：『不断升级程序，不断迭代 PDCA，不断优化，这个机会生存的法则，请写到规则里面。』 项目一贯做法：文档会被忘记，门禁不会。所以这条法则必须变成可测量的指标，而不是一句口号",
-      "status": "alive"
+      "status": "failed",
+      "detail": "**真跑**生存法则：在动(PDCA 93 轮) · 有证据 · 未退化(教训 91 / 门禁 59) · 双轨都在 —— ❌ 不达标：LIVE-1"
     },
     {
       "id": "L-59",

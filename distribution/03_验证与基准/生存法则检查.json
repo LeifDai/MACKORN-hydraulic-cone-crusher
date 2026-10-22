@@ -1,12 +1,12 @@
 {
-  "generated": "2026-10-22T07:32:13.707Z",
+  "generated": "2026-10-22T17:07:59.899Z",
   "stale_days": 3,
   "rows": [
     {
       "id": "LIVE-1",
       "name": "【动】最近有推进（PDCA 距今天数 ≤ 3）",
-      "pass": true,
-      "detail": "最近一轮 R93 · 距今 2.62 天 · 累计 93 轮"
+      "pass": false,
+      "detail": "最近一轮 R93 · 距今 3.02 天 · 累计 93 轮"
     },
     {
       "id": "LIVE-2",
