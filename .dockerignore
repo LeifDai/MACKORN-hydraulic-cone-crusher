@@ -1,0 +1,59 @@
+# .dockerignore — keep the build context small and the image clean (R144)
+#
+# Why: without this file, `docker build` sends the ENTIRE repo as build context
+#      (dist/, distribution/, tests/, tools/, ~/20MB+). That makes builds slow
+#      and can blow past Glama's build limits.
+
+# ── Build outputs and archives ──
+dist/
+distribution/
+public-overrides/
+_upload-github/
+.npmcache/
+*.tgz
+*.zip
+
+# ── Version control ──
+.git/
+.github/
+.gitignore
+
+# ── Tests and tooling (not needed at runtime) ──
+tests/
+tools/
+scripts/
+node_modules/
+*.test.mjs
+*.spec.mjs
+cognition-data/
+iteration-data/
+rsi-data/
+directory-registry/
+plugin-radar/
+
+# ── Docs and metadata (not needed to RUN the server) ──
+*.md
+!README.md
+CITATION.cff
+CHANGELOG.md
+VERSION
+docs/
+知识库/
+knowledge/_refs/
+knowledge/**/*.png
+knowledge/**/*.jpg
+knowledge/**/*.pdf
+
+# ── Editor / OS noise ──
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.tmp
+
+# ── Local credentials (never ship) ──
+.gh-token
+.env
+.env.*
