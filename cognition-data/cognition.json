@@ -496,49 +496,136 @@
       "evidence": "NC2 注入 \"本项目共 47 tools\" 后原逻辑不报，修判据后报 \"错误值: 47（文件里所有值: 29, 47）\"",
       "impact": "L3",
       "why": null
+    },
+    {
+      "id": "C056",
+      "at": "2026-10-23T11:36:03.927Z",
+      "wrong": "我以为「recurrence（错误复现率）」只要在文档里写一句\"要测量\"就够了",
+      "now": "实际从建规则到 2026-10-23 整整 3 天，仪表盘里 recurrence 一直显示「—」（未测量），因为根本没人写测量工具。而规则里明确写「recurrence 是判定 RSI 真假的唯一硬指标」—— 唯一硬指标没实现，等于整个 RSI 体系无法被证伪。已建 tools/recurrence_tracker.mjs：8 个可形式化错误模式 + 3 个明确标注\"不可自动测\"的模式，首次测出 12.5%，修完降到 0%",
+      "evidence": "cognition.mjs --status 连续多日显示 recurrence —；recurrence_tracker.mjs 首跑 12.5%（抓到 syntax_gate_negative_controls 真用管道捕获），修后 0.0%",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C057",
+      "at": "2026-10-23T11:36:04.098Z",
+      "wrong": "我以为 syntax_gate 报的「模板字符串未闭合」是真的语法错",
+      "now": "实际是词法器的假阳性（2 个文件 node --check 都通过）。真因：`${text.replace(/[<>&\"]/g, \"\")}` 里【正则含双引号】，而词法器在 ${} 内部只处理字符串不处理正则 → 把 \" 当字符串开头 → 吃掉后面的 \" → 把 } 和闭合反引号全吃掉。手写词法器在\"带正则的模板字符串\"上有天然盲区",
+      "evidence": "node --check 对 tools/build_tool_pages.mjs 和 tools/gen_qr_svg.mjs 都通过；用 lexCheck 直接测两文件都报\"模板字符串未闭合\"；定位到 L50 的 ${text.replace(/[<>&\"]/g, \"\")}",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C058",
+      "at": "2026-10-23T11:36:04.263Z",
+      "wrong": "我以为负控测试只要能跑通就说明闸门有效",
+      "now": "实际 syntax_gate 的负控【从来没跑通过】—— 它把 GATE 路径写成 join(HERE, \"syntax_gate.mjs\")，但文件在 tools/ 不在 tests/negative/，一直报 exit -2（Cannot find module）。一个坏掉的负控会让\"闸门有效\"变成假信号。修路径后 6/6 才真正通过",
+      "evidence": "原 GATE = join(HERE, \"syntax_gate.mjs\")（HERE=tests/negative）→ 报 Cannot find module；修成 join(HERE, \"..\", \"..\", \"tools\", \"syntax_gate.mjs\") 后负控 6/6",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C059",
+      "at": "2026-10-23T11:36:04.450Z",
+      "wrong": "我以为给 syntax_gate 加 node --check 复核能提高准确性",
+      "now": "实际反而破坏了它的核心设计：沙箱禁止【父 node spawn 子 node】（spawnSync EPERM）→ 所有复核都落进\"无法复核\"被跳过 → 假绿。这解释了这个文件标题为什么特意写「零子进程」。已回滚，改用白名单（每条必须带 node --check 反证）",
+      "evidence": "加复核后输出「词法器假阳性 0 个 · 无法复核 1 个」且 exit=0（损坏文件也判通过）→ 证明复核全部失败",
+      "impact": "L4",
+      "why": null
     }
   ],
-  "generated": "2026-10-21T21:32:25.494Z",
+  "generated": "2026-10-23T11:27:05.160Z",
   "rule": "全局规则 §2.6 每天提升认知力（四件事：学 / 疑 / 炼 / 测）",
   "metrics": {
     "facts": 14,
     "recall_pass": 45.5,
-    "refutations": 47,
-    "rules_distilled": 22,
+    "refutations": 55,
+    "rules_distilled": 23,
     "recurrence": null,
-    "today_facts": 4,
-    "today_quiz": 8,
-    "today_correct": 3,
-    "today_refutations": 24,
-    "last7_refutations": 47,
-    "due_now": 0
+    "today_facts": 0,
+    "today_quiz": 0,
+    "today_correct": 0,
+    "today_refutations": 3,
+    "last7_refutations": 55,
+    "due_now": 11
   },
   "today": {
-    "learned": 4,
-    "doubted": 24,
-    "distilled": 22,
-    "tested": 8,
-    "correct": 3
+    "learned": 0,
+    "doubted": 3,
+    "distilled": 23,
+    "tested": 0,
+    "correct": 0
   },
-  "due_facts": [],
+  "due_facts": [
+    {
+      "id": "F0001",
+      "title": "Whiten 模型在圆锥破上的质量不守恒问题",
+      "due_at": "2026-10-23T09:19:38.787Z"
+    },
+    {
+      "id": "F0002",
+      "title": "Kuz-Ram 爆破块度公式的形式与参数含义",
+      "due_at": "2026-10-22T20:54:46.879Z"
+    },
+    {
+      "id": "F0003",
+      "title": "SAG 半自磨与球磨的经济分界",
+      "due_at": "2026-10-22T20:54:46.879Z"
+    },
+    {
+      "id": "F0005",
+      "title": "先进控制（L3/MPC）的 5 项就绪条件",
+      "due_at": "2026-10-23T09:19:38.787Z"
+    },
+    {
+      "id": "F0006",
+      "title": "GitHub OAuth Device Flow 不需要预装 git/gh",
+      "due_at": "2026-10-22T16:21:05.008Z"
+    },
+    {
+      "id": "F0008",
+      "title": "项目里有两套独立的工具验证器",
+      "due_at": "2026-10-22T16:21:05.008Z"
+    },
+    {
+      "id": "F0009",
+      "title": "sync_tool_count_facts 的映射表保护判据",
+      "due_at": "2026-10-22T20:54:46.879Z"
+    },
+    {
+      "id": "F0011",
+      "title": "发布产物必须单独设门禁：Dockerfile 写了却从未进包",
+      "due_at": "2026-10-22T16:20:54.334Z"
+    },
+    {
+      "id": "F0012",
+      "title": "npm 单 bin 包会按包名隐式回退",
+      "due_at": "2026-10-22T16:20:54.660Z"
+    },
+    {
+      "id": "F0013",
+      "title": "远程 MCP 端点支持 local-only 工具声明",
+      "due_at": "2026-10-22T16:20:54.842Z"
+    }
+  ],
   "recent_corrections": [
     {
-      "id": "C047",
-      "wrong": "部署包里页面访问正常，就说明链接都是对的",
-      "now": "错。把部署目录 126 个文件的内部链接逐一映射回本地文件，抓出 14 类死链：guides/ 整目录不在 MOVE_DIRS（8 篇矿石指南从未上线，agent.json 里 9 条链接 404）、repo-qrcode.png 与 mackorn-logo.jpg 从未进包、markets 缺入口页、robots 写了不存在的 /ai/sitemap.xml。更严重的是 sync_ai_index 的 urlOf() 按源站扁平路径拼 URL，导致 llms.txt 里 55 条链接指向部署后不存在的路径 —— 而 llms.txt 是给 AI 读的第一份文件。已全部修复并新增『部署产物死链扫描』门禁（扫 126 文件）",
+      "id": "C055",
+      "wrong": "我以为工具数检查逻辑「真值不在列表里才报」是对的",
+      "now": "实际这是错的：如果文件里同时有正确的 29 和错误的 47，真值在列表里 → 漏报错误值。正确判据是【有任何 ≠ 真值的数就报】。这个 bug 是 NC2 负控抓出来的——证明负控有价值",
       "impact": "L3"
     },
     {
-      "id": "C046",
-      "wrong": "站内链接改写规则写全了站内相对路径（\\",
-      "now": "错。LINK_MAP 里三个维度要分别写：① 站内相对（双引号）② 站内相对（单引号）③ **绝对 URL**。我原先只手写了 en/ru/es/de 四种语言的绝对规则 → 部署后 ar/fr/id/pt/vi 五个语言页的 canonical 与 29 处 hreflang 仍指向站点根旧路径（/ar/ 等），而根目录已无该路径 → 爬虫照 canonical 去访问会 404。已改为按语言表批量生成三套规则；门禁 +2 条（部署页 canonical/hreflang 必须全部指向 /ai/）",
-      "impact": "L2"
+      "id": "C054",
+      "wrong": "我以为负控测试可以直接 execFileSync 抓子进程 stdout 来解析 JSON",
+      "now": "实际沙箱禁止管道捕获（spawnSync ... EPERM）。必须用【stdio:ignore + 文件交接】：让检查器把结果写到 cognition-auto.json，负控再读那个文件。这是我在这个环境里已经踩过多次的老坑，又踩了一次",
+      "impact": "L3"
     },
     {
-      "id": "C045",
-      "wrong": "sync_tool_count_facts 的映射表保护判据是：映射目标文件里找不到锚点或匹配 0 次时必须报错终止",
-      "now": "不是这个意思。真实判据是**按行判断**：一行里出现 ≥2 个不同的工具数 → 说明这是映射表/证据行，必须**跳过不改**。原来的判据『同时含旧值与新值』只认当前 TOOLS 这一个新值，遇到 [19 tools, 22 tools] 这类历史映射（新值早已不是当前值）就漏判，会破坏证据行。来自 G4b 负控实测",
-      "impact": "L2"
+      "id": "C053",
+      "wrong": "我以为\"自动认知发现器报 0 个候选\"就说明系统自洽了",
+      "now": "实际\"0 个\"有两种可能：① 真的自洽 ② 检查器太弱什么都发现不了。必须做【负控测试】（故意造假问题看能不能抓到）才能区分。我第一次跑负控，5 项全失败——因为检查器根本跑不起来（EPERM）",
+      "impact": "L4"
     }
   ]
 }
