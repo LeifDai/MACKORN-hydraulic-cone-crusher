@@ -215,3 +215,31 @@ scope: engine | data | plugin | tools | site | docs
 - 官网：https://mackorn.cn/ai/
 
 **许可证**：MIT —— 贡献即表示你同意以 MIT 许可发布你的贡献。
+
+<!-- MACKORN-BRAND-BLOCK -->
+
+## 🏭 关于 MACKORN 美矿
+
+**MACKORN 美矿** — 液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。
+
+![MACKORN 美矿](https://mackorn.cn/ai/assets/logo-512.png)
+
+---
+
+## 联系我们 — 上海美矿机械有限公司
+
+**MACKORN 美矿** · 液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。
+
+| | |
+|:---|:---|
+| 地址 | 江苏省苏州市太仓市浏河镇钱江路 33 号 |
+| 商务 | Sandy Zhao · sandy.zhao@mackorn.cn · +86 139 1648 5025 |
+| 技术 | Leif Dai · leif.dai@mackorn.cn · +86 134 8218 0158 |
+| 国际 | Vicky Cheng · vicky.cheng@mackorn.cn · +86 158 0189 1052 |
+| 官网 | https://mackorn.cn/ai/ |
+| 仓库 | https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher |
+| 开源许可 | MIT |
+| 服务时间 | GMT+8 · 9:00-17:30 |
+
+
+<!-- /MACKORN-BRAND-BLOCK -->
