@@ -197,6 +197,12 @@ console.log(r);
 | `mackorn_beneficiation_selection` | 选矿（浮选/重选/光电选/磁选） | `ore`, `target_mineral`, `liberation_um` |
 | `mackorn_automation_design` | 自动化分层 + 仪表 | `section`, `target_tph`, `has_plc` |
 
+### 报告生成
+
+| 工具 | 用途 |
+|:---|:---|
+| `mackorn_selection_report` | **一键生成完整选型报告**（把生产线配置、圆锥破选型、MCFM 诊断、成本估算、衬板设计串成 Markdown 报告，并自动汇总全部「假设与来源」和「风险与待确认项」） |
+
 ### 校验与仿真
 
 | 工具 | 用途 |
