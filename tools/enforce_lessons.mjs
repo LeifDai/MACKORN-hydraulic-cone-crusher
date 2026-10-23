@@ -391,6 +391,22 @@ if (!QUICK) {
         : ('🟢 剩 ' + days + ' 天'));
     rec('G21', 'SSL 证书有效期（非阻塞但必须可见）', true, txt);
   }
+  /* G22：自动认知发现器必须 0 候选（六类缺口全清）
+   * 2026-10-23 建。扫：承诺 vs 实现 / 数字不一致 / 文件未见天日 /
+   * 死链 / 过期状态 / 反模式复现。任何一类有候选 = 系统不自洽。 */
+  {
+    let total = null; let critical = 0; let kinds = [];
+    try {
+      const ca = JSON.parse(read(join(D, '03_验证与基准', 'cognition-auto.json')));
+      total = ca.counts ? ca.counts.total : 0;
+      critical = ca.counts ? (ca.counts.critical || 0) : 0;
+      kinds = [...new Set((ca.candidates || []).map((x) => x.kind))];
+    } catch { }
+    const txt = total === null ? '⚠ 尚无 cognition-auto.json（先跑 node tools/cognition_auto.mjs）'
+      : (total === 0 ? '✅ 0 候选（六类缺口全清）'
+        : '⚠ ' + total + ' 个候选（' + kinds.join(',') + (critical ? ' · 🔴' + critical + ' 严重' : '') + '）');
+    rec('G22', '自动认知发现器（六类缺口）', total === 0, txt);
+  }
   }
   }
   }
@@ -508,6 +524,51 @@ if (!QUICK) {
       rec('自验证', '无硬失败', hard.length === 0, hard.length ? hard.map((c) => c.name).join(', ') : '通过 ' + (v.summary?.passed ?? '?') + '/' + (v.summary?.total ?? '?'));
     } else rec('自验证', '自验证报告存在', false, '缺少 model-self-validation.json（跑 validate_model.mjs 生成）');
   }
+}
+
+/* ══════════ ⑨ 发布产物完整性（R140 · 2026-10-21 夜班新增）══════════
+ *
+ * 为什么必须有这一节：
+ *   之前所有门禁（单元/自审/关键词/基准/自验证）校验的都是**源码与内容合规**，
+ *   没有任何一条校验 `dist/` 里那份**真正要发出去的产物**。
+ *   实测后果：Dockerfile 为 Glama 自动部署而写，写了却从没进过发布包 ——
+ *   `build_public.mjs` 的 ALLOW.files 只放行 README.md 与 package.json。
+ *   于是评估器只能报 "This server cannot be deployed"，而门禁全绿。
+ *
+ * 教训（可迁移）：**"写了" ≠ "发出去了"。** 任何交付物都要有一个门禁
+ *   去检查**最终产物**，而不是检查源码意图。
+ */
+if (!JSON_OUT) console.log('\n  ── ⑨ 发布产物完整性（R140）──');
+{
+  const DIST = join(ROOT, 'dist', 'mackorn-cone-crusher');
+  let distPkg = null;
+  try { distPkg = JSON.parse(read(join(DIST, 'package.json'))); } catch { distPkg = null; }
+
+  rec('产物', 'dist 目录存在', exists(DIST), exists(DIST) ? DIST : '先跑 node tools/build_public.mjs');
+  rec('产物', 'dist/package.json 可解析', !!distPkg, distPkg ? ('v' + distPkg.version) : '');
+
+  const binKeys = Object.keys((distPkg && distPkg.bin) || {});
+  rec('产物', 'bin 含包名（npx <包名> 可靠解析）',
+    !!distPkg && binKeys.includes(distPkg.name), binKeys.join(',') || '(无 bin)');
+  rec('产物', 'bin 保留旧别名 mackorn-mcp', binKeys.includes('mackorn-mcp'), '');
+
+  rec('产物', '含 Dockerfile（Glama/Registry 部署入口）', exists(join(DIST, 'Dockerfile')), '');
+  rec('产物', '含 skills.sh.json（skills.sh 索引）', exists(join(DIST, 'skills.sh.json')), '');
+
+  const distFiles = (distPkg && Array.isArray(distPkg.files)) ? distPkg.files : [];
+  rec('产物', 'files 清单含 Dockerfile', distFiles.includes('Dockerfile'), '');
+  rec('产物', 'files 清单含 skills.sh.json', distFiles.includes('skills.sh.json'), '');
+  const ghost = distFiles.filter((f) => !exists(join(DIST, String(f).replace(/\/$/, ''))));
+  rec('产物', 'files 清单无幽灵条目（每条都在磁盘上）', ghost.length === 0, ghost.join(', '));
+
+  // 产物级综合验收：真跑 check_publish_artifact（stdio 必须 ignore，管道会 EPERM）
+  let ap = { status: null, error: null };
+  try {
+    ap = spawnSync(process.execPath, [join(HERE, 'check_publish_artifact.mjs')], { stdio: 'ignore', timeout: 300000 });
+  } catch (e) { ap = { status: null, error: e }; }
+  rec('产物', 'check_publish_artifact.mjs 通过',
+    !ap.error && ap.status === 0,
+    ap.error ? ('EPERM/异常: ' + (ap.error.code || ap.error.message)) : ('exit ' + ap.status));
 }
 
 /* ══════════ 汇总 ══════════ */
