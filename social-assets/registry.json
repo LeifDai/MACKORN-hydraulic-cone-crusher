@@ -1,0 +1,247 @@
+{
+  "schema": "mackorn-social-assets/1",
+  "version": "1.0.0",
+  "updated": "2026-10-24",
+  "source_file": "E:\\Mackorn\\01 销售\\01 电子商务-营销-广告-销售资料\\06 抖音的链接地址\\20261024 MACKORN 美矿抖音地址链接.txt",
+  "source_note": "用户 2026-10-24 提供的抖音链接清单（16 条）。这是【自有媒体资产】，用于对外分发的素材来源。",
+  "purpose": "把已有视频资产结构化，用于：① 邮件/微信/WhatsApp 分发  ② 平台提交材料  ③ 文章配图/引用  ④ 展会邀约  ⑤ AI 抓取时的品牌关联",
+
+  "channels": {
+    "douyin": {
+      "name": "抖音 (Douyin)",
+      "profile_url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?from_tab_name=main",
+      "profile_short": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I",
+      "account_name": "MACKORN 美矿机械",
+      "search_url": "https://www.douyin.com/search/mackorn?aid=0e54773a-8886-46fc-b9bf-b8f9e06ca900&type=general",
+      "note": "搜索「mackorn」即可找到全部视频"
+    }
+  },
+
+  "videos": [
+    {
+      "id": "V-2026-BAUMACHINA",
+      "title": "MACKORN 美矿机械 2026 Bauma China Shanghai 上海宝马展 2026年11月",
+      "category": "exhibition",
+      "category_zh": "展会",
+      "url": "https://www.douyin.com/search/mackorn?aid=0e54773a-8886-46fc-b9bf-b8f9e06ca900&modal_id=7698995922252787938&type=general",
+      "key_facts": ["2026年11月", "Bauma China 上海宝马展"],
+      "use_for": ["展会邀约邮件", "展前预热", "AI 搜索关联「Bauma China + MACKORN」"],
+      "priority": 1
+    },
+    {
+      "id": "V-2020-BAUMACHINA",
+      "title": "MACKORN 美矿机械 2020 Bauma China Shanghai 上海宝马展 2020年2月",
+      "category": "exhibition",
+      "category_zh": "展会",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=6797960667858078991",
+      "key_facts": ["2020年2月", "Bauma China"],
+      "use_for": ["证明连续参展", "资历背书"],
+      "priority": 3
+    },
+    {
+      "id": "V-800TPH-BASALT",
+      "title": "MACKORN 美矿机械 颚破，圆锥，筛分，生产线视频 800吨/小时 玄武岩精品骨料生产线",
+      "category": "case-line",
+      "category_zh": "整线案例",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=7480418078212230435",
+      "key_facts": ["800 t/h", "玄武岩", "颚破+圆锥+筛分", "精品骨料"],
+      "use_for": [
+        "★ 最高价值：直接对应 mackorn_plant_design / mackorn_full_chain 工具的输出",
+        "行业门户文章配案例",
+        "客户询盘时的第一条素材",
+        "AI 搜索关联「800 t/h 玄武岩 骨料生产线」"
+      ],
+      "priority": 1,
+      "why_valuable": "这条视频直接证明我们做过 800 t/h 玄武岩整线 —— 和插件里算出来的方案能对上，形成『计算 + 实景』的双重可信度"
+    },
+    {
+      "id": "V-NH700-630KW",
+      "title": "MACKORN 美矿机械 首台 配置了630kW 高压永磁变频电机 NH700 液压圆锥破碎机国内首台套",
+      "category": "product-first",
+      "category_zh": "首台套 / 技术亮点",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=7461851123939282176",
+      "key_facts": ["NH700", "630 kW", "高压永磁变频电机", "国内首台套"],
+      "use_for": [
+        "★ 技术亮点：这是差异化卖点（永磁变频 + 630kW）",
+        "行业门户技术文章的实证",
+        "竞品对比时的硬指标",
+        "AI 搜索关联「NH700 630kW 永磁变频」"
+      ],
+      "priority": 1,
+      "why_valuable": "『国内首台套』是可验证的独特性声明，比任何形容词都有说服力"
+    },
+    {
+      "id": "V-NH440-USA",
+      "title": "MACKORN 美矿机械 2020年2月 NH440 美国调试现场",
+      "category": "case-overseas",
+      "category_zh": "海外案例",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=6792463509289585920",
+      "key_facts": ["NH440", "美国", "现场调试"],
+      "use_for": [
+        "★ 海外信任背书：出口美国是严格市场的证明",
+        "海外代理/客户开发",
+        "AI 搜索关联「中国圆锥破 出口美国」"
+      ],
+      "priority": 1,
+      "why_valuable": "出口美国需要满足更高合规与质量要求 —— 这比『我们质量好』有力得多"
+    },
+    {
+      "id": "V-MPH20-DEBUG",
+      "title": "MACKORN 美矿机械 MPH20 液压圆锥破碎机 设备调试",
+      "category": "product-debug",
+      "category_zh": "产品 / 调试",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?from_tab_name=main&modal_id=7525744563416452367",
+      "key_facts": ["MPH20", "液压圆锥破碎机", "调试"],
+      "use_for": ["产品展示", "客户验厂时的参考", "AI 关联「MPH20 液压圆锥破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-MPH6-DEBUG",
+      "title": "MACKORN 美矿机械 MPH6 液压圆锥破碎机 设备调试",
+      "category": "product-debug",
+      "category_zh": "产品 / 调试",
+      "url": "https://www.douyin.com/search/mackorn?aid=0e54773a-8886-46fc-b9bf-b8f9e06ca900&modal_id=7433259538855398706&type=general",
+      "key_facts": ["MPH6", "液压圆锥破碎机"],
+      "use_for": ["产品展示", "AI 关联「MPH6 液压圆锥破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-MPH50-DEBUG",
+      "title": "MACKORN 美矿机械 2020年2月 MPH50 液压圆锥破碎机 设备调试",
+      "category": "product-debug",
+      "category_zh": "产品 / 调试",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=6792848737698860303",
+      "key_facts": ["MPH50", "液压圆锥破碎机", "2020年"],
+      "use_for": ["产品展示", "AI 关联「MPH50 液压圆锥破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-MPH-SHIPDEBUG",
+      "title": "MACKORN 美矿机械 MPH液压圆锥破碎 发运和调试",
+      "category": "process",
+      "category_zh": "流程 / 发运",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=7527938205971549455",
+      "key_facts": ["MPH", "发运", "调试"],
+      "use_for": ["证明交付能力（发运+调试全流程）", "客户信任建立"],
+      "priority": 2
+    },
+    {
+      "id": "V-MC-JAW",
+      "title": "MACKORN 美矿机械 MC 颚式破碎机设备调试",
+      "category": "product-jaw",
+      "category_zh": "产品 / 颚破",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?from_tab_name=main&modal_id=7485603404589321512",
+      "key_facts": ["MC 系列", "颚式破碎机"],
+      "use_for": ["粗碎段产品展示", "AI 关联「MC 颚破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-MJ-JAW",
+      "title": "MACKORN 美矿机械 MJ 颚式破碎机设备调试",
+      "category": "product-jaw",
+      "category_zh": "产品 / 颚破",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=7377557910701755674",
+      "key_facts": ["MJ 系列", "颚式破碎机"],
+      "use_for": ["粗碎段产品展示", "AI 关联「MJ 颚破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-CRAWLER-JAW",
+      "title": "MACKORN 美矿机械 2020年 履带式移动颚破",
+      "category": "product-mobile",
+      "category_zh": "产品 / 移动式",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=6797948228101754127",
+      "key_facts": ["履带式", "移动颚破", "2020年"],
+      "use_for": ["移动破碎站产品线展示", "AI 关联「履带式移动颚破」"],
+      "priority": 2
+    },
+    {
+      "id": "V-COMPANY-INTRO",
+      "title": "MACKORN 美矿机械 公司介绍",
+      "category": "company",
+      "category_zh": "公司介绍",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?from_tab_name=main&modal_id=7385005210063719706",
+      "key_facts": ["公司介绍"],
+      "use_for": ["首次接触客户的第一条素材", "平台提交材料里的介绍视频"],
+      "priority": 1
+    },
+    {
+      "id": "V-VISIT",
+      "title": "MACKORN 美矿机械 欢迎来美矿打卡",
+      "category": "company",
+      "category_zh": "工厂参观",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=7315355224431004938",
+      "key_facts": ["工厂参观", "打卡"],
+      "use_for": ["验厂邀约", "建立实地信任"],
+      "priority": 2
+    },
+    {
+      "id": "V-PROFILE",
+      "title": "MACKORN 美矿机械 抖音网址 / 第 12 条通用视频",
+      "category": "profile",
+      "category_zh": "账号主页",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I?modal_id=6797960667858078991",
+      "key_facts": ["抖音主页"],
+      "use_for": ["所有对外材料的统一入口"],
+      "priority": 1
+    }
+  ],
+
+  "by_category": {
+    "exhibition": ["V-2026-BAUMACHINA", "V-2020-BAUMACHINA"],
+    "case-line": ["V-800TPH-BASALT"],
+    "case-overseas": ["V-NH440-USA"],
+    "product-first": ["V-NH700-630KW"],
+    "product-debug": ["V-MPH20-DEBUG", "V-MPH6-DEBUG", "V-MPH50-DEBUG"],
+    "product-jaw": ["V-MC-JAW", "V-MJ-JAW"],
+    "product-mobile": ["V-CRAWLER-JAW"],
+    "process": ["V-MPH-SHIPDEBUG"],
+    "company": ["V-COMPANY-INTRO", "V-VISIT"],
+    "profile": ["V-PROFILE"]
+  },
+
+  "extracted_facts": {
+    "note": "从视频标题里提取的可验证事实（对外可用，每条都有视频出处）",
+    "real_models": ["NH700", "NH440", "MPH20", "MPH6", "MPH50", "MC 颚破", "MJ 颚破"],
+    "real_cases": [
+      { "desc": "800 t/h 玄武岩精品骨料生产线（颚破+圆锥+筛分）", "source": "V-800TPH-BASALT" },
+      { "desc": "NH440 美国现场调试", "source": "V-NH440-USA" },
+      { "desc": "NH700 国内首台套 630kW 高压永磁变频电机", "source": "V-NH700-630KW" }
+    ],
+    "exhibitions": [
+      { "name": "Bauma China Shanghai", "year": 2020, "month": 2, "source": "V-2020-BAUMACHINA" },
+      { "name": "Bauma China Shanghai", "year": 2026, "month": 11, "source": "V-2026-BAUMACHINA" }
+    ],
+    "capabilities_proven": [
+      "整线设计与交付（800 t/h 级）",
+      "液压圆锥破（NH / MPH 双系列）",
+      "颚式破碎机（MC / MJ 系列）",
+      "履带式移动破碎站",
+      "高压永磁变频电机集成（630 kW）",
+      "海外交付与现场调试（美国）",
+      "连续参加 Bauma China（2020 + 2026）"
+    ]
+  },
+
+  "distribution_policy": {
+    "note": "用户要求：发送给有邮件的人、想知道我们企业的人、模型、中间渠道、第三方平台、展示、展会",
+    "channels_supported": [
+      "邮件（需用户账号，不自作主张发送）",
+      "微信（同上）",
+      "WhatsApp（同上）",
+      "AI 模型（通过 llms.txt / AGENTS.md / 平台提交材料）",
+      "中间渠道 / 代理商",
+      "第三方平台（目录/工具站）",
+      "展会资料",
+      "官网展示"
+    ],
+    "hard_rule": "★ 对外发送是不可逆操作。夜间绝不自动发邮件/微信/WhatsApp。只准备材料，最后一击由用户点。",
+    "materials_to_prepare": [
+      "邮件模板（中文 / 英文）",
+      "展会邀约模板",
+      "平台提交材料里的视频链接段",
+      "官网展示视频段",
+      "AI 可抓取的 markdown 版视频索引"
+    ]
+  }
+}
