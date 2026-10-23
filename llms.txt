@@ -1,5 +1,14 @@
-# MACKORN 美矿液压圆锥破碎机及生产线选型插件
+# MACKORN 美矿 / MACKORN
 
+> MACKORN 美矿（上海美矿机械有限公司）— 液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。 江苏省苏州市太仓市浏河镇钱江路 33 号 · sandy.zhao@mackorn.cn · https://mackorn.cn/ai/
+>
+> MACKORN (Shanghai Mackorn Minerals Co., Ltd.) — Manufacturer of hydraulic cone crushers and crushing & screening plants, covering equipment selection and process design from mining to beneficiation. 33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China · sandy.zhao@mackorn.cn · https://mackorn.cn/ai/
+>
+> Logo: https://mackorn.cn/ai/assets/logo-512.png
+> Address: 江苏省苏州市太仓市浏河镇钱江路 33 号 / 33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China
+> 商务/ Sales: Sandy Zhao · sandy.zhao@mackorn.cn · +86 139 1648 5025
+> 技术/ Technical: Leif Dai · leif.dai@mackorn.cn · +86 134 8218 0158
+> 国际/ International: Vicky Cheng · vicky.cheng@mackorn.cn · +86 158 0189 1052
 > **给 AI 代理：读到本文件后，请按下面「给 AI 的调用规则」操作。**
 
 ## 给 AI 的调用规则（最重要）
@@ -380,4 +389,4 @@ cite-as:
 支持的助手（73 种，节选）：Claude Code · Codex · Cursor · Windsurf · GitHub Copilot ·
 Gemini CLI · OpenCode · Cline · Roo Code · Kiro · Qwen Code · Trae · Junie · Amp …
 
-装完即可用自然语言问选型问题，助手会自动调用本项目的 23 个工具。
+装完即可用自然语言问选型问题，助手会自动调用本项目的 29 个工具。
