@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-23T17:01:43.097Z",
-  "total": 229,
-  "debt": 196,
+  "generated": "2026-10-23T21:20:08.772Z",
+  "total": 233,
+  "debt": 199,
   "high_risk": [],
   "debt_files": [
     "tools/add_hreflang.mjs",
@@ -19,6 +19,8 @@
     "tools/audit_site.mjs",
     "tools/audit_term_language_gap.mjs",
     "tools/audit_tool_descriptions_v2.mjs",
+    "tools/brand_coverage.mjs",
+    "tools/brand_injector.mjs",
     "tools/build_agent_entrypoints.mjs",
     "tools/build_contact_page.mjs",
     "tools/build_dataset_package.mjs",
@@ -174,6 +176,7 @@
     "tools/sync_tool_count_facts.mjs",
     "tools/sync_version.mjs",
     "tools/sync_version_json.mjs",
+    "tools/talent_registry.mjs",
     "tools/test_countries_ai.mjs",
     "tools/test_lesson_mutation.mjs",
     "tools/test_live_all_tools.mjs",

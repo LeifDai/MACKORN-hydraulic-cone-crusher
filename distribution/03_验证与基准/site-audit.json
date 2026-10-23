@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-23T16:55:47.892Z",
-  "pages": 1,
-  "total_mb": 0,
+  "generated": "2026-10-23T21:17:08.293Z",
+  "pages": 2,
+  "total_mb": 0.02,
   "issues": {
     "title": [
       "ai/privacy.html"
@@ -28,12 +28,12 @@
     "llms.txt": {
       "exists": true,
       "kb": 4,
-      "refs": 3
+      "refs": 4
     },
     "llms-full.txt": {
       "exists": true,
       "kb": 0,
-      "refs": 0
+      "refs": 1
     },
     ".well-known/keywords.json": {
       "exists": false
@@ -42,8 +42,10 @@
       "exists": false
     },
     "sitemap.xml": {
-      "exists": false
+      "exists": true,
+      "kb": 25,
+      "refs": 0
     }
   },
-  "jsonld_pages": 0
+  "jsonld_pages": 1
 }

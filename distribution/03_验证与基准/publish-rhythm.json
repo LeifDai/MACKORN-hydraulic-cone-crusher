@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-23T17:03:11.186Z",
+  "generated": "2026-10-23T21:20:42.041Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,24 +12,24 @@
     "error": null
   },
   "last_commit": {
-    "sha": "11a27ed",
-    "date": "2026-10-23T14:21:35Z",
-    "message": "feat(traffic): article engine — 5 topics x 5 platform formats + 1 complete 2400-word essay"
+    "sha": "e7d4ac3",
+    "date": "2026-10-23T19:54:33Z",
+    "message": "feat(site): video index page + sitemap/robots/llms updated (R172)"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 5.08,
+    "days_since": 5.26,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.11,
-  "days_since_publish": 0.11,
+  "effective_days": 0.06,
+  "days_since_publish": 0.06,
   "changed_since_publish": {
-    "count": 302,
+    "count": 308,
     "files": [
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/index.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/automation-engine.mjs",
@@ -39,6 +39,8 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/contact.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/core.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-automation.mjs",
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-brand-rules.mjs",
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-brand.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-grinding.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-jaw.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/data-market.mjs",
@@ -88,9 +90,7 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_ai_access.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_gaps.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_global.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_qa_coverage.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_run_guards.mjs",
-      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_site.mjs"
+      "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_qa_coverage.mjs"
     ]
   },
   "verdict": "HEALTHY",

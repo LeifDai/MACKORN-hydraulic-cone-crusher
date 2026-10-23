@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-10-23T17:03:11.350Z",
+  "generated": "2026-10-23T21:20:42.148Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
@@ -11,14 +11,14 @@
     {
       "id": "M-README.md",
       "name": "根 README（GitHub 展示的）",
-      "pass": true,
-      "detail": "30KB ✅ 与真相源一致"
+      "pass": false,
+      "detail": "❌ 不一致（本地 30KB vs 真相源 30KB）"
     },
     {
       "id": "M-llms.txt",
       "name": "llms.txt（AI 索引）",
-      "pass": true,
-      "detail": "31KB ✅ 与真相源一致"
+      "pass": false,
+      "detail": "❌ 不一致（本地 33KB vs 真相源 31KB）"
     },
     {
       "id": "M-cordis.patch.yml",
@@ -29,20 +29,20 @@
     {
       "id": "M-server.json",
       "name": "server.json（MCP Registry）",
-      "pass": true,
-      "detail": "1KB ✅ 与真相源一致"
+      "pass": false,
+      "detail": "❌ 不一致（本地 1KB vs 真相源 1KB）"
     },
     {
       "id": "F-facts",
       "name": "对外文件硬事实（工具数/版本）",
-      "pass": false,
-      "detail": "❌ 发现 2 处过时：README.md 写 工具数=22（应为 29） · llms.txt 写 工具数=23（应为 29）"
+      "pass": true,
+      "detail": "✅ 与真相源一致（29 工具 / v0.2.2）"
     }
   ],
   "remote_surfaces": [],
   "summary": {
-    "ok": 4,
-    "failed": 1,
+    "ok": 2,
+    "failed": 3,
     "unknown": 0
   },
   "verdict": "STALE",

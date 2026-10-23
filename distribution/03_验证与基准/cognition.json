@@ -1,18 +1,18 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-23T17:03:16.620Z",
+  "generated": "2026-10-23T21:20:45.592Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 64,
-    "today": 12,
-    "last7": 64,
-    "last30": 64
+    "total": 72,
+    "today": 20,
+    "last7": 72,
+    "last30": 72
   },
   "metrics": {
-    "daily_correction": 12,
-    "week_correction": 64,
-    "depth_score_7d": 147,
-    "avg_depth": 2.3,
+    "daily_correction": 20,
+    "week_correction": 72,
+    "depth_score_7d": 171,
+    "avg_depth": 2.38,
     "streak_days": 4
   },
   "thresholds": {
@@ -22,47 +22,47 @@
   },
   "recent": [
     {
-      "id": "C064",
-      "at": "2026-10-23T14:21:22.316Z",
-      "wrong": "我以为同一篇文可以改改标题发到多个平台",
-      "now": "实际一稿多投在技术社区会被识别为 spam。正确做法是【一素材多文体】：同一个\"细碎台数爆炸\"洞察，行业门户写严谨工程文（1500-3000字克制不推销）、知乎写经验分享（设问+类比）、DEV.to 写技术复盘（第一人称承认错误）、AI 目录写一句话卖点。每种文体的语气/长度/结构/必须包含/必须避免都不同，已固化进 traffic_engine.mjs 的 platform_formats",
-      "evidence": "traffic_engine.mjs --write 对同一选题生成不同平台骨架，输出里带完整写作要求表（语气/长度/结构/必须包含/必须避免/行动号召）",
+      "id": "C072",
+      "at": "2026-10-23T18:53:14.142Z",
+      "wrong": "我以为视频标题只是营销文案，不能当事实依据",
+      "now": "实际这些标题里含可验证的硬事实——而且是【我们缺少的那类证据】：① 800 t/h 玄武岩整线恰好对应插件算出来的方案，形成\"计算+实景\"双重可信度；② NH700 630kW 高压永磁变频\"国内首台套\"是可验证的独特性声明；③ NH440 美国调试是出口严格市场的质量背书。已把这些提取成 extracted_facts（带视频出处），对外可用",
+      "evidence": "social-assets/registry.json 的 extracted_facts 段：real_models 7 个、real_cases 3 条（每条带 source）、exhibitions 2 条、capabilities_proven 7 条",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C063",
-      "at": "2026-10-23T14:21:22.129Z",
-      "wrong": "我以为\"引流\"就是多发推广内容、多提交目录",
-      "now": "实际最有价值的引流不是推广词，是【只有我们能写的技术复盘】—— 因为其他矿业公司不会写 MCP 踩坑，其他开发者不懂圆锥破。这种交叉地带的真实经历别人抄不走。建立 traffic_engine.mjs：选题池 5 个（每个都绑定独有资产）+ 5 种平台文体 + 发布日历 + 风险自动提示（如厂商参数需确认可公开范围）",
-      "evidence": "traffic-registry/registry.json 5 个选题 / 6 项独有资产 / 5 种文体；已生成 3 个骨架 + 1 篇完整美文（T-003 约 2400 字，四坑复盘）",
+      "id": "C071",
+      "at": "2026-10-23T18:53:13.986Z",
+      "wrong": "我以为\"发送给客户\"这件事可以直接由我来做",
+      "now": "实际对外发送是【不可逆操作】，且需要邮箱/微信/WhatsApp 账号凭据（硬红线：不读凭据）。按全局规则 §2.5 夜间自主模式：涉及对外发送的必须停下来，写清\"已准备好，等你一句话\"。所以工具只生成材料不发送，并且每份材料都带「发送前检查清单」（收件人是否核实、是否群发、是否承诺价格交期）",
+      "evidence": "tools/distribution_kit.mjs 顶部明确写\"本工具只生成材料，不发送\"；6 份材料每份都带 checklist；output 里明确提示\"对外发送是不可逆操作，必须你本人点发送\"",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C062",
-      "at": "2026-10-23T14:00:29.929Z",
-      "wrong": "我以为已经有的 ai_coverage.mjs（18 平台）和 ai_rejection_diagnoser.mjs（12 平台）覆盖够了",
-      "now": "实际它们只覆盖 MCP 目录。用户要的是【全部有助于模型分发传播的平台】——还包括 AI 客户端能不能配 MCP、包管理器、AI 工具站、开发者社区、行业门户、学术标准。已建 distribution_registry.mjs 管 70 个平台，与前者形成三层分工：覆盖探测 / 原因诊断 / 全量分发台账",
-      "evidence": "新工具实测：70 平台 7 类；--roadmap 输出 P1(2个)/P2(27个) 等分桶；--blockers 输出原因+提升条件",
+      "id": "C070",
+      "at": "2026-10-23T18:53:13.790Z",
+      "wrong": "我以为\"分发传播\"主要靠提交到外部目录（MCP 目录/AI 工具站）",
+      "now": "实际最有价值的资产一直在我们自己手里但没被结构化：抖音 15 条视频含真实设备型号（NH700/NH440/MPH20/MPH6/MPH50/MC/MJ）、真实案例（800t/h 玄武岩整线、NH440 美国调试）、真实展会（Bauma China 2020+2026）、真实技术亮点（630kW 高压永磁变频国内首台套）。这些是外部目录给不了的信任凭证。已建成 social-assets 台账 + 6 类分发材料生成器",
+      "evidence": "social-assets/registry.json 15 条视频分类为 10 类；tools/distribution_kit.mjs --all 生成 email-zh/email-en/expo-bauma/platform-video/llms-video-index/im-templates 六类材料",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C061",
-      "at": "2026-10-23T14:00:29.662Z",
-      "wrong": "我以为搜到的东西可以先抓下来看",
-      "now": "实际 raw.githubusercontent.com 从本机连不上（UND_ERR_CONNECT_TIMEOUT，之前也遇到过）。所以不能依赖外部抓取建清单 —— 必须用【已知的+搜索摘要+实测】三种来源混合，并给每条明确标注可信度（measured/searched/known/unknown），不许把\"听说\"当\"验证过\"",
-      "evidence": "Node fetch raw.githubusercontent.com → UND_ERR_CONNECT_TIMEOUT；最终清单 70 条里 measured 约 30 条、searched 约 25 条、known 约 15 条，每条都标了",
+      "id": "C069",
+      "at": "2026-10-23T17:35:45.363Z",
+      "wrong": "我以为\"成为世界一线品牌\"这种事只能靠人，代码做不了什么",
+      "now": "实际能拆出 5 个可测基础设施指标（全流程知识覆盖/关键词占位/品牌信息覆盖/平台触达/内容产出），其中前三项我们能控到 100%，已全部达成。剩下的商业结果（市场份额、客户信赖、品牌溢价）确实代码做不了——但不能因为做不了终点就不做能做的路。诚实拆解比空喊\"我们要成为霸主\"有用",
+      "evidence": "tools/brand_coverage.mjs 实测：规则一 100%(8/8段)、规则二 100%(135/136词)、规则三 100%(7/7文件)；规则四 28.6%、规则五 5选题0发布（受外部条件限制，只报告不判定）",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C060",
-      "at": "2026-10-23T14:00:29.384Z",
-      "wrong": "我以为\"让 AI 收录我们\"主要就是提交 MCP 目录（那 15 个）",
-      "now": "实际把分发平台全量铺开后有 7 大类 70 个平台，而我们只在\"技术圈\"有存在：AI 客户端 12/18、MCP 目录 4/15、包管理器 4/6 已通；但 AI 工具目录 0/9、开发者社区 0/11、行业垂直门户 0/8、学术标准 0/3 全部空白。★ 最大的分发缺口不是 MCP 目录，是【行业垂直门户 —— 真正的客户在那里】和【AI 工具目录 —— 面向终端用户和 AI 搜索】",
-      "evidence": "distribution-registry/registry.json 70 个平台 7 类；tools/distribution_registry.mjs 实测输出各类已通比例",
+      "id": "C068",
+      "at": "2026-10-23T17:35:45.152Z",
+      "wrong": "我以为\"人才识别\"是 HR 的事，编程帮不上忙",
+      "now": "实际能编程的是【让判断可复盘】：把 L1 履历/L2 战绩/L3 判断力/L4 品格志趣四层强制分层打分，并自动判\"深度\"——只在 L1-L2 评估的标为 shallow 并提示\"多数招聘失败在这里\"。加上群体结构缺口检查（技术/商务/区域/语言/资本五维是否互补）和历史复盘（判断→结果→教训），人才眼光就变成可训练的能力而不是玄学",
+      "evidence": "tools/talent_registry.mjs 实测：--assess 只给 L1/L2 时判 shallow 并给出\"必须做 L3/L4\"；--gap 检出 5 维中缺失的维度；--review 列出需补 L3/L4 的人并给测试方法",
       "impact": "L4",
       "why": null
     }

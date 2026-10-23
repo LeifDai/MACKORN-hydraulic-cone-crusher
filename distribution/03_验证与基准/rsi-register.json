@@ -1,17 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-23T17:03:10.959Z",
+  "generated": "2026-10-23T21:20:41.728Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
-  "alive": 68,
-  "dead": 23,
+  "alive": 69,
+  "dead": 22,
   "broken": 0,
-  "recurrence": 0.25274725274725274,
+  "recurrence": 0.24175824175824176,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
   "neg_coverage": 0.5824175824175825,
   "by_status": {
-    "failed": 23,
-    "alive": 68
+    "failed": 22,
+    "alive": 69
   },
   "register": [
     {
@@ -80,7 +80,7 @@
       "negctl": [],
       "origin": "R1：keyword_gate 测\"词与品牌同页\"是自证式弱检测，275 词 100% 通过但内容未必有用",
       "status": "failed",
-      "detail": "⚠ 有问题页面占比 0.0% < 60%；可引用段占比 0.0% < 50%；审计报出 4 项 issue"
+      "detail": "⚠ 有问题页面占比 0.0% < 60%；审计报出 4 项 issue"
     },
     {
       "id": "L-07",
@@ -89,8 +89,7 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R4：新增 22 个工具页后 hreflang 覆盖从 94/94 掉到 44/94，触发门禁",
-      "status": "failed",
-      "detail": "真扫站点：0 个页面 · 在 sitemap 中 0（0%）· 含 hreflang 0（0%）"
+      "status": "alive"
     },
     {
       "id": "L-08",
@@ -295,7 +294,7 @@
       "negctl": [],
       "origin": "R19：建了 47 个新页面（工具页/语言FAQ/国别页），但 llms.txt / keywords.json / agent.json 还是旧的",
       "status": "failed",
-      "detail": "**真跑**索引同步：站点 1 个 HTML 页 · llms.txt 引用 5 个路径（500%）"
+      "detail": "**真跑**索引同步：站点 2 个 HTML 页 · llms.txt 引用 6 个路径（300%）"
     },
     {
       "id": "L-27",
@@ -318,7 +317,7 @@
       ],
       "origin": "R20：给编排器接线时，replace 的锚点 run('PDCA 轮次状态' 在文件里根本不存在，脚本仍打印\"已接入\"，实际一个都没接上",
       "status": "failed",
-      "detail": "【硬】改源码的脚本 22 个 · 带验证 21 个，❌ cognition_auto.mjs ｜ 【软·债务】全局替换点 76 处 · 带验证 37 处（49%） ｜ 编排器查退出码 ✅ · 记每步 ✅"
+      "detail": "【硬】改源码的脚本 23 个 · 带验证 22 个，❌ cognition_auto.mjs ｜ 【软·债务】全局替换点 78 处 · 带验证 38 处（49%） ｜ 编排器查退出码 ✅ · 记每步 ✅"
     },
     {
       "id": "L-29",
@@ -359,7 +358,7 @@
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
       "status": "failed",
-      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：229 脚本 / 缺守卫 196 / **被"
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：233 脚本 / 缺守卫 199 / **被"
     },
     {
       "id": "L-33",
@@ -675,7 +674,7 @@
       ],
       "origin": "R83 用户指令（原文）：『不断升级程序，不断迭代 PDCA，不断优化，这个机会生存的法则，请写到规则里面。』 项目一贯做法：文档会被忘记，门禁不会。所以这条法则必须变成可测量的指标，而不是一句口号",
       "status": "failed",
-      "detail": "**真跑**生存法则：在动(PDCA 93 轮) · 有证据 · 未退化(教训 91 / 门禁 70) · 双轨都在 —— ❌ 不达标：LIVE-1"
+      "detail": "**真跑**生存法则：在动(PDCA 93 轮) · 有证据 · 未退化(教训 91 / 门禁 78) · 双轨都在 —— ❌ 不达标：LIVE-1"
     },
     {
       "id": "L-59",
@@ -1017,7 +1016,7 @@
       "negctl": [],
       "origin": "R100 用户明确指出：昨天讲过要先升级再上传，但 GitHub 上的根 README 仍是旧版（写 19 tools、编码还坏了），而真相源 public-overrides/README.md 早已是 22 tools / V000022。结果 Glama 读根 README 认为我们只有 19 tools，质量分",
       "status": "failed",
-      "detail": "**真跑**上传前一致性：镜像 4/5 ❌ 对外文件硬事实（工具数/版本） · 真相源 29 工具 / v0.2.2"
+      "detail": "**真跑**上传前一致性：镜像 2/5 ❌ 根 README（GitHub 展示的）,llms.txt（AI 索引）,server.json（MCP Registry） · 真相源 29 工具 / v0.2.2"
     },
     {
       "id": "L-89",
