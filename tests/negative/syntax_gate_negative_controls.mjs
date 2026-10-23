@@ -13,7 +13,11 @@ import { tmpdir } from 'node:os';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
-const GATE = join(HERE, 'syntax_gate.mjs');
+/* R156 修真 bug：syntax_gate.mjs 在 tools/ 里，不在 tests/negative/ 里。
+ * 原代码 join(HERE, 'syntax_gate.mjs') 指向不存在的文件 →
+ * 这个负控测试【从来没跑通过】（一直报 exit -2 = Cannot find module）。
+ * 这也说明：负控自己坏了，谁都没发现 —— 必须有个"负控的负控"。 */
+const GATE = join(HERE, '..', '..', 'tools', 'syntax_gate.mjs');
 
 /* 在 tools/ 下建临时文件（闸门会扫到），跑完删掉 */
 const CASES = [
@@ -81,14 +85,37 @@ function runGate() {
   return -2;                                      // 明确标记"始终无法启动"
 }
 
-/** 带输出的运行（诊断用：看它到底报了哪个文件） */
+/** 带输出的运行（诊断用：看它到底报了哪个文件）
+ *
+ * ★ R155 修 R-PIPE-STDIO-EPERM 复现：
+ *   沙箱禁止【管道捕获子进程 stdout】(spawnSync ... EPERM)，
+ *   原实现用 { encoding: 'utf8' } 走管道 → 必然 EPERM → 基线报 "exit -2"。
+ *   改为【文件交接】：子进程 stdout/stderr 重定向到临时文件，
+ *   父进程读文件。这是本机唯一可靠的方式（云端两者都可以）。 */
 function runGateVerbose() {
+  const outPath = join(tmpdir(), 'mackorn-gate-out-' + process.pid + '.log');
   for (let attempt = 0; attempt < 4; attempt += 1) {
     try {
-      return { st: 0, out: execFileSync(process.execPath, [GATE], { encoding: 'utf8', windowsHide: true, timeout: 300000 }) };
+      const fd = openSync(outPath, 'w');
+      let st = 0;
+      try {
+        execFileSync(process.execPath, [GATE], {
+          stdio: ['ignore', fd, fd],
+          windowsHide: true,
+          timeout: 300000,
+        });
+      } catch (e) {
+        st = e.status == null ? null : e.status;
+      } finally {
+        closeSync(fd);
+      }
+      if (st === null) continue;
+      let out = '';
+      try { out = readFs(outPath, 'utf8'); } catch { }
+      try { unlinkSync(outPath); } catch { }
+      return { st, out };
     } catch (e) {
       if (e.status == null) continue;
-      return { st: e.status, out: String(e.stdout || '') + String(e.stderr || '') };
     }
   }
   return { st: -2, out: '' };
