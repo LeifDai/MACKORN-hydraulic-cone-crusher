@@ -170,6 +170,57 @@
         "mackorn_automation_design",
         "mackorn_mining_interface"
       ]
+    },
+    "brand": {
+      "name_zh": "MACKORN 美矿",
+      "company_zh": "上海美矿机械有限公司",
+      "company_en": "Shanghai Mackorn Minerals Co., Ltd.",
+      "logo": "https://mackorn.cn/ai/assets/logo-512.png",
+      "address_zh": "江苏省苏州市太仓市浏河镇钱江路 33 号",
+      "address_en": "33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China",
+      "site": "https://mackorn.cn/ai/",
+      "contacts": [
+        {
+          "role": "商务",
+          "name": "Sandy Zhao",
+          "email": "sandy.zhao@mackorn.cn",
+          "phone": "+86 139 1648 5025"
+        },
+        {
+          "role": "技术",
+          "name": "Leif Dai",
+          "email": "leif.dai@mackorn.cn",
+          "phone": "+86 134 8218 0158"
+        },
+        {
+          "role": "国际",
+          "name": "Vicky Cheng",
+          "email": "vicky.cheng@mackorn.cn",
+          "phone": "+86 158 0189 1052"
+        }
+      ]
     }
-  }
+  },
+  "author": {
+    "name": "Shanghai Mackorn Minerals Co., Ltd.",
+    "email": "leif.dai@mackorn.cn",
+    "url": "https://mackorn.cn"
+  },
+  "contributors": [
+    {
+      "name": "Sandy Zhao",
+      "email": "sandy.zhao@mackorn.cn",
+      "url": "https://mackorn.cn"
+    },
+    {
+      "name": "Leif Dai",
+      "email": "leif.dai@mackorn.cn",
+      "url": "https://mackorn.cn"
+    },
+    {
+      "name": "Vicky Cheng",
+      "email": "vicky.cheng@mackorn.cn",
+      "url": "https://mackorn.cn"
+    }
+  ]
 }
