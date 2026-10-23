@@ -1,0 +1,329 @@
+{
+  "schema": "mackorn-traffic-registry/1",
+  "version": "1.0.0",
+  "updated": "2026-10-23",
+  "purpose": "引流工作器的内容台账 —— 选题池、各平台文稿、发布日历、状态追踪。目标：把技术资产转成能被行业客户和 AI 搜索看到的内容，为官网和插件引流。",
+  "principles": {
+    "no_marketing_garbage": "不写营销垃圾。每篇必须有真实技术内容（数据/方法/踩坑），否则不发。",
+    "one_material_many_formats": "同一份技术素材，按平台改写成不同文体，不做一稿多投。",
+    "earn_attention": "靠'有用'换注意力，不靠标题党。标题可以吸引人，但内容必须兑现。",
+    "honest_boundaries": "公开文章里同样遵守：null 说未知、价格说非报价、文献值说文献值。",
+    "no_spam": "同一平台不连发；社区发帖遵守各站规则（HN 禁止纯推广、Reddit 需参与讨论）。"
+  },
+  "asset_inventory": {
+    "note": "我们手里真正稀缺、别人写不出来的素材",
+    "unique_assets": [
+      {
+        "id": "A1",
+        "name": "Whiten(1972) 稳态破碎模型的可运行实现",
+        "why_unique": "公开文献，但很少有人真的写成能跑的工具链并用于选型",
+        "risk": "算法不是我们发明的，必须注明出处"
+      },
+      {
+        "id": "A2",
+        "name": "MACKORN NH/NS 真实厂商参数表（29 机型 × 9 腔型 × CSS 网格）",
+        "why_unique": "★ 真正稀缺 —— 这是厂商内部数据，别人没有",
+        "risk": "需确认哪些可以公开（不能泄露定价）"
+      },
+      {
+        "id": "A3",
+        "name": "细碎段台数爆炸的真实工程诊断",
+        "why_unique": "实测发现：目标 10mm 时引擎会给出 10 台 NH300 —— 合理的数字但荒谬的工程。这种'模型对了但方案错了'的洞察，很少人写",
+        "risk": "无"
+      },
+      {
+        "id": "A4",
+        "name": "MCFM 给料模数诊断法",
+        "why_unique": "把'给料级配不稳'这种老师傅手感变成可计算公式",
+        "risk": "需注明是工程经验模型"
+      },
+      {
+        "id": "A5",
+        "name": "AI 插件可发现性的实战复盘（MCP 目录/DNS/SSL/容器化）",
+        "why_unique": "真实踩坑：DNS 裸域无 A 记录 + SSL 过期 + Glama 容器化 release 的机制。技术圈会感兴趣",
+        "risk": "无"
+      },
+      {
+        "id": "A6",
+        "name": "1300+ 条测试断言 + 负控体系",
+        "why_unique": "工程纪律本身是可分享的内容（怎么防止'工具自己说自己成功'）",
+        "risk": "无"
+      }
+    ]
+  },
+  "topics": [
+    {
+      "id": "T-001",
+      "title_cn": "为什么你的圆锥破细碎段会选出 10 台设备：一个'数字对了但方案错了'的真实案例",
+      "title_en": "Why your tertiary crushing stage selects 10 crushers: a case where the math is right but the design is wrong",
+      "angle": "技术洞察 + 真实数据",
+      "assets": [
+        "A3",
+        "A2"
+      ],
+      "target_platforms": [
+        "行业门户",
+        "开发者社区",
+        "知乎"
+      ],
+      "hook": "铁矿 500 t/h，给料 800mm，出料 10mm —— 模型算出细碎段需要 10 台 NH300。数字没错，但没人会这么建厂。",
+      "body_outline": [
+        "案例：一个真实的选型请求",
+        "模型怎么算出 10 台的（单台产能 50 t/h，500/50）",
+        "为什么数字对但方案错（工程可接受台数 ≤3）",
+        "三种正确解法：改大机型 / 上 HPGR / 放宽粒度给磨矿",
+        "教训：工程工具必须有'合理性告警'层，不能只做算术"
+      ],
+      "status": "drafted",
+      "priority": 1
+    },
+    {
+      "id": "T-002",
+      "title_cn": "把'给料级配不稳'从老师傅的手感变成可计算的公式",
+      "title_en": "Turning a veteran operator's intuition about feed gradation into a computable formula",
+      "angle": "方法论",
+      "assets": [
+        "A4"
+      ],
+      "target_platforms": [
+        "行业门户",
+        "知乎",
+        "中文社区"
+      ],
+      "hook": "老操作工看两眼就知道'今天料不对'，但说不出参数。MCFM 模数把这个判断变成一个 4.0-4.5 的窗口。",
+      "body_outline": [
+        "问题：细碎台时产量莫名偏低，查了半天设备没毛病",
+        "真正原因：给料级配离析",
+        "MCFM 模数公式（附推导与出处）",
+        "工程最优窗口 4.0-4.5 从哪来",
+        "调整杠杆：均匀布料 → 速度均匀化 → 磨损稳定"
+      ],
+      "status": "draft-ready",
+      "priority": 2
+    },
+    {
+      "id": "T-003",
+      "title_cn": "我们给 AI 插件做'可发现性'踩的坑：DNS、SSL 和一个亚马逊式的容器化要求",
+      "title_en": "What we learned making an AI plugin discoverable: DNS, SSL, and a containerization requirement nobody told us about",
+      "angle": "技术复盘",
+      "assets": [
+        "A5"
+      ],
+      "target_platforms": [
+        "开发者社区",
+        "DEV.to",
+        "Hacker News"
+      ],
+      "hook": "连续三天我们以为是 SSL 证书过期。第四天把 dns.lookup 和 fetch 分开跑，才发现裸域根本没有 A 记录 —— 两个独立的问题。",
+      "body_outline": [
+        "背景：做了个 MCP server，想让 AI 都能调用",
+        "坑 1：以为自己没被收录，其实 6 个平台早收录了",
+        "坑 2：把 DNS 故障误判成 SSL 故障，连判 3 天",
+        "坑 3：Glama 的 'cannot be deployed' 不是探测失败，是它要你自己构建容器",
+        "坑 4：写了文件但没进发布包（Dockerfile / AGENTS.md 都中招）",
+        "教训：诊断网络问题必须分开测 DNS 与 TLS；写了 ≠ 发出去了"
+      ],
+      "status": "drafted",
+      "priority": 1
+    },
+    {
+      "id": "T-004",
+      "title_cn": "如何让工程计算工具不骗人：1300 条断言与'负控'体系",
+      "title_en": "How to keep an engineering calculator honest: 1300 assertions and a negative-control system",
+      "angle": "工程纪律",
+      "assets": [
+        "A6"
+      ],
+      "target_platforms": [
+        "开发者社区",
+        "DEV.to",
+        "HN"
+      ],
+      "hook": "'工具说它成功了'不算证据。我们的做法是：故意造一个错误，看它能不能抓到。抓不到，就说明闸门是假的。",
+      "body_outline": [
+        "问题：AI 生成的工程数字，凭什么信？",
+        "原则 1：null 就是未知，不编造",
+        "原则 2：每个结论带来源等级（S1 厂商/S3 文献/工程经验区间）",
+        "原则 3：负控 —— 造错看能不能抓",
+        "原则 4：不信任工具的自我报告，跑门禁",
+        "实战：我们自己的负控测试曾经'从来没跑通过'（路径写错），却一直报'闸门有效'"
+      ],
+      "status": "idea",
+      "priority": 2
+    },
+    {
+      "id": "T-005",
+      "title_cn": "从原矿到精矿：一条 500 t/h 铁矿线的完整选型过程（附每一步的来源标注）",
+      "title_en": "From run-of-mine to concentrate: a complete 500 t/h iron ore line selection, with a source label at every step",
+      "angle": "完整案例",
+      "assets": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "target_platforms": [
+        "行业门户",
+        "知乎"
+      ],
+      "hook": "粗碎用什么？中碎分几台？细碎 CSS 定多少？磨矿选什么？每一步的数字从哪来 —— 全部列出来。",
+      "body_outline": [
+        "工况：铁矿 500 t/h · 给料 ≤800mm · 出料 ≤10mm · 进球磨",
+        "① 粗碎：为什么进料口要 942mm 而不是 800mm",
+        "② 中碎：NH860/MC 两台（S1 厂商参数）",
+        "③ 细碎：台数爆炸告警 + 三种解法",
+        "④ 筛分：32.7 m² 怎么算出来的",
+        "⑤ 磨矿：为什么型号留空（诚实边界）",
+        "总装机与投资量级"
+      ],
+      "status": "idea",
+      "priority": 1
+    }
+  ],
+  "platform_formats": {
+    "行业门户": {
+      "examples": [
+        "Mining.com",
+        "Mining Technology",
+        "Pit & Quarry",
+        "中国砂石网",
+        "中国矿业网"
+      ],
+      "tone": "工程视角，克制，不推销",
+      "length": "1500-3000 字",
+      "structure": "问题 → 数据 → 方法 → 案例 → 结论",
+      "must_include": "可验证的数字 + 方法出处",
+      "must_avoid": "产品广告语、'革命性'、'领先'",
+      "call_to_action": "结尾一句：详细参数与工具在 mackorn.cn/ai（可选，不强推）"
+    },
+    "开发者社区": {
+      "examples": [
+        "Hacker News",
+        "DEV.to",
+        "Reddit r/mcp",
+        "V2EX",
+        "掘金"
+      ],
+      "tone": "技术复盘，第一人称，承认错误",
+      "length": "800-2000 字",
+      "structure": "钩子（反直觉的事实）→ 踩坑 → 根因 → 修法 → 可迁移的教训",
+      "must_include": "真实的错误、真实的数据、可复现的步骤",
+      "must_avoid": "营销、'我们多牛'、夸大",
+      "call_to_action": "repo 链接（社区允许时）"
+    },
+    "AI工具目录": {
+      "examples": [
+        "There's An AI For That",
+        "Futurepedia",
+        "FutureTools",
+        "Toolify"
+      ],
+      "tone": "简洁、卖点明确",
+      "length": "100-300 字 + 3-5 条特性",
+      "structure": "一句话是什么 → 解决什么问题 → 3-5 个核心功能 → 怎么用",
+      "must_include": "一句话定位 + 安装命令",
+      "must_avoid": "技术细节堆砌",
+      "call_to_action": "立即试用 + 链接"
+    },
+    "知乎": {
+      "examples": [
+        "知乎",
+        "掘金",
+        "公众号"
+      ],
+      "tone": "经验分享，接地气，用类比",
+      "length": "2000-5000 字",
+      "structure": "设问 → 常见误解 → 真实情况 → 方法 → 案例",
+      "must_include": "本土案例、可操作建议",
+      "must_avoid": "翻译腔、纯理论",
+      "call_to_action": "文末一句软性引导"
+    },
+    "Hacker News": {
+      "examples": [
+        "Show HN"
+      ],
+      "tone": "极简，技术，不铺垫",
+      "length": "标题 + 正文 300-800 字",
+      "structure": "标题：Show HN: <一句话>；正文：做了什么/为什么/技术上最难的点/邀请反馈",
+      "must_include": "真实的技术难点",
+      "must_avoid": "任何营销词、'revolutionary'、'game-changing'",
+      "call_to_action": "求反馈"
+    }
+  },
+  "calendar": {
+    "note": "发布节奏 —— 不连发，不刷屏",
+    "policy": {
+      "industry_portal": "每 2 周 1 篇（行业门户审稿慢，宁精不滥）",
+      "dev_community": "每 1-2 周 1 篇（HN 一个月最多 1 次 Show HN）",
+      "ai_tool_dir": "一次性提交，之后每季度更新描述",
+      "zhihu": "每 2 周 1 篇",
+      "reddit": "先在 r/mcp 参与讨论 2 周，再考虑发自己的东西"
+    },
+    "planned": [
+      {
+        "week": "2026-W44",
+        "topic": "T-003",
+        "platform": "DEV.to",
+        "why": "技术复盘最适合开发者社区，且不涉及商业数据"
+      },
+      {
+        "week": "2026-W44",
+        "topic": "T-001",
+        "platform": "知乎",
+        "why": "中文技术洞察，容易引发行业讨论"
+      },
+      {
+        "week": "2026-W45",
+        "topic": "T-001",
+        "platform": "行业门户",
+        "why": "行业门户要更严谨的版本，需再打磨"
+      },
+      {
+        "week": "2026-W45",
+        "topic": "T-005",
+        "platform": "行业门户",
+        "why": "完整案例是行业门户最爱的形式"
+      },
+      {
+        "week": "2026-W46",
+        "topic": "T-002",
+        "platform": "知乎",
+        "why": "方法论文章适合长文"
+      },
+      {
+        "week": "2026-W46",
+        "topic": "T-004",
+        "platform": "Hacker News",
+        "why": "工程纪律是 HN 喜欢的题材"
+      },
+      {
+        "week": "2026-W47",
+        "topic": "T-003",
+        "platform": "Hacker News",
+        "why": "Show HN（一个月最多一次）"
+      }
+    ]
+  },
+  "published": [],
+  "status_legend": {
+    "idea": "只有选题，还没写",
+    "draft-ready": "素材齐备，可以开写",
+    "drafting": "正在写",
+    "drafted": "已写完，待审",
+    "reviewed": "已审（数字/来源核对过）",
+    "published": "已发布（记录 URL + 日期）",
+    "failed": "平台拒稿 / 不适合"
+  },
+  "tracking": {
+    "note": "每篇发布后记录：平台、日期、URL、初始反馈",
+    "fields": [
+      "topic_id",
+      "platform",
+      "published_at",
+      "url",
+      "views_7d",
+      "comments",
+      "leads",
+      "notes"
+    ]
+  }
+}
