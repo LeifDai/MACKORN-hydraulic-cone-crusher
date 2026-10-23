@@ -407,6 +407,35 @@ if (!QUICK) {
         : '⚠ ' + total + ' 个候选（' + kinds.join(',') + (critical ? ' · 🔴' + critical + ' 严重' : '') + '）');
     rec('G22', '自动认知发现器（六类缺口）', total === 0, txt);
   }
+  /* ══════ 品牌战略五条规则（用户 2026-10-24 明令写进升级迭代规则）══════
+   * 真实定义见 plugin/lib/data-brand-rules.mjs 顶部注释：
+   *   「成为世界一线品牌」是商业结果，不是代码产出。
+   *   代码能做的 5 个可测指标，每轮至少一个变好、不许有变差（棘轮）。
+   * 门禁口径：flow/keywords/brand 必须 100%（我们能控）；
+   *          platforms/content 只做可见性报告（受外部条件限制）。 */
+  {
+    let r = null;
+    try {
+      /* 直接读已生成的报告，避免门禁里做异步 import（会拖慢且可能失败） */
+      r = JSON.parse(read(join(D, '03_验证与基准', 'brand-rules.json')));
+    } catch { }
+    const sc = r ? (r.scorecard || {}) : null;
+    if (!sc) {
+      rec('G23', '全流程 8 段知识库覆盖', false, '⚠ 尚无 brand-rules.json（先跑 node tools/brand_coverage.mjs）');
+      rec('G24', '行业关键词占位率', false, '⚠ 尚无品牌规则报告');
+      rec('G25', '品牌信息覆盖率', false, '⚠ 尚无品牌规则报告');
+    } else {
+      const flow100 = /^100%/.test(String(sc.flow || ''));
+      const kw100 = /^100%/.test(String(sc.keywords || ''));
+      const br100 = /^100%/.test(String(sc.brand || ''));
+      rec('G23', '全流程 8 段知识库覆盖（开采/挖运/破碎/筛分/磨矿/分级/选矿/自动化）', flow100, String(sc.flow || '?'));
+      rec('G24', '行业关键词占位率（每个词都有对应资产）', kw100, String(sc.keywords || '?'));
+      rec('G25', '品牌信息覆盖率（logo/电话/邮箱/地址/官网/公司名）', br100, String(sc.brand || '?'));
+    }
+    /* G26/G27：只报告不判定（受外部条件限制，不能因为没发布就卡交付） */
+    rec('G26', '平台触达率（70 平台，外部条件限制，仅报告）', true, sc ? String(sc.platforms || '?') : '⚠ 无数据');
+    rec('G27', '内容产出（选题数只增不减，仅报告）', true, sc ? String(sc.content || '?') : '⚠ 无数据');
+  }
   }
   }
   }
