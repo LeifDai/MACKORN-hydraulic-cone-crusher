@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-cognition-auto/1",
-  "at": "2026-10-23T11:24:25.890Z",
+  "at": "2026-10-23T11:35:50.632Z",
   "what": "自动认知发现器 —— 扫六类认知缺口，产出候选条目（不自动入账）",
   "truth": {
     "tools": 29,
@@ -39,7 +39,7 @@
     "version": "0.2.2",
     "languages": 2,
     "skills": 6,
-    "gates": 19,
+    "gates": 20,
     "lessons": 95
   },
   "counts": {
