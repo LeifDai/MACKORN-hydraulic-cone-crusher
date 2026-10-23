@@ -469,6 +469,33 @@
       "evidence": "实测：加块后 check_publish_artifact 仍报 62/0 且 grep Glama 无输出；移到 if 块外 + 改 exists→existsSync 后变 70/0 且能看到 Glama 那 7 行",
       "impact": "L3",
       "why": null
+    },
+    {
+      "id": "C053",
+      "at": "2026-10-23T11:24:39.303Z",
+      "wrong": "我以为\"自动认知发现器报 0 个候选\"就说明系统自洽了",
+      "now": "实际\"0 个\"有两种可能：① 真的自洽 ② 检查器太弱什么都发现不了。必须做【负控测试】（故意造假问题看能不能抓到）才能区分。我第一次跑负控，5 项全失败——因为检查器根本跑不起来（EPERM）",
+      "evidence": "tests/negative/cognition_auto_negative_controls.mjs 首跑 0 通过 / 5 失败；修完后 5 通过 / 0 失败",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C054",
+      "at": "2026-10-23T11:24:39.473Z",
+      "wrong": "我以为负控测试可以直接 execFileSync 抓子进程 stdout 来解析 JSON",
+      "now": "实际沙箱禁止管道捕获（spawnSync ... EPERM）。必须用【stdio:ignore + 文件交接】：让检查器把结果写到 cognition-auto.json，负控再读那个文件。这是我在这个环境里已经踩过多次的老坑，又踩了一次",
+      "evidence": "实测：execFileSync(...,{encoding:\"utf8\"}) → EPERM；改 stdio:\"ignore\" + 读文件 → 成功",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C055",
+      "at": "2026-10-23T11:24:39.676Z",
+      "wrong": "我以为工具数检查逻辑「真值不在列表里才报」是对的",
+      "now": "实际这是错的：如果文件里同时有正确的 29 和错误的 47，真值在列表里 → 漏报错误值。正确判据是【有任何 ≠ 真值的数就报】。这个 bug 是 NC2 负控抓出来的——证明负控有价值",
+      "evidence": "NC2 注入 \"本项目共 47 tools\" 后原逻辑不报，修判据后报 \"错误值: 47（文件里所有值: 29, 47）\"",
+      "impact": "L3",
+      "why": null
     }
   ],
   "generated": "2026-10-21T21:32:25.494Z",
