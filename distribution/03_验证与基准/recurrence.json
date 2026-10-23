@@ -1,0 +1,99 @@
+{
+  "schema": "mackorn-recurrence/1",
+  "at": "2026-10-23T11:35:50.436Z",
+  "what": "错误复现率追踪 —— 全局规则 §3.3 的「唯一硬指标」",
+  "definition": "recurrence = 复现的可形式化错误模式数 / 可形式化模式总数（目标 ↓ 趋近 0）",
+  "summary": {
+    "patterns_total": 8,
+    "measured": 8,
+    "reproduced": 0,
+    "recurrence": 0,
+    "unmeasurable": 3,
+    "failures_in_ledger": 61
+  },
+  "reproduced": [],
+  "results": [
+    {
+      "id": "R-FILE-NEVER-SHIPPED",
+      "desc": "写了文件但没进发布包（R141 Dockerfile / R142 AGENTS.md 血泪）",
+      "origin": "E-FAIL 系列 + R141/R142 不变量「写了 ≠ 发出去了」",
+      "reproduced": false,
+      "evidence": "全部已进 dist",
+      "measured": true
+    },
+    {
+      "id": "R-PIPE-STDIO-EPERM",
+      "desc": "用管道捕获子进程 stdout（沙箱 EPERM）",
+      "origin": "2026-10-23 R152 负控首跑 5 项全失败，根因是 execFileSync 抓 stdout → EPERM",
+      "reproduced": false,
+      "evidence": "全部改用文件交接",
+      "measured": true
+    },
+    {
+      "id": "R-TOOL-COUNT-DRIFT",
+      "desc": "工具数在不同文件里对不上（22/24/29 混用）",
+      "origin": "R113-R116 sync_tool_count_facts 反复漏改",
+      "reproduced": false,
+      "evidence": "全部一致（29）",
+      "measured": true
+    },
+    {
+      "id": "R-DNS-SSL-CONFUSION",
+      "desc": "把 DNS 与 SSL 混为一谈（连判 3 天的误诊）",
+      "origin": "2026-10-19→21 一直说「SSL 过期」，实际是 DNS 也挂了；两者错误码不同",
+      "reproduced": false,
+      "evidence": "两者已分开表述",
+      "measured": true
+    },
+    {
+      "id": "R-GATE-INSERTED-NOT-RUNNING",
+      "desc": "加了门禁但代码在永远走不到的分支里（R144 血泪）",
+      "origin": "2026-10-22 往 check_publish_artifact 加 R144，插在 if(!existsSync(OUT)) 内部 → 从不执行",
+      "reproduced": false,
+      "evidence": "检查块 R142, R144（精确判据见 70/0 输出）",
+      "measured": true
+    },
+    {
+      "id": "R-DOC-REF-MISSING-FILE",
+      "desc": "文档引用了不存在的文件",
+      "origin": "2026-10-23 auto-cognition 首版误报 5 个（命令被当路径）",
+      "reproduced": false,
+      "evidence": "0 个",
+      "measured": true
+    },
+    {
+      "id": "R-COGNITION-ASSERTION-WRONG",
+      "desc": "断言写错（如 0.85×0.85 算成 0.72 实际 0.7225）",
+      "origin": "2026-10-21 黄金断言 required_nominal_tph === 528 实际 526",
+      "reproduced": false,
+      "evidence": "GOLDEN_ASSERTIONS 引用 2 处（精确判据=全绿）",
+      "measured": true
+    },
+    {
+      "id": "R-DIST-BUNDLE-STALE",
+      "desc": "改了 package.json 但没重建上传包",
+      "origin": "2026-10-22 多次 check_publish_artifact 报「上传包与源不一致」",
+      "reproduced": false,
+      "evidence": "_upload-github 不存在（跳过）",
+      "measured": true
+    }
+  ],
+  "unmeasurable": [
+    {
+      "id": "R-JUDGEMENT-ERROR",
+      "desc": "人的判断类错误（\"以为 X 其实 Y\"）",
+      "why": "语义级判断无法自动检测，只能靠每次主动找反例"
+    },
+    {
+      "id": "R-WRONG-SOURCE",
+      "desc": "引用了不可靠来源",
+      "why": "需要外部核查，无法离线判定"
+    },
+    {
+      "id": "R-SCOPE-CREEP",
+      "desc": "范围膨胀（做超出用户要求的事）",
+      "why": "需要对照原始需求，无法自动判定"
+    }
+  ],
+  "honest_note": "本指标只覆盖【可形式化】的错误模式。判断类/来源类/范围类错误无法自动检测，已明确列在 unmeasurable 里，不计入 recurrence。不许用这个低复现率冒充\"全部错误都消失了\"。"
+}
