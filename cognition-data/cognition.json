@@ -532,6 +532,33 @@
       "evidence": "加复核后输出「词法器假阳性 0 个 · 无法复核 1 个」且 exit=0（损坏文件也判通过）→ 证明复核全部失败",
       "impact": "L4",
       "why": null
+    },
+    {
+      "id": "C060",
+      "at": "2026-10-23T14:00:29.384Z",
+      "wrong": "我以为\"让 AI 收录我们\"主要就是提交 MCP 目录（那 15 个）",
+      "now": "实际把分发平台全量铺开后有 7 大类 70 个平台，而我们只在\"技术圈\"有存在：AI 客户端 12/18、MCP 目录 4/15、包管理器 4/6 已通；但 AI 工具目录 0/9、开发者社区 0/11、行业垂直门户 0/8、学术标准 0/3 全部空白。★ 最大的分发缺口不是 MCP 目录，是【行业垂直门户 —— 真正的客户在那里】和【AI 工具目录 —— 面向终端用户和 AI 搜索】",
+      "evidence": "distribution-registry/registry.json 70 个平台 7 类；tools/distribution_registry.mjs 实测输出各类已通比例",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C061",
+      "at": "2026-10-23T14:00:29.662Z",
+      "wrong": "我以为搜到的东西可以先抓下来看",
+      "now": "实际 raw.githubusercontent.com 从本机连不上（UND_ERR_CONNECT_TIMEOUT，之前也遇到过）。所以不能依赖外部抓取建清单 —— 必须用【已知的+搜索摘要+实测】三种来源混合，并给每条明确标注可信度（measured/searched/known/unknown），不许把\"听说\"当\"验证过\"",
+      "evidence": "Node fetch raw.githubusercontent.com → UND_ERR_CONNECT_TIMEOUT；最终清单 70 条里 measured 约 30 条、searched 约 25 条、known 约 15 条，每条都标了",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C062",
+      "at": "2026-10-23T14:00:29.929Z",
+      "wrong": "我以为已经有的 ai_coverage.mjs（18 平台）和 ai_rejection_diagnoser.mjs（12 平台）覆盖够了",
+      "now": "实际它们只覆盖 MCP 目录。用户要的是【全部有助于模型分发传播的平台】——还包括 AI 客户端能不能配 MCP、包管理器、AI 工具站、开发者社区、行业门户、学术标准。已建 distribution_registry.mjs 管 70 个平台，与前者形成三层分工：覆盖探测 / 原因诊断 / 全量分发台账",
+      "evidence": "新工具实测：70 平台 7 类；--roadmap 输出 P1(2个)/P2(27个) 等分桶；--blockers 输出原因+提升条件",
+      "impact": "L4",
+      "why": null
     }
   ],
   "generated": "2026-10-23T11:27:05.160Z",
