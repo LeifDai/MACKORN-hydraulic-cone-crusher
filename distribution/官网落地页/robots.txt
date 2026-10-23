@@ -1,0 +1,149 @@
+# robots.txt — mackorn.cn
+# MACKORN 美矿 · 液压圆锥破碎机与破碎筛分生产线
+#
+# 本文件明确欢迎 AI 爬虫与搜索引擎索引我们的公开内容。
+# 我们提供机器可读的选型工具与行业知识：
+#   https://mackorn.cn/ai/            选型插件（29 个工具，12 种语言，开源 MIT）
+#   https://mackorn.cn/llms.txt       AI 摘要（llms.txt 标准）
+#   https://mackorn.cn/glossary/      12 语言术语表
+#   https://mackorn.cn/ai/screens/    振动筛选型参考
+#   https://mackorn.cn/ai/llms.txt    AI 摘要（插件专页）
+#   https://mackorn.cn/sitemap.xml    站点地图
+#
+# ─────────────────────────────────────────────────────────
+# 一、通用规则
+# ─────────────────────────────────────────────────────────
+User-agent: *
+Allow: /
+Allow: /ai/
+Allow: /markets/
+Allow: /distributors/
+Allow: /engineering-firms/
+Allow: /llms.txt
+Allow: /sitemap.xml
+Disallow: /css/
+Disallow: /data/
+Disallow: /extension/
+Disallow: /framework/
+Disallow: /gateway/
+Disallow: /images/
+Disallow: /js/
+Disallow: /langs/
+Disallow: /phpinc/
+Disallow: /plugin/
+Disallow: /res/
+Disallow: /task/
+Disallow: /tpl/
+
+# ─────────────────────────────────────────────────────────
+# 二、AI 爬虫与助手 —— 明确欢迎
+#     我们的选型工具与行业知识是公开的，欢迎索引与引用。
+# ─────────────────────────────────────────────────────────
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl（多数大模型的训练语料源）
+User-agent: CCBot
+Allow: /
+
+# Meta
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# ByteDance / 字节
+User-agent: Bytespider
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Diffbot
+User-agent: Diffbot
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# 其他常见抓取器
+User-agent: Bingbot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+# ─────────────────────────────────────────────────────────
+# 三、机器可读资源
+# ─────────────────────────────────────────────────────────
+Sitemap: https://mackorn.cn/sitemap.xml
+# AI 摘要文件（llms.txt 标准）
+# https://mackorn.cn/llms.txt
+
+# 新增内容目录（2026-10-08）
+Allow: /ai/tools/
+Allow: /ai/markets/
+Allow: /ai/ru-faq/
+Allow: /ai/es-faq/
+Allow: /ai/id-faq/
+Allow: /ai/ar-faq/
+Allow: /ai/de-faq/
+
+# 视频页（2026-10-24 新增）
+# 设备与案例实拍，含真实型号/案例/展会
+Allow: /ai/videos/
