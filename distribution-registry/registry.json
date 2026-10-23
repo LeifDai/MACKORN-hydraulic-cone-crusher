@@ -21,8 +21,58 @@
     "version": "0.2.2",
     "languages": 12
   },
-
   "categories": [
+    {
+      "id": "own-media",
+      "name": "自有媒体（我们已拥有的传播渠道）",
+      "why_it_matters": "这些是我们完全控制的渠道，发布即生效，不受平台审核限制。是引流的起点。",
+      "platforms": [
+        {
+          "id": "douyin",
+          "name": "抖音（MACKORN 美矿机械）",
+          "type": "video-platform",
+          "url": "https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I",
+          "submit_method": "已有账号，直接发布",
+          "status": "listed",
+          "confidence": "measured",
+          "recorded_at": "2026-10-24",
+          "note": "15 条视频：800t/h 玄武岩整线 · NH700 630kW 首台套 · NH440 美国调试 · Bauma China 2020+2026 · MPH/MC/MJ 系列设备调试",
+          "asset_count": 15
+        },
+        {
+          "id": "mackorn-site",
+          "name": "官网 mackorn.cn/ai",
+          "type": "website",
+          "url": "https://mackorn.cn/ai/",
+          "submit_method": "自己部署",
+          "status": "listed",
+          "confidence": "measured",
+          "recorded_at": "2026-10-17",
+          "note": "12 语言 · 29 工具页 · llms.txt · AGENTS.md · server-card。⚠️ SSL 证书过期待修"
+        },
+        {
+          "id": "github-repo",
+          "name": "GitHub 仓库",
+          "type": "repo",
+          "url": "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher",
+          "submit_method": "git push",
+          "status": "listed",
+          "confidence": "measured",
+          "recorded_at": "2026-10-17"
+        },
+        {
+          "id": "npm-package",
+          "name": "npm 包",
+          "type": "package",
+          "url": "https://www.npmjs.com/package/mackorn-cone-crusher",
+          "submit_method": "npm publish",
+          "status": "listed",
+          "confidence": "measured",
+          "recorded_at": "2026-10-19",
+          "recorded_version": "0.2.2"
+        }
+      ]
+    },
     {
       "id": "ai-clients",
       "name": "AI 客户端（模型侧）",
@@ -210,7 +260,6 @@
         }
       ]
     },
-
     {
       "id": "mcp-directories",
       "name": "MCP 目录 / 注册表",
@@ -224,7 +273,13 @@
           "submit_method": "server.json + mcp-publisher CLI",
           "status": "listed",
           "confidence": "measured",
-          "requirements": ["server.json", "reverse-DNS name", "packages 声明", "version 与 npm 一致", "description"],
+          "requirements": [
+            "server.json",
+            "reverse-DNS name",
+            "packages 声明",
+            "version 与 npm 一致",
+            "description"
+          ],
           "requirements_satisfied": "5/5",
           "recorded_at": "2026-10-19",
           "recorded_version": "0.2.1",
@@ -238,7 +293,12 @@
           "submit_method": "自动抓取 + 做 containerized release",
           "status": "listed-but-unscored",
           "confidence": "measured",
-          "requirements": ["Dockerfile", ".dockerignore", "glama.json", "在 admin 页面 Deploy → Make Release"],
+          "requirements": [
+            "Dockerfile",
+            ".dockerignore",
+            "glama.json",
+            "在 admin 页面 Deploy → Make Release"
+          ],
           "requirements_satisfied": "4/5（三件套已备，未做 release）",
           "recorded_at": "2026-10-18",
           "recorded_version": "0.2.0",
@@ -256,7 +316,11 @@
           "submit_method": "自动抓 npm + GitHub + smithery.yaml",
           "status": "listed",
           "confidence": "measured",
-          "requirements": ["npx 能启动 stdio", "package.json description", "smithery.yaml（可选）"],
+          "requirements": [
+            "npx 能启动 stdio",
+            "package.json description",
+            "smithery.yaml（可选）"
+          ],
           "requirements_satisfied": "3/3",
           "recorded_at": "2026-10-19",
           "recorded_version": "0.2.1",
@@ -270,7 +334,10 @@
           "submit_method": "手工提交表单",
           "status": "not-listed",
           "confidence": "measured",
-          "requirements": ["手工提交", "GitHub topic mcp-server"],
+          "requirements": [
+            "手工提交",
+            "GitHub topic mcp-server"
+          ],
           "requirements_satisfied": "1/2（topic 已设，未提交）",
           "last_verified_http": 404,
           "blocker": "未手工提交",
@@ -318,7 +385,9 @@
           "submit_method": "自动抓 GitHub topic mcp-server",
           "status": "blocked-or-pending",
           "confidence": "measured",
-          "requirements": ["GitHub topic mcp-server（已设）"],
+          "requirements": [
+            "GitHub topic mcp-server（已设）"
+          ],
           "blocker": "403 反爬，无法自动验证是否已收录",
           "improvement": "已设 topic，等它自己抓（通常 1-2 周）。可用搜索引擎 site:pulsemcp.com mackorn 间接验证"
         },
@@ -372,7 +441,10 @@
           "status": "pr-open",
           "confidence": "measured",
           "pr": "#15410",
-          "requirements": ["PR 已开", "Glama 评分已出"],
+          "requirements": [
+            "PR 已开",
+            "Glama 评分已出"
+          ],
           "requirements_satisfied": "1/2",
           "recorded_at": "2026-10-18",
           "blocker": "卡在 Glama 评分（需先做 containerized release）",
@@ -398,14 +470,15 @@
           "submit_method": "npx skills add LeifDai/MACKORN-hydraulic-cone-crusher",
           "status": "listed",
           "confidence": "measured",
-          "requirements": ["SKILL.md 有 frontmatter"],
+          "requirements": [
+            "SKILL.md 有 frontmatter"
+          ],
           "requirements_satisfied": "2/2",
           "recorded_at": "2026-10-19",
           "last_verified_http": 200
         }
       ]
     },
-
     {
       "id": "package-registries",
       "name": "包管理器 / 代码托管",
@@ -471,78 +544,319 @@
         }
       ]
     },
-
     {
       "id": "ai-tool-directories",
       "name": "AI 工具目录（泛）",
       "why_it_matters": "面向终端用户和 SEO。AI 搜索（Perplexity/ChatGPT Search）会读这些站。",
       "platforms": [
-        { "id": "togetherai", "name": "There's An AI For That", "url": "https://theresanaiforthat.com", "type": "ai-tool-dir", "submit_method": "付费/免费提交", "status": "not-listed", "confidence": "searched", "note": "最大的 AI 工具目录之一" },
-        { "id": "futurepedia", "name": "Futurepedia", "url": "https://futurepedia.io", "type": "ai-tool-dir", "submit_method": "提交表单", "status": "not-listed", "confidence": "searched" },
-        { "id": "futuretools", "name": "FutureTools", "url": "https://futuretools.io", "type": "ai-tool-dir", "submit_method": "提交表单", "status": "not-listed", "confidence": "searched" },
-        { "id": "aitools-dir", "name": "AI Tools Directory", "url": "https://aitoolsdirectory.com", "type": "ai-tool-dir", "status": "not-listed", "confidence": "known" },
-        { "id": "toolify", "name": "Toolify.ai", "url": "https://toolify.ai", "type": "ai-tool-dir", "status": "not-listed", "confidence": "searched" },
-        { "id": "topai-tools", "name": "TopAI.tools", "url": "https://topai.tools", "type": "ai-tool-dir", "status": "not-listed", "confidence": "searched" },
-        { "id": "ai-tools-list", "name": "submitaitools/Free-AI-Directories", "url": "https://github.com/submitaitools/Free-AI-Directories", "type": "directory-of-directories", "status": "reference", "confidence": "searched", "note": "★ 元清单：列出了几十个免费 AI 目录 + DA 分数，应作为我们的提交路线图" },
-        { "id": "tomrzv-ai-directories", "name": "tomrzv/AI-Directories", "url": "https://github.com/tomrzv/AI-Directories", "type": "directory-of-directories", "status": "reference", "confidence": "searched", "note": "★ 元清单：字母序 AI 目录清单" },
-        { "id": "mcp-submit", "name": "mcp-submit (npm)", "url": "https://www.npmjs.com/package/mcp-submit", "type": "submit-tool", "status": "reference", "confidence": "searched", "note": "★★ 一键提交到所有主要 MCP 目录的工具 —— 按 §2.4 应先评估它，能省大量手工提交" }
+        {
+          "id": "togetherai",
+          "name": "There's An AI For That",
+          "url": "https://theresanaiforthat.com",
+          "type": "ai-tool-dir",
+          "submit_method": "付费/免费提交",
+          "status": "not-listed",
+          "confidence": "searched",
+          "note": "最大的 AI 工具目录之一"
+        },
+        {
+          "id": "futurepedia",
+          "name": "Futurepedia",
+          "url": "https://futurepedia.io",
+          "type": "ai-tool-dir",
+          "submit_method": "提交表单",
+          "status": "not-listed",
+          "confidence": "searched"
+        },
+        {
+          "id": "futuretools",
+          "name": "FutureTools",
+          "url": "https://futuretools.io",
+          "type": "ai-tool-dir",
+          "submit_method": "提交表单",
+          "status": "not-listed",
+          "confidence": "searched"
+        },
+        {
+          "id": "aitools-dir",
+          "name": "AI Tools Directory",
+          "url": "https://aitoolsdirectory.com",
+          "type": "ai-tool-dir",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "toolify",
+          "name": "Toolify.ai",
+          "url": "https://toolify.ai",
+          "type": "ai-tool-dir",
+          "status": "not-listed",
+          "confidence": "searched"
+        },
+        {
+          "id": "topai-tools",
+          "name": "TopAI.tools",
+          "url": "https://topai.tools",
+          "type": "ai-tool-dir",
+          "status": "not-listed",
+          "confidence": "searched"
+        },
+        {
+          "id": "ai-tools-list",
+          "name": "submitaitools/Free-AI-Directories",
+          "url": "https://github.com/submitaitools/Free-AI-Directories",
+          "type": "directory-of-directories",
+          "status": "reference",
+          "confidence": "searched",
+          "note": "★ 元清单：列出了几十个免费 AI 目录 + DA 分数，应作为我们的提交路线图"
+        },
+        {
+          "id": "tomrzv-ai-directories",
+          "name": "tomrzv/AI-Directories",
+          "url": "https://github.com/tomrzv/AI-Directories",
+          "type": "directory-of-directories",
+          "status": "reference",
+          "confidence": "searched",
+          "note": "★ 元清单：字母序 AI 目录清单"
+        },
+        {
+          "id": "mcp-submit",
+          "name": "mcp-submit (npm)",
+          "url": "https://www.npmjs.com/package/mcp-submit",
+          "type": "submit-tool",
+          "status": "reference",
+          "confidence": "searched",
+          "note": "★★ 一键提交到所有主要 MCP 目录的工具 —— 按 §2.4 应先评估它，能省大量手工提交"
+        }
       ]
     },
-
     {
       "id": "developer-communities",
       "name": "开发者社区 / 技术门户",
       "why_it_matters": "技术人从哪里发现工具。也是外链和 SEO 的来源。",
       "platforms": [
-        { "id": "hackernews", "name": "Hacker News", "url": "https://news.ycombinator.com", "type": "community", "status": "not-posted", "confidence": "known", "improvement": "Show HN 帖子（需英文、需有真实价值主张）" },
-        { "id": "reddit-mcp", "name": "r/mcp (Reddit)", "url": "https://reddit.com/r/mcp", "type": "subreddit", "status": "not-posted", "confidence": "known" },
-        { "id": "reddit-claudeai", "name": "r/ClaudeAI", "url": "https://reddit.com/r/ClaudeAI", "type": "subreddit", "status": "not-posted", "confidence": "known" },
-        { "id": "reddit-localllama", "name": "r/LocalLLaMA", "url": "https://reddit.com/r/LocalLLaMA", "type": "subreddit", "status": "not-posted", "confidence": "known" },
-        { "id": "v2ex", "name": "V2EX", "url": "https://v2ex.com", "type": "cn-community", "status": "not-posted", "confidence": "known", "note": "中文技术社区，有 MCP 相关讨论" },
-        { "id": "juejin", "name": "掘金", "url": "https://juejin.cn", "type": "cn-community", "status": "not-posted", "confidence": "known" },
-        { "id": "zhihu", "name": "知乎", "url": "https://zhihu.com", "type": "cn-community", "status": "not-posted", "confidence": "known" },
-        { "id": "devto", "name": "DEV.to", "url": "https://dev.to", "type": "community", "status": "not-posted", "confidence": "known" },
-        { "id": "medium", "name": "Medium", "url": "https://medium.com", "type": "community", "status": "not-posted", "confidence": "known" },
-        { "id": "producthunt", "name": "Product Hunt", "url": "https://producthunt.com", "type": "launch-platform", "status": "not-launched", "confidence": "known", "improvement": "需要产品化包装 + 英文 landing page" },
-        { "id": "github-trending", "name": "GitHub Trending", "url": "https://github.com/trending", "type": "discovery", "status": "not-featured", "confidence": "known", "improvement": "需要在短时间内获得大量 star（不现实）；但可以发 Release" }
+        {
+          "id": "hackernews",
+          "name": "Hacker News",
+          "url": "https://news.ycombinator.com",
+          "type": "community",
+          "status": "not-posted",
+          "confidence": "known",
+          "improvement": "Show HN 帖子（需英文、需有真实价值主张）"
+        },
+        {
+          "id": "reddit-mcp",
+          "name": "r/mcp (Reddit)",
+          "url": "https://reddit.com/r/mcp",
+          "type": "subreddit",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "reddit-claudeai",
+          "name": "r/ClaudeAI",
+          "url": "https://reddit.com/r/ClaudeAI",
+          "type": "subreddit",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "reddit-localllama",
+          "name": "r/LocalLLaMA",
+          "url": "https://reddit.com/r/LocalLLaMA",
+          "type": "subreddit",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "v2ex",
+          "name": "V2EX",
+          "url": "https://v2ex.com",
+          "type": "cn-community",
+          "status": "not-posted",
+          "confidence": "known",
+          "note": "中文技术社区，有 MCP 相关讨论"
+        },
+        {
+          "id": "juejin",
+          "name": "掘金",
+          "url": "https://juejin.cn",
+          "type": "cn-community",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "zhihu",
+          "name": "知乎",
+          "url": "https://zhihu.com",
+          "type": "cn-community",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "devto",
+          "name": "DEV.to",
+          "url": "https://dev.to",
+          "type": "community",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "medium",
+          "name": "Medium",
+          "url": "https://medium.com",
+          "type": "community",
+          "status": "not-posted",
+          "confidence": "known"
+        },
+        {
+          "id": "producthunt",
+          "name": "Product Hunt",
+          "url": "https://producthunt.com",
+          "type": "launch-platform",
+          "status": "not-launched",
+          "confidence": "known",
+          "improvement": "需要产品化包装 + 英文 landing page"
+        },
+        {
+          "id": "github-trending",
+          "name": "GitHub Trending",
+          "url": "https://github.com/trending",
+          "type": "discovery",
+          "status": "not-featured",
+          "confidence": "known",
+          "improvement": "需要在短时间内获得大量 star（不现实）；但可以发 Release"
+        }
       ]
     },
-
     {
       "id": "industry-verticals",
       "name": "行业垂直门户（矿业/机械/工程）",
       "why_it_matters": "【真正的客户在这里】。AI 工具目录带来的是开发者，行业门户带来的是买设备的人。",
       "platforms": [
-        { "id": "mining-com", "name": "Mining.com", "url": "https://mining.com", "type": "industry-news", "status": "not-listed", "confidence": "known" },
-        { "id": "mining-technology", "name": "Mining Technology", "url": "https://mining-technology.com", "type": "industry-news", "status": "not-listed", "confidence": "known" },
-        { "id": "aggregates-research", "name": "Aggregates Research", "url": "https://aggregateresearch.com", "type": "industry-news", "status": "not-listed", "confidence": "known" },
-        { "id": "pit-quarry", "name": "Pit & Quarry", "url": "https://pitandquarry.com", "type": "industry-news", "status": "not-listed", "confidence": "known" },
-        { "id": "rock-products", "name": "Rock Products", "url": "https://rockproducts.com", "type": "industry-news", "status": "not-listed", "confidence": "known" },
-        { "id": "中国砂石网", "name": "中国砂石协会/中国砂石网", "url": "https://www.cssglw.com", "type": "cn-industry", "status": "not-listed", "confidence": "known" },
-        { "id": "中国矿业网", "name": "中国矿业网", "url": "https://www.chinamining.com.cn", "type": "cn-industry", "status": "not-listed", "confidence": "known" },
-        { "id": "中国重型机械", "name": "中国重型机械工业协会", "url": "https://www.chmia.org.cn", "type": "cn-industry-assoc", "status": "not-listed", "confidence": "known" }
+        {
+          "id": "mining-com",
+          "name": "Mining.com",
+          "url": "https://mining.com",
+          "type": "industry-news",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "mining-technology",
+          "name": "Mining Technology",
+          "url": "https://mining-technology.com",
+          "type": "industry-news",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "aggregates-research",
+          "name": "Aggregates Research",
+          "url": "https://aggregateresearch.com",
+          "type": "industry-news",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "pit-quarry",
+          "name": "Pit & Quarry",
+          "url": "https://pitandquarry.com",
+          "type": "industry-news",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "rock-products",
+          "name": "Rock Products",
+          "url": "https://rockproducts.com",
+          "type": "industry-news",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "中国砂石网",
+          "name": "中国砂石协会/中国砂石网",
+          "url": "https://www.cssglw.com",
+          "type": "cn-industry",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "中国矿业网",
+          "name": "中国矿业网",
+          "url": "https://www.chinamining.com.cn",
+          "type": "cn-industry",
+          "status": "not-listed",
+          "confidence": "known"
+        },
+        {
+          "id": "中国重型机械",
+          "name": "中国重型机械工业协会",
+          "url": "https://www.chmia.org.cn",
+          "type": "cn-industry-assoc",
+          "status": "not-listed",
+          "confidence": "known"
+        }
       ]
     },
-
     {
       "id": "academic-standards",
       "name": "学术 / 标准 / 专利",
       "why_it_matters": "提升权威性。AI 模型训练数据里，学术和标准来源权重高。",
       "platforms": [
-        { "id": "arxiv", "name": "arXiv", "url": "https://arxiv.org", "type": "preprint", "status": "not-applicable", "confidence": "known", "note": "除非写论文；但可以引用 Whiten 1972 / Bond 1952 原文献提升可信度" },
-        { "id": "zenodo", "name": "Zenodo", "url": "https://zenodo.org", "type": "data-repo", "status": "not-listed", "confidence": "known", "improvement": "给 release 打 DOI（Zenodo 集成 GitHub）—— 有 DOI 的软件在学术引用里权重高" },
-        { "id": "doi", "name": "DOI (via Zenodo)", "url": "https://zenodo.org", "type": "identifier", "status": "not-having", "confidence": "known", "improvement": "★ 高价值：GitHub Release + Zenodo 自动给 DOI，AI 引用时会有稳定标识" }
+        {
+          "id": "arxiv",
+          "name": "arXiv",
+          "url": "https://arxiv.org",
+          "type": "preprint",
+          "status": "not-applicable",
+          "confidence": "known",
+          "note": "除非写论文；但可以引用 Whiten 1972 / Bond 1952 原文献提升可信度"
+        },
+        {
+          "id": "zenodo",
+          "name": "Zenodo",
+          "url": "https://zenodo.org",
+          "type": "data-repo",
+          "status": "not-listed",
+          "confidence": "known",
+          "improvement": "给 release 打 DOI（Zenodo 集成 GitHub）—— 有 DOI 的软件在学术引用里权重高"
+        },
+        {
+          "id": "doi",
+          "name": "DOI (via Zenodo)",
+          "url": "https://zenodo.org",
+          "type": "identifier",
+          "status": "not-having",
+          "confidence": "known",
+          "improvement": "★ 高价值：GitHub Release + Zenodo 自动给 DOI，AI 引用时会有稳定标识"
+        }
       ]
     }
   ],
-
   "update_policy": {
-    "daily": ["检查已收录平台的 HTTP 状态", "检查 SSL 证书", "跑自动认知发现"],
-    "every_3_days": ["跑 directory_checker --check", "更新 registry 的 last_verified", "生成更新材料包"],
-    "weekly": ["搜寻新平台（5 个以上候选）", "评估 mcp-submit 类自动化工具", "更新本清单的版本号"],
-    "monthly": ["全面复查（每个平台重新验证）", "清理失效平台", "重新评估未收录平台的条件"]
+    "daily": [
+      "检查已收录平台的 HTTP 状态",
+      "检查 SSL 证书",
+      "跑自动认知发现"
+    ],
+    "every_3_days": [
+      "跑 directory_checker --check",
+      "更新 registry 的 last_verified",
+      "生成更新材料包"
+    ],
+    "weekly": [
+      "搜寻新平台（5 个以上候选）",
+      "评估 mcp-submit 类自动化工具",
+      "更新本清单的版本号"
+    ],
+    "monthly": [
+      "全面复查（每个平台重新验证）",
+      "清理失效平台",
+      "重新评估未收录平台的条件"
+    ]
   },
-
   "statistics": {
     "total_platforms": 0,
     "by_confidence": {},
