@@ -1,0 +1,316 @@
+{
+  "at": "2026-10-23T17:34:29.929Z",
+  "rules": {
+    "R1_flow_coverage": {
+      "total_segments": 8,
+      "covered": 8,
+      "coverage_pct": 100,
+      "segments": [
+        {
+          "id": "mining",
+          "name_zh": "开采",
+          "name_en": "Mining",
+          "tool": "mackorn_mining_interface",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-mining.mjs",
+          "data_ok": true,
+          "knowledge_declared": 0,
+          "knowledge_found": 0,
+          "covered": true,
+          "note": "爆破块度 Kuz-Ram · 台阶高度 · 炸药单耗"
+        },
+        {
+          "id": "haulage",
+          "name_zh": "挖运",
+          "name_en": "Haulage & Loading",
+          "tool": "mackorn_mining_interface",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-mining.mjs",
+          "data_ok": true,
+          "knowledge_declared": 0,
+          "knowledge_found": 0,
+          "covered": true,
+          "note": "铲装 · 矿卡 · 粗碎站位置 · 半移动破碎站"
+        },
+        {
+          "id": "crushing",
+          "name_zh": "破碎",
+          "name_en": "Crushing",
+          "tool": "mackorn_cone_selection",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data.mjs",
+          "data_ok": true,
+          "knowledge_declared": 2,
+          "knowledge_found": 2,
+          "covered": true,
+          "note": "粗碎/中碎/细碎/超细碎 · 颚破 · 圆锥破 · CSS · 破碎比"
+        },
+        {
+          "id": "screening",
+          "name_zh": "筛分",
+          "name_en": "Screening",
+          "tool": "mackorn_screen_selection",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-screen.mjs",
+          "data_ok": true,
+          "knowledge_declared": 0,
+          "knowledge_found": 0,
+          "covered": true,
+          "note": "振动筛 · 筛孔 · 筛分效率 · 循环负荷"
+        },
+        {
+          "id": "grinding",
+          "name_zh": "磨矿",
+          "name_en": "Grinding",
+          "tool": "mackorn_grinding_selection",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-grinding.mjs",
+          "data_ok": true,
+          "knowledge_declared": 1,
+          "knowledge_found": 1,
+          "covered": true,
+          "note": "SAG · 球磨 · HPGR · 比能耗 · 磨矿细度"
+        },
+        {
+          "id": "classification",
+          "name_zh": "分级",
+          "name_en": "Classification",
+          "tool": "mackorn_grinding_selection",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-grinding.mjs",
+          "data_ok": true,
+          "knowledge_declared": 0,
+          "knowledge_found": 0,
+          "covered": true,
+          "note": "螺旋分级机 · 水力旋流器 · 返砂比 · 溢流/沉砂"
+        },
+        {
+          "id": "beneficiation",
+          "name_zh": "选矿",
+          "name_en": "Beneficiation",
+          "tool": "mackorn_beneficiation_selection",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-processing.mjs",
+          "data_ok": true,
+          "knowledge_declared": 1,
+          "knowledge_found": 1,
+          "covered": true,
+          "note": "浮选 · 重选 · 磁选 · 光电选 · 解离粒度"
+        },
+        {
+          "id": "automation",
+          "name_zh": "自动化",
+          "name_en": "Automation",
+          "tool": "mackorn_automation_design",
+          "tool_in_index": true,
+          "data_file": "plugin/lib/data-automation.mjs",
+          "data_ok": true,
+          "knowledge_declared": 0,
+          "knowledge_found": 0,
+          "covered": true,
+          "note": "L0-L3 分层 · PLC/DCS · 过铁保护 · 在线监测"
+        }
+      ]
+    },
+    "R2_keyword_coverage": {
+      "total_keywords": 136,
+      "covered": 135,
+      "gaps": 0,
+      "partials": 1,
+      "coverage_pct": 100,
+      "gap_terms": [],
+      "partial_terms": [
+        "溜井 (只有矿卡/铲装选型，没有溜井本体设计（断面/坡度/衬板/堵塞防治）—— 属于矿山开拓工程)"
+      ],
+      "broken_claims": []
+    },
+    "R3_brand_coverage": {
+      "files_checked": 7,
+      "files_full": 7,
+      "coverage_pct": 100,
+      "results": [
+        {
+          "file": "AGENTS.md",
+          "required": true,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "QUICKSTART.md",
+          "required": true,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "README.md",
+          "required": true,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "CONTRIBUTING.md",
+          "required": false,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "llms.txt",
+          "required": true,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "package.json",
+          "required": true,
+          "exists": true,
+          "coverage": {
+            "logo": true,
+            "phone": true,
+            "email": true,
+            "address": true,
+            "site": true,
+            "company": true
+          },
+          "score": 6,
+          "total": 6,
+          "raw_score": 6,
+          "raw_total": 6
+        },
+        {
+          "file": "server.json",
+          "required": false,
+          "schema_limited": true,
+          "note": "MCP Registry 固定 schema，只允许 repository/homepage",
+          "exists": true,
+          "coverage": {
+            "logo": false,
+            "phone": false,
+            "email": false,
+            "address": false,
+            "site": true,
+            "company": true
+          },
+          "score": 2,
+          "total": 2,
+          "raw_score": 2,
+          "raw_total": 6
+        }
+      ]
+    },
+    "R4_platform_coverage": {
+      "platforms_total": 70,
+      "platforms_reached": 20,
+      "coverage_pct": 28.6,
+      "by_category": {
+        "ai-clients": {
+          "total": 18,
+          "reached": 12,
+          "name": "AI 客户端（模型侧）"
+        },
+        "mcp-directories": {
+          "total": 15,
+          "reached": 4,
+          "name": "MCP 目录 / 注册表"
+        },
+        "package-registries": {
+          "total": 6,
+          "reached": 4,
+          "name": "包管理器 / 代码托管"
+        },
+        "ai-tool-directories": {
+          "total": 9,
+          "reached": 0,
+          "name": "AI 工具目录（泛）"
+        },
+        "developer-communities": {
+          "total": 11,
+          "reached": 0,
+          "name": "开发者社区 / 技术门户"
+        },
+        "industry-verticals": {
+          "total": 8,
+          "reached": 0,
+          "name": "行业垂直门户（矿业/机械/工程）"
+        },
+        "academic-standards": {
+          "total": 3,
+          "reached": 0,
+          "name": "学术 / 标准 / 专利"
+        }
+      }
+    },
+    "R5_content_coverage": {
+      "topics_total": 5,
+      "by_status": {
+        "drafted": 2,
+        "draft-ready": 1,
+        "idea": 2
+      },
+      "published": 0,
+      "assets_unique": 6,
+      "platform_formats": 5
+    }
+  },
+  "scorecard": {
+    "flow": "100%（8/8 段）",
+    "keywords": "100%（135/136 词）",
+    "brand": "100%（7/7 文件）",
+    "platforms": "28.6%（20/70 平台）",
+    "content": "5 选题 · 0 已发布"
+  }
+}
