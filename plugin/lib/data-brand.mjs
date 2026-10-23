@@ -108,6 +108,22 @@ export const BRAND = {
 
   /* 社交媒体 / 其他存在（有则填，没有就留空 —— 不许编造账号） */
   social: {
+    /* ★ 抖音（2026-10-24 用户提供真实链接清单，共 15 条视频）
+     * 这是【自有媒体资产】：真实设备型号、真实案例、真实展会。
+     * 完整台账见 social-assets/registry.json */
+    douyin: {
+      account: 'MACKORN 美矿机械',
+      profile: 'https://www.douyin.com/user/MS4wLjABAAAAdmdyf2K_Gy-jC_qgy1sjm31DWzGlE5F26iBPjW7dY0I',
+      search: 'https://www.douyin.com/search/mackorn',
+      video_count: 15,
+      key_videos: {
+        line_800tph_basalt: '800 t/h 玄武岩精品骨料生产线（颚破+圆锥+筛分）',
+        nh700_630kw: 'NH700 国内首台套 · 630kW 高压永磁变频电机',
+        nh440_usa: 'NH440 美国现场调试',
+        bauma_2026: 'Bauma China 2026 上海宝马展（2026年11月）',
+        bauma_2020: 'Bauma China 2020 上海宝马展（2020年2月）',
+      },
+    },
     wechat_official: null,   /* 微信公众号：有二维码图片但没找到公开 ID */
     linkedin: null,
     youtube: null,
