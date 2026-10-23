@@ -1,0 +1,53 @@
+{
+  "schema": "mackorn-cognition-auto/1",
+  "at": "2026-10-23T11:24:25.890Z",
+  "what": "自动认知发现器 —— 扫六类认知缺口，产出候选条目（不自动入账）",
+  "truth": {
+    "tools": 29,
+    "toolNames": [
+      "mackorn_mcfm_analysis",
+      "mackorn_cone_selection",
+      "mackorn_capacity_check",
+      "mackorn_plant_design",
+      "mackorn_cost_estimate",
+      "mackorn_wear_design",
+      "mackorn_grading_porosity",
+      "mackorn_market_intel",
+      "mackorn_selection_report",
+      "mackorn_equipment_catalog",
+      "mackorn_requirement_intake",
+      "mackorn_proposal",
+      "mackorn_intel_watch",
+      "mackorn_knowledge_update",
+      "mackorn_pdca_status",
+      "mackorn_crusher_curve",
+      "mackorn_simulate_flowsheet",
+      "mackorn_calibrate",
+      "mackorn_contact",
+      "mackorn_distributor_eval",
+      "mackorn_market_stats",
+      "mackorn_knowledge",
+      "mackorn_grinding_selection",
+      "mackorn_beneficiation_selection",
+      "mackorn_automation_design",
+      "mackorn_mining_interface",
+      "mackorn_full_chain",
+      "mackorn_jaw_selection",
+      "mackorn_screen_selection"
+    ],
+    "allModels": 1,
+    "version": "0.2.2",
+    "languages": 2,
+    "skills": 6,
+    "gates": 19,
+    "lessons": 95
+  },
+  "counts": {
+    "total": 0,
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "candidates": []
+}
