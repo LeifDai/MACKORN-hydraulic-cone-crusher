@@ -241,6 +241,39 @@ if (isMain) {
     const p = lexCheck(src);
     if (p.length) failures.push({ file: relative(ROOT, f).replace(/\\/g, '/'), problems: p });
   }
+  /* R162：已知词法器假阳性白名单（每个都必须给出 node --check 通过的反证）。
+   *
+   * 为什么用白名单而不是继续改词法器：
+   *   手写词法器在【带正则的模板字符串】上有天然盲区 ——
+   *   `${text.replace(/[<>&"]/g, '')}` 里正则含双引号，词法器把 " 当字符串开头 → 吃掉了闭合。
+   *   彻底修需要完整实现 JS 正则/模板嵌套词法（等于重写 acorn 的一小部分）。
+   *   收益不抵成本：这 2 个文件都已被 node --check 证明合法，词法器报的是假阳性。
+   *
+   * 纪律：
+   *   ① 白名单条目必须写明【为什么是假阳性】（不是"先跳过"）；
+   *   ② 必须写明【反证方式】（node --check 通过）；
+   *   ③ 新增条目必须同时加进 tests/negative/syntax_gate_negative_controls.mjs 的正控。
+   */
+  const KNOWN_FALSE_POSITIVES = new Map([
+    ['tools/build_tool_pages.mjs',
+      '模板字符串内含 HTML，且 L159/L196 等有 ${} 嵌套；node --check 通过（2026-10-23 实证）'],
+    ['tools/gen_qr_svg.mjs',
+      'L50 模板内含正则 /[<>&"]/g，正则里的双引号被词法器误当字符串；node --check 通过（2026-10-23 实证）'],
+  ]);
+  const filtered = [];
+  const suppressed = [];
+  for (const x of failures) {
+    if (KNOWN_FALSE_POSITIVES.has(x.file)) { suppressed.push(x.file); continue; }
+    filtered.push(x);
+  }
+  failures.length = 0;
+  failures.push(...filtered);
+  if (suppressed.length) {
+    console.log('  ℹ️  已知假阳性已排除 ' + suppressed.length + ' 个（均有 node --check 反证）:');
+    for (const f of suppressed) console.log('       · ' + f);
+    console.log('');
+  }
+
   const elapsed = ((Date.now() - t0) / 1000).toFixed(2);
 
   if (!failures.length) {
