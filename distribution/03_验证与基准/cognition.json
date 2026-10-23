@@ -1,19 +1,19 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-23T07:30:36.202Z",
+  "generated": "2026-10-23T17:03:16.620Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 52,
-    "today": 3,
-    "last7": 52,
-    "last30": 52
+    "total": 64,
+    "today": 12,
+    "last7": 64,
+    "last30": 64
   },
   "metrics": {
-    "daily_correction": 3,
-    "week_correction": 52,
-    "depth_score_7d": 113,
-    "avg_depth": 2.17,
-    "streak_days": 0
+    "daily_correction": 12,
+    "week_correction": 64,
+    "depth_score_7d": 147,
+    "avg_depth": 2.3,
+    "streak_days": 4
   },
   "thresholds": {
     "daily_min": 1,
@@ -22,47 +22,47 @@
   },
   "recent": [
     {
-      "id": "C052",
-      "at": "2026-10-22T07:44:56.908Z",
-      "wrong": "我以为往 check_publish_artifact 里加检查项，加完就会生效",
-      "now": "实际加了两次都没生效：第一次块插在 if(!existsSync(OUT)) 内部（dist 存在时整块跳过），第二次用了不存在的 exists() 函数（报 ReferenceError）。教训：【加门禁后必须看输出里有没有那一行】，不能只看总通过数。70/0 比 62/0 多了 8 项才说明真生效",
-      "evidence": "实测：加块后 check_publish_artifact 仍报 62/0 且 grep Glama 无输出；移到 if 块外 + 改 exists→existsSync 后变 70/0 且能看到 Glama 那 7 行",
-      "impact": "L3",
-      "why": null
-    },
-    {
-      "id": "C051",
-      "at": "2026-10-22T07:44:56.122Z",
-      "wrong": "我以为只要有 Dockerfile 就够了",
-      "now": "实际需要三件套 + 一个关键优化：① Dockerfile（已有但中文注释有编码风险，已改英文）② .dockerignore（缺！构建上下文会含 dist/ 20MB+）③ glama.json（缺！声明维护者）④ .dockerignore 必须排除 knowledge/_refs（17.48MB 报价截图 + 违反 No pricing）。补齐后镜像从 20MB 降到 ~0.6MB",
-      "evidence": "实测：knowledge/ 20.13MB 其中 _refs/ 19.59MB（40 张 PNG 17.48MB + 8 张 JPG 1.87MB）；移走 _refs 后 selftest 依然 36 通过 0 失败，证明运行时不依赖",
+      "id": "C064",
+      "at": "2026-10-23T14:21:22.316Z",
+      "wrong": "我以为同一篇文可以改改标题发到多个平台",
+      "now": "实际一稿多投在技术社区会被识别为 spam。正确做法是【一素材多文体】：同一个\"细碎台数爆炸\"洞察，行业门户写严谨工程文（1500-3000字克制不推销）、知乎写经验分享（设问+类比）、DEV.to 写技术复盘（第一人称承认错误）、AI 目录写一句话卖点。每种文体的语气/长度/结构/必须包含/必须避免都不同，已固化进 traffic_engine.mjs 的 platform_formats",
+      "evidence": "traffic_engine.mjs --write 对同一选题生成不同平台骨架，输出里带完整写作要求表（语气/长度/结构/必须包含/必须避免/行动号召）",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C050",
-      "at": "2026-10-22T07:44:55.761Z",
-      "wrong": "我一直以为 Glama 判定「cannot be deployed」是因为它探测 https://mackorn.cn/ai/api/mcp.php 时 SSL 证书过期导致的",
-      "now": "实际 Glama 官方文档明确写着：\"A Glama release is not a GitHub release. It is a containerized build of your MCP server that Glama uses to run security checks and to let users deploy the server.\" —— 它【自己构建 Docker 镜像跑我们的 server】，根本不探测我们的 HTTPS 端点。所以 SSL 和 Glama Release 是两件独立的事，SSL 过期【不会阻塞】Glama。真因是我们从来没做过 containerized release",
-      "evidence": "glama.ai/blog/2026-03-15-how-to-make-a-release 原文；且搜索结果里多个项目（vestige/hubd/skyvern/ateam-mcp）都专门加 Dockerfile + glama.json 为了 Glama",
+      "id": "C063",
+      "at": "2026-10-23T14:21:22.129Z",
+      "wrong": "我以为\"引流\"就是多发推广内容、多提交目录",
+      "now": "实际最有价值的引流不是推广词，是【只有我们能写的技术复盘】—— 因为其他矿业公司不会写 MCP 踩坑，其他开发者不懂圆锥破。这种交叉地带的真实经历别人抄不走。建立 traffic_engine.mjs：选题池 5 个（每个都绑定独有资产）+ 5 种平台文体 + 发布日历 + 风险自动提示（如厂商参数需确认可公开范围）",
+      "evidence": "traffic-registry/registry.json 5 个选题 / 6 项独有资产 / 5 种文体；已生成 3 个骨架 + 1 篇完整美文（T-003 约 2400 字，四坑复盘）",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C049",
-      "at": "2026-10-22T04:23:34.815Z",
-      "wrong": "我以为有了 check_publish_artifact 就不会再漏",
-      "now": "实际它没检查 AGENTS.md/QUICKSTART.md/smithery.yaml 这三个\"AI 可发现性文件\"。门禁只覆盖它已知的清单，新增文件必须【同时】加到 files 字段 + build_public 放行清单 + 验收器检查项，三处缺一就会被漏",
-      "evidence": "加 R142 检查块后 check_publish_artifact 立刻抓到 package.json 与上传包不一致（因为 files 改了但上传包没重建），重建后 62/0",
+      "id": "C062",
+      "at": "2026-10-23T14:00:29.929Z",
+      "wrong": "我以为已经有的 ai_coverage.mjs（18 平台）和 ai_rejection_diagnoser.mjs（12 平台）覆盖够了",
+      "now": "实际它们只覆盖 MCP 目录。用户要的是【全部有助于模型分发传播的平台】——还包括 AI 客户端能不能配 MCP、包管理器、AI 工具站、开发者社区、行业门户、学术标准。已建 distribution_registry.mjs 管 70 个平台，与前者形成三层分工：覆盖探测 / 原因诊断 / 全量分发台账",
+      "evidence": "新工具实测：70 平台 7 类；--roadmap 输出 P1(2个)/P2(27个) 等分桶；--blockers 输出原因+提升条件",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C048",
-      "at": "2026-10-22T04:23:34.217Z",
-      "wrong": "我以为写完 AGENTS.md / QUICKSTART.md / smithery.yaml 就等于\"AI 能读到了\"",
-      "now": "实际它们从未进过发布包！package.json 的 files 字段没列它们、build_public 的放行清单也没加它们 → dist 里根本没有 → AI 装 npm 包时读不到。写了 ≠ 发出去了。这和 R141 记录的 Dockerfile 缺失是同一个坑的第二次发作",
-      "evidence": "实测 dist/mackorn-cone-crusher 根目录：AGENTS.md ❌ / QUICKSTART.md ❌ / smithery.yaml ❌（Dockerfile ✅ 因为 R141 已修）。修复后三个全部 ✅，check_publish_artifact 从 61/1 变 62/0",
+      "id": "C061",
+      "at": "2026-10-23T14:00:29.662Z",
+      "wrong": "我以为搜到的东西可以先抓下来看",
+      "now": "实际 raw.githubusercontent.com 从本机连不上（UND_ERR_CONNECT_TIMEOUT，之前也遇到过）。所以不能依赖外部抓取建清单 —— 必须用【已知的+搜索摘要+实测】三种来源混合，并给每条明确标注可信度（measured/searched/known/unknown），不许把\"听说\"当\"验证过\"",
+      "evidence": "Node fetch raw.githubusercontent.com → UND_ERR_CONNECT_TIMEOUT；最终清单 70 条里 measured 约 30 条、searched 约 25 条、known 约 15 条，每条都标了",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C060",
+      "at": "2026-10-23T14:00:29.384Z",
+      "wrong": "我以为\"让 AI 收录我们\"主要就是提交 MCP 目录（那 15 个）",
+      "now": "实际把分发平台全量铺开后有 7 大类 70 个平台，而我们只在\"技术圈\"有存在：AI 客户端 12/18、MCP 目录 4/15、包管理器 4/6 已通；但 AI 工具目录 0/9、开发者社区 0/11、行业垂直门户 0/8、学术标准 0/3 全部空白。★ 最大的分发缺口不是 MCP 目录，是【行业垂直门户 —— 真正的客户在那里】和【AI 工具目录 —— 面向终端用户和 AI 搜索】",
+      "evidence": "distribution-registry/registry.json 70 个平台 7 类；tools/distribution_registry.mjs 实测输出各类已通比例",
       "impact": "L4",
       "why": null
     }

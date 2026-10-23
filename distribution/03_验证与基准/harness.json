@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-harness/1",
-  "generated": "2026-10-23T07:30:30.757Z",
+  "generated": "2026-10-23T17:03:09.104Z",
   "what_this_is": "MACKORN 插件的运行边界清单。任何接手的 Agent（云端/他人/另一个 AI）应先读本文件，再动手。",
   "hard_rules": [
     {
@@ -130,7 +130,7 @@
     ]
   },
   "gates": {
-    "count": 55,
+    "count": 66,
     "items": [
       {
         "id": "语法",
@@ -281,6 +281,10 @@
         "name": "SSL 证书有效期（非阻塞但必须可见）"
       },
       {
+        "id": "G22",
+        "name": "自动认知发现器（六类缺口）"
+      },
+      {
         "id": "G4",
         "name": "负控可执行"
       },
@@ -351,6 +355,46 @@
       {
         "id": "自验证",
         "name": "自验证报告存在"
+      },
+      {
+        "id": "产物",
+        "name": "dist 目录存在"
+      },
+      {
+        "id": "产物",
+        "name": "dist/package.json 可解析"
+      },
+      {
+        "id": "产物",
+        "name": "bin 含包名（npx <包名> 可靠解析）"
+      },
+      {
+        "id": "产物",
+        "name": "bin 保留旧别名 mackorn-mcp"
+      },
+      {
+        "id": "产物",
+        "name": "含 Dockerfile（Glama/Registry 部署入口）"
+      },
+      {
+        "id": "产物",
+        "name": "含 skills.sh.json（skills.sh 索引）"
+      },
+      {
+        "id": "产物",
+        "name": "files 清单含 Dockerfile"
+      },
+      {
+        "id": "产物",
+        "name": "files 清单含 skills.sh.json"
+      },
+      {
+        "id": "产物",
+        "name": "files 清单无幽灵条目（每条都在磁盘上）"
+      },
+      {
+        "id": "产物",
+        "name": "check_publish_artifact.mjs 通过"
       }
     ]
   },

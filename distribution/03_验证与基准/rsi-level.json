@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-rsi/1",
-  "generated": "2026-10-23T07:30:30.789Z",
+  "generated": "2026-10-23T17:03:09.149Z",
   "level": 3,
   "ceiling": 4,
   "ceiling_reason": "严格意义的 L5 需要能改进【自身基础模型（权重/架构/训练方法）】—— 本项目改的是工具链与判据，改不了自己的权重。所以天花板 = L4。这不是谦虚，是事实。",
@@ -21,13 +21,13 @@
       "total": 91
     },
     "ratchet": {
-      "mechanisms": 146,
+      "mechanisms": 157,
       "baseline": 99,
-      "delta": 47,
+      "delta": 58,
       "ok": true
     },
     "neg_control": {
-      "files": 5,
+      "files": 6,
       "needed": 3,
       "coverage": 1
     },
@@ -109,7 +109,7 @@
       "late": 196,
       "improving": false
     },
-    "gates": 55,
+    "gates": 66,
     "rounds": 93
   },
   "checks": [
@@ -138,7 +138,7 @@
       "key": "L3-ratchet",
       "level": 3,
       "name": "棘轮未倒退（机制数只增不减）",
-      "value": 47,
+      "value": 58,
       "pass": true
     },
     {
