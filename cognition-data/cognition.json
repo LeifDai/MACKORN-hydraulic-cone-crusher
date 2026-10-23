@@ -622,6 +622,33 @@
       "evidence": "tools/brand_coverage.mjs 实测：规则一 100%(8/8段)、规则二 100%(135/136词)、规则三 100%(7/7文件)；规则四 28.6%、规则五 5选题0发布（受外部条件限制，只报告不判定）",
       "impact": "L4",
       "why": null
+    },
+    {
+      "id": "C070",
+      "at": "2026-10-23T18:53:13.790Z",
+      "wrong": "我以为\"分发传播\"主要靠提交到外部目录（MCP 目录/AI 工具站）",
+      "now": "实际最有价值的资产一直在我们自己手里但没被结构化：抖音 15 条视频含真实设备型号（NH700/NH440/MPH20/MPH6/MPH50/MC/MJ）、真实案例（800t/h 玄武岩整线、NH440 美国调试）、真实展会（Bauma China 2020+2026）、真实技术亮点（630kW 高压永磁变频国内首台套）。这些是外部目录给不了的信任凭证。已建成 social-assets 台账 + 6 类分发材料生成器",
+      "evidence": "social-assets/registry.json 15 条视频分类为 10 类；tools/distribution_kit.mjs --all 生成 email-zh/email-en/expo-bauma/platform-video/llms-video-index/im-templates 六类材料",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C071",
+      "at": "2026-10-23T18:53:13.986Z",
+      "wrong": "我以为\"发送给客户\"这件事可以直接由我来做",
+      "now": "实际对外发送是【不可逆操作】，且需要邮箱/微信/WhatsApp 账号凭据（硬红线：不读凭据）。按全局规则 §2.5 夜间自主模式：涉及对外发送的必须停下来，写清\"已准备好，等你一句话\"。所以工具只生成材料不发送，并且每份材料都带「发送前检查清单」（收件人是否核实、是否群发、是否承诺价格交期）",
+      "evidence": "tools/distribution_kit.mjs 顶部明确写\"本工具只生成材料，不发送\"；6 份材料每份都带 checklist；output 里明确提示\"对外发送是不可逆操作，必须你本人点发送\"",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C072",
+      "at": "2026-10-23T18:53:14.142Z",
+      "wrong": "我以为视频标题只是营销文案，不能当事实依据",
+      "now": "实际这些标题里含可验证的硬事实——而且是【我们缺少的那类证据】：① 800 t/h 玄武岩整线恰好对应插件算出来的方案，形成\"计算+实景\"双重可信度；② NH700 630kW 高压永磁变频\"国内首台套\"是可验证的独特性声明；③ NH440 美国调试是出口严格市场的质量背书。已把这些提取成 extracted_facts（带视频出处），对外可用",
+      "evidence": "social-assets/registry.json 的 extracted_facts 段：real_models 7 个、real_cases 3 条（每条带 source）、exhibitions 2 条、capabilities_proven 7 条",
+      "impact": "L4",
+      "why": null
     }
   ],
   "generated": "2026-10-23T11:27:05.160Z",
