@@ -151,6 +151,13 @@ jobs:
         if: steps.dir_due.outputs.due == 'yes'
         run: node tools/directory_uploader.mjs --all || true
 
+      # ══════ R151：自动认知发现器（六类缺口扫描）══════
+      - name: 自动认知发现（承诺/数字/文件/死链/过期/复现）
+        run: node tools/cognition_auto.mjs || true
+
+      - name: 自动认知发现器负控（必须 5/5）
+        run: node tests/negative/cognition_auto_negative_controls.mjs
+
       - name: 认知力台账（每天必须推翻自己）
         run: node tools/cognition_log.mjs --check || true
 
