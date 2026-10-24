@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>隐私政策 · MACKORN 液压圆锥破选型插件 / Privacy Policy</title>
+<meta name="description" content="MACKORN 美矿液压圆锥破碎机选型插件（MCP Server / Agent Skill）隐私政策：不收集、不上传、不存储任何用户数据，所有计算在本机完成。Private by design: no collection, no telemetry, no upload.">
+<link rel="canonical" href="https://mackorn.cn/ai/privacy.html">
+<link rel="alternate" hreflang="zh-CN" href="https://mackorn.cn/ai/privacy.html">
+<link rel="alternate" hreflang="en" href="https://mackorn.cn/ai/privacy.html#english">
+<link rel="alternate" hreflang="x-default" href="https://mackorn.cn/ai/privacy.html">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Shanghai Mackorn Minerals Co., Ltd.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "隐私政策 · MACKORN 液压圆锥破选型插件",
+  "alternateName": "Privacy Policy · MACKORN Hydraulic Cone Crusher Selection Plugin",
+  "url": "https://mackorn.cn/ai/privacy.html",
+  "inLanguage": ["zh-CN", "en"],
+  "description": "MACKORN 美矿液压圆锥破碎机选型插件隐私政策：不收集、不上传、不存储任何用户数据，所有计算在用户本机完成。",
+  "isPartOf": { "@type": "WebSite", "name": "MACKORN 美矿", "url": "https://mackorn.cn/" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Shanghai Mackorn Minerals Co., Ltd.",
+    "alternateName": "上海美矿机械有限公司",
+    "url": "https://mackorn.cn/",
+    "email": "leif.dai@mackorn.cn"
+  },
+  "dateModified": "2026-10-21"
+}
+</script>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0 auto; max-width: 820px; padding: 2.2rem 1.2rem 4rem;
+         font: 16px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+         color: #22252a; background: #fff; }
+  @media (prefers-color-scheme: dark) { body { color: #e7e9ee; background: #14171c; } }
+  h1 { font-size: 1.9rem; margin: 0 0 .4rem; letter-spacing: .01em; }
+  h2 { font-size: 1.22rem; margin: 2.2rem 0 .6rem; padding-top: .6rem; border-top: 1px solid rgba(128,128,128,.22); }
+  blockquote { margin: 1rem 0; padding: .7rem 1rem; border-left: 4px solid #2f6fd0;
+               background: rgba(47,111,208,.07); border-radius: 0 6px 6px 0; }
+  blockquote p { margin: .2rem 0; }
+  pre { background: rgba(128,128,128,.12); padding: .9rem 1rem; border-radius: 8px;
+        overflow-x: auto; font-size: .9rem; line-height: 1.6; }
+  code { font-family: ui-monospace, Consolas, "Courier New", monospace; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  .lead { font-size: 1.06rem; }
+  .meta { color: #6b7180; font-size: .92rem; margin-bottom: 1.6rem; }
+  .lang-switch { display: flex; gap: .8rem; margin: 0 0 1.8rem; font-size: .92rem; }
+  .lang-switch a { color: #2f6fd0; text-decoration: none; }
+  hr { border: 0; border-top: 1px solid rgba(128,128,128,.22); margin: 2.4rem 0; }
+  footer { margin-top: 3rem; font-size: .88rem; color: #6b7180; }
+  a { color: #2f6fd0; }
+</style>
+</head>
+<body>
+
+<h1>隐私政策 / Privacy Policy</h1>
+<p class="meta">最后更新：2026-10-21　·　适用：MACKORN 美矿液压圆锥破碎机选型插件（MCP Server / Agent Skill）</p>
+<nav class="lang-switch"><a href="#zh">中文</a><a href="#english">English</a></nav>
+
+<section id="zh" lang="zh-CN">
+
+  <h2>一句话总结</h2>
+  <p class="lead"><strong>本插件不收集、不上传、不存储任何用户数据。</strong>所有计算在你的本机完成。</p>
+
+  <h2>1. 我们收集什么</h2>
+  <p><strong>什么都不收集。</strong></p>
+  <p>本插件是一个<strong>纯本地计算工具</strong>：</p>
+  <pre>✅ 所有选型计算在你的机器上完成
+✅ 不联网（除用户主动要求的线上检查）
+✅ 不发送遥测 / 不上报使用情况
+✅ 不记录调用日志
+✅ 不需要登录、不需要 API key
+✅ 不读写你的任何文件（除你显式提供的输入）</pre>
+
+  <h2>2. 数据流向</h2>
+  <pre>你的输入（处理量、矿石类型、粒度等）
+    ↓
+本机 Node.js 进程
+    ↓
+计算结果返回给 AI 助手
+    ↓
+结束
+
+★ 全程不离开你的机器。</pre>
+  <p><strong>唯一的例外</strong>（且需你主动触发）：</p>
+  <ul>
+    <li><code>mackorn_knowledge_update</code> 工具会<strong>在你本机</strong>写文件到 <code>$DSH_HOME/mackorn-knowledge/</code></li>
+    <li>这是本地写盘，不涉及网络</li>
+  </ul>
+
+  <h2>3. 第三方</h2>
+  <pre>❌ 不使用任何第三方分析服务（无 Google Analytics / 无 Sentry / 无 Mixpanel）
+❌ 不调用任何第三方 API（除 MCP 协议本身）
+❌ 不包含任何追踪代码</pre>
+  <p><strong>依赖层面</strong>：本插件<strong>零外部 npm 依赖</strong>，只用 Node.js 内置模块。</p>
+
+  <h2>4. 你的数据权利</h2>
+  <p>因为你没给我们数据，所以：</p>
+  <pre>✅ 无数据可删
+✅ 无数据可导出
+✅ 无数据可撤回</pre>
+  <p><strong>本地产生的文件</strong>（如知识库缓存）完全在你机器上，你自己随时可删。</p>
+
+  <h2>5. 儿童隐私</h2>
+  <p>本插件是工业设备选型工具，不面向儿童，不收集任何个人信息。</p>
+
+  <h2>6. 政策变更</h2>
+  <p>如有变更，会更新上方“最后更新”日期。但本插件的核心设计（纯本地、零收集）不会变。</p>
+
+  <h2>7. 联系方式</h2>
+  <pre>上海美矿机械有限公司 / Shanghai Mackorn Minerals Co., Ltd.
+地址：江苏省苏州市太仓市浏河镇钱江路 33 号
+      33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China
+
+商务：Sandy Zhao  sandy.zhao@mackorn.cn  +86 139 1648 5025
+技术：Leif Dai     leif.dai@mackorn.cn    +86 134 8218 0158
+官网：https://mackorn.cn/ai/</pre>
+
+</section>
+
+<hr>
+
+<section id="english" lang="en">
+
+  <h2>English Version</h2>
+  <h1 style="font-size:1.5rem">Privacy Policy</h1>
+  <p class="lead"><strong>Summary: this plugin collects, uploads and stores nothing. Everything runs on your machine.</strong></p>
+
+  <h2>What we collect</h2>
+  <p><strong>Nothing.</strong> This is a pure local computation tool:</p>
+  <ul>
+    <li>All selection calculations run on your machine</li>
+    <li>No telemetry, no usage reporting</li>
+    <li>No request logging</li>
+    <li>No login, no API key</li>
+    <li>No file access except inputs you explicitly provide</li>
+  </ul>
+
+  <h2>Data flow</h2>
+  <p>Your inputs → local Node.js process → results returned to your AI assistant → done. Nothing leaves your machine.</p>
+  <p>The only exception (user-triggered): <code>mackorn_knowledge_update</code> writes files to
+  <code>$DSH_HOME/mackorn-knowledge/</code> locally. Local disk write, no network.</p>
+
+  <h2>Third parties</h2>
+  <p>No analytics, no third-party APIs, no tracking code, zero npm dependencies.</p>
+
+  <h2>Your rights</h2>
+  <p>No data to delete, export or revoke. Local cache files are entirely on your machine.</p>
+
+  <h2>Contact</h2>
+  <p>Shanghai Mackorn Minerals Co., Ltd.<br>
+  33 Qianjiang Road, Liuhe Town, Taicang, Suzhou, Jiangsu, China<br>
+  <a href="mailto:leif.dai@mackorn.cn">leif.dai@mackorn.cn</a> · <a href="https://mackorn.cn/ai/">https://mackorn.cn/ai/</a></p>
+
+</section>
+
+<footer>
+  <p>MACKORN 美矿 · <a href="https://mackorn.cn/ai/">mackorn.cn/ai</a> ·
+  <a href="https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher">GitHub</a> ·
+  MIT License</p>
+</footer>
+
+</body>
+</html>
