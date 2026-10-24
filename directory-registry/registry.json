@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-directory-registry/1",
-  "updated": "2026-10-21",
+  "updated": "2026-10-24",
   "purpose": "AI 目录收录台账 —— 记录每个平台的收录条件、当前状态、历史、经验与失败教训。定期（每3天）检查并更新。",
   "our_identity": {
     "name": "MACKORN Hydraulic Cone Crusher Selection",
@@ -23,7 +23,7 @@
       "probe": "https://api.github.com/repos/LeifDai/MACKORN-hydraulic-cone-crusher",
       "status": "listed",
       "status_since": "2026-10-17",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "repo-public",
@@ -72,7 +72,7 @@
       "probe": "https://registry.npmjs.org/mackorn-cone-crusher",
       "status": "listed",
       "status_since": "2026-10-19",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "published",
@@ -121,7 +121,7 @@
       "probe": "https://registry.modelcontextprotocol.io/v0/servers?search=mackorn",
       "status": "listed",
       "status_since": "2026-10-19",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "server-json",
@@ -164,7 +164,7 @@
       "probe": "https://smithery.ai/server/@LeifDai/mackorn-cone-crusher",
       "status": "listed",
       "status_since": "2026-10-19",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "stdio-startable",
@@ -197,7 +197,7 @@
       "probe": "https://skills.sh/s/LeifDai/MACKORN-hydraulic-cone-crusher",
       "status": "listed",
       "status_since": "2026-10-19",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "skill-frontmatter",
@@ -225,7 +225,7 @@
       "probe": "https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher",
       "status": "listed",
       "status_since": "2026-10-18",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "page-exists",
@@ -271,14 +271,14 @@
       "url": "https://claude.com/docs/connectors/building/submission",
       "probe": "https://claude.com/connectors",
       "status": "not-listed",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "remote-endpoint",
           "desc": "生产级远程 MCP 端点（HTTPS 有效）",
-          "satisfied": false,
-          "blocker": "SSL：证书 2026-10-14 已过期",
-          "note": "DNS 已于 2026-10-21 晚恢复"
+          "satisfied": true,
+          "blocker": null,
+          "note": "DNS 已于 2026-10-21 晚恢复（SSL 已于 2026-10-24 修复）"
         },
         {
           "id": "privacy-policy",
@@ -301,7 +301,6 @@
       "submit_method": "https://claude.com/docs/connectors/building/submission 表单",
       "update_method": "提交后等审核",
       "check_method": "node tools/directory_checker.mjs --only claude-directory",
-      "blockers": [],
       "notes": "门槛最高，需 Anthropic 人工审核。前置条件：生产级端点 + 隐私政策",
       "priority": 3
     },
@@ -312,7 +311,7 @@
       "url": "https://mcp.so/",
       "probe": "https://mcp.so/server/mackorn-cone-crusher",
       "status": "not-listed",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "manual-submit",
@@ -339,7 +338,7 @@
       "url": "https://mcp-x.com/",
       "probe": "https://mcp-x.com/server/mackorn-cone-crusher",
       "status": "not-listed",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "manual-submit",
@@ -359,7 +358,7 @@
       "url": "https://mcplist.org/",
       "probe": "https://mcplist.org/server/mackorn-cone-crusher",
       "status": "not-listed",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "manual-submit",
@@ -380,7 +379,7 @@
       "probe": "https://api.github.com/repos/punkpeye/awesome-mcp-servers/pulls/15410",
       "status": "pr-open",
       "status_since": "2026-10-18",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "pr-opened",
@@ -391,9 +390,9 @@
         {
           "id": "glama-evaluated",
           "desc": "Glama 评分已出",
-          "satisfied": false,
-          "blocker": "SSL：证书 2026-10-14 已过期",
-          "note": "DNS 已于 2026-10-21 晚恢复"
+          "satisfied": true,
+          "blocker": null,
+          "note": "DNS 已于 2026-10-21 晚恢复（SSL 已于 2026-10-24 修复）"
         },
         {
           "id": "pr-merged",
@@ -418,7 +417,7 @@
       "probe": "https://api.github.com/repos/awesome-dsh-plugin/awesome-dsh-plugin/pulls/6141",
       "status": "merged",
       "status_since": "2026-10-17",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "pr-merged",
@@ -440,7 +439,7 @@
       "url": "https://www.pulsemcp.com/",
       "probe": "https://www.pulsemcp.com/servers?q=mackorn",
       "status": "blocked",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "github-topic",
@@ -468,7 +467,7 @@
       "url": "https://mcpservers.org/",
       "probe": "https://mcpservers.org/servers/LeifDai/mackorn-cone-crusher",
       "status": "blocked",
-      "last_checked": "2026-10-21",
+      "last_checked": "2026-10-24",
       "requirements": [
         {
           "id": "github-pr",
@@ -555,6 +554,13 @@
         "detail": "Glama 官方文档：A Glama release is a containerized build of your MCP server. 它自己 docker build + docker run -i 跑我们的 server，不需要访问我们的 HTTPS 端点。所以证书过期与 Glama 评分无关。需要三件套：Dockerfile + .dockerignore + glama.json，且 .dockerignore 要排除大文件（我们的 knowledge/_refs 有 19.59MB 截图）。",
         "date": "2026-10-22",
         "transferable": true
+      },
+      {
+        "id": "E-SUCCESS-009",
+        "title": "SSL 修复后立刻多解锁 2 个平台",
+        "detail": "2026-10-24 证书续期（阿里云免费证书，89 天有效期），端点从 0/5 变 4/5 可访问。directory_checker 实测：收录从 6 个变 8 个 —— punkpeye/awesome-mcp-servers 从 pr-open 变可探测通过。证明「先修基础设施再提交」的顺序是对的。",
+        "date": "2026-10-24",
+        "transferable": true
       }
     ],
     "failure": [
@@ -612,7 +618,7 @@
     "check_interval_days": 3,
     "update_interval_days": 3,
     "discovery_interval_days": 7,
-    "last_check": "2026-10-21",
+    "last_check": "2026-10-24",
     "last_update": "2026-10-21",
     "last_discovery": "2026-10-21",
     "note": "每 3 天检查收录状态并更新，每 7 天搜寻新平台。由云端 nightly 工作流驱动，也可手动跑 tools/directory_checker.mjs"
