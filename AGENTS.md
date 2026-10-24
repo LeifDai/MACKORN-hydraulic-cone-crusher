@@ -148,8 +148,8 @@ claude mcp add --transport stdio mackorn -- npx -y mackorn-cone-crusher
 https://mackorn.cn/ai/api/mcp.php
 ```
 
-⚠️ **当前状态（2026-10-21）**：该端点的 DNS 与 SSL 正在修复中，可能暂时不可用。
-修好前的推荐方式是上面的 stdio 本地安装。
+✅ **当前状态（2026-10-24 已修复）**：DNS 正常 · SSL 证书有效（剩 89 天）· 端点 4/5 可访问。
+HTTP 端点可直接使用；若你的客户端仍报错，用上面的 stdio 本地安装作为备选。
 </details>
 
 ### 方式 B：环境未配 MCP
