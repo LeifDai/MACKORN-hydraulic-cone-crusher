@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-23T21:20:41.728Z",
+  "generated": "2026-10-24T00:31:53.224Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
   "alive": 69,

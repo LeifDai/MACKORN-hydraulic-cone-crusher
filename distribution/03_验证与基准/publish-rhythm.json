@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-23T21:20:42.041Z",
+  "generated": "2026-10-24T00:31:53.436Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "e7d4ac3",
-    "date": "2026-10-23T19:54:33Z",
-    "message": "feat(site): video index page + sitemap/robots/llms updated (R172)"
+    "sha": "63a6409",
+    "date": "2026-10-23T21:20:46Z",
+    "message": "chore(nightly): 云端自迭代 2026-10-23 21:20 [skip ci]"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 5.26,
+    "days_since": 5.39,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.06,
-  "days_since_publish": 0.06,
+  "effective_days": 0.13,
+  "days_since_publish": 0.13,
   "changed_since_publish": {
     "count": 308,
     "files": [
