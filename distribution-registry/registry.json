@@ -1,7 +1,7 @@
 {
   "schema": "mackorn-distribution-registry/1",
   "version": "1.0.0",
-  "updated": "2026-10-23",
+  "updated": "2026-10-24",
   "purpose": "AI 分发传播平台总账 —— 覆盖 AI 客户端、MCP 目录、AI 工具站、开发者社区、行业门户。记录每个平台的收录方式、当前状态、收录时间、当时版本。未收录的分析原因并给出提升条件。",
   "confidence_labels": {
     "measured": "我本地实测过（有 HTTP 状态码 / 页面内容证据）",
@@ -306,7 +306,10 @@
           "last_seen_tools_count": 29,
           "last_seen_quality": "B0",
           "blocker": "未做 containerized release → 页面仍显示 cannot be deployed",
-          "improvement": "去 https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher/admin/dockerfile 配置 → Deploy → Make Release（三件套已备好，不需等 SSL）"
+          "improvement": "去 https://glama.ai/mcp/servers/LeifDai/MACKORN-hydraulic-cone-crusher/admin/dockerfile 配置 → Deploy → Make Release（三件套已备好，不需等 SSL）",
+          "blockers": [
+            "需做 containerized release（三件套已备：Dockerfile/.dockerignore/glama.json）"
+          ]
         },
         {
           "id": "smithery",
