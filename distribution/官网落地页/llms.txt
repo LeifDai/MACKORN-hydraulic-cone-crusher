@@ -1,0 +1,179 @@
+# MACKORN 美矿 · 液压圆锥破碎机与破碎筛分生产线选型
+
+> MACKORN（上海美矿机械）制造 NH 标准型与 NS 高速型单缸液压圆锥破碎机，
+> 并为砂石骨料与金属矿山设计完整破碎筛分生产线。
+> 选型能力以 MCP 服务器形式公开，29 个工具可经 HTTP 直接调用，无需安装。
+
+版本：V001.1 (semver 0.2.2) · 语言：12 · 远程工具：29
+
+<!-- CANONICAL-POSITIONING -->
+## Positioning / 定位
+
+Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
+
+矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
+
+**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
+
+**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
+
+**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
+
+**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
+
+
+## 调用入口
+
+- [MCP 远程端点](https://mackorn.cn/ai/api/mcp.php)：JSON-RPC 2.0 over HTTP，29 个工具，无需安装
+- [MCP 注册表](https://registry.modelcontextprotocol.io/v0/servers?search=mackorn)：cn.mackorn/mackorn-cone-crusher
+- [npm](https://www.npmjs.com/package/mackorn-cone-crusher)：mackorn-cone-crusher
+- [GitHub](https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher)
+- [MCP server card](https://mackorn.cn/.well-known/mcp/server-card.json)
+
+## 29 个工具（每个有独立说明页与真实算例）
+
+- [MACKORN MCP tools](https://mackorn.cn/ai/tools/)：All 29 MCP tools for hydraulic cone crusher selection, plant design, product-size simulation, calibration, cos
+- [mackorn_automation_design](https://mackorn.cn/ai/tools/automation-design/)：(Multilingual triggers / 多语言触发词: automation, PLC, DCS, SCADA, HMI, model predictive control, MPC, expert syste
+- [mackorn_beneficiation_selection](https://mackorn.cn/ai/tools/beneficiation-selection/)：(Multilingual triggers / 多语言触发词: beneficiation, mineral processing, flotation, gravity separation, ore sorting
+- [mackorn_calibrate](https://mackorn.cn/ai/tools/calibrate/)：输入某工况的给料筛析与产品筛析（累积通过率 %）+ 该工况 CSS，用最小二乘（有界网格 + 局部细化）反算破碎函数参数 φ/γ/β 与啮合系数，给出拟合优度、逐点残差与可用性判断。
+- [mackorn_capacity_check](https://mackorn.cn/ai/tools/capacity-check/)：给定机型 + 腔型 + 紧边排矿口 CSS，从腔型×CSS 产能详表查出生产能力区间 t/h，并返回排矿口合规性、最大给料限制、外形尺寸与重量。
+- [mackorn_cone_selection](https://mackorn.cn/ai/tools/cone-selection/)：按目标处理量、给料最大粒度、目标产品粒度与工序段，从 NH / NS 中选出机型 + 腔型 + CSS + 台数，给出候选排序、P80 估计与达标判定。
+- [mackorn_contact](https://mackorn.cn/ai/tools/contact/)：返回 MACKORN 的联系方式与全球招募信息：公司名称、地址（中英文）、三个商务电话与邮箱、官网、服务时间，以及代理商/选人招募条件。
+- [mackorn_cost_estimate](https://mackorn.cn/ai/tools/cost-estimate/)：按机型与台数算装机功率、年电耗、年电费、吨电耗与吨电费；按电价/年运行小时/负荷率/衬板寿命与衬板价算衬板吨成本。
+- [mackorn_crusher_curve](https://mackorn.cn/ai/tools/crusher-curve/)：用 Whiten (1972) 稳态圆锥破模型，由给料分布 + CSS + 偏心距算出产品 P80、破碎比、逐级产品分布与啮合区 K1/K2，并给 Bond (1952) 功耗估算。
+- [mackorn_distributor_eval](https://mackorn.cn/ai/tools/distributor-eval/)：按「能力/可靠/匹配」三维 17 项打分，区分公司代理与个人代理，输出分级 A/B/C/D、授信额度建议、风险清单与待核验项。
+- [mackorn_equipment_catalog](https://mackorn.cn/ai/tools/equipment-catalog/)：列出 MACKORN 全部 13 个机型（NH 标准型 9 个 + NS 高速型 4 个）与 9 种腔型代码，含最大给料、排矿口范围、功率、重量、产能。
+- [mackorn_full_chain](https://mackorn.cn/ai/tools/full-chain/)：(Multilingual triggers / 多语言触发词: full chain, end to end, complete plant, flowsheet, mine to concentrate, whole
+- [mackorn_grading_porosity](https://mackorn.cn/ai/tools/grading-porosity/)：按粗/中/细三组分配比计算料层孔隙率 φ = 0.42 − 0.30·min(中料占比,0.35) + 0.15·max(0, 细料占比 − 0.30)，与最优配比窗口对比。
+- [mackorn_grinding_selection](https://mackorn.cn/ai/tools/grinding-selection/)：(Multilingual triggers / 多语言触发词: grinding, SAG, semi-autogenous, ball mill, rod mill, HPGR, high pressure grin
+- [mackorn_intel_watch](https://mackorn.cn/ai/tools/intel-watch/)：返回 MACKORN 行业情报的固定观测面与可执行研究简报：竞品新品与专利动向、中国与国际破碎机专利、国家标准更新、矿山机械市场数据。
+- [mackorn_jaw_selection](https://mackorn.cn/ai/tools/jaw-selection/)：(Multilingual triggers / 多语言触发词: jaw crusher, primary crusher, coarse crushing, jaw plate, feed opening, PE ja
+- [mackorn_knowledge_update](https://mackorn.cn/ai/tools/knowledge-update/)：把新采集的情报写入知识库并做：来源可信度分级、数值矛盾检测、版本演进判定、变更留痕。**无 source_url 的条目一律拒收**；可信度裁决只产出&quot;建议值&quot;。
+- [mackorn_knowledge](https://mackorn.cn/ai/tools/knowledge/)：(Multilingual triggers / 多语言触发词: material properties, ore hardness, rock properties, Bond work index, abrasive
+- [mackorn_market_intel](https://mackorn.cn/ai/tools/market-intel/)：返回五维（行业/技术/时效/经济/可操作）评估框架与打分口径、破碎效率核心杠杆链、竞品对标矩阵、优势与差距、客户痛点应对话术。
+- [mackorn_market_stats](https://mackorn.cn/ai/tools/market-stats/)：描述统计（均值/中位数/CV/偏度/峰度）、市场集中度（CR/HHI/Gini）、线性回归与残差分析、威布尔拟合预测 B10 寿命、增长率基数效应修正。
+- [mackorn_mcfm_analysis](https://mackorn.cn/ai/tools/mcfm-analysis/)：计算粗粒级给料模数 MCFM，判定是否落在工程最优窗口 4.0–4.5，给出&quot;均匀布料 → 速度均匀化 → 磨损稳定 → 模数恒定&quot;的杠杆调整建议。
+- [mackorn_mining_interface](https://mackorn.cn/ai/tools/mining-interface/)：(Multilingual triggers / 多语言触发词: mining, blasting, drilling, fragmentation, Kuz-Ram, stripping ratio, overburd
+- [mackorn_pdca_status](https://mackorn.cn/ai/tools/pdca-status/)：查看自我优化循环（PDCA）状态：模型版本与知识库修订号、条目数与可信度分布、矛盾台账、四项演进指标、到期情报观测项与优化建议清单。
+- [mackorn_plant_design](https://mackorn.cn/ai/tools/plant-design/)：按原矿最大粒度与目标产品粒度算总破碎比、推荐破碎段数、各段给料/产品/破碎比分配，并做中碎与细碎选型，给出筛分面积、皮带带宽与辅机配置。
+- [mackorn_proposal](https://mackorn.cn/ai/tools/proposal/)：生成 14 章标准方案书（Markdown）：项目概况、设计依据、工艺流程、设备选择、技术参数、电气自控、环保、土建、供货范围、投资估算、工期、假设与来源、风险与待确认、附件清单。
+- [mackorn_requirement_intake](https://mackorn.cn/ai/tools/requirement-intake/)：把客户需求表文字 + 产量变成「还缺什么要问客户」+「该配什么设备」：抽取字段并标注来源、检查缺失生成追问话术、归一化工况、调用选型与整线配置。
+- [mackorn_screen_selection](https://mackorn.cn/ai/tools/screen-selection/)：(Multilingual triggers / 多语言触发词: vibrating screen, screen, screening, sieve, aperture, mesh, screen deck, circ
+- [mackorn_selection_report](https://mackorn.cn/ai/tools/selection-report/)：把生产线配置、圆锥破选型、MCFM 诊断、成本估算串成一份 Markdown 选型报告，并自动汇总全部&quot;假设与来源&quot;和&quot;风险与待确认项&quot;。
+- [mackorn_simulate_flowsheet](https://mackorn.cn/ai/tools/simulate-flowsheet/)：多段破碎 + 筛分 + 闭路流程模拟：逐段算产品粒度与循环负荷，用群体平衡迭代到稳态，输出各段入料/出料 P80、破碎比、筛下率与最终产品 P80。
+- [mackorn_wear_design](https://mackorn.cn/ai/tools/wear-design/)：沿破碎腔高度离散截面评估衬板磨损均匀度（均匀度 = 1 − σ/μ），给出多梯度分区硬度设计 H_i = H_base × k^i 与均匀度提升量。
+
+## 多语言问答（术语表 + 常见问题，含 FAQPage 结构化数据）
+
+- [المصطلحات والأجوبة — اختيار الكسارة المخروطية الهيدروليكية |](https://mackorn.cn/ai/ar-faq/)
+- [Begriffe und Antworten — Auslegung von Hydraulikkegelbrecher](https://mackorn.cn/ai/de-faq/)
+- [Términos y respuestas — selección de trituradora de cono hid](https://mackorn.cn/ai/es-faq/)
+- [Istilah dan Jawaban — pemilihan crusher kerucut hidrolik | M](https://mackorn.cn/ai/id-faq/)
+- [Термины и ответы — выбор гидравлической конусной дробилки | ](https://mackorn.cn/ai/ru-faq/)
+
+## 行业术语表（12 语言）
+
+- [术语表 · 12 语言](https://mackorn.cn/ai/glossary/)：1460+ 条术语，含 DefinedTermSet 结构化数据
+
+## 市场数据（按国别）
+
+- [Hydraulic cone crusher for 澳大利亚 mining — selection, import](https://mackorn.cn/ai/markets/au/)
+- [Hydraulic cone crusher for 巴西 mining — selection, import d](https://mackorn.cn/ai/markets/br/)
+- [Hydraulic cone crusher for 加拿大 mining — selection, import ](https://mackorn.cn/ai/markets/ca/)
+- [Hydraulic cone crusher for 刚果金 mining — selection, import ](https://mackorn.cn/ai/markets/cd/)
+- [Hydraulic cone crusher for 智利 mining — selection, import d](https://mackorn.cn/ai/markets/cl/)
+- [Hydraulic cone crusher for 中国 mining — selection, import d](https://mackorn.cn/ai/markets/cn/)
+- [Hydraulic cone crusher for 哥伦比亚 mining — selection, import](https://mackorn.cn/ai/markets/co/)
+- [Hydraulic cone crusher for 德国 mining — selection, import d](https://mackorn.cn/ai/markets/de/)
+- [Hydraulic cone crusher for 加纳 mining — selection, import d](https://mackorn.cn/ai/markets/gh/)
+- [Hydraulic cone crusher for 印度尼西亚 mining — selection, impor](https://mackorn.cn/ai/markets/id/)
+- [Hydraulic cone crusher for 哈萨克斯坦 mining — selection, impor](https://mackorn.cn/ai/markets/kz/)
+- [Hydraulic cone crusher for 墨西哥 mining — selection, import ](https://mackorn.cn/ai/markets/mx/)
+- [Hydraulic cone crusher for 秘鲁 mining — selection, import d](https://mackorn.cn/ai/markets/pe/)
+- [Hydraulic cone crusher for 菲律宾 mining — selection, import ](https://mackorn.cn/ai/markets/ph/)
+- [Hydraulic cone crusher for 俄罗斯 mining — selection, import ](https://mackorn.cn/ai/markets/ru/)
+- [Hydraulic cone crusher for 土耳其 mining — selection, import ](https://mackorn.cn/ai/markets/tr/)
+- [Hydraulic cone crusher for 坦桑尼亚 mining — selection, import](https://mackorn.cn/ai/markets/tz/)
+- [Hydraulic cone crusher for 乌兹别克斯坦 mining — selection, impo](https://mackorn.cn/ai/markets/uz/)
+- [Hydraulic cone crusher for 越南 mining — selection, import d](https://mackorn.cn/ai/markets/vn/)
+- [Hydraulic cone crusher for 南非 mining — selection, import d](https://mackorn.cn/ai/markets/za/)
+- [Hydraulic cone crusher for 赞比亚 mining — selection, import ](https://mackorn.cn/ai/markets/zm/)
+
+## 矿石与工况指南
+
+- [圆锥破选型指南 · 按矿石与岩石分类 | Cone Crusher Selection Guides by Mate](https://mackorn.cn/ai/guides/)
+- [安山岩圆锥破选型指南 250 t/h | Andesite Cone Crusher Selection Guide](https://mackorn.cn/ai/guides/andesite/)
+- [玄武岩圆锥破选型指南 300 t/h | Basalt Cone Crusher Selection Guide |](https://mackorn.cn/ai/guides/basalt/)
+- [铜矿圆锥破选型指南 800 t/h | Copper ore Cone Crusher Selection Guid](https://mackorn.cn/ai/guides/copper_ore/)
+- [辉绿岩圆锥破选型指南 200 t/h | Diabase Cone Crusher Selection Guide ](https://mackorn.cn/ai/guides/diabase/)
+- [花岗岩圆锥破选型指南 500 t/h | Granite Cone Crusher Selection Guide ](https://mackorn.cn/ai/guides/granite/)
+- [铁矿圆锥破选型指南 600 t/h | Iron ore Cone Crusher Selection Guide ](https://mackorn.cn/ai/guides/iron_ore/)
+- [铅锌矿圆锥破选型指南 400 t/h | Lead-zinc ore Cone Crusher Selection ](https://mackorn.cn/ai/guides/lead_zinc/)
+- [钼矿圆锥破选型指南 500 t/h | Molybdenum ore Cone Crusher Selection ](https://mackorn.cn/ai/guides/molybdenum/)
+
+## 核心页面
+
+- [MACKORN AI 选型插件 — 液压圆锥破碎机选型与破碎筛分生产线设计 | 上海美矿](https://mackorn.cn/ai/)：MACKORN 美矿开源 AI 插件：输入一张客户需求表 + 一个产量，输出设备选型、整线配置、产品粒度仿真与 14 章方案书。22 个工具、6 个技能、零运行时依赖、MIT 开源
+- [Contact MACKORN — Hydraulic Cone Crushers & Crushing Plant](https://mackorn.cn/ai/contact/)：Contact Shanghai Mackorn Minerals: hydraulic cone crusher selection, crushing and screenin
+- [Become a MACKORN Distributor — Cone Crushers & Wear Parts](https://mackorn.cn/ai/distributors/)：Distributor and agent opportunities for MACKORN hydraulic cone crushers and wear parts in 
+- [For Engineering Firms & EPC Contractors — Cone Crusher Sel](https://mackorn.cn/ai/engineering-firms/)：Technical data, selection methodology and documented calculations for engineering firms, c
+- [MACKORN 破碎筛分术语表 · 12 语言 | Hydraulic cone crusher glossary](https://mackorn.cn/ai/glossary/)：MACKORN (美矿) 液压圆锥破碎机与破碎筛分生产线术语表，覆盖中文、English、Español、Русский、Português、Français、العربية、In
+
+## 其他语言入口
+
+- [MACKORN KI-Auslegungsplugin — Hydraulikkegelbrecher & Brec](https://mackorn.cn/ai/de/)
+- [MACKORN AI選定プラグイン — 油圧コーンクラッシャー・破砕筛分プラント設計 | 上海美矿](https://mackorn.cn/ai/ja/)
+- [MACKORN Yapay Zekâ Seçim Eklentisi — Hidrolik Konik Kırıcı](https://mackorn.cn/ai/tr/)
+
+## 模型验证与可信度（可自己重跑）
+
+- [公开验证基准](https://mackorn.cn/ai/validation/)：26 项检查（物理不变量 / 确定性 / 失效边界 / 不确定度 / 回归），零依赖脚本，CC-BY-4.0
+- [基准结果 JSON](https://mackorn.cn/ai/validation/benchmark-results.json)：机器可读，含逐项判定与实测值
+- 含与两份公开实测数据集（Zenodo，CC-BY-4.0）的交叉验证，以及【不能证明什么】的局限声明
+
+## 其他页面
+
+- [Mackorn Rot — AI agent card | MACKORN](https://mackorn.cn/ai/agent/)
+- [MACKORN — اختيار الكسارة المخروطية الهيدروليكية | إضافة ذك](https://mackorn.cn/ai/ar/)
+- [Contacto MACKORN — Trituradoras de cono y plantas de tritu](https://mackorn.cn/ai/contact/es/)
+- [Contact MACKORN — Concasseurs à cône et installations de c](https://mackorn.cn/ai/contact/fr/)
+- [Contato MACKORN — Britadores de cone e plantas de britagem](https://mackorn.cn/ai/contact/pt/)
+- [Контакты MACKORN — гидравлические конусные дробилки | QR-к](https://mackorn.cn/ai/contact/ru/)
+- [联系 MACKORN 美矿 —— 液压圆锥破与破碎筛分生产线 | 微信二维码](https://mackorn.cn/ai/contact/zh/)
+- [Sea distribuidor de MACKORN — Trituradoras de cono y pieza](https://mackorn.cn/ai/distributors/es/)
+- [Devenir distributeur MACKORN — Concasseurs à cône et pièce](https://mackorn.cn/ai/distributors/fr/)
+- [Seja distribuidor MACKORN — Britadores de cone e peças de ](https://mackorn.cn/ai/distributors/pt/)
+- [Стать дистрибьютором MACKORN — конусные дробилки и футеров](https://mackorn.cn/ai/distributors/ru/)
+- [成为 MACKORN 美矿代理商 —— 圆锥破与耐磨件](https://mackorn.cn/ai/distributors/zh/)
+- [MACKORN Hydraulic Cone Crusher Selection — Mining-industry](https://mackorn.cn/ai/en/)
+- [Für Ingenieurbüros und EPC-Auftragnehmer — Auslegungsdaten](https://mackorn.cn/ai/engineering-firms/de/)
+- [致设计院与 EPC 总包 —— 圆锥破选型数据 | MACKORN 美矿](https://mackorn.cn/ai/engineering-firms/zh/)
+- [MACKORN — Selección de trituradora de cono hidráulica | Pl](https://mackorn.cn/ai/es/)
+- [For AI platforms — how to read and call MACKORN | MACKORN](https://mackorn.cn/ai/for-ai/)
+- [MACKORN — Sélection de concasseur à cône hydraulique | Plu](https://mackorn.cn/ai/fr/)
+- [MACKORN — Pemilihan cone crusher hidraulik | Plugin AI unt](https://mackorn.cn/ai/id/)
+- [Model Card — MACKORN Cone Crusher Model | limitations, unc](https://mackorn.cn/ai/model-card/)
+- [圆锥破衬板耐磨件 · 破碎壁轧臼壁 | MACKORN 美矿](https://mackorn.cn/ai/parts/)
+- [Cone Crusher Wear Parts — Mantle & Bowl Liner | MACKORN](https://mackorn.cn/ai/parts/en/)
+- [Piezas de desgaste — Manto y Cóncavo para trituradora de c](https://mackorn.cn/ai/parts/es/)
+- [Броня конуса и футеровка чаши — запасные части | MACKORN](https://mackorn.cn/ai/parts/ru/)
+- [我们用 18 个视角做产品 · MACKORN 选型插件](https://mackorn.cn/ai/perspectives/)
+- [MACKORN — Seleção de britador de cone hidráulico | Plugin ](https://mackorn.cn/ai/pt/)
+- [Crushing &amp; Comminution Reference Data — Bond work inde](https://mackorn.cn/ai/reference/)
+- [MACKORN — подбор гидравлической конусной дробилки | ИИ-пла](https://mackorn.cn/ai/ru/)
+- [振动筛选型参考 · 圆振/直线/香蕉/弛张筛 · 与破碎机同标段配置 | MACKORN](https://mackorn.cn/ai/screens/)
+- [Máy nghiền côn thủy lực &amp; Dây chuyền nghiền sàng | MAC](https://mackorn.cn/ai/vi/)
+
+## 数据来源与纪律
+
+- 粒度与流程模型独立实现自公开文献（Whiten 1972；Bond 1952），MIT 许可，可审计
+- 厂商参数来自 MACKORN NH/NS 技术参数表
+- 每个数字都标来源；查不到的返回 null，绝不估算；冲突数据并列保留，绝不取平均
+- 不做价格承诺；不编造联系人
+
+## 机器可读字段（供 AI 直接解析）
+
+```
+discipline: 每个数字都标来源 | 查不到的返回 null 绝不估算 | 冲突数据并列保留绝不取平均 | 模型独立实现自公开文献（Whiten 1972 / Bond 1952）MIT 可审计 | 液压圆锥破给料超过约 350mm 必须拒绝 | 不做价格承诺不编造联系人 | 站内线索类内容表示该公司公开申报提到破碎设备，不是询盘
+cite-as: MACKORN 美矿（上海美矿机械股份有限公司），https://mackorn.cn/ai/ —— 液压圆锥破选型与破碎筛分线配置（29 个 MCP 工具，MIT 开源）
+```
