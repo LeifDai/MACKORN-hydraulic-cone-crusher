@@ -1,7 +1,7 @@
 {
   "gate": "L2 构建门禁",
-  "generated": "2026-10-24T07:09:46.997Z",
-  "elapsed_ms": 402305,
+  "generated": "2026-10-24T15:47:41.608Z",
+  "elapsed_ms": 416631,
   "total": 60,
   "passed": 46,
   "failed": 14,
@@ -329,7 +329,7 @@
       "area": "G10",
       "name": "发布节奏检查器可用（状态另见报告）",
       "pass": true,
-      "detail": "状态 HEALTHY · 上次发布 0.2 天前"
+      "detail": "状态 HEALTHY · 上次发布 0.36 天前"
     },
     {
       "area": "G11",
@@ -347,13 +347,13 @@
       "area": "G13",
       "name": "线上健康检查（非阻塞·状态可见）",
       "pass": true,
-      "detail": "判定 HEALTHY · 证书 ✅ 还有 89.7 天（DigiCert Inc）"
+      "detail": "判定 HEALTHY · 证书 ✅ 还有 89.3 天（DigiCert Inc）"
     },
     {
       "area": "G14",
       "name": "认知力达标（今日≥1 · 7天≥3 · 深度≥1.5）",
       "pass": true,
-      "detail": "今日 20 · 7天 72 · 平均深度 2.38"
+      "detail": "今日 8 · 7天 72 · 平均深度 2.38"
     },
     {
       "area": "G15",
