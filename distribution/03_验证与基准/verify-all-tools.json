@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24T15:47:00.084Z",
+  "generated": "2026-10-24T18:46:04.786Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_cone_selection",
@@ -22,7 +22,7 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_capacity_check",
@@ -37,7 +37,7 @@
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_wear_design",
@@ -52,12 +52,12 @@
     {
       "name": "mackorn_market_intel",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_selection_report",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_equipment_catalog",
@@ -82,17 +82,17 @@
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 39
+      "ms": 25
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 85
+      "ms": 68
     },
     {
       "name": "mackorn_contact",
@@ -102,7 +102,7 @@
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_market_stats",
@@ -117,7 +117,7 @@
     {
       "name": "mackorn_grinding_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_beneficiation_selection",
@@ -142,12 +142,12 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_screen_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     }
   ]
 }
