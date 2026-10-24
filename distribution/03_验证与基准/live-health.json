@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-live-health/1",
-  "generated": "2026-10-24T00:31:56.409Z",
+  "generated": "2026-10-24T07:09:45.819Z",
   "host": "mackorn.cn",
   "cert_warn_days": 14,
   "expected_tools": 22,
@@ -8,12 +8,12 @@
     {
       "id": "cert",
       "name": "SSL 证书有效且不临期",
-      "pass": false,
-      "detail": "❌ **已过期 9 天**（Oct 14 23:59:59 2026 GMT）",
+      "pass": true,
+      "detail": "✅ 还有 89.7 天（DigiCert Inc）",
       "cert": {
-        "ok": false,
-        "days": -9,
-        "validTo": "Oct 14 23:59:59 2026 GMT",
+        "ok": true,
+        "days": 89.7,
+        "validTo": "Jan 21 23:59:59 2027 GMT",
         "issuer": "DigiCert Inc",
         "subject": "mackorn.cn",
         "err": null
@@ -22,34 +22,34 @@
     {
       "id": "home",
       "name": "官网首页 HTTPS 可达",
-      "pass": false,
-      "detail": "❌ CERT_HAS_EXPIRED"
+      "pass": true,
+      "detail": "HTTP 200 · 45950 字符 · 2077ms"
     },
     {
       "id": "landing",
       "name": "/ai/ 落地页可达",
-      "pass": false,
-      "detail": "❌ CERT_HAS_EXPIRED"
+      "pass": true,
+      "detail": "HTTP 200 · 27247 字符"
     },
     {
       "id": "mcp",
       "name": "MCP 端点响应 JSON-RPC",
-      "pass": false,
-      "detail": "❌ CERT_HAS_EXPIRED",
-      "tools": null
+      "pass": true,
+      "detail": "HTTP 200 · 工具数 29 ⚠️ 本地 22",
+      "tools": 29
     },
     {
       "id": "llms",
       "name": "llms.txt 可达",
-      "pass": false,
-      "detail": "❌ CERT_HAS_EXPIRED"
+      "pass": true,
+      "detail": "HTTP 200 · 16004 字符"
     }
   ],
   "summary": {
     "total": 5,
-    "passed": 0,
-    "failed": 5
+    "passed": 5,
+    "failed": 0
   },
-  "verdict": "UNHEALTHY",
+  "verdict": "HEALTHY",
   "note": "线上健康检查 —— 弥补\"只顾本地、不看线上\"的监控盲区。"
 }

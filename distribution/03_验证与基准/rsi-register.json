@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-24T00:31:53.224Z",
+  "generated": "2026-10-24T07:09:40.792Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
   "alive": 69,
@@ -80,7 +80,7 @@
       "negctl": [],
       "origin": "R1：keyword_gate 测\"词与品牌同页\"是自证式弱检测，275 词 100% 通过但内容未必有用",
       "status": "failed",
-      "detail": "⚠ 有问题页面占比 0.0% < 60%；审计报出 4 项 issue"
+      "detail": "⚠ 有问题页面占比 25.0% < 60%；审计报出 4 项 issue"
     },
     {
       "id": "L-07",
@@ -294,7 +294,7 @@
       "negctl": [],
       "origin": "R19：建了 47 个新页面（工具页/语言FAQ/国别页），但 llms.txt / keywords.json / agent.json 还是旧的",
       "status": "failed",
-      "detail": "**真跑**索引同步：站点 2 个 HTML 页 · llms.txt 引用 6 个路径（300%）"
+      "detail": "**真跑**索引同步：站点 4 个 HTML 页 · llms.txt 引用 7 个路径（175%）"
     },
     {
       "id": "L-27",
