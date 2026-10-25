@@ -89,8 +89,77 @@ Allow: /
 User-agent: Amazonbot
 Allow: /
 
-# ByteDance / 字节
+# ByteDance / 字节（豆包）
 User-agent: Bytespider
+Allow: /
+User-agent: ByteDance
+Allow: /
+
+# ═══════════════════════════════════════════════════════════════
+# 中国大模型爬虫 —— 2026-10-25 补（此前全部缺失）
+#
+# 为什么必须补：
+#   市面上开源 GEO 工具几乎全部聚焦海外 ChatGPT/Perplexity，
+#   但国内豆包月活 3.45 亿、通义千问月活 1.66 亿，是真正的流量入口。
+#   不放行 = AI 抓不到 = 永远不会在它们生成的回答里引用我们。
+# ═══════════════════════════════════════════════════════════════
+
+# 阿里 / 通义千问（月活 1.66 亿）
+User-agent: TongyiBot
+Allow: /
+User-agent: Tongyi
+Allow: /
+User-agent: Alibaba
+Allow: /
+User-agent: AliyunBot
+Allow: /
+User-agent: YisouSpider
+Allow: /
+
+# 深度求索 DeepSeek
+User-agent: DeepSeekBot
+Allow: /
+User-agent: DeepSeek
+Allow: /
+
+# 智谱 AI / ChatGLM
+User-agent: ZhipuBot
+Allow: /
+User-agent: ChatGLM
+Allow: /
+User-agent: GLM
+Allow: /
+
+# 月之暗面 Kimi
+User-agent: MoonshotBot
+Allow: /
+User-agent: Kimi
+Allow: /
+User-agent: Moonshot
+Allow: /
+
+# 腾讯混元
+User-agent: HunyuanBot
+Allow: /
+User-agent: Hunyuan
+Allow: /
+User-agent: TencentBot
+Allow: /
+
+# 百度 AI / 文心
+User-agent: Baiduspider
+Allow: /
+User-agent: ERNIEBot
+Allow: /
+User-agent: WenxinBot
+Allow: /
+
+# 讯飞星火
+User-agent: SparkBot
+Allow: /
+
+# 商汤 / 其他国内 AI
+User-agent: SenseBot
 Allow: /
 
 # Cohere
