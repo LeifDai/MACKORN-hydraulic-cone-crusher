@@ -649,29 +649,83 @@
       "evidence": "social-assets/registry.json 的 extracted_facts 段：real_models 7 个、real_cases 3 条（每条带 source）、exhibitions 2 条、capabilities_proven 7 条",
       "impact": "L4",
       "why": null
+    },
+    {
+      "id": "C073",
+      "at": "2026-10-25T12:29:03.624Z",
+      "wrong": "我说\"云端会自动跑门禁，你不用管\"",
+      "now": "实际云端跑了 1194 次，最近全部失败（45/61）。而且失败原因里有一半是\"云端缺本地生成的台账文件\"。我说\"不用管\"是错的——云端的绿灯必须每次看真实日志确认。",
+      "evidence": "GitHub Actions runs API: 最近 10 次全 failure；日志显示 G28 报\"Excel 不存在\"、G14 报\"今日 0\"",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C074",
+      "at": "2026-10-25T12:29:03.810Z",
+      "wrong": "我以为本地 recurrence_tracker 测出 0% 就等于「没有错误复现」",
+      "now": "实际云端 G8 用的是 rsi-data/rsi.json 的口径，测出 25.3%。两个工具测的模式集不同：本地 tracker 只有 8 个可形式化模式，云端 rsi.json 覆盖更多历史模式。所以\"0%\"只是我这 8 个模式没复现，不是说全部模式都没复现。这是【用窄口径冒充全景】。",
+      "evidence": "本地 recurrence_tracker --json 输出 8 个模式 0 复现；云端 G8 detail 显示 recurrence 25.3%",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C075",
+      "at": "2026-10-25T12:29:04.038Z",
+      "wrong": "我以为把 Excel 推到 GitHub 云端就有了",
+      "now": "实际云端 G28 报\"不存在\"。原因：Excel 是二进制 xlsx，可能被 .gitignore 排除，或推送后云端 checkout 没拿到。二进制文件走 Contents API 与文本文件行为不同，需要单独验证云端是否真拿到。",
+      "evidence": "云端日志 ❌ [G28] 每日回顾清单 — ⚠ 不存在；本地 follow-up/follow-up-list0001.1.xlsx 41KB 存在",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C076",
+      "at": "2026-10-25T12:54:43.143Z",
+      "wrong": "我说\"云端会自动跑门禁，你不用管\"",
+      "now": "实际 GitHub Actions 跑了 1194 次，最近全部失败（45/61）。而且失败里有一半是\"云端缺本地生成的台账文件\"。更关键的是：我加进 workflow 的 3 个关键门禁（语法闸门/发布验收/品牌规则）之前根本没加进去——云端只跑了半套。",
+      "evidence": "GitHub Actions API: total_count=1194, 最近 10 次全 failure；日志显示 G28 不存在、G14 今日0、[产物] bin 缺包名、[产物] files 缺 Dockerfile",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C077",
+      "at": "2026-10-25T12:54:43.324Z",
+      "wrong": "我以为 public-overrides/package.json 和根 package.json 是同步的",
+      "now": "实际 public-overrides 只有 19 项 files，缺 .dockerignore/glama.json/AGENTS.md/QUICKSTART.md/smithery.yaml 5 项。而 build_public 是从 public-overrides 生成 dist 的 → dist/package.json 也缺。云端检查 [产物] 时就会报\"files 清单缺 Dockerfile\"。修后 24 项全齐。",
+      "evidence": "public-overrides/package.json files 19 项 → 补 5 项后 24 项；dist/package.json 同步；check_publish_artifact 69/0",
+      "impact": "L4",
+      "why": null
+    },
+    {
+      "id": "C078",
+      "at": "2026-10-25T12:54:43.477Z",
+      "wrong": "我以为删掉错误路径的文件就干净了",
+      "now": "实际有三层残留：① 官网落地页/ai/videos/（错误路径）② _deploy/ai/videos/（build 复制过去的旧版）③ dist/mackorn-cone-crusher/（构建产物）。check_publish_artifact 扫的是 distribution/_deploy/，所以只改前两层不够，还要重建 _deploy。而且 _deploy/ai/ 映射到服务器 /ai/，视频页必须放 _deploy/ai/videos/ 而不是 _deploy/videos/。",
+      "evidence": "删除后仍有死链 → 查 DEP 定义 = distribution/_deploy → 清理 _deploy/ai/videos 并用新版覆盖 → 69/0",
+      "impact": "L4",
+      "why": null
     }
   ],
-  "generated": "2026-10-24T09:12:10.610Z",
+  "generated": "2026-10-25T12:43:56.064Z",
   "rule": "全局规则 §2.6 每天提升认知力（四件事：学 / 疑 / 炼 / 测）",
   "metrics": {
-    "facts": 14,
-    "recall_pass": 45.5,
-    "refutations": 72,
+    "facts": 17,
+    "recall_pass": 50,
+    "refutations": 75,
     "rules_distilled": 32,
     "recurrence": null,
-    "today_facts": 0,
-    "today_quiz": 0,
-    "today_correct": 0,
-    "today_refutations": 20,
-    "last7_refutations": 72,
+    "today_facts": 3,
+    "today_quiz": 3,
+    "today_correct": 2,
+    "today_refutations": 3,
+    "last7_refutations": 75,
     "due_now": 11
   },
   "today": {
-    "learned": 0,
-    "doubted": 20,
+    "learned": 3,
+    "doubted": 3,
     "distilled": 32,
-    "tested": 0,
-    "correct": 0
+    "tested": 3,
+    "correct": 2
   },
   "due_facts": [
     {
@@ -690,14 +744,14 @@
       "due_at": "2026-10-22T20:54:46.879Z"
     },
     {
-      "id": "F0005",
-      "title": "先进控制（L3/MPC）的 5 项就绪条件",
-      "due_at": "2026-10-23T09:19:38.787Z"
-    },
-    {
       "id": "F0006",
       "title": "GitHub OAuth Device Flow 不需要预装 git/gh",
       "due_at": "2026-10-22T16:21:05.008Z"
+    },
+    {
+      "id": "F0007",
+      "title": "云端 Actions 的依赖是传递闭包",
+      "due_at": "2026-10-24T16:21:05.008Z"
     },
     {
       "id": "F0008",
@@ -710,9 +764,9 @@
       "due_at": "2026-10-22T20:54:46.879Z"
     },
     {
-      "id": "F0011",
-      "title": "发布产物必须单独设门禁：Dockerfile 写了却从未进包",
-      "due_at": "2026-10-22T16:20:54.334Z"
+      "id": "F0010",
+      "title": "render 必须返回 [{type,text}] 数组",
+      "due_at": "2026-10-24T20:54:46.879Z"
     },
     {
       "id": "F0012",
@@ -727,21 +781,21 @@
   ],
   "recent_corrections": [
     {
-      "id": "C072",
-      "wrong": "我以为视频标题只是营销文案，不能当事实依据",
-      "now": "实际这些标题里含可验证的硬事实——而且是【我们缺少的那类证据】：① 800 t/h 玄武岩整线恰好对应插件算出来的方案，形成\"计算+实景\"双重可信度；② NH700 630kW 高压永磁变频\"国内首台套\"是可验证的独特性声明；③ NH440 美国调试是出口严格市场的质量背书。已把这些提取成 extracted_facts（带视频出处），对外可用",
+      "id": "C075",
+      "wrong": "我以为把 Excel 推到 GitHub 云端就有了",
+      "now": "实际云端 G28 报\"不存在\"。原因：Excel 是二进制 xlsx，可能被 .gitignore 排除，或推送后云端 checkout 没拿到。二进制文件走 Contents API 与文本文件行为不同，需要单独验证云端是否真拿到。",
+      "impact": "L3"
+    },
+    {
+      "id": "C074",
+      "wrong": "我以为本地 recurrence_tracker 测出 0% 就等于「没有错误复现」",
+      "now": "实际云端 G8 用的是 rsi-data/rsi.json 的口径，测出 25.3%。两个工具测的模式集不同：本地 tracker 只有 8 个可形式化模式，云端 rsi.json 覆盖更多历史模式。所以\"0%\"只是我这 8 个模式没复现，不是说全部模式都没复现。这是【用窄口径冒充全景】。",
       "impact": "L4"
     },
     {
-      "id": "C071",
-      "wrong": "我以为\"发送给客户\"这件事可以直接由我来做",
-      "now": "实际对外发送是【不可逆操作】，且需要邮箱/微信/WhatsApp 账号凭据（硬红线：不读凭据）。按全局规则 §2.5 夜间自主模式：涉及对外发送的必须停下来，写清\"已准备好，等你一句话\"。所以工具只生成材料不发送，并且每份材料都带「发送前检查清单」（收件人是否核实、是否群发、是否承诺价格交期）",
-      "impact": "L4"
-    },
-    {
-      "id": "C070",
-      "wrong": "我以为\"分发传播\"主要靠提交到外部目录（MCP 目录/AI 工具站）",
-      "now": "实际最有价值的资产一直在我们自己手里但没被结构化：抖音 15 条视频含真实设备型号（NH700/NH440/MPH20/MPH6/MPH50/MC/MJ）、真实案例（800t/h 玄武岩整线、NH440 美国调试）、真实展会（Bauma China 2020+2026）、真实技术亮点（630kW 高压永磁变频国内首台套）。这些是外部目录给不了的信任凭证。已建成 social-assets 台账 + 6 类分发材料生成器",
+      "id": "C073",
+      "wrong": "我说\"云端会自动跑门禁，你不用管\"",
+      "now": "实际云端跑了 1194 次，最近全部失败（45/61）。而且失败原因里有一半是\"云端缺本地生成的台账文件\"。我说\"不用管\"是错的——云端的绿灯必须每次看真实日志确认。",
       "impact": "L4"
     }
   ]
