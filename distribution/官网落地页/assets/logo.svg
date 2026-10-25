@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="MACKORN 美矿">
+  <rect width="512" height="512" rx="88" fill="#0b5cab"/>
+  <text x="256" y="228" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
+        font-size="86" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="1">MACKORN</text>
+  <text x="256" y="318" font-family="'PingFang SC','Microsoft YaHei',sans-serif"
+        font-size="72" font-weight="700" fill="#ffffff" text-anchor="middle">美矿</text>
+  <text x="256" y="392" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
+        font-size="26" font-weight="600" fill="#a8cdf0" text-anchor="middle" letter-spacing="3">CRUSHING &amp; SCREENING</text>
+</svg>
