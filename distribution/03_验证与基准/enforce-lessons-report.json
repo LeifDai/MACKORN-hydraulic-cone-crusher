@@ -1,7 +1,7 @@
 {
   "gate": "L2 构建门禁",
-  "generated": "2026-10-25T11:09:41.687Z",
-  "elapsed_ms": 423256,
+  "generated": "2026-10-25T12:53:56.023Z",
+  "elapsed_ms": 337830,
   "total": 61,
   "passed": 45,
   "failed": 16,
@@ -334,7 +334,7 @@
       "area": "G10",
       "name": "发布节奏检查器可用（状态另见报告）",
       "pass": true,
-      "detail": "状态 HEALTHY · 上次发布 0.29 天前"
+      "detail": "状态 HEALTHY · 上次发布 0 天前"
     },
     {
       "area": "G11",

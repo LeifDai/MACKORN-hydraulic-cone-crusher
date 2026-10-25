@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-live-health/1",
-  "generated": "2026-10-25T11:09:40.874Z",
+  "generated": "2026-10-25T12:53:55.077Z",
   "host": "mackorn.cn",
   "cert_warn_days": 14,
   "expected_tools": 22,
@@ -23,7 +23,7 @@
       "id": "home",
       "name": "官网首页 HTTPS 可达",
       "pass": true,
-      "detail": "HTTP 200 · 45951 字符 · 2117ms"
+      "detail": "HTTP 200 · 45950 字符 · 2026ms"
     },
     {
       "id": "landing",
