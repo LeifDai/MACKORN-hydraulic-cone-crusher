@@ -1,12 +1,24 @@
 name: CI
 
 # 公开可复现的验证：任何人在 GitHub 上都能看到测试真的在跑、真的通过。
-# 这也是 awesome-dsh-plugin 评审标准里"项目是否活跃维护"的直接证据。
+# 这也是目录评审标准里"项目是否活跃维护"的直接证据。
 #
-# 三项检查：
-#   1. DSH 插件契约 + 功能冒烟 + 8 项负控
-#   2. MCP 协议 + 全部 19 个工具
-#   3. MCPB 包能否成功构建（Smithery 的 stdio 分发路径依赖它）
+# 2026-10-22 修正（本地原本没有这个文件，线上那份已连续失败多次）：
+#   ① 第 5 步硬性要求 package.json 声明 dsh.bundle.patch，而根 package.json 的设计
+#      就是「纯 Cordis 插件，不声明 dsh.bundle」（见其 dsh.note）。
+#      两者矛盾 → 三个 Node 版本全部卡在这一步，CI 永久红。
+#      改为：声明了 bundle.patch 就校验该文件存在；只写 dsh.note 亦可通过；始终校验 cordis.patch.yml 存在。
+#   ② 工具数写死 19（两处）。实际已是 29。改为从 plugin/index.mjs **派生**，
+#      并与 mcp-server --list 的实际输出、package.json 描述里的数字三方比对。
+#
+# 检查项：
+#   1. 零运行时依赖
+#   2. DSH 插件清单自洽（bundle.patch 或 Cordis-only 说明 + cordis.patch.yml 存在）
+#   3. 插件契约 + 功能冒烟 + 负控
+#   4. MCP 协议 + 每个工具
+#   5. 工具数三方一致（定义 / 协议 / 对外描述）
+#   6. MCPB 包能构建且工具数一致（Smithery 的 stdio 分发路径依赖它）
+#   7. 真跑一次工具调用，确认返回 assumptions
 
 on:
   push:
@@ -45,16 +57,32 @@ jobs:
             if (deps !== 0) { console.error('Expected zero runtime dependencies'); process.exit(1); }
           "
 
-      - name: Verify the dsh.bundle manifest is present
+      - name: Verify the DSH plugin manifest is self-consistent
         run: |
           node -e "
+            const fs = require('fs');
             const p = require('./package.json');
-            if (!p.dsh || !p.dsh.bundle || !p.dsh.bundle.patch) {
-              console.error('package.json must declare dsh.bundle.patch'); process.exit(1);
+            const bundlePatch = p.dsh && p.dsh.bundle && p.dsh.bundle.patch;
+            const cordisOnly = p.dsh && typeof p.dsh.note === 'string' && p.dsh.note.length > 0;
+
+            if (bundlePatch) {
+              if (!fs.existsSync(bundlePatch)) {
+                console.error('dsh.bundle.patch 指向的文件不存在:', bundlePatch);
+                process.exit(1);
+              }
+              console.log('DSH plugin: bundle.patch =', bundlePatch);
+            } else if (cordisOnly) {
+              console.log('DSH plugin: Cordis-only（无 dsh.bundle），dsh.note 已说明挂载方式');
+            } else {
+              console.error('package.json 必须声明 dsh.bundle.patch，或用 dsh.note 说明为 Cordis-only 插件');
+              process.exit(1);
             }
-            console.log('dsh.bundle.patch =', p.dsh.bundle.patch);
+            if (!fs.existsSync('cordis.patch.yml')) {
+              console.error('cordis.patch.yml 缺失');
+              process.exit(1);
+            }
+            console.log('cordis.patch.yml present');
           "
-          test -f cordis.patch.yml && echo 'cordis.patch.yml present'
 
       - name: Plugin contract + functional smoke + negative controls
         run: npm run selftest
@@ -62,11 +90,48 @@ jobs:
       - name: MCP protocol + every tool
         run: npm run mcp:selftest
 
-      - name: Tool count matches the documented 19
+      - name: Tool count is consistent across definition / protocol / documentation
         run: |
-          count=$(node plugin/mcp-server.mjs --list 2>&1 | grep -oE '共 [0-9]+ 个工具' | grep -oE '[0-9]+' | head -1)
-          echo "tools: $count"
-          if [ "$count" != "19" ]; then echo "Expected 19 tools, got $count"; exit 1; fi
+          node -e "
+            const fs = require('fs');
+            const idx = fs.readFileSync('plugin/index.mjs', 'utf8');
+            // 定义数：工具定义里 name: 'mackorn_xxx',
+            const defined = (idx.match(/^\s{2}name: 'mackorn_[a-z_]+',/gm) || []).length;
+
+            // 协议数：真跑 mcp-server --list，从输出里数
+            const { spawnSync } = require('child_process');
+            const r = spawnSync(process.execPath, ['plugin/mcp-server.mjs', '--list'], { encoding: 'utf8' });
+            if (r.error) {
+              console.error('无法运行 mcp-server --list:', r.error.message);
+              process.exit(1);
+            }
+            const listOut = String(r.stderr || '') + String(r.stdout || '');
+            const m = listOut.match(/共\s*(\d+)\s*个工具/);
+            const viaProtocol = m ? Number(m[1]) : null;
+            if (!viaProtocol) {
+              console.error('从 --list 输出里数不到工具数，实际输出如下：');
+              console.error(listOut.split('\n').slice(-5).join('\n'));
+              process.exit(1);
+            }
+
+            // 文档数：package.json 描述里的「N 个工具」
+            const pkg = require('./package.json');
+            const dm = String(pkg.description || '').match(/(\d+)\s*个工具/);
+            const viaDoc = dm ? Number(dm[1]) : null;
+
+            console.log('defined =', defined, '· viaProtocol =', viaProtocol, '· viaDoc =', viaDoc);
+
+            if (!defined) { console.error('一个工具都没数到，检查 plugin/index.mjs 的格式'); process.exit(1); }
+            if (viaProtocol !== defined) { console.error('协议层工具数与定义数不一致'); process.exit(1); }
+            if (viaDoc !== defined) { console.error('package.json 描述里的工具数与定义数不一致'); process.exit(1); }
+            console.log('tool count consistent:', defined);
+
+            // 写入 GITHUB_STEP_SUMMARY，方便人一眼看到
+            const fs2 = require('fs');
+            if (process.env.GITHUB_STEP_SUMMARY) {
+              fs2.appendFileSync(process.env.GITHUB_STEP_SUMMARY, '- Tool count: **' + defined + '** (definition / protocol / docs all agree)\n');
+            }
+          "
 
       - name: Build the MCPB bundle (Smithery stdio path)
         run: |
@@ -78,8 +143,17 @@ jobs:
             const req = ['name','version','description','author','server'];
             const missing = req.filter(k => !m[k]);
             if (missing.length) { console.error('manifest missing:', missing); process.exit(1); }
-            console.log('MCPB manifest OK —', m.tools.length, 'tools');
-            if (m.tools.length !== 19) { console.error('Expected 19 tools in manifest'); process.exit(1); }
+
+            const pkg = require('./package.json');
+            if (m.version !== pkg.version) {
+              console.error('MCPB version', m.version, '!== package.json', pkg.version); process.exit(1);
+            }
+            const idx = require('fs').readFileSync('plugin/index.mjs', 'utf8');
+            const defined = (idx.match(/^\s{2}name: 'mackorn_[a-z_]+',/gm) || []).length;
+            console.log('MCPB manifest OK —', m.tools.length, 'tools (defined:', defined + ')');
+            if (m.tools.length !== defined) {
+              console.error('MCPB manifest tools 数量与定义不一致'); process.exit(1);
+            }
           "
 
       - name: Read back a real tool result over MCP stdio
