@@ -1,19 +1,19 @@
 {
   "schema": "mackorn-cognition/1",
-  "generated": "2026-10-25T12:53:55.108Z",
+  "generated": "2026-10-25T15:57:36.210Z",
   "what": "认知力台账 —— 把「每天提升认知力」变成可测指标。核心判据来自辩证规则 §6.4：从不推翻自己 = 没在验证。",
   "counts": {
-    "total": 72,
-    "today": 0,
-    "last7": 72,
-    "last30": 72
+    "total": 84,
+    "today": 12,
+    "last7": 84,
+    "last30": 84
   },
   "metrics": {
-    "daily_correction": 0,
-    "week_correction": 72,
-    "depth_score_7d": 171,
-    "avg_depth": 2.38,
-    "streak_days": 0
+    "daily_correction": 12,
+    "week_correction": 84,
+    "depth_score_7d": 203,
+    "avg_depth": 2.42,
+    "streak_days": 1
   },
   "thresholds": {
     "daily_min": 1,
@@ -22,47 +22,47 @@
   },
   "recent": [
     {
-      "id": "C072",
-      "at": "2026-10-23T18:53:14.142Z",
-      "wrong": "我以为视频标题只是营销文案，不能当事实依据",
-      "now": "实际这些标题里含可验证的硬事实——而且是【我们缺少的那类证据】：① 800 t/h 玄武岩整线恰好对应插件算出来的方案，形成\"计算+实景\"双重可信度；② NH700 630kW 高压永磁变频\"国内首台套\"是可验证的独特性声明；③ NH440 美国调试是出口严格市场的质量背书。已把这些提取成 extracted_facts（带视频出处），对外可用",
-      "evidence": "social-assets/registry.json 的 extracted_facts 段：real_models 7 个、real_cases 3 条（每条带 source）、exhibitions 2 条、capabilities_proven 7 条",
+      "id": "C084",
+      "at": "2026-10-25T15:20:54.894Z",
+      "wrong": "我以为给 /ai/ 加 Organization schema 就够（因为文件里搜到了 Organization）",
+      "now": "实际搜到的是【嵌套在 SoftwareApplication.author 里】的组织信息，不是顶层实体。AI 抽取实体时需要顶层 @type: Organization + @id，嵌套的抽不到。修法：用 @graph 形式独立声明 Organization + WebSite + BreadcrumbList + ItemList 四个节点，并用 @id 互相引用。",
+      "evidence": "index.html 第 3336 字符处的 Organization 在 author 字段内；改成 @graph 顶层后 JSON-LD 块从 3→4，类型从 3 种→7 种",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C083",
+      "at": "2026-10-25T15:20:54.701Z",
+      "wrong": "我以为 robots.txt 已经做得很全（26 个 UA，含字节和百度）",
+      "now": "实际只放行了字节 Bytespider，通义、DeepSeek、智谱、Kimi、腾讯混元、文心、星火、商汤全部缺失，共 17 个。而通义千问月活 1.66 亿，是仅次于豆包的国内第二大 AI 入口。26 个 UA 里海外占 16 个，国内只有 4 个 —— 这个比例暴露了「照抄海外清单」的思维惯性。",
+      "evidence": "线上 robots.txt 实测：海外 16/16 全放行，国内 4/21；补齐后 48 个 UA",
+      "impact": "L3",
+      "why": null
+    },
+    {
+      "id": "C082",
+      "at": "2026-10-25T15:20:54.473Z",
+      "wrong": "我以为「做了 74 个平台的收录台账」就等于「AI 能发现并引用我们」",
+      "now": "实际完全不是。目录收录和 GEO 是两回事：前者靠提交，后者靠 AI 抓得到 + 抽得出结构 + 愿意引用。实测主站 GEO 仅 8/100（F 级），robots.txt 缺 17 个国内 AI 爬虫，meta 是占位符。我把大量精力花在了\"目录\"这个较易的战场，而真正决定 AI 回答的\"GEO\"几乎没做。这是【用易做的指标替代难做的目标】。",
+      "evidence": "tools/geo_audit.mjs 实测：主站 8/100 / robots 国内 4/21 / 零 JSON-LD",
       "impact": "L4",
       "why": null
     },
     {
-      "id": "C071",
-      "at": "2026-10-23T18:53:13.986Z",
-      "wrong": "我以为\"发送给客户\"这件事可以直接由我来做",
-      "now": "实际对外发送是【不可逆操作】，且需要邮箱/微信/WhatsApp 账号凭据（硬红线：不读凭据）。按全局规则 §2.5 夜间自主模式：涉及对外发送的必须停下来，写清\"已准备好，等你一句话\"。所以工具只生成材料不发送，并且每份材料都带「发送前检查清单」（收件人是否核实、是否群发、是否承诺价格交期）",
-      "evidence": "tools/distribution_kit.mjs 顶部明确写\"本工具只生成材料，不发送\"；6 份材料每份都带 checklist；output 里明确提示\"对外发送是不可逆操作，必须你本人点发送\"",
-      "impact": "L4",
+      "id": "C081",
+      "at": "2026-10-25T13:09:37.400Z",
+      "wrong": "我以为品牌覆盖率 100% 是稳态，删掉 logo 图片引用也不会掉",
+      "now": "实际删掉 logo 引用后规则三从 100% 掉到 71.4%（5/7）。这是典型的对立统一：有 logo 图片会死链（指向不存在的 assets/logo-512.png），删掉图片则品牌覆盖率掉。正解是【造一个真实存在的 logo.svg】而不是删引用。",
+      "evidence": "删 logo 后 brand_coverage 报 71.4%；生成 assets/logo.svg 并恢复引用后回到 100%；同时死链 0",
+      "impact": "L3",
       "why": null
     },
     {
-      "id": "C070",
-      "at": "2026-10-23T18:53:13.790Z",
-      "wrong": "我以为\"分发传播\"主要靠提交到外部目录（MCP 目录/AI 工具站）",
-      "now": "实际最有价值的资产一直在我们自己手里但没被结构化：抖音 15 条视频含真实设备型号（NH700/NH440/MPH20/MPH6/MPH50/MC/MJ）、真实案例（800t/h 玄武岩整线、NH440 美国调试）、真实展会（Bauma China 2020+2026）、真实技术亮点（630kW 高压永磁变频国内首台套）。这些是外部目录给不了的信任凭证。已建成 social-assets 台账 + 6 类分发材料生成器",
-      "evidence": "social-assets/registry.json 15 条视频分类为 10 类；tools/distribution_kit.mjs --all 生成 email-zh/email-en/expo-bauma/platform-video/llms-video-index/im-templates 六类材料",
-      "impact": "L4",
-      "why": null
-    },
-    {
-      "id": "C069",
-      "at": "2026-10-23T17:35:45.363Z",
-      "wrong": "我以为\"成为世界一线品牌\"这种事只能靠人，代码做不了什么",
-      "now": "实际能拆出 5 个可测基础设施指标（全流程知识覆盖/关键词占位/品牌信息覆盖/平台触达/内容产出），其中前三项我们能控到 100%，已全部达成。剩下的商业结果（市场份额、客户信赖、品牌溢价）确实代码做不了——但不能因为做不了终点就不做能做的路。诚实拆解比空喊\"我们要成为霸主\"有用",
-      "evidence": "tools/brand_coverage.mjs 实测：规则一 100%(8/8段)、规则二 100%(135/136词)、规则三 100%(7/7文件)；规则四 28.6%、规则五 5选题0发布（受外部条件限制，只报告不判定）",
-      "impact": "L4",
-      "why": null
-    },
-    {
-      "id": "C068",
-      "at": "2026-10-23T17:35:45.152Z",
-      "wrong": "我以为\"人才识别\"是 HR 的事，编程帮不上忙",
-      "now": "实际能编程的是【让判断可复盘】：把 L1 履历/L2 战绩/L3 判断力/L4 品格志趣四层强制分层打分，并自动判\"深度\"——只在 L1-L2 评估的标为 shallow 并提示\"多数招聘失败在这里\"。加上群体结构缺口检查（技术/商务/区域/语言/资本五维是否互补）和历史复盘（判断→结果→教训），人才眼光就变成可训练的能力而不是玄学",
-      "evidence": "tools/talent_registry.mjs 实测：--assess 只给 L1/L2 时判 shallow 并给出\"必须做 L3/L4\"；--gap 检出 5 维中缺失的维度；--review 列出需补 L3/L4 的人并给测试方法",
+      "id": "C080",
+      "at": "2026-10-25T13:09:37.195Z",
+      "wrong": "我以为 GitHub Actions 的工作流文件在仓库里就是最新的",
+      "now": "实际本地改过的文件如果没推送，云端永远跑旧的。而且我加进 workflow 的 3 个门禁（语法闸门/发布验收/品牌规则）也是没推送的——所以云端一直在跑半套门禁。教训：改完 workflow 必须验证 GitHub 上的字节数/内容，不能只看本地文件。",
+      "evidence": "云端日志缺 syntax_gate/check_publish_artifact/brand_coverage 三个步骤；推送后补齐",
       "impact": "L4",
       "why": null
     }

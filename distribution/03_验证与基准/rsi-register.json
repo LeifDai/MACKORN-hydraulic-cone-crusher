@@ -1,17 +1,17 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-25T12:53:50.381Z",
+  "generated": "2026-10-25T15:57:30.802Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
-  "alive": 68,
-  "dead": 23,
+  "alive": 67,
+  "dead": 24,
   "broken": 0,
-  "recurrence": 0.25274725274725274,
+  "recurrence": 0.26373626373626374,
   "recurrence_note": "recurrence = (守卫失效 + 守卫损坏) / 总缺陷数。趋近 0 才算真改进。",
   "neg_coverage": 0.5824175824175825,
   "by_status": {
-    "failed": 23,
-    "alive": 68
+    "failed": 24,
+    "alive": 67
   },
   "register": [
     {
@@ -80,7 +80,7 @@
       "negctl": [],
       "origin": "R1：keyword_gate 测\"词与品牌同页\"是自证式弱检测，275 词 100% 通过但内容未必有用",
       "status": "failed",
-      "detail": "⚠ 有问题页面占比 25.0% < 60%；审计报出 4 项 issue"
+      "detail": "⚠ 有问题页面占比 50.0% < 60%"
     },
     {
       "id": "L-07",
@@ -89,7 +89,8 @@
       "guard": "check()",
       "negctl": [],
       "origin": "R4：新增 22 个工具页后 hreflang 覆盖从 94/94 掉到 44/94，触发门禁",
-      "status": "alive"
+      "status": "failed",
+      "detail": "真扫站点：6 个页面 · 在 sitemap 中 6（100%）· 含 hreflang 5（83%）"
     },
     {
       "id": "L-08",
@@ -294,7 +295,7 @@
       "negctl": [],
       "origin": "R19：建了 47 个新页面（工具页/语言FAQ/国别页），但 llms.txt / keywords.json / agent.json 还是旧的",
       "status": "failed",
-      "detail": "**真跑**索引同步：站点 4 个 HTML 页 · llms.txt 引用 7 个路径（175%）"
+      "detail": "**真跑**索引同步：站点 8 个 HTML 页 · llms.txt 引用 10 个路径（125%）"
     },
     {
       "id": "L-27",
@@ -358,7 +359,7 @@
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
       "status": "failed",
-      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：233 脚本 / 缺守卫 199 / **被"
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：234 脚本 / 缺守卫 200 / **被"
     },
     {
       "id": "L-33",

@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-25T12:51:01.393Z",
-  "pages": 4,
-  "total_mb": 0.04,
+  "generated": "2026-10-25T15:54:23.714Z",
+  "pages": 8,
+  "total_mb": 0.25,
   "issues": {
     "title": [
       "ai/privacy.html"
@@ -13,7 +13,8 @@
       "ai/privacy.html"
     ],
     "hreflang": [
-      "ai/privacy.html"
+      "ai/privacy.html",
+      "videos/index.html"
     ],
     "lang": [
       "ai/privacy.html"
@@ -22,18 +23,20 @@
       "ai/privacy.html"
     ],
     "big": [],
-    "deadlink": []
+    "deadlink": [
+      "glossary/index.html → /.well-known/keywords.json"
+    ]
   },
   "ai_index": {
     "llms.txt": {
       "exists": true,
       "kb": 4,
-      "refs": 5
+      "refs": 8
     },
     "llms-full.txt": {
       "exists": true,
-      "kb": 0,
-      "refs": 2
+      "kb": 2,
+      "refs": 5
     },
     ".well-known/keywords.json": {
       "exists": false
@@ -47,5 +50,5 @@
       "refs": 0
     }
   },
-  "jsonld_pages": 3
+  "jsonld_pages": 7
 }
