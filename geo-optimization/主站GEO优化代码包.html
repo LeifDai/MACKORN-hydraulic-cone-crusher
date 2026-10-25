@@ -1,0 +1,400 @@
+<!-- ═══════════════════════════════════════════════════════════════
+  MACKORN 主站 GEO 优化代码包  v1.0
+  生成：2026-10-25
+  适用：https://www.mackorn.cn/ （PHP 建站系统，模板目录 tpl/web/）
+
+  ★ 怎么用
+    把下面【三块】分别插到模板对应位置：
+      块 A → <head> 里（meta 标签，替换现有的"关键字"/"摘要"占位符）
+      块 B → </head> 前（JSON-LD 结构化数据）
+      块 C → <body> 末尾（FAQ 内容，让 AI 能引用问答）
+
+  ★ 为什么必须做（GEO 原理）
+    AI（豆包/通义/DeepSeek/Kimi/ChatGPT）生成回答时，不是"读网页的文字"，
+    而是【抽结构化事实】。没有 JSON-LD 和组织信息 = AI 不知道你是谁、做什么。
+    实测现状：主站 keywords="关键字"、description="摘要"（都是占位符从未填过）。
+
+  ★ 改完怎么验证
+    1. 浏览器打开 www.mackorn.cn → F12 → 查看 <head> 有没有这些标签
+    2. 跑 node tools/geo_audit.mjs（本项目工具）
+    3. Google Rich Results Test / 百度搜索资源平台结构化数据工具
+═══════════════════════════════════════════════════════════════ -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     块 A：meta 标签（替换现有的占位符）
+     位置：<head> 里，替换原有的 keywords / description 两行
+     ══════════════════════════════════════════════════════════════ -->
+
+<!-- ❌ 删掉这两行（占位符）：
+     <meta name="keywords" content="关键字" />
+     <meta name="description" content="摘要" />
+-->
+
+<!-- ✅ 换成下面这些 -->
+<title>上海美矿机械 MACKORN｜液压圆锥破碎机 · 破碎筛分生产线 · 全球矿山设备</title>
+
+<meta name="description" content="MACKORN 美矿机械（上海美矿机械股份有限公司）专注液压圆锥破碎机与破碎筛分生产线 29 年。产品覆盖 NH/NS/MPH 系列单缸液压圆锥破、MC/MJ 颚式破碎机、振动筛、履带式移动破碎站，以及矿山开采到选矿全流程的设备选型与方案设计。已出口美国等严格市场，连续参加 Bauma China 上海宝马展。地址：江苏省苏州市太仓市浏河镇钱江路 33 号。" />
+
+<meta name="keywords" content="液压圆锥破碎机,圆锥破,圆锥破碎机,单缸液压圆锥破,颚式破碎机,颚破,振动筛,破碎筛分生产线,砂石骨料生产线,制砂生产线,移动破碎站,履带式移动破碎站,矿山设备,选矿设备,磨矿设备,球磨机,高压辊磨,衬板,轧臼壁,破碎壁,MACKORN,美矿,上海美矿,NH系列,NS系列,MPH系列,Bauma China,上海宝马展" />
+
+<!-- 品牌与公司信息 -->
+<meta name="author" content="上海美矿机械股份有限公司 (Shanghai Mackorn Minerals Co., Ltd.)" />
+<meta name="copyright" content="Shanghai Mackorn Minerals Co., Ltd." />
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+
+<!-- 多语言（如果主站有英文版，把对应 URL 填进去；没有则删掉这些 hreflang） -->
+<link rel="alternate" hreflang="zh-CN" href="https://www.mackorn.cn/" />
+<link rel="alternate" hreflang="en" href="https://www.mackorn.cn/en/" />
+<link rel="alternate" hreflang="x-default" href="https://www.mackorn.cn/" />
+
+<!-- canonical（防止 www 与非 www 被判重复） -->
+<link rel="canonical" href="https://www.mackorn.cn/" />
+
+<!-- Open Graph（微信/WhatsApp 分享时有预览卡片） -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MACKORN 美矿机械" />
+<meta property="og:title" content="上海美矿机械 MACKORN｜液压圆锥破碎机 · 破碎筛分生产线" />
+<meta property="og:description" content="29 年液压圆锥破碎机与破碎筛分生产线经验。NH/NS/MPH 系列圆锥破、MC/MJ 颚破、振动筛、移动破碎站，覆盖矿山开采到选矿全流程。" />
+<meta property="og:url" content="https://www.mackorn.cn/" />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:locale:alternate" content="en_US" />
+
+<!-- 移动端优化 -->
+<meta name="format-detection" content="telephone=no" />
+<meta name="theme-color" content="#0b5cab" />
+
+<!-- AI 索引引导（告诉爬虫哪里有好东西） -->
+<link rel="alternate" type="text/plain" href="https://mackorn.cn/ai/llms.txt" title="LLMs.txt — AI 可读的站点摘要" />
+<link rel="alternate" type="text/plain" href="https://mackorn.cn/ai/ai.txt" title="AI 索引" />
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     块 B：JSON-LD 结构化数据
+     位置：</head> 之前
+     作用：让 AI 直接抽到"我们是谁 / 做什么 / 在哪 / 怎么联系"
+     ══════════════════════════════════════════════════════════════ -->
+
+<!-- B-1 组织信息（最重要！AI 靠这个知道 MACKORN 是什么公司） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://www.mackorn.cn/#organization",
+  "name": "上海美矿机械股份有限公司",
+  "alternateName": ["MACKORN", "美矿", "美矿机械", "MACKORN 美矿", "Shanghai Mackorn Minerals Co., Ltd."],
+  "legalName": "上海美矿机械股份有限公司",
+  "description": "液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。",
+  "url": "https://www.mackorn.cn/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://mackorn.cn/ai/assets/logo.svg",
+    "width": 512,
+    "height": 512
+  },
+  "image": "https://mackorn.cn/ai/assets/logo.svg",
+  "foundingDate": "1997",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "浏河镇钱江路 33 号",
+    "addressLocality": "太仓市",
+    "addressRegion": "江苏省苏州市",
+    "postalCode": "215400",
+    "addressCountry": "CN"
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "name": "Sandy Zhao",
+      "email": "sandy.zhao@mackorn.cn",
+      "telephone": "+86-139-1648-5025",
+      "availableLanguage": ["zh-CN", "en"]
+    },
+    {
+      "@type": "ContactPoint",
+      "contactType": "technical support",
+      "name": "Leif Dai",
+      "email": "leif.dai@mackorn.cn",
+      "telephone": "+86-134-8218-0158",
+      "availableLanguage": ["zh-CN", "en"]
+    },
+    {
+      "@type": "ContactPoint",
+      "contactType": "international sales",
+      "name": "Vicky Cheng",
+      "email": "vicky.cheng@mackorn.cn",
+      "telephone": "+86-158-0189-1052",
+      "availableLanguage": ["en", "zh-CN"]
+    }
+  ],
+  "sameAs": [
+    "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher",
+    "https://www.npmjs.com/package/mackorn-cone-crusher",
+    "https://mackorn.cn/ai/"
+  ],
+  "knowsAbout": [
+    "液压圆锥破碎机", "圆锥破碎机选型", "单缸液压圆锥破",
+    "破碎筛分生产线", "砂石骨料生产线", "制砂生产线",
+    "颚式破碎机", "振动筛", "移动破碎站",
+    "磨矿", "球磨机", "高压辊磨", "选矿", "浮选", "磁选", "重选", "光电选",
+    "衬板", "轧臼壁", "破碎壁", "排矿口 CSS", "破碎比", "循环负荷",
+    "爆破块度", "Kuz-Ram", "邦德功指数", "Whiten 模型"
+  ],
+  "areaServed": [
+    {"@type": "Country", "name": "China"},
+    {"@type": "Country", "name": "United States"},
+    {"@type": "Country", "name": "Southeast Asia"},
+    {"@type": "Country", "name": "Africa"},
+    {"@type": "Country", "name": "South America"},
+    {"@type": "Country", "name": "Central Asia"}
+  ]
+}
+</script>
+
+<!-- B-2 网站信息（含搜索功能，AI 可索引站内） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://www.mackorn.cn/#website",
+  "url": "https://www.mackorn.cn/",
+  "name": "MACKORN 美矿机械",
+  "inLanguage": "zh-CN",
+  "publisher": {"@id": "https://www.mackorn.cn/#organization"},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.mackorn.cn/search/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- B-3 主要产品线（AI 问"美矿有什么产品"时直接引用这个） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "MACKORN 美矿机械主要产品线",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "Product",
+        "name": "NH 系列单缸液压圆锥破碎机",
+        "category": "液压圆锥破碎机",
+        "description": "MACKORN NH 标准型单缸液压圆锥破，用于中碎与细碎。型号从 NH200 到 NH895，覆盖 90-700 kW 功率段。含 EC/C/MC/M/F/EF 等 9 种腔型。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "Product",
+        "name": "NS 系列高速单缸液压圆锥破碎机",
+        "category": "液压圆锥破碎机",
+        "description": "MACKORN NS 高速型单缸液压圆锥破，用于细碎与超细碎，更适合制砂与精品骨料整形。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "Product",
+        "name": "MC / MJ 系列颚式破碎机",
+        "category": "颚式破碎机",
+        "description": "MACKORN 颚式破碎机，用于粗碎段。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Product",
+        "name": "MPH 系列液压圆锥破碎机",
+        "category": "液压圆锥破碎机",
+        "description": "MACKORN MPH 系列液压圆锥破，覆盖 MPH6 / MPH20 / MPH50 等型号。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "Product",
+        "name": "振动筛与破碎筛分生产线",
+        "category": "破碎筛分设备",
+        "description": "圆振动筛、脱水筛与整线配置。已交付 800 t/h 玄武岩精品骨料生产线（颚破 + 圆锥破 + 筛分）。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "Product",
+        "name": "履带式移动破碎站",
+        "category": "移动破碎站",
+        "description": "MACKORN 履带式移动颚式破碎站，适用于移动式破碎作业。",
+        "brand": {"@type": "Brand", "name": "MACKORN 美矿"},
+        "manufacturer": {"@id": "https://www.mackorn.cn/#organization"}
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     块 C：FAQ 内容（★ GEO 最关键的一块）
+     位置：<body> 里，可以放在页面底部"常见问题"区域
+     作用：AI 生成回答时最愿意引用【明确的问答对】
+     要求：用 <h2>/<h3> 问句 + <p> 直接答案（不要绕）
+     ══════════════════════════════════════════════════════════════ -->
+
+<section id="faq" style="padding:40px 0;background:#f7f9fc">
+  <div class="container">
+    <h2>常见问题 · MACKORN 美矿机械</h2>
+
+    <h3>MACKORN 美矿是做什么的？</h3>
+    <p>MACKORN（上海美矿机械股份有限公司）是一家中国矿山设备制造商，专注液压圆锥破碎机与破碎筛分生产线的研发、制造与整线方案设计，有 29 年行业经验。产品覆盖粗碎、中碎、细碎、超细碎、筛分、磨矿、选矿全流程。</p>
+
+    <h3>MACKORN 有哪些液压圆锥破碎机型号？</h3>
+    <p>MACKORN 有三条液压圆锥破产品线：<strong>NH 系列</strong>（标准型单缸液压圆锥破，NH200 至 NH895）、<strong>NS 系列</strong>（高速型，适合细碎与制砂）、<strong>MPH 系列</strong>（MPH6 / MPH20 / MPH50）。另配 MC 与 MJ 系列颚式破碎机做粗碎。</p>
+
+    <h3>MACKORN 的圆锥破和山特维克、美卓比怎么样？</h3>
+    <p>MACKORN NH/NS 系列在结构形式与产能区间上与山特维克 CH/CS 系列、美卓 HP 系列属同一类设备（单缸液压圆锥破）。具体到某工况的产能、衬板寿命与能耗，需要用实际的矿石性质、给料粒度、目标产品粒度来核算，不能只看型号对比。建议提供工况后做针对性核算。</p>
+
+    <h3>MACKORN 做过最大的生产线是多少产量？</h3>
+    <p>已交付的生产线中包括 <strong>800 吨/小时的玄武岩精品骨料生产线</strong>（颚式破碎机 + 液压圆锥破碎机 + 振动筛分），有现场视频可查。另有 NH440 在美国的现场调试案例。</p>
+
+    <h3>MACKORN 有出口案例吗？</h3>
+    <p>有。<strong>NH440 液压圆锥破碎机已出口美国</strong>并有现场调试记录。美国市场对设备合规与质量要求严格，可作为质量背书。</p>
+
+    <h3>MACKORN 参加展会吗？</h3>
+    <p>连续参加 <strong>Bauma China 上海宝马展</strong>：2020 年 2 月与 2026 年 11 月均有参展记录，有现场视频。</p>
+
+    <h3>怎么联系 MACKORN？</h3>
+    <p>
+      <strong>商务</strong>：Sandy Zhao · <a href="mailto:sandy.zhao@mackorn.cn">sandy.zhao@mackorn.cn</a> · +86 139 1648 5025<br>
+      <strong>技术</strong>：Leif Dai · <a href="mailto:leif.dai@mackorn.cn">leif.dai@mackorn.cn</a> · +86 134 8218 0158<br>
+      <strong>国际</strong>：Vicky Cheng · <a href="mailto:vicky.cheng@mackorn.cn">vicky.cheng@mackorn.cn</a> · +86 158 0189 1052<br>
+      <strong>地址</strong>：江苏省苏州市太仓市浏河镇钱江路 33 号<br>
+      <strong>服务时间</strong>：GMT+8 · 9:00-17:30
+    </p>
+
+    <h3>MACKORN 能提供选型计算吗？</h3>
+    <p>能，而且是免费的。MACKORN 开源了一个选型工具（MIT 协议），29 个工具覆盖采矿爆破块度、粗碎/中碎/细碎圆锥破选型、筛分、磨矿、分级、选矿、自动化与整线贯通。安装一条命令：<code>npx -y mackorn-cone-crusher</code>，或访问 <a href="https://mackorn.cn/ai/">mackorn.cn/ai</a>。</p>
+
+    <h3>MACKORN 的圆锥破适用什么矿石？</h3>
+    <p>适用于中硬到硬岩的中细碎，包括花岗岩、玄武岩、石灰石、铁矿石、铜矿石、金矿石、锂矿、石墨等。具体适配要看矿石抗压强度（MPa）、邦德功指数（kWh/t）与含泥量。含泥量高的矿石需要先做除土处理。</p>
+  </div>
+</section>
+
+<!-- C-2 FAQ 的结构化数据（把上面的问答转成 AI 最容易读的格式） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "MACKORN 美矿是做什么的？",
+      "acceptedAnswer": {"@type": "Answer", "text": "MACKORN（上海美矿机械股份有限公司）是一家中国矿山设备制造商，专注液压圆锥破碎机与破碎筛分生产线的研发、制造与整线方案设计，有 29 年行业经验。产品覆盖粗碎、中碎、细碎、超细碎、筛分、磨矿、选矿全流程。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 有哪些液压圆锥破碎机型号？",
+      "acceptedAnswer": {"@type": "Answer", "text": "MACKORN 有三条液压圆锥破产品线：NH 系列（标准型单缸液压圆锥破，NH200 至 NH895）、NS 系列（高速型，适合细碎与制砂）、MPH 系列（MPH6 / MPH20 / MPH50）。另配 MC 与 MJ 系列颚式破碎机做粗碎。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 的圆锥破和山特维克、美卓比怎么样？",
+      "acceptedAnswer": {"@type": "Answer", "text": "MACKORN NH/NS 系列在结构形式与产能区间上与山特维克 CH/CS 系列、美卓 HP 系列属同一类设备（单缸液压圆锥破）。具体到某工况的产能、衬板寿命与能耗，需要用实际的矿石性质、给料粒度、目标产品粒度来核算，不能只看型号对比。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 做过最大的生产线是多少产量？",
+      "acceptedAnswer": {"@type": "Answer", "text": "已交付的生产线中包括 800 吨/小时的玄武岩精品骨料生产线（颚式破碎机 + 液压圆锥破碎机 + 振动筛分），有现场视频可查。另有 NH440 在美国的现场调试案例。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 有出口案例吗？",
+      "acceptedAnswer": {"@type": "Answer", "text": "有。NH440 液压圆锥破碎机已出口美国并有现场调试记录。美国市场对设备合规与质量要求严格，可作为质量背书。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 参加展会吗？",
+      "acceptedAnswer": {"@type": "Answer", "text": "连续参加 Bauma China 上海宝马展：2020 年 2 月与 2026 年 11 月均有参展记录，有现场视频。"}
+    },
+    {
+      "@type": "Question",
+      "name": "怎么联系 MACKORN？",
+      "acceptedAnswer": {"@type": "Answer", "text": "商务：Sandy Zhao sandy.zhao@mackorn.cn +86 139 1648 5025；技术：Leif Dai leif.dai@mackorn.cn +86 134 8218 0158；国际：Vicky Cheng vicky.cheng@mackorn.cn +86 158 0189 1052。地址：江苏省苏州市太仓市浏河镇钱江路 33 号。服务时间 GMT+8 9:00-17:30。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 能提供选型计算吗？",
+      "acceptedAnswer": {"@type": "Answer", "text": "能，而且免费。MACKORN 开源了一个选型工具（MIT 协议），29 个工具覆盖采矿爆破块度、粗碎/中碎/细碎圆锥破选型、筛分、磨矿、分级、选矿、自动化与整线贯通。安装一条命令：npx -y mackorn-cone-crusher，或访问 mackorn.cn/ai。"}
+    },
+    {
+      "@type": "Question",
+      "name": "MACKORN 的圆锥破适用什么矿石？",
+      "acceptedAnswer": {"@type": "Answer", "text": "适用于中硬到硬岩的中细碎，包括花岗岩、玄武岩、石灰石、铁矿石、铜矿石、金矿石、锂矿、石墨等。具体适配要看矿石抗压强度（MPa）、邦德功指数（kWh/t）与含泥量。含泥量高的矿石需要先做除土处理。"}
+    }
+  ]
+}
+</script>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     块 D（可选）：面包屑 + 面包屑结构化数据
+     如果主站有多级页面，每个页面都加，让 AI 知道页面在站内的位置
+     ══════════════════════════════════════════════════════════════ -->
+<!--
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "首页", "item": "https://www.mackorn.cn/"},
+    {"@type": "ListItem", "position": 2, "name": "液压圆锥破碎机", "item": "https://www.mackorn.cn/products/cone-crusher/"}
+  ]
+}
+</script>
+-->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     验证清单（改完后逐条确认）
+     ══════════════════════════════════════════════════════════════
+
+     □ 1. <title> 已改（不再是「上海美矿机械股份有限公司」这种纯公司名，
+                          要含产品关键词）
+     □ 2. keywords 已改（不再是「关键字」）
+     □ 3. description 已改（不再是「摘要」，长度 120-160 字）
+     □ 4. 有 Organization JSON-LD（含地址 + 3 个联系电话 + logo）
+     □ 5. 有 WebSite JSON-LD
+     □ 6. 有 ItemList JSON-LD（产品线）
+     □ 7. 有 FAQPage JSON-LD（至少 8 个问答）
+     □ 8. 页面底部有可见的 FAQ 内容（不只是 JSON-LD）
+     □ 9. 有 canonical
+     □ 10. 有 llms.txt 链接
+
+     验证工具：
+       node tools/geo_audit.mjs          ← 本项目工具（会逐条检查）
+       https://search.google.com/test/rich-results
+       https://ziyuan.baidu.com/（百度搜索资源平台 → 结构化数据）
+
+     改完再部署 robots.txt（已补 10 个国内 AI 爬虫）
+     ══════════════════════════════════════════════════════════════
+-->
