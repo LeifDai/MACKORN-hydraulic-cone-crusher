@@ -5,7 +5,7 @@
 # 我们提供机器可读的选型工具与行业知识：
 #   https://mackorn.cn/ai/            选型插件（29 个工具，12 种语言，开源 MIT）
 #   https://mackorn.cn/llms.txt       AI 摘要（llms.txt 标准）
-#   https://mackorn.cn/glossary/      12 语言术语表
+#   https://mackorn.cn/ai/glossary/      12 语言术语表
 #   https://mackorn.cn/ai/screens/    振动筛选型参考
 #   https://mackorn.cn/ai/llms.txt    AI 摘要（插件专页）
 #   https://mackorn.cn/sitemap.xml    站点地图
