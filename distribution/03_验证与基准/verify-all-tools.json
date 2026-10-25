@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-24T22:25:21.939Z",
+  "generated": "2026-10-25T04:08:23.845Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_cone_selection",
@@ -22,17 +22,17 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_capacity_check",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mcfm_analysis",
@@ -47,7 +47,7 @@
     {
       "name": "mackorn_grading_porosity",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_market_intel",
@@ -67,12 +67,12 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
@@ -87,17 +87,17 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 39
+      "ms": 33
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 108
+      "ms": 103
     },
     {
       "name": "mackorn_contact",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_distributor_eval",
@@ -107,7 +107,7 @@
     {
       "name": "mackorn_market_stats",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge",
@@ -122,12 +122,12 @@
     {
       "name": "mackorn_beneficiation_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_automation_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mining_interface",
@@ -142,7 +142,7 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_screen_selection",

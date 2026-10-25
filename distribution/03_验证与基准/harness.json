@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-harness/1",
-  "generated": "2026-10-24T22:25:49.674Z",
+  "generated": "2026-10-25T04:08:48.892Z",
   "what_this_is": "MACKORN 插件的运行边界清单。任何接手的 Agent（云端/他人/另一个 AI）应先读本文件，再动手。",
   "hard_rules": [
     {
@@ -130,7 +130,7 @@
     ]
   },
   "gates": {
-    "count": 74,
+    "count": 75,
     "items": [
       {
         "id": "语法",
@@ -315,6 +315,10 @@
       {
         "id": "G27",
         "name": "内容产出（选题数只增不减，仅报告）"
+      },
+      {
+        "id": "G28",
+        "name": "每日回顾清单（follow-up-list0001.1.xlsx · 8 Sheet）"
       },
       {
         "id": "G4",
