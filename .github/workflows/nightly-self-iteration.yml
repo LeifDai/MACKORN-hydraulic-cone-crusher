@@ -170,6 +170,12 @@ jobs:
       - name: 品牌战略五条规则（flow/keywords/brand 必须 100%）
         run: node tools/brand_coverage.mjs --check || true
 
+      # ══════ R183：GEO 审计（生成式引擎优化，2026-10-25 新增）══════
+      # 每日自动跑：检查 AI 能否抓到我们 + 抽得出结构 + 愿意引用
+      # 重点监控国内 AI 爬虫放行率（豆包/通义/DeepSeek/Kimi/智谱）
+      - name: GEO 审计（生成式引擎优化）
+        run: node tools/geo_audit.mjs --all || true
+
       # ══════ R151：自动认知发现器（六类缺口扫描）══════
       - name: 自动认知发现（承诺/数字/文件/死链/过期/复现）
         run: node tools/cognition_auto.mjs || true
