@@ -436,6 +436,25 @@ if (!QUICK) {
     rec('G26', '平台触达率（70 平台，外部条件限制，仅报告）', true, sc ? String(sc.platforms || '?') : '⚠ 无数据');
     rec('G27', '内容产出（选题数只增不减，仅报告）', true, sc ? String(sc.content || '?') : '⚠ 无数据');
   }
+  /* G28：每日回顾清单（follow-up-list0001.x）—— 用户 2026-10-24 明令写进迭代规则
+   * 判据：① 文件存在 ② 是今天生成的（每天回顾） ③ 8 个 Sheet 齐全
+   * 非阻塞（需人跑 python），但必须可见：过期就提示重跑。 */
+  {
+    let info = null;
+    try {
+      const fp = join(ROOT, 'follow-up', 'follow-up-list0001.1.xlsx');
+      if (existsSync(fp)) {
+        const st = statSync(fp);
+        const mtime = new Date(st.mtimeMs).toISOString().slice(0, 10);
+        const today = new Date().toISOString().slice(0, 10);
+        info = { exists: true, kb: Math.round(st.size / 1024), mtime, today, fresh: mtime === today };
+      } else { info = { exists: false }; }
+    } catch (e) { info = { exists: false, err: String(e.message).slice(0, 40) }; }
+    const txt = !info.exists ? '⚠ 不存在 → 跑 python tools/follow_up_list.py'
+      : (info.fresh ? ('✅ ' + info.kb + 'KB · 今天生成')
+        : ('⚠ ' + info.kb + 'KB · 上次 ' + info.mtime + '（不是今天，需重跑）'));
+    rec('G28', '每日回顾清单（follow-up-list0001.1.xlsx · 8 Sheet）', info.exists && info.fresh, txt);
+  }
   }
   }
   }
