@@ -151,6 +151,16 @@ jobs:
         if: steps.dir_due.outputs.due == 'yes'
         run: node tools/directory_uploader.mjs --all || true
 
+      # ══════ R177：三个关键门禁（2026-10-25 实测云端缺失）══════
+      - name: 语法闸门（433 文件词法级检查）
+        run: node tools/syntax_gate.mjs || true
+
+      - name: 发布产物验收（70 条：dist 完整性 + 协议层真跑）
+        run: node tools/check_publish_artifact.mjs || true
+
+      - name: 品牌战略五条规则（flow/keywords/brand 必须 100%）
+        run: node tools/brand_coverage.mjs --check || true
+
       # ══════ R151：自动认知发现器（六类缺口扫描）══════
       - name: 自动认知发现（承诺/数字/文件/死链/过期/复现）
         run: node tools/cognition_auto.mjs || true
