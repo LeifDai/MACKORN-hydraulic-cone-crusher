@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-25T18:55:32.652Z",
+  "generated": "2026-10-25T22:30:23.455Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "941bc67",
-    "date": "2026-10-25T17:42:34Z",
-    "message": "feat(eval): 通道考评器 + Kimi 三版本对比 + 11通道0可用实测 (R186)"
+    "sha": "219b43e",
+    "date": "2026-10-25T18:55:39Z",
+    "message": "chore(nightly): 云端自迭代 2026-10-25 18:55 [skip ci]"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 7.16,
+    "days_since": 7.31,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.05,
-  "days_since_publish": 0.05,
+  "effective_days": 0.15,
+  "days_since_publish": 0.15,
   "changed_since_publish": {
     "count": 310,
     "files": [
