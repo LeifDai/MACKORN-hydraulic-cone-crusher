@@ -317,16 +317,36 @@ if (!QUICK) {
         : ('已收录 ' + listed + '/' + total + ' · 未收录 ' + notListed));
   }
 
-  /* G18：自有域名 DNS + SSL 双检（2026-10-21 发现两个独立问题叠加） */
+  /* G18：自有域名 DNS + SSL 双检（2026-10-21 发现两个独立问题叠加）
+   *
+   * ★ R178 修 bug（2026-10-25 云端实证）：
+   *   原实现在读 reachability.json（2026-10-21 的旧快照，当时 DNS+SSL 全挂），
+   *   而 cert_monitor.mjs 写的是 cert-monitor.json（最新）。
+   *   两个文件不同步 → 云端日志里 G18 一直显示 RED "裸域无 A 记录"，
+   *   但实际 SSL 已修好（剩 88 天）、端点 5/5。
+   *   修法：优先读 cert-monitor.json（新），没有才 fallback reachability.json（旧）。
+   */
   {
-    const rp = join(D, '03_验证与基准', 'reachability.json');
     let verdict = null, mainBlocker = null, dnsOk = null, sslOk = null;
+    /* 优先：cert-monitor.json（cert_monitor.mjs 每天写） */
     try {
-      const j = JSON.parse(read(rp));
-      verdict = j.verdict; mainBlocker = j.main_blocker;
-      dnsOk = j.dns ? j.dns.ok : null;
-      sslOk = j.ssl ? j.ssl.ok : null;
+      const cm = JSON.parse(read(join(D, '03_验证与基准', 'cert-monitor.json')));
+      if (cm.dns) dnsOk = cm.dns.ok;
+      if (cm.cert && cm.cert.main) {
+        sslOk = !cm.cert.main.expired;
+        mainBlocker = cm.cert.main.expired ? ('SSL 已过期 ' + Math.abs(cm.cert.main.days_left) + ' 天') : null;
+      }
+      verdict = cm.verdict || (dnsOk && sslOk ? 'GREEN' : 'RED');
     } catch { }
+    /* fallback：reachability.json（旧快照，仅在没有 cert-monitor 时用） */
+    if (verdict === null) {
+      try {
+        const j = JSON.parse(read(join(D, '03_验证与基准', 'reachability.json')));
+        verdict = j.verdict; mainBlocker = j.main_blocker;
+        dnsOk = j.dns ? j.dns.ok : null;
+        sslOk = j.ssl ? j.ssl.ok : null;
+      } catch { }
+    }
     /* 非阻塞：可发现性故障需要用户操作服务器（DNS/证书），本地改不了。
      * 但如果 RED，必须在门禁输出里【明确可见】，不能静默。 */
     rec('G18', '自有域名可达（DNS+SSL，非阻塞但必须可见）', true,
