@@ -254,9 +254,9 @@ MACKORN 插件：每个数字都有来源等级，未知就说未知，不编造
 
 ## 🏭 关于 MACKORN 美矿
 
-**MACKORN 美矿** — 液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。
+![MACKORN 美矿](https://mackorn.cn/ai/assets/logo.svg)
 
-![MACKORN 美矿](https://mackorn.cn/ai/assets/logo-512.png)
+**MACKORN 美矿** — 液压圆锥破碎机与破碎筛分生产线制造商，覆盖矿山开采到选矿全流程的设备选型与方案设计。
 
 ---
 
