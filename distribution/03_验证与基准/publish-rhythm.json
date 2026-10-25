@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-25T04:08:50.918Z",
+  "generated": "2026-10-25T11:09:35.500Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "a6f15b2",
-    "date": "2026-10-25T00:57:52Z",
-    "message": "fix(ci): add 3 missing gates — syntax/artifact/brand (cloud was missing them!)"
+    "sha": "0b3fb34",
+    "date": "2026-10-25T04:08:57Z",
+    "message": "chore(nightly): 云端自迭代 2026-10-25 04:08 [skip ci]"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 6.54,
+    "days_since": 6.83,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.13,
-  "days_since_publish": 0.13,
+  "effective_days": 0.29,
+  "days_since_publish": 0.29,
   "changed_since_publish": {
     "count": 308,
     "files": [
@@ -94,7 +94,7 @@
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.1 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.3 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
