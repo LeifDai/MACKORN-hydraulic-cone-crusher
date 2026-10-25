@@ -50,6 +50,15 @@ jobs:
       - name: 云端心跳（防止 60 天无活动被自动禁用）
         if: always()
         run: node tools/cloud_heartbeat.mjs
+      # ══════ R179：诊断 follow-up 目录为什么云端看不到（2026-10-25）══════
+      - name: 诊断：follow-up 目录
+        run: |
+          echo "=== pwd ==="; pwd
+          echo "=== ls -la follow-up/ ==="; ls -la follow-up/ || echo "目录不存在"
+          echo "=== git ls-files follow-up ==="; git ls-files follow-up/ || echo "git 里没有"
+          echo "=== git log 最近 3 条 ==="; git log --oneline -3
+          echo "=== find xlsx ==="; find . -name "*.xlsx" -maxdepth 3 2>/dev/null || echo "无 xlsx"
+
       - name: 单元测试
         run: node tests/run.mjs
 
