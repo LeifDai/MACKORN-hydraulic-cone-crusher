@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-25T15:56:56.175Z",
-  "total": 234,
-  "debt": 200,
+  "generated": "2026-10-25T18:54:53.790Z",
+  "total": 235,
+  "debt": 201,
   "high_risk": [],
   "debt_files": [
     "tools/add_hreflang.mjs",
@@ -53,6 +53,7 @@
     "tools/calibration_priority_guide.mjs",
     "tools/census_ai.mjs",
     "tools/cert_monitor.mjs",
+    "tools/channel_eval.mjs",
     "tools/check_blueprint_compliance.mjs",
     "tools/check_build_consistency.mjs",
     "tools/check_citation.mjs",
