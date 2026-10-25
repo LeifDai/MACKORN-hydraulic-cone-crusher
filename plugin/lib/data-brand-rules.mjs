@@ -67,7 +67,7 @@
  *   ✗ 门禁数下降 / 指标倒退（立即回滚）
  */
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -269,6 +269,62 @@ export function checkBrandCoverage() {
     files_full: full.length,
     coverage_pct: judgeable.length ? Number((full.length / judgeable.length * 100).toFixed(1)) : 0,
     results,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * 规则六：每日回顾清单（follow-up-list0001.x）
+ *
+ * 用户要求（2026-10-24）：
+ *   「请编程列出来回顾清单 follow-up-list0001.1，所有 Ai、第三方平台，
+ *     学习基地等 Ai 经常收录的地方清单，被收录的目录，和待收录的清单；
+ *     备注上，已经收录，和待收录，及提高收录机会事项，
+ *     汇总成 Excel 方便比 md 容易阅读，每天回顾，补充，完善，迭代，
+ *     请编程写进迭代规则。」
+ *
+ * ★ 为什么是 Excel 而不是 md
+ *   平台数 74 个 × 16 列状态 → md 表格横向溢出、手机上看不了、无法筛选。
+ *   Excel 能：筛选（只看待收录）、排序（按优先级）、颜色分组（一眼看出绿橙红）、
+ *           每天追加一行（Sheet 6 每日回顾）、多 Sheet 分层（总览/已收录/待收录/提升机会）。
+ *
+ * ★ 版本号规则
+ *   文件名带版本：follow-up-list0001.1.xlsx
+ *   0001 = 第 1 个大版本（结构稳定后不再动）
+ *   .1   = 第 1 次迭代（每天生成会递增小版本）
+ *
+ * ★ 每天要做的四件事（对应 Excel 的 4 个 Sheet）
+ *   ① 跑 tools/follow_up_list.py 重新生成（Sheet 1/2/3/4 自动更新）
+ *   ② 在 Sheet 6 填「今日主要动作」与「明日计划」
+ *   ③ 检查 Sheet 5「提高收录机会」有没有可以推进的 P0
+ *   ④ 发现新平台 → 加进 distribution-registry → 重新生成
+ * ══════════════════════════════════════════════════════════════ */
+
+/** 规则六：每日回顾清单的状态检查 */
+export function checkFollowUpList() {
+  const rel = 'follow-up/follow-up-list0001.1.xlsx';
+  const path = join(ROOT, rel);
+  const exists = existsSync(path);
+  let size = 0;
+  let mtime = null;
+  if (exists) {
+    try {
+      const st = statSync(path);
+      size = st.size;
+      mtime = new Date(st.mtimeMs).toISOString().slice(0, 10);
+    } catch { }
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    exists,
+    path: rel,
+    size_kb: size ? Math.round(size / 1024 * 10) / 10 : 0,
+    mtime,
+    is_today: mtime === today,
+    generation_cmd: 'python tools/follow_up_list.py',
+    sheets: [
+      '0-总览', '1-全部平台', '2-已收录', '3-待收录',
+      '4-被挡与外部', '5-提高收录机会', '6-每日回顾', '7-迭代规则',
+    ],
   };
 }
 
