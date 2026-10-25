@@ -32,7 +32,7 @@
  *   node tools/geo_audit.mjs --json
  *   node tools/geo_audit.mjs --check            # 门禁（分数 < 60 则 exit 1）
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -94,6 +94,24 @@ const AI_CRAWLERS = {
 /* ══════════════════════════════════════════════════════════════
  * 审计一个 URL
  * ══════════════════════════════════════════════════════════════ */
+/* R184：--local 模式 —— 读本地 _deploy 文件而不是线上（上传前验证用）
+ * 为什么需要：GEO 改动在本地完成，但服务器还没传。不用等上传就能看到预期分数。 */
+const LOCAL_MODE = process.argv.includes('--local');
+const DEPLOY = join(ROOT, 'distribution', '_deploy');
+
+/** URL → 本地 _deploy 相对路径 */
+function urlToLocal(url) {
+  const m = url.match(/mackorn\.cn(\/[^?#]*)?$/);
+  if (!m) return null;
+  let p = (m[1] || '/').replace(/^\//, '');
+  const cands = p === '' ? ['index.html', 'ai/index.html'] : [p, p + '.html', p + '/index.html', 'ai/' + p, 'ai/' + p + '.html'];
+  for (const cand of cands) {
+    const fp = join(DEPLOY, ...cand.split('/'));
+    try { if (statSync(fp).isFile()) return fp; } catch { /* 不存在就跳过 */ }
+  }
+  return null;
+}
+
 async function auditPage(url) {
   const r = {
     url, ok: false, http: null, bytes: 0, error: null,
@@ -101,16 +119,27 @@ async function auditPage(url) {
   };
 
   let html = '';
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MACKORN-GEO-audit/1.0)' } });
-    r.http = res.status;
-    if (!res.ok) { r.error = 'HTTP ' + res.status; return r; }
-    html = await res.text();
+  if (LOCAL_MODE) {
+    const fp = urlToLocal(url);
+    if (!fp) { r.error = '本地文件不存在'; return r; }
+    html = readFileSync(fp, 'utf8');
+    r.http = 200;
     r.bytes = html.length;
+    r.source = 'local:' + fp.replace(DEPLOY, '_deploy').replace(/\\/g, '/');
     r.ok = true;
-  } catch (e) {
-    r.error = String((e.cause && (e.cause.code || e.cause.message)) || e.message).slice(0, 60);
-    return r;
+  } else {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(25000), redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MACKORN-GEO-audit/1.0)' } });
+      r.http = res.status;
+      if (!res.ok) { r.error = 'HTTP ' + res.status; return r; }
+      html = await res.text();
+      r.bytes = html.length;
+      r.source = 'live';
+      r.ok = true;
+    } catch (e) {
+      r.error = String((e.cause && (e.cause.code || e.cause.message)) || e.message).slice(0, 60);
+      return r;
+    }
   }
 
   const t = html;
@@ -209,10 +238,18 @@ async function auditPage(url) {
 async function auditRobots(siteRoot) {
   const r = { url: siteRoot + '/robots.txt', ok: false, http: null, bytes: 0, overseas: [], china: [], error: null, score: 0, max: 30 };
   try {
-    const res = await fetch(r.url, { signal: AbortSignal.timeout(20000) });
-    r.http = res.status;
-    if (!res.ok) { r.error = 'HTTP ' + res.status; return r; }
-    const t = await res.text();
+    let t;
+    if (LOCAL_MODE) {
+      const fp = join(DEPLOY, 'robots.txt');
+      t = readFileSync(fp, 'utf8');
+      r.http = 200; r.source = 'local';
+    } else {
+      const res = await fetch(r.url, { signal: AbortSignal.timeout(20000) });
+      r.http = res.status;
+      if (!res.ok) { r.error = 'HTTP ' + res.status; return r; }
+      t = await res.text();
+      r.source = 'live';
+    }
     r.bytes = t.length;
     r.ok = true;
     for (const [ua, desc] of AI_CRAWLERS.overseas) {
@@ -243,7 +280,7 @@ const targets = has('--all')
   : [val('--url') || (SITE + '/')];
 
 console.log('');
-console.log('  ══ GEO 审计器 ══');
+console.log('  ══ GEO 审计器 ══' + (LOCAL_MODE ? '  【本地模式：读 _deploy 文件，不上网】' : '  【线上模式：直接读网站】'));
 console.log('  （GEO = 生成式引擎优化：让 AI 在生成回答时【引用我们】）');
 console.log('');
 
