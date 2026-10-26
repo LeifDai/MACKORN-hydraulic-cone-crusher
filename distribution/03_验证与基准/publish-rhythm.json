@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-26T04:13:20.503Z",
+  "generated": "2026-10-26T12:41:25.586Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "2ae1b4c",
-    "date": "2026-10-26T00:09:31Z",
-    "message": "docs(eval): 智谱 key 实测 7/8 模型可用 + Kimi 欠费0.03元诊断 (R187)"
+    "sha": "a44fb59",
+    "date": "2026-10-26T07:48:43Z",
+    "message": "docs: 关机交接 2026-10-26 — 智谱可用 / Kimi欠0.03元 / GEO 98分 / 考评第1"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 7.54,
+    "days_since": 7.9,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.17,
-  "days_since_publish": 0.17,
+  "effective_days": 0.2,
+  "days_since_publish": 0.2,
   "changed_since_publish": {
     "count": 310,
     "files": [

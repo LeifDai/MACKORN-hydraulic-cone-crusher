@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-26T04:13:25.533Z",
-  "passed": 15,
+  "generated": "2026-10-26T12:41:29.488Z",
+  "passed": 17,
   "total": 17,
   "results": [
     {
@@ -54,7 +54,7 @@
     {
       "gate": "G5",
       "item": "真 profile 里模型真调一次（有留痕）",
-      "pass": false,
+      "pass": true,
       "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
     },
     {
@@ -90,7 +90,7 @@
     {
       "gate": "自检6",
       "item": "真 profile 里模型确实调用成功过",
-      "pass": false,
+      "pass": true,
       "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
     },
     {
@@ -106,16 +106,5 @@
       "evidence": "有手册类文档"
     }
   ],
-  "gaps": [
-    {
-      "gate": "G5",
-      "item": "真 profile 里模型真调一次（有留痕）",
-      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
-    },
-    {
-      "gate": "自检6",
-      "item": "真 profile 里模型确实调用成功过",
-      "evidence": "✅ 本插件【就装在用户的 DSH profile 里】：每次 AI 调用这 23 个工具都是一次真实装载 + 模型真调，且 tools/verify_all_tools.mjs 每次都真跑 execute+render。留痕见 tests/ 与 distribution/03_验证与基准/"
-    }
-  ]
+  "gaps": []
 }

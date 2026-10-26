@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26T04:12:43.272Z",
+  "generated": "2026-10-26T12:40:42.379Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 2
+      "ms": 5
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_cone_selection",
@@ -22,7 +22,7 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_capacity_check",
@@ -32,17 +32,17 @@
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grading_porosity",
@@ -57,7 +57,7 @@
     {
       "name": "mackorn_selection_report",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_equipment_catalog",
@@ -72,37 +72,37 @@
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 3
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 3
+      "ms": 6
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 28
+      "ms": 46
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 81
+      "ms": 132
     },
     {
       "name": "mackorn_contact",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_market_stats",
@@ -112,7 +112,7 @@
     {
       "name": "mackorn_knowledge",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_grinding_selection",
@@ -122,7 +122,7 @@
     {
       "name": "mackorn_beneficiation_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_automation_design",
@@ -142,7 +142,7 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_screen_selection",

@@ -1,7 +1,7 @@
 {
   "gate": "L2 构建门禁",
-  "generated": "2026-10-26T04:13:26.189Z",
-  "elapsed_ms": 365866,
+  "generated": "2026-10-26T12:41:30.512Z",
+  "elapsed_ms": 342365,
   "total": 61,
   "passed": 49,
   "failed": 12,
@@ -334,7 +334,7 @@
       "area": "G10",
       "name": "发布节奏检查器可用（状态另见报告）",
       "pass": true,
-      "detail": "状态 HEALTHY · 上次发布 0.17 天前"
+      "detail": "状态 HEALTHY · 上次发布 0.2 天前"
     },
     {
       "area": "G11",
@@ -352,13 +352,13 @@
       "area": "G13",
       "name": "线上健康检查（非阻塞·状态可见）",
       "pass": true,
-      "detail": "判定 HEALTHY · 证书 ✅ 还有 87.8 天（DigiCert Inc）"
+      "detail": "判定 HEALTHY · 证书 ✅ 还有 87.5 天（DigiCert Inc）"
     },
     {
       "area": "G14",
       "name": "认知力达标（今日≥1 · 7天≥3 · 深度≥1.5）",
       "pass": true,
-      "detail": "今日 12 · 7天 84 · 平均深度 2.42"
+      "detail": "今日 9 · 7天 84 · 平均深度 2.42"
     },
     {
       "area": "G15",
@@ -448,7 +448,7 @@
       "area": "蓝图",
       "name": "五道门禁与自检清单核对",
       "pass": true,
-      "detail": "15/17 项 · 缺口 2 项: [G5]真 profile 里模型真调一次（有留痕）; [自检6]真 profile 里模型确实调用成功过"
+      "detail": "17/17 项"
     },
     {
       "area": "护栏",
