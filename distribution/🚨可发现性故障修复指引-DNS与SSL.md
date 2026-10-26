@@ -187,7 +187,7 @@ ai_coverage         → 收录数从 6 涨到 10（自有 4 个端点恢复）
 |:---|:---|:---|
 | ✅ Official MCP Registry | **已收录** | 官方注册表已有我们 |
 | ✅ npm registry | **已收录** | mackorn-cone-crusher@0.2.2 |
-| ✅ Glama | **页面已存在** | 但显示 19 tools + cannot be deployed |
+| ✅ Glama | **页面已存在** | 但显示 29 tools + cannot be deployed |
 | ✅ Smithery | **已收录** | 我以为没收录，实际早就有 |
 | ✅ skills.sh | **已收录** | |
 | ✅ unpkg server.json | **已收录** | |
