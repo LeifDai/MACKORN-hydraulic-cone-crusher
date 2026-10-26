@@ -124,7 +124,7 @@ const CHANNELS = [
     keyEnv: 'MOONSHOT_API_KEY',
     models: ['moonshot-v1-8k', 'moonshot-v1-32k', 'moonshot-v1-128k'],
     freePolicy: '新用户送 15 元额度（非永久免费）',
-    note: '★ 无永久免费模型；免费版走 NVIDIA NIM 那条',
+    note: '★ 实测 2026-10-26：key 有效（能查余额、能列模型），但账户欠费 0.03092 元被暂停 → 充值任意金额即可用',
   },
   {
     id: 'siliconflow',
