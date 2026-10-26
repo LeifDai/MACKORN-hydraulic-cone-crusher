@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-26T12:41:25.586Z",
+  "generated": "2026-10-26T19:54:52.409Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -8,26 +8,22 @@
   "github": {
     "owner": "LeifDai",
     "repo": "MACKORN-hydraulic-cone-crusher",
-    "reachable": true,
-    "error": null
+    "reachable": false,
+    "error": "HTTP 403"
   },
-  "last_commit": {
-    "sha": "a44fb59",
-    "date": "2026-10-26T07:48:43Z",
-    "message": "docs: 关机交接 2026-10-26 — 智谱可用 / Kimi欠0.03元 / GEO 98分 / 考评第1"
-  },
+  "last_commit": null,
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 7.9,
+    "days_since": 8.2,
     "local_version": "0.2.2",
     "version_pending": false
   },
-  "effective_channel": "github",
-  "effective_days": 0.2,
-  "days_since_publish": 0.2,
+  "effective_channel": "npm",
+  "effective_days": 8.2,
+  "days_since_publish": null,
   "changed_since_publish": {
     "count": 310,
     "files": [
@@ -93,8 +89,8 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_qa_coverage.mjs"
     ]
   },
-  "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.2 天前）。本轮无需推送。",
+  "verdict": "UNKNOWN",
+  "action": "读不到 GitHub（HTTP 403）—— 联网后重跑；这不算\"已检查\"。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",

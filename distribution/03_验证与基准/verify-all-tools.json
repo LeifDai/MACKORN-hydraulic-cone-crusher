@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-26T12:40:42.379Z",
+  "generated": "2026-10-26T19:54:18.650Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 5
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_cone_selection",
@@ -22,7 +22,7 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_capacity_check",
@@ -32,17 +32,17 @@
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_grading_porosity",
@@ -67,7 +67,7 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge_update",
@@ -82,22 +82,22 @@
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 6
+      "ms": 4
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 46
+      "ms": 26
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 132
+      "ms": 84
     },
     {
       "name": "mackorn_contact",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_distributor_eval",
@@ -112,7 +112,7 @@
     {
       "name": "mackorn_knowledge",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grinding_selection",
@@ -127,22 +127,22 @@
     {
       "name": "mackorn_automation_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_full_chain",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_screen_selection",
