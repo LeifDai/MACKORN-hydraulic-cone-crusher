@@ -759,24 +759,24 @@
       "why": null
     }
   ],
-  "generated": "2026-10-25T12:43:56.064Z",
+  "generated": "2026-10-25T15:28:35.931Z",
   "rule": "全局规则 §2.6 每天提升认知力（四件事：学 / 疑 / 炼 / 测）",
   "metrics": {
-    "facts": 17,
+    "facts": 20,
     "recall_pass": 50,
-    "refutations": 75,
+    "refutations": 84,
     "rules_distilled": 32,
     "recurrence": null,
-    "today_facts": 3,
+    "today_facts": 6,
     "today_quiz": 3,
     "today_correct": 2,
-    "today_refutations": 3,
-    "last7_refutations": 75,
+    "today_refutations": 12,
+    "last7_refutations": 84,
     "due_now": 11
   },
   "today": {
-    "learned": 3,
-    "doubted": 3,
+    "learned": 6,
+    "doubted": 12,
     "distilled": 32,
     "tested": 3,
     "correct": 2
@@ -835,21 +835,21 @@
   ],
   "recent_corrections": [
     {
-      "id": "C075",
-      "wrong": "我以为把 Excel 推到 GitHub 云端就有了",
-      "now": "实际云端 G28 报\"不存在\"。原因：Excel 是二进制 xlsx，可能被 .gitignore 排除，或推送后云端 checkout 没拿到。二进制文件走 Contents API 与文本文件行为不同，需要单独验证云端是否真拿到。",
+      "id": "C084",
+      "wrong": "我以为给 /ai/ 加 Organization schema 就够（因为文件里搜到了 Organization）",
+      "now": "实际搜到的是【嵌套在 SoftwareApplication.author 里】的组织信息，不是顶层实体。AI 抽取实体时需要顶层 @type: Organization + @id，嵌套的抽不到。修法：用 @graph 形式独立声明 Organization + WebSite + BreadcrumbList + ItemList 四个节点，并用 @id 互相引用。",
       "impact": "L3"
     },
     {
-      "id": "C074",
-      "wrong": "我以为本地 recurrence_tracker 测出 0% 就等于「没有错误复现」",
-      "now": "实际云端 G8 用的是 rsi-data/rsi.json 的口径，测出 25.3%。两个工具测的模式集不同：本地 tracker 只有 8 个可形式化模式，云端 rsi.json 覆盖更多历史模式。所以\"0%\"只是我这 8 个模式没复现，不是说全部模式都没复现。这是【用窄口径冒充全景】。",
-      "impact": "L4"
+      "id": "C083",
+      "wrong": "我以为 robots.txt 已经做得很全（26 个 UA，含字节和百度）",
+      "now": "实际只放行了字节 Bytespider，通义、DeepSeek、智谱、Kimi、腾讯混元、文心、星火、商汤全部缺失，共 17 个。而通义千问月活 1.66 亿，是仅次于豆包的国内第二大 AI 入口。26 个 UA 里海外占 16 个，国内只有 4 个 —— 这个比例暴露了「照抄海外清单」的思维惯性。",
+      "impact": "L3"
     },
     {
-      "id": "C073",
-      "wrong": "我说\"云端会自动跑门禁，你不用管\"",
-      "now": "实际云端跑了 1194 次，最近全部失败（45/61）。而且失败原因里有一半是\"云端缺本地生成的台账文件\"。我说\"不用管\"是错的——云端的绿灯必须每次看真实日志确认。",
+      "id": "C082",
+      "wrong": "我以为「做了 74 个平台的收录台账」就等于「AI 能发现并引用我们」",
+      "now": "实际完全不是。目录收录和 GEO 是两回事：前者靠提交，后者靠 AI 抓得到 + 抽得出结构 + 愿意引用。实测主站 GEO 仅 8/100（F 级），robots.txt 缺 17 个国内 AI 爬虫，meta 是占位符。我把大量精力花在了\"目录\"这个较易的战场，而真正决定 AI 回答的\"GEO\"几乎没做。这是【用易做的指标替代难做的目标】。",
       "impact": "L4"
     }
   ]
