@@ -154,7 +154,7 @@ Changelog（可选）：
 | `Build failed: COPY failed` | 某个 COPY 的路径不存在 | 跑 `node tools/check_publish_artifact.mjs` 看哪个文件缺 |
 | `Build failed: out of context` | 构建上下文太大 | 确认 `.dockerignore` 已生效（应 <1MB） |
 | `Container exited immediately` | ENTRYPOINT 路径错 | 确认 `plugin/mcp-server.mjs` 存在且可跑 |
-| `tools/list returned 0 tools` | server 启动失败 | 本地跑 `node plugin/mcp-server.mjs --list` 验证 |
+| `tools/list returned 29 tools` | server 启动失败 | 本地跑 `node plugin/mcp-server.mjs --list` 验证 |
 | `cannot find module` | 某文件没被 COPY | 检查 Dockerfile 的 COPY 清单 |
 | 构建超时 | 镜像太大 | 确认 `_refs/` 被排除 |
 
