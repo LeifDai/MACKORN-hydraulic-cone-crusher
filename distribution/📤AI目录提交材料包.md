@@ -174,7 +174,7 @@ https://raw.githubusercontent.com/LeifDai/MACKORN-hydraulic-cone-crusher/main/as
 
 ## 四、PR #15410 的补评（Glama 卡住的那个）
 
-**现状**：PR 开着，但 Glama 页面显示 `19 tools` + `cannot be deployed`。
+**现状**：PR 开着，但 Glama 页面显示 `29 tools` + `cannot be deployed`。
 
 **修好 DNS+SSL 后，去 PR 补这条评论**：
 
