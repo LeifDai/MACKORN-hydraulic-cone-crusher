@@ -1,0 +1,56 @@
+{
+  "version": "V001.1",
+  "at": "2026-10-26T15:19:47.726Z",
+  "channels": {
+    "ollama": {
+      "ok": true,
+      "probe": {
+        "ok": true,
+        "ms": 146,
+        "models": [
+          "qwen2.5:1.5b",
+          "nomic-embed-text:latest"
+        ],
+        "hasTarget": true
+      },
+      "detail": "服务在线，目标模型可用"
+    },
+    "free_cloud": {
+      "ok": false,
+      "providers": {
+        "zhipu": {
+          "key": false,
+          "env": "ZHIPU_API_KEY"
+        },
+        "nvidia-glm": {
+          "key": false,
+          "env": "NVIDIA_API_KEY"
+        },
+        "nvidia-deepseek": {
+          "key": false,
+          "env": "NVIDIA_API_KEY"
+        },
+        "nvidia-kimi": {
+          "key": false,
+          "env": "NVIDIA_API_KEY"
+        }
+      },
+      "detail": "所有免费通道都缺 key"
+    },
+    "codex": {
+      "ok": true,
+      "path": "D:\\AI\\npm_global\\codex.ps1",
+      "detail": "已找到 CLI"
+    },
+    "pure_script": {
+      "ok": true,
+      "detail": "始终可用（不需要外部依赖）"
+    },
+    "deepseek": {
+      "ok": true,
+      "detail": "DSH 会话在用（本工具无法探测其 API，只标记可用）"
+    }
+  },
+  "ok_count": 4,
+  "total": 5
+}
