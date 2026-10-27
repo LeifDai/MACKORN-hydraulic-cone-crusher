@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-rsi-register/1",
-  "generated": "2026-10-26T23:46:17.324Z",
+  "generated": "2026-10-27T04:33:03.559Z",
   "what": "已知缺陷台账 —— recurrence（同类错误复现率）的度量基础。对齐全局 AGENTS.md §3.3。",
   "total_defects": 91,
   "alive": 67,
@@ -359,7 +359,7 @@
       ],
       "origin": "R32：enforce_lessons.mjs 与 self_iterate.mjs 一 import lessons.mjs / verify_libraries.mjs，就把对方的整个 CLI 跑了一遍，污染输出、误导判断。根因是这两个脚本的 CLI 逻辑写在模块顶层，没有 `import.meta.url ===",
       "status": "failed",
-      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：235 脚本 / 缺守卫 201 / **被"
+      "detail": "**真 import** 7 个脚本可安全导入，❌ build_action_checklist.mjs(Cannot find module '/home/runner/wor) ｜ 守卫审计：240 脚本 / 缺守卫 206 / **被"
     },
     {
       "id": "L-33",
