@@ -59,8 +59,15 @@ Additional:
     node tools/keyword_gate.mjs    # AI keyword coverage (must be >=85%)
     node tools/orchestrate_v2.mjs  # continuous loop, bounded per-step timeout
     node tools/build_public.mjs    # compliance / version / tag gates
+    node tools/check_publish_artifact.mjs  # 发布产物验收（25 条：dist 完整性 + 协议层真跑）
+    node tools/check_lessons_subset.mjs L-01 L-48 L-50 L-88  # 秒级抽查关键判据（不替代全量）
 
 Do not trust a tool's own success message. Run the gates.
+
+> **R141（2026-10-21）新增不变量：**「写了」≠「发出去了」。
+> 任何交付物都要有门禁检查**最终产物**，而不是检查源码意图 ——
+> 实证：为 Glama 写的 `Dockerfile` 从未进过发布包（`build_public.mjs` 的放行清单漏了它），
+> 而所有门禁当时全绿。`check_publish_artifact.mjs` 就是这条不变量的执行者。
 
 ## 每天提升认知力（用户 2026-10-20 明令 · 不可协商）
 
