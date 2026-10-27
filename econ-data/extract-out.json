@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-26T14:33:12.672Z",
+  "total": 5,
+  "free": 4,
+  "failed": 0,
+  "refused": 0,
+  "results": [
+    {
+      "item": {
+        "text": "我们是福建福州的砂石厂，想上一条玄武岩骨料线，产量要求 500 吨每小时，给料最大 600mm，出料 0-5/5-10/10-20/20-31.5，麻烦报个方案"
+      },
+      "skipped": "self"
+    },
+    {
+      "item": {
+        "text": "我是印尼的矿主，有铁矿要处理，1000tph，给料 800 以下，最终要磨到 200 目，请问你们能做整线吗"
+      },
+      "ok": true,
+      "provider": "zhipu-250414",
+      "ms": 1364,
+      "text": "地区=印尼 | 产量=1000 t/h | 物料=铁矿",
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 96,
+        "total_tokens": 115
+      }
+    },
+    {
+      "item": {
+        "text": "河北唐山，现有颚破一台，想加中碎和细碎，总产量 300 吨/小时，物料是石灰石，硬度中等"
+      },
+      "ok": true,
+      "provider": "zhipu-250414",
+      "ms": 868,
+      "text": "地区=河北唐山 | 产量=300 t/h | 物料=石灰石",
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 91,
+        "total_tokens": 111
+      }
+    },
+    {
+      "item": {
+        "text": "我们这边是新疆的铜矿，日处理量 3000 吨，需要粗碎+中碎+细碎+磨矿，请问设备清单"
+      },
+      "ok": true,
+      "provider": "zhipu-250414",
+      "ms": 836,
+      "text": "地区=新疆 | 产量=3000 t/h | 物料=铜矿",
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 91,
+        "total_tokens": 111
+      }
+    },
+    {
+      "item": {
+        "text": "做机制砂，原料是河卵石，产能 200 吨每小时，成品要求细度模数 2.6-3.0"
+      },
+      "ok": true,
+      "provider": "zhipu-250414",
+      "ms": 739,
+      "text": "地区=xx | 产量=200 t/h | 物料=河卵石",
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 89,
+        "total_tokens": 109
+      }
+    }
+  ]
+}
