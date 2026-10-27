@@ -1,0 +1,22 @@
+{
+  "schema": "mackorn-econ/2",
+  "version": "V001.1",
+  "at": "2026-10-26T15:17:07.197Z",
+  "total_tasks": 10,
+  "by_channel": {
+    "zhipu": 2,
+    "ollama": 8
+  },
+  "by_level": {
+    "T0": 3,
+    "T3a": 7
+  },
+  "free_tasks": 10,
+  "paid_tasks": 0,
+  "local_tasks": 8,
+  "free_ratio": 100,
+  "local_ratio": 80,
+  "tokens_routed_away": 10253,
+  "saved_cny_est": 0.0154,
+  "note": "free_ratio/free_tasks 含「本地 Ollama」与「纯脚本」；saved_cny_est 按 DeepSeek ¥1.5/M token 估算，仅供参考。DSH 会话本身的 token 不计入。"
+}
