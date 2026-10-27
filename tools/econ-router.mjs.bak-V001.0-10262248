@@ -1,0 +1,546 @@
+/**
+ * 经济路由器（R189）—— 收费模型当导师，免费模型干活
+ *
+ * 用户要求（2026-10-26 22:28）：
+ *   「遵照经济性原则，用 DeepSeek harness 作为总指挥，用 codex 编程，
+ *     用免费模型作为普通能做的工作，提升效率的同时，提升经济性，请编程；
+ *     回顾之前对话，现在有网了，大干到明天早上 7 点」
+ *
+ * ══════════════════════════════════════════════════════════════
+ * 核心思想：收费的 DeepSeek 只做三件事
+ *   ① 拆任务  ② 定标准  ③ 验收
+ * 中间的体力活全部派给免费通道和 Codex
+ * ══════════════════════════════════════════════════════════════
+ *
+ * 五条通道（按难度分级）：
+ *   T3 敏感   → 我做（DeepSeek）或本地 Ollama（命中敏感词强制覆盖）
+ *   T1 编程   → Codex CLI
+ *   T2 判断   → 我做（DeepSeek）
+ *   T0 机械   → 免费云模型（智谱 GLM-4-Flash）
+ *   T0 纯算   → 纯脚本（连模型都不用）
+ *
+ * 用法：
+ *   node tools/econ-router.mjs --classify "帮我整理这段文字"
+ *   node tools/econ-router.mjs --exec "把这段归类：..."          # 派给免费模型
+ *   node tools/econ-router.mjs --codex "给 xxx.mjs 加参数"       # 派给 Codex
+ *   node tools/econ-router.mjs --status                          # 通道状态
+ *   node tools/econ-router.mjs --report                          # 经济账
+ *   node tools/econ-router.mjs --batch tasks.txt                 # 批量派活
+ *   node tools/econ-router.mjs --json
+ */
+import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
+import { join, dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, '..');
+const DATA_DIR = join(ROOT, 'econ-data');
+const LEDGER = join(DATA_DIR, 'econ-ledger.jsonl');
+const OUT_JSON = join(DATA_DIR, 'econ-report.json');
+
+const argv = process.argv.slice(2);
+const has = (f) => argv.includes(f);
+const val = (f) => {
+  const i = argv.indexOf(f);
+  return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : null;
+};
+const JSON_OUT = has('--json');
+
+/* ══════════════════════════════════════════════════════════════
+ * ① 敏感词闸（T3 强制覆盖 —— 这条覆盖其他所有规则）
+ * ══════════════════════════════════════════════════════════════ */
+const SENSITIVE = [
+  '合同', '协议', '报价', '价格', '单价', '总价', '折扣', '付款', '账期', '发票', '税',
+  '客户名', '联系人', '手机号', '身份证', '银行', '账号', '密码', '密钥', 'token',
+  '专利', '图纸', 'CAD', 'BOM', '配方', '工艺流程', '招标', '投标', '标书',
+  '工资', '薪酬', '人事', '简历', '离职',
+];
+
+function isSensitive(text) {
+  const hits = SENSITIVE.filter((w) => text.includes(w));
+  return { sensitive: hits.length > 0, hits };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * ② 任务分级（判据可复核，不拍脑袋）
+ * ══════════════════════════════════════════════════════════════ */
+const SIGNALS = {
+  code: [
+    /\.(py|mjs|js|ts|tsx|jsx|go|rs|java|cpp|c|h|sh|ps1|cmd|json|yaml|yml|html|css|sql)\b/i,
+    /(写|加|改|修|重构|补|删|优化)(个|一个|一下)?(函数|方法|类|脚本|文件|模块|接口|测试|参数|逻辑|bug|错误)/,
+    /(实现|编写|生成)(一个|个)?(函数|脚本|程序|工具|模块)/i,
+    /(fix|implement|refactor|add|write|create)\s+(a\s+)?(function|script|module|class|test|method)/i,
+    /报错|异常|报错信息|stack trace|Traceback|SyntaxError|TypeError/i,
+  ],
+  judge: [
+    /(选型|评估|判断|该不该|要不要|值不值|哪个好|怎么选|取舍|权衡)/,
+    /(风险|隐患|漏洞|问题在哪|为什么|原因是什么)/,
+    /(方案|策略|建议|推荐|话术|谈判|定价|策略)/,
+    /(analyze|evaluate|assess|recommend|should|which is better|trade-?off)/i,
+  ],
+  mechanical: [
+    /(整理|转换|抽取|提取|翻译|分类|归类|格式化|清洗|拆分|合并|归纳|摘要)/,
+    /(翻译成|翻成|用英文|用中文|转成|变成)/,
+    /(translate|extract|classify|format|summarize|convert|clean|parse)/i,
+  ],
+  compute: [
+    /(统计|计算|求和|总数|多少个|去重|排序|筛选|平均值|最大值|最小值|占比)/,
+    /(count|sum|average|dedupe|sort|filter|total|how many)/i,
+  ],
+};
+
+function classify(text) {
+  const sens = isSensitive(text);
+  if (sens.sensitive) {
+    return {
+      level: 'T3', channel: 'deepseek-self',
+      reason: '命中最敏感词：' + sens.hits.slice(0, 3).join('、'),
+      action: '敏感内容不出网 —— 我做，或本地 Ollama（若可用）',
+      cost: '收费（DeepSeek）',
+    };
+  }
+  for (const [key, patterns] of Object.entries(SIGNALS)) {
+    if (patterns.some((re) => re.test(text))) {
+      if (key === 'code') {
+        return {
+          level: 'T1', channel: 'codex',
+          reason: '命中编程信号',
+          action: '派给 Codex（编码专用，不烧对话 token）',
+          cost: 'Codex 订阅（不额外计费）',
+        };
+      }
+      if (key === 'judge') {
+        return {
+          level: 'T2', channel: 'deepseek-self',
+          reason: '命中判断信号',
+          action: '我做（需要取舍/责任判断，免费模型不可靠）',
+          cost: '收费（DeepSeek）',
+        };
+      }
+      if (key === 'mechanical') {
+        return {
+          level: 'T0', channel: 'free-cloud',
+          reason: '命中机械活信号（整理/转换/抽取/翻译/分类）',
+          action: '派给免费云模型（智谱 GLM-4-Flash）',
+          cost: '免费',
+        };
+      }
+      if (key === 'compute') {
+        return {
+          level: 'T0', channel: 'pure-script',
+          reason: '命中纯算信号（统计/计数/去重）',
+          action: '纯脚本算，连模型都不用',
+          cost: '零',
+        };
+      }
+    }
+  }
+  return {
+    level: 'T0', channel: 'free-cloud',
+    reason: '无强信号，默认按机械活处理',
+    action: '派给免费云模型',
+    cost: '免费',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * ③ 免费云通道（智谱 GLM-4-Flash）
+ * ══════════════════════════════════════════════════════════════ */
+const FREE_PROVIDERS = [
+  {
+    id: 'zhipu',
+    name: '智谱 GLM-4-Flash',
+    keyEnv: 'ZHIPU_API_KEY',
+    baseURL: 'https://open.bigmodel.cn/api/paas/v4',
+    model: 'glm-4-flash-250414',  /* 实测 671ms，最快 */
+    fallbackModel: 'glm-4-flash',
+    free: true,
+    dataPolicy: '国内（数据政策待核实，敏感数据不走）',
+  },
+  {
+    id: 'zhipu-45',
+    name: '智谱 GLM-4.5-Flash',
+    keyEnv: 'ZHIPU_API_KEY',
+    baseURL: 'https://open.bigmodel.cn/api/paas/v4',
+    model: 'glm-4.5-flash',
+    free: true,
+    dataPolicy: '国内',
+  },
+  {
+    id: 'deepseek-free',
+    name: 'DeepSeek V4.1 Flash（NVIDIA NIM）',
+    keyEnv: 'NVIDIA_API_KEY',
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+    model: 'deepseek-ai/deepseek-v4.1-flash',
+    free: true,
+    dataPolicy: '海外（未核实）',
+  },
+  {
+    id: 'kimi-free',
+    name: 'Kimi K2.6（NVIDIA NIM）',
+    keyEnv: 'NVIDIA_API_KEY',
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+    model: 'moonshotai/kimi-k2.6',
+    free: true,
+    dataPolicy: '海外（未核实）',
+  },
+];
+
+function availableProviders() {
+  return FREE_PROVIDERS.filter((p) => process.env[p.keyEnv]);
+}
+
+async function callFree(prompt, provider, maxTokens = 800, timeoutMs = 45000) {
+  const key = process.env[provider.keyEnv];
+  if (!key) return { ok: false, error: '缺 ' + provider.keyEnv };
+  const t0 = Date.now();
+  try {
+    const r = await fetch(provider.baseURL + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key },
+      body: JSON.stringify({
+        model: provider.model,
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: maxTokens,
+        temperature: 0.2,
+      }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    const ms = Date.now() - t0;
+    if (!r.ok) {
+      const t = await r.text().catch(() => '');
+      /* 模型不可用则试 fallback */
+      if (provider.fallbackModel) {
+        const r2 = await fetch(provider.baseURL + '/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key },
+          body: JSON.stringify({
+            model: provider.fallbackModel,
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: maxTokens, temperature: 0.2,
+          }),
+          signal: AbortSignal.timeout(timeoutMs),
+        });
+        if (r2.ok) {
+          const j2 = await r2.json();
+          return {
+            ok: true, ms: Date.now() - t0, model: provider.fallbackModel,
+            text: (j2.choices && j2.choices[0] && j2.choices[0].message && j2.choices[0].message.content) || '',
+            usage: j2.usage || null,
+          };
+        }
+      }
+      return { ok: false, ms, error: 'HTTP ' + r.status + ' ' + t.slice(0, 80) };
+    }
+    const j = await r.json();
+    return {
+      ok: true, ms, model: provider.model,
+      text: (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '',
+      usage: j.usage || null,
+    };
+  } catch (e) {
+    return {
+      ok: false, ms: Date.now() - t0,
+      error: String((e.cause && (e.cause.code || e.cause.message)) || e.message).slice(0, 80),
+    };
+  }
+}
+
+/** 派活：按顺序试免费通道，第一个成功就用 */
+async function dispatchFree(prompt, maxTokens = 800) {
+  const provs = availableProviders();
+  if (!provs.length) {
+    return {
+      ok: false, error: '没有可用的免费通道（缺 API key）',
+      hint: '配 ZHIPU_API_KEY：setx ZHIPU_API_KEY "你的key"',
+    };
+  }
+  const attempts = [];
+  for (const p of provs) {
+    const r = await callFree(prompt, p, maxTokens);
+    attempts.push({ provider: p.id, name: p.name, ...r });
+    if (r.ok) return { ok: true, ...r, provider: p.id, providerName: p.name, attempts };
+  }
+  return { ok: false, error: '所有免费通道都失败', attempts };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * ④ Codex 派活
+ * ══════════════════════════════════════════════════════════════ */
+const CODEX_PATHS = ['D:\\AI\\npm_global\\codex.ps1', 'D:\\AI\\npm_global\\codex.cmd'];
+
+function findCodex() {
+  for (const p of CODEX_PATHS) if (existsSync(p)) return p;
+  return null;
+}
+
+function dispatchCodex(task) {
+  const codex = findCodex();
+  if (!codex) {
+    return { ok: false, error: '找不到 codex（查过 ' + CODEX_PATHS.join(' / ') + '）' };
+  }
+  /* ⚠️ 不自动执行 —— Codex 会改文件，必须先人确认
+   * 这里只生成命令，由用户/我决定是否跑 */
+  return {
+    ok: true, mode: 'command-only',
+    command: '& "' + codex + '" exec "' + task.replace(/"/g, '`"') + '"',
+    note: '⚠️ 不自动执行（Codex 会改文件）。确认后手动跑，或由我代跑。',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * ⑤ 经济账
+ * ══════════════════════════════════════════════════════════════ */
+function logUsage(entry) {
+  try {
+    mkdirSync(DATA_DIR, { recursive: true });
+    appendFileSync(LEDGER, JSON.stringify({ at: new Date().toISOString(), ...entry }) + '\n', 'utf8');
+  } catch { /* 落盘失败不影响主流程 */ }
+}
+
+function readLedger() {
+  if (!existsSync(LEDGER)) return [];
+  try {
+    return readFileSync(LEDGER, 'utf8').split('\n').filter(Boolean).map((l) => {
+      try { return JSON.parse(l); } catch { return null; }
+    }).filter(Boolean);
+  } catch { return []; }
+}
+
+function buildReport() {
+  const rows = readLedger();
+  const byChannel = {};
+  const byLevel = {};
+  let totalTokens = 0;
+  let totalFreeTasks = 0;
+  let totalPaidTasks = 0;
+
+  for (const r of rows) {
+    const ch = r.channel || '?';
+    byChannel[ch] = (byChannel[ch] || 0) + 1;
+    const lv = r.level || '?';
+    byLevel[lv] = (byLevel[lv] || 0) + 1;
+    if (r.tokens) totalTokens += r.tokens;
+    if (r.cost === 'free' || r.cost === 'zero') totalFreeTasks++;
+    else totalPaidTasks++;
+  }
+  const total = rows.length;
+  return {
+    schema: 'mackorn-econ/1',
+    at: new Date().toISOString(),
+    total_tasks: total,
+    by_channel: byChannel,
+    by_level: byLevel,
+    free_tasks: totalFreeTasks,
+    paid_tasks: totalPaidTasks,
+    free_ratio: total ? Math.round((totalFreeTasks / total) * 100) : 0,
+    total_tokens: totalTokens,
+    note: 'free_ratio = 免费通道处理的任务占比（越高越省）。DSH 会话本身 token 不计入。',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+ * 主流程
+ * ══════════════════════════════════════════════════════════════ */
+
+/* --status：通道状态 */
+if (has('--status')) {
+  console.log('');
+  console.log('  ══ 经济路由 · 通道状态 ══');
+  console.log('');
+  console.log('  ── 免费云通道（T0 机械活）──');
+  for (const p of FREE_PROVIDERS) {
+    const ok = !!process.env[p.keyEnv];
+    console.log('  ' + (ok ? '✅' : '❌') + ' ' + p.name.padEnd(36) + ' ' + (ok ? 'key 已配' : '缺 ' + p.keyEnv));
+    console.log('      模型: ' + p.model + ' · ' + p.dataPolicy);
+  }
+  const avail = availableProviders();
+  console.log('');
+  console.log('  可用免费通道：' + avail.length + '/' + FREE_PROVIDERS.length);
+  console.log('');
+  console.log('  ── 其他通道 ──');
+  const codex = findCodex();
+  console.log('  ' + (codex ? '✅' : '❌') + ' Codex（T1 编程）   ' + (codex || '未找到'));
+  console.log('  ⚠️  Ollama（T3 敏感）   上次 ECONNREFUSED，需启动服务');
+  console.log('  ⚠️  DeepSeek（总指挥）  本会话在用（收费）');
+  console.log('');
+  process.exit(0);
+}
+
+/* --classify：只判级不执行 */
+const classifyText = val('--classify');
+if (classifyText) {
+  const c = classify(classifyText);
+  if (JSON_OUT) {
+    console.log(JSON.stringify(c, null, 2));
+  } else {
+    console.log('');
+    console.log('  ══ 任务判级 ══');
+    console.log('  任务：' + classifyText.slice(0, 80));
+    console.log('');
+    console.log('  级别：' + c.level);
+    console.log('  通道：' + c.channel);
+    console.log('  理由：' + c.reason);
+    console.log('  动作：' + c.action);
+    console.log('  成本：' + c.cost);
+    console.log('');
+  }
+  process.exit(0);
+}
+
+/* --exec：派给免费模型 */
+const execText = val('--exec');
+if (execText) {
+  const c = classify(execText);
+  console.log('');
+  console.log('  ══ 派活 ══');
+  console.log('  判级：' + c.level + ' → ' + c.channel);
+  console.log('  理由：' + c.reason);
+  console.log('');
+
+  if (c.level === 'T3') {
+    console.log('  ⛔ 敏感内容不出网 —— 拒绝派给云免费通道');
+    console.log('     命中的敏感词：' + c.reason);
+    console.log('     请我自己处理，或本地 Ollama（若可用）');
+    console.log('');
+    process.exit(2);
+  }
+
+  if (c.channel === 'codex') {
+    const r = dispatchCodex(execText);
+    console.log('  → 该派给 Codex，不是免费模型');
+    console.log('  ' + (r.ok ? '命令已生成：' : '❌ ' + r.error));
+    if (r.ok) {
+      console.log('    ' + r.command);
+      console.log('    ' + r.note);
+    }
+    console.log('');
+    process.exit(0);
+  }
+
+  if (c.channel === 'deepseek-self') {
+    console.log('  → 该我自己做（判断类），不适合派给免费模型');
+    console.log('     原因：需要取舍与责任判断，免费模型不可靠');
+    console.log('');
+    process.exit(0);
+  }
+
+  /* T0：真派 */
+  console.log('  ⏳ 派给免费通道…');
+  const r = await dispatchFree(execText, 800);
+  if (r.ok) {
+    console.log('  ✅ ' + r.providerName + ' · ' + r.ms + 'ms · ' + r.model);
+    if (r.usage) console.log('  token: ' + r.usage.total_tokens + '（输入 ' + r.usage.prompt_tokens + ' / 输出 ' + r.usage.completion_tokens + '）');
+    console.log('');
+    console.log('  ── 结果 ──');
+    console.log(r.text.split('\n').map((l) => '  ' + l).join('\n'));
+    console.log('');
+    logUsage({
+      task: execText.slice(0, 200), level: c.level, channel: r.provider,
+      cost: 'free', ms: r.ms, tokens: r.usage ? r.usage.total_tokens : null,
+    });
+  } else {
+    console.log('  ❌ ' + r.error);
+    if (r.hint) console.log('     ' + r.hint);
+    if (r.attempts) {
+      for (const a of r.attempts) console.log('     · ' + a.name + ': ' + (a.error || '?'));
+    }
+    console.log('');
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
+/* --codex：生成 codex 命令 */
+const codexTask = val('--codex');
+if (codexTask) {
+  const r = dispatchCodex(codexTask);
+  if (r.ok) {
+    console.log('');
+    console.log('  ══ Codex 派活 ══');
+    console.log('  任务：' + codexTask);
+    console.log('');
+    console.log('  命令：');
+    console.log('    ' + r.command);
+    console.log('');
+    console.log('  ' + r.note);
+    console.log('');
+  } else {
+    console.log('  ❌ ' + r.error);
+  }
+  process.exit(0);
+}
+
+/* --batch：批量派活（一行一个任务） */
+const batchFile = val('--batch');
+if (batchFile && existsSync(batchFile)) {
+  const tasks = readFileSync(batchFile, 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  console.log('');
+  console.log('  ══ 批量派活（' + tasks.length + ' 个任务）══');
+  console.log('');
+  let free = 0, self_ = 0, codex_ = 0, refused = 0, failed = 0;
+  for (let i = 0; i < tasks.length; i++) {
+    const t = tasks[i];
+    const c = classify(t);
+    process.stdout.write('  [' + (i + 1) + '/' + tasks.length + '] ' + c.level + ' ' + t.slice(0, 50).padEnd(52) + ' ');
+    if (c.level === 'T3') { console.log('⛔ 拒（敏感）'); refused++; continue; }
+    if (c.channel === 'codex') { console.log('→ Codex'); codex_++; continue; }
+    if (c.channel === 'deepseek-self') { console.log('→ 我自己'); self_++; continue; }
+    const r = await dispatchFree(t, 600);
+    if (r.ok) { console.log('✅ ' + r.ms + 'ms'); free++; }
+    else { console.log('❌ ' + (r.error || '').slice(0, 30)); failed++; }
+  }
+  console.log('');
+  console.log('  免费处理 ' + free + ' · 我自己 ' + self_ + ' · Codex ' + codex_ + ' · 拒敏 ' + refused + ' · 失败 ' + failed);
+  console.log('');
+  process.exit(0);
+}
+
+/* --report：经济账 */
+if (has('--report')) {
+  const rep = buildReport();
+  mkdirSync(DATA_DIR, { recursive: true });
+  writeFileSync(OUT_JSON, JSON.stringify(rep, null, 2), 'utf8');
+  console.log('');
+  console.log('  ══ 经济账 ══');
+  console.log('  总任务数：' + rep.total_tasks);
+  console.log('  免费处理：' + rep.free_tasks + ' · 收费处理：' + rep.paid_tasks);
+  console.log('  免费占比：' + rep.free_ratio + '%（越高越省）');
+  console.log('  累计 token（仅免费通道）：' + rep.total_tokens);
+  console.log('');
+  if (rep.total_tasks === 0) {
+    console.log('  ⚠️ 还没有派活记录。用 --exec 或 --batch 派几件活再来。');
+  } else {
+    console.log('  ── 按通道 ──');
+    for (const [k, v] of Object.entries(rep.by_channel)) console.log('    ' + k + ': ' + v);
+    console.log('  ── 按级别 ──');
+    for (const [k, v] of Object.entries(rep.by_level)) console.log('    ' + k + ': ' + v);
+  }
+  console.log('');
+  console.log('  报告：econ-data/econ-report.json');
+  console.log('  台账：econ-data/econ-ledger.jsonl');
+  console.log('');
+  process.exit(0);
+}
+
+/* 无参数：帮助 */
+console.log('');
+console.log('  ══ 经济路由器 ══');
+console.log('  （收费 DeepSeek 当导师 · 免费模型干活 · Codex 编程）');
+console.log('');
+console.log('  用法：');
+console.log('    --status              看通道状态');
+console.log('    --classify "任务"      只判级不执行');
+console.log('    --exec "任务"          派给免费模型真干');
+console.log('    --codex "任务"         生成 Codex 命令');
+console.log('    --batch 文件           批量派活（一行一个）');
+console.log('    --report              经济账');
+console.log('');
+console.log('  分级：');
+console.log('    T3 敏感 → 我做（不出网）');
+console.log('    T1 编程 → Codex');
+console.log('    T2 判断 → 我做');
+console.log('    T0 机械 → 免费云模型（智谱）');
+console.log('    T0 纯算 → 纯脚本');
+console.log('');
