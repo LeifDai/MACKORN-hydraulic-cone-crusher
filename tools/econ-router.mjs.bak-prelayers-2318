@@ -1,0 +1,1211 @@
+#!/usr/bin/env node
+/**
+ * 经济路由器 V001.1 —— 收费模型当导师，免费/本地模型干活
+ * ══════════════════════════════════════════════════════════════════════════
+ * 用户要求（2026-10-26 22:28 / 22:44）：
+ *   「遵照经济性原则，用 DeepSeek harness 作为总指挥，用 codex 编程，
+ *     用免费模型作为普通能做的工作，用本地微模型处理单据合同、支付合同、
+ *     法律文件等内部资料；提升效率的同时，提升经济性，请编程完善
+ *     econ-router V001.1.mjs；回顾之前对话，现在有网了，大干到明天早上 7 点」
+ *
+ * ══════════════════════════════════════════════════════════════════════════
+ * 核心思想：收费的 DeepSeek 只做三件事
+ *   ① 拆任务  ② 定标准  ③ 验收
+ * 中间的体力活全部派给免费通道、本地模型和 Codex
+ * ══════════════════════════════════════════════════════════════════════════
+ * 六条通道（按「数据敏感度 × 难度」分级）
+ *
+ *   T3a 绝密  → 本地 Ollama（qwen2.5:1.5b）**数据不出本机**
+ *               合同 / 支付 / 报价 / 法务 / 客户名单 / 图纸 / BOM
+ *   T3b 内部  → 本地 Ollama 优先，失败才我自己
+ *               人事 / 工资 / 简历 / 内部流程
+ *   T2  判断  → DeepSeek（我）—— 需要取舍与责任
+ *   T1  编程  → Codex CLI
+ *   T0  机械  → 免费云模型（智谱 GLM-4-Flash / NVIDIA NIM）
+ *   T0  纯算  → 纯脚本（连模型都不用）
+ *
+ * ══════════════════════════════════════════════════════════════════════════
+ * V001.1 相比 V001.0 的六项升级
+ *   ① **本地微模型通道真正落地**（V001.0 里 Ollama 只是注释，写成「需启动服务」；
+ *      现在自动探测 + 真调用 + 敏感数据强制本地）
+ *   ② **敏感分级从一档拆成两档**（T3a 绝密 / T3b 内部）—— 绝密永不出网
+ *   ③ **新增 `--route`**：一句话自动判级 + 自动派活（含本地），不用手工选命令
+ *   ④ **成本核算升级**：按 DeepSeek 真实单价估算「省了多少钱」
+ *   ⑤ **新增 `--selftest`**：逐通道探测可用性（服务/模型/key 三层）
+ *   ⑥ **新增 `--local`**：显式走本地模型（可指定 prompt 文件/目录）
+ *
+ * ══════════════════════════════════════════════════════════════════════════
+ * 用法
+ *   node tools/econ-router.mjs --status                     # 六通道状态（含 Ollama 实探）
+ *   node tools/econ-router.mjs --selftest                   # 逐通道自测
+ *   node tools/econ-router.mjs --classify "帮我整理这段文字"   # 只判级
+ *   node tools/econ-router.mjs --route "把这段归类：…"         # ★ 自动判级 + 自动派
+ *   node tools/econ-router.mjs --local "解读这份合同要点"      # 强制走本地
+ *   node tools/econ-router.mjs --local --file 合同.txt        # 本地处理文件
+ *   node tools/econ-router.mjs --exec "…"                   # 派给免费云
+ *   node tools/econ-router.mjs --codex "给 xxx 加参数"        # 生成 Codex 命令
+ *   node tools/econ-router.mjs --batch tasks.txt            # 批量
+ *   node tools/econ-router.mjs --report                     # 经济账（含省钱估算）
+ *   node tools/econ-router.mjs --json                       # 机器可读
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync, readdirSync, statSync } from 'node:fs';
+import { join, dirname, resolve, basename } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const VERSION = 'V001.1';
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, '..');
+const DATA_DIR = join(ROOT, 'econ-data');
+const LEDGER = join(DATA_DIR, 'econ-ledger.jsonl');
+const OUT_JSON = join(DATA_DIR, 'econ-report.json');
+const SELFTEST_JSON = join(DATA_DIR, 'econ-selftest.json');
+
+const argv = process.argv.slice(2);
+const has = (f) => argv.includes(f);
+const val = (f) => {
+  const i = argv.indexOf(f);
+  return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : null;
+};
+const JSON_OUT = has('--json');
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ① 敏感分级（V001.1 从一档拆成两档 —— 绝密永不出网）
+ * ══════════════════════════════════════════════════════════════════════
+ * 为什么必须拆：
+ *   「合同里提到价格」和「帮我把这段话翻译成英文」敏感度差一个量级。
+ *   前者一旦泄露是商业事故，后者几乎无风险。
+ *   混成一档的后果要么过度保守（什么都走贵的），要么过度放任（把合同发给免费云）。
+ */
+const SENSITIVE_T3A = [
+  // ── 合同/法务 ──
+  '合同', '协议', '条款', '违约', '索赔', '仲裁', '诉讼', '律师', '法务',
+  '保密协议', 'NDA', '授权书', '委托书', '盖章', '签字', '签署',
+  // ── 支付/财务 ──
+  '付款', '支付', '账期', '应收账款', '应付账款', '发票', '开票', '税号',
+  '银行', '账号', '户名', 'SWIFT', 'LC', '信用证', '定金', '尾款',
+  '报价', '单价', '总价', '成本', '毛利', '折扣', '返点', '佣金',
+  // ── 客户/渠道机密 ──
+  '客户名单', '客户名', '联系人', '手机号', '身份证', '护照',
+  '代理商名单', '经销商名单', '渠道政策',
+  // ── 技术机密 ──
+  '图纸', 'CAD', 'BOM', '配方', '工艺流程', '参数表', '设计文件',
+  '专利', '技术秘密', 'know-how',
+  // ── 投标 ──
+  '招标', '投标', '标书', '评标', '中标',
+  // ── 通用密级标记 ──
+  '机密', '绝密', '内部资料', '不得外传', '仅限内部',
+];
+
+const SENSITIVE_T3B = [
+  // ── 人事 ──
+  '工资', '薪酬', '薪资', '奖金', '绩效考核', '人事', '简历', '离职',
+  '招聘', '面试', '员工', '组织架构',
+  // ── 内部经营 ──
+  '预算', '费用', '报销', '内部流程', '管理制度', '例会纪要',
+];
+
+function isSensitive(text) {
+  const t = String(text || '');
+  const a = SENSITIVE_T3A.filter((w) => t.includes(w));
+  if (a.length) return { level: 'T3a', hits: a, label: '绝密' };
+  const b = SENSITIVE_T3B.filter((w) => t.includes(w));
+  if (b.length) return { level: 'T3b', hits: b, label: '内部' };
+  return { level: null, hits: [], label: '' };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ② 任务分级（判据可复核，不拍脑袋）
+ * ══════════════════════════════════════════════════════════════════════ */
+const SIGNALS = {
+  code: [
+    /\.(py|mjs|js|ts|tsx|jsx|go|rs|java|cpp|c|h|sh|ps1|cmd|json|yaml|yml|html|css|sql)\b/i,
+    /(写|加|改|修|重构|补|删|优化)(个|一个|一下)?(函数|方法|类|脚本|文件|模块|接口|测试|参数|逻辑|bug|错误)/,
+    /(实现|编写|生成)(一个|个)?(函数|脚本|程序|工具|模块)/i,
+    /(fix|implement|refactor|add|write|create)\s+(a\s+)?(function|script|module|class|test|method)/i,
+    /报错|异常|stack trace|Traceback|SyntaxError|TypeError/i,
+  ],
+  judge: [
+    /(选型|评估|判断|该不该|要不要|值不值|哪个好|怎么选|取舍|权衡)/,
+    /(风险|隐患|漏洞|问题在哪|为什么|原因是什么)/,
+    /(方案|策略|建议|推荐|话术|谈判|定价)/,
+    /(analyze|evaluate|assess|recommend|should|which is better|trade-?off)/i,
+  ],
+  mechanical: [
+    /(整理|转换|抽取|提取|翻译|分类|归类|格式化|清洗|拆分|合并|归纳|摘要)/,
+    /(翻译成|翻成|用英文|用中文|转成|变成)/,
+    /(translate|extract|classify|format|summarize|convert|clean|parse)/i,
+  ],
+  compute: [
+    /(统计|计算|求和|总数|多少个|去重|排序|筛选|平均值|最大值|最小值|占比)/,
+    /(count|sum|average|dedupe|sort|filter|total|how many)/i,
+  ],
+};
+
+function classify(text) {
+  // ① 敏感优先（这条覆盖其他所有规则）
+  const sens = isSensitive(text);
+  if (sens.level === 'T3a') {
+    return {
+      version: VERSION, level: 'T3a', channel: 'local-ollama',
+      reason: '命中绝密词：' + sens.hits.slice(0, 3).join('、'),
+      action: '⛔ 绝密内容永不出网 → 本地 Ollama（qwen2.5:1.5b）处理；不可用时我自己做',
+      cost: '零（本地）',
+      must_stay_local: true,
+    };
+  }
+  if (sens.level === 'T3b') {
+    return {
+      version: VERSION, level: 'T3b', channel: 'local-ollama',
+      reason: '命中内部词：' + sens.hits.slice(0, 3).join('、'),
+      action: '内部资料 → 本地 Ollama 优先；失败我自己做（不派云端）',
+      cost: '零（本地）',
+      must_stay_local: true,
+    };
+  }
+  // ② 难度分级
+  for (const [key, patterns] of Object.entries(SIGNALS)) {
+    if (!patterns.some((re) => re.test(text))) continue;
+    if (key === 'code') {
+      return {
+        version: VERSION, level: 'T1', channel: 'codex',
+        reason: '命中编程信号',
+        action: '派给 Codex（编码专用，不烧对话 token）',
+        cost: 'Codex 订阅（边际成本 0）', must_stay_local: false,
+      };
+    }
+    if (key === 'judge') {
+      return {
+        version: VERSION, level: 'T2', channel: 'deepseek-self',
+        reason: '命中判断信号',
+        action: '我做（需要取舍与责任判断，免费模型不可靠）',
+        cost: '收费（DeepSeek）', must_stay_local: false,
+      };
+    }
+    if (key === 'mechanical') {
+      return {
+        version: VERSION, level: 'T0', channel: 'free-cloud',
+        reason: '命中机械活信号（整理/转换/抽取/翻译/分类）',
+        action: '派给免费云模型（智谱 GLM-4-Flash，失败退 NVIDIA NIM）',
+        cost: '免费', must_stay_local: false,
+      };
+    }
+    if (key === 'compute') {
+      return {
+        version: VERSION, level: 'T0', channel: 'pure-script',
+        reason: '命中纯算信号（统计/计数/去重）',
+        action: '纯脚本算，连模型都不用',
+        cost: '零', must_stay_local: false,
+      };
+    }
+  }
+  return {
+    version: VERSION, level: 'T0', channel: 'free-cloud',
+    reason: '无强信号，默认按机械活处理',
+    action: '派给免费云模型', cost: '免费', must_stay_local: false,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ③ ★ V001.1 新增：本地微模型通道（Ollama）
+ * ══════════════════════════════════════════════════════════════════════
+ * 这是本次升级的核心 —— 用户明确要求「用本地微模型处理单据合同、
+ * 支付合同、法律文件等内部资料」。
+ *
+ * 为什么必须本地：
+ *   · 合同/报价/客户名单一旦发到云端，无论对方承诺什么，都是失控
+ *   · 1.5B 小模型做「抽取要点/分类/改写」这类机械活够了
+ *   · 敏感场景不需要「聪明」，需要「不出网」
+ */
+const OLLAMA = {
+  id: 'ollama',
+  name: 'Ollama 本地（数据不出本机）',
+  baseURL: process.env.OLLAMA_BASE || 'http://127.0.0.1:11434',
+  model: process.env.OLLAMA_MODEL || 'qwen2.5:1.5b',
+  fallbackModel: 'qwen2.5:1.5b',
+  cost: 0,
+};
+
+
+/* ══ QUALITY-GUARD-V0011 ══
+ * 本地 1.5B 输出的质量护栏（实测必需，见 docs/经济路由规则.md 第十一章）
+ * 纯规则实现，不依赖模型 —— 因为「用模型检查模型」在 1.5B 上不可靠
+ */
+function checkLocalQuality(output, input) {
+  const out = String(output || '');
+  const inp = String(input || '');
+  const issues = [];
+
+  // A. 回声检测：输出里有多少字符来自输入
+  if (inp.length > 80 && out.length > 80) {
+    const chunks = [];
+    const step = 20;
+    for (let i = 0; i + step <= inp.length; i += step) {
+      chunks.push(inp.slice(i, i + step));
+    }
+    const echoed = chunks.filter((c) => out.includes(c)).length;
+    const ratio = chunks.length ? echoed / chunks.length : 0;
+    if (ratio > 0.55) {
+      issues.push('回声率 ' + Math.round(ratio * 100) + '%（在复述原文，不是作答）');
+    }
+  }
+
+  // B. 退化检测
+  const lines = out.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (!lines.length) {
+    issues.push('输出为空');
+  } else {
+    const freq = {};
+    for (const l of lines) freq[l] = (freq[l] || 0) + 1;
+    const maxRep = Math.max(...Object.values(freq));
+    if (maxRep >= 3) {
+      const worst = Object.entries(freq).find(([, v]) => v === maxRep);
+      issues.push('同一行重复 ' + maxRep + ' 次（' + String(worst[0]).slice(0, 20) + '…）');
+    }
+    // 只有标点/空白
+    const meaningful = lines.join('').replace(/[\s\p{P}]/gu, '');
+    if (meaningful.length < 10) issues.push('几乎没有实质内容');
+  }
+
+  // C. 长度检测
+  if (out.trim().length < 20) {
+    issues.push('输出仅 ' + out.trim().length + ' 字符，可能没答完');
+  }
+
+  return {
+    ok: issues.length === 0,
+    issues,
+    verdict: issues.length === 0 ? '看起来正常'
+      : (issues.length === 1 ? '⚠ 可能不可靠' : '⛔ 明显不可靠'),
+    advice: issues.length === 0 ? ''
+      : '建议：这份输出只当「线索」，不要直接当结论；重要文件改用 DeepSeek 复核。',
+  };
+}
+
+async function ollamaProbe(timeoutMs = 4000) {
+  const t0 = Date.now();
+  try {
+    const r = await fetch(OLLAMA.baseURL + '/api/tags', {
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!r.ok) return { ok: false, ms: Date.now() - t0, error: 'HTTP ' + r.status };
+    const j = await r.json();
+    const names = (j.models || []).map((m) => m.name);
+    return {
+      ok: true, ms: Date.now() - t0, models: names,
+      hasTarget: names.includes(OLLAMA.model) ||
+        names.some((n) => n.startsWith(OLLAMA.model.split(':')[0])),
+    };
+  } catch (e) {
+    return {
+      ok: false, ms: Date.now() - t0,
+      error: String((e.cause && (e.cause.code || e.cause.message)) || e.message).slice(0, 80),
+      hint: '启动服务：D:\\AI\\OllamaApp\\ollama.exe serve',
+    };
+  }
+}
+
+async function callOllama(prompt, maxTokens = 900, timeoutMs = null) {
+  timeoutMs = Number(process.env.OLLAMA_TIMEOUT_MS || timeoutMs || 420000);
+  const t0 = Date.now();
+  // 冷启动（第一次加载模型可能 30-60s），故超时给足
+  try {
+    const r = await fetch(OLLAMA.baseURL + '/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: OLLAMA.model,
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: maxTokens,
+        temperature: 0.2,
+        stream: false,
+      }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    const ms = Date.now() - t0;
+    if (!r.ok) {
+      const t = await r.text().catch(() => '');
+      return { ok: false, ms, error: 'HTTP ' + r.status + ' ' + t.slice(0, 100) };
+    }
+    const j = await r.json();
+    const text = (j.choices && j.choices[0] && j.choices[0].message &&
+      j.choices[0].message.content) || '';
+    return { ok: true, ms, model: OLLAMA.model, text, usage: j.usage || null };
+  } catch (e) {
+    return {
+      ok: false, ms: Date.now() - t0,
+      error: String((e.cause && (e.cause.code || e.cause.message)) || e.message).slice(0, 100),
+    };
+  }
+}
+
+/** 本地派活（T3a/T3b 唯一出口；失败不降级到云端，只报错） */
+async function dispatchLocal(prompt, maxTokens = 900) {
+  const probe = await ollamaProbe();
+  if (!probe.ok) {
+    return {
+      ok: false, stays_local: true,
+      error: 'Ollama 不可用：' + probe.error,
+      hint: probe.hint,
+      no_fallback_reason: '⛔ 敏感内容绝不降级到云端 —— 请启动 Ollama，或我自己处理',
+    };
+  }
+  const r = await callOllama(prompt, maxTokens);
+  return { ...r, stays_local: true, provider: 'ollama',
+    providerName: OLLAMA.name };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ③b ★ V001.1 分块（实测必需）
+ * ══════════════════════════════════════════════════════════════════════
+ * 实测（2026-10-26 23:02，用真实文件）：
+ *   NDA 599 字符   → ✅ 输出有用（正确找出"未约定违约责任"）
+ *   维修合同 753   → ✅ 输出基本正确（4 项对 3 项）
+ *   技术协议 1242  → ❌ **退化**：输出一串重复的「明确的设备…详细说明」（幻觉列表）
+ *   ⇒ **1.5B 的可用上限约 800 字符**，超过就崩。
+ *
+ * 修法：按段落切块，每块 ≤ CHUNK_CHARS，逐块处理再合并。
+ * 这比「换个更大的模型」便宜得多，也更可控。
+ */
+const CHUNK_CHARS = Number(process.env.OLLAMA_CHUNK_CHARS || 700);
+
+function splitIntoChunks(text, maxChars = CHUNK_CHARS) {
+  if (text.length <= maxChars) return [text];
+  const paras = text.split(/\n{1,}/).filter((p) => p.trim());
+  const chunks = [];
+  let cur = '';
+  for (const p of paras) {
+    if (p.length > maxChars) {           // 单段超长 → 硬切
+      if (cur) { chunks.push(cur); cur = ''; }
+      for (let i = 0; i < p.length; i += maxChars) {
+        chunks.push(p.slice(i, i + maxChars));
+      }
+      continue;
+    }
+    if ((cur + '\n' + p).length > maxChars) {
+      if (cur) chunks.push(cur);
+      cur = p;
+    } else {
+      cur = cur ? cur + '\n' + p : p;
+    }
+  }
+  if (cur) chunks.push(cur);
+  return chunks.filter((c) => c.trim());
+}
+
+/** 分块本地处理：长文档自动切，逐块问，最后合并 */
+async function dispatchLocalChunked(instruction, docText, maxTokens = 500) {
+  if (docText.length <= CHUNK_CHARS) {         // 短文档 → 一次
+    const r = await dispatchLocal(
+      instruction + '\n\n---\n\n' + docText, maxTokens);
+    return { ...r, chunks: 1, chunked: false };
+  }
+  const parts = splitIntoChunks(docText, CHUNK_CHARS);
+  const outs = [];
+  let totalMs = 0;
+  let totalTokens = 0;
+  for (let i = 0; i < parts.length; i++) {
+    // ★ 内容在前、指令在后（实测：指令在前会让 1.5B 复述原文而不作答）
+    const sub = parts[i] + '\n\n---\n\n' + instruction;
+    const r = await dispatchLocal(sub, maxTokens);
+    if (!r.ok) {
+      return {
+        ...r, chunks: parts.length, chunked: true,
+        error: `第 ${i + 1}/${parts.length} 段失败：${r.error}`,
+        partial: outs,
+      };
+    }
+    totalMs += r.ms || 0;
+    totalTokens += (r.usage && r.usage.total_tokens) || 0;
+    outs.push({ i: i + 1, text: r.text });
+  }
+  return {
+    ok: true, stays_local: true, provider: 'ollama',
+    providerName: OLLAMA.name + `（分 ${parts.length} 块）`,
+    ms: totalMs, chunks: parts.length, chunked: true,
+    text: outs.map((o) => `【第${o.i}段】\n${o.text}`).join('\n\n'),
+    usage: { total_tokens: totalTokens },
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ④ 免费云通道（智谱 GLM / NVIDIA NIM）
+ * ══════════════════════════════════════════════════════════════════════ */
+const FREE_PROVIDERS = [
+  {
+    id: 'zhipu',
+    name: '智谱 GLM-4-Flash（永久免费）',
+    keyEnv: 'ZHIPU_API_KEY',
+    baseURL: 'https://open.bigmodel.cn/api/paas/v4',
+    model: 'glm-4-flash-250414',
+    fallbackModel: 'glm-4-flash',
+    free: true,
+    dataPolicy: '国内 · 敏感数据不走',
+  },
+  {
+    id: 'nvidia-glm',
+    name: 'GLM-5.3 Flash（NVIDIA NIM）',
+    keyEnv: 'NVIDIA_API_KEY',
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+    model: 'z-ai/glm-5.3-flash',
+    free: true,
+    dataPolicy: '海外 · 敏感数据不走',
+  },
+  {
+    id: 'nvidia-deepseek',
+    name: 'DeepSeek V4.1 Flash（NVIDIA NIM）',
+    keyEnv: 'NVIDIA_API_KEY',
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+    model: 'deepseek-ai/deepseek-v4.1-flash',
+    free: true,
+    dataPolicy: '海外 · 敏感数据不走',
+  },
+  {
+    id: 'nvidia-kimi',
+    name: 'Kimi K2.6（NVIDIA NIM）',
+    keyEnv: 'NVIDIA_API_KEY',
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+    model: 'moonshotai/kimi-k2.6',
+    free: true,
+    dataPolicy: '海外 · 敏感数据不走',
+  },
+];
+
+function availableProviders() {
+  return FREE_PROVIDERS.filter((p) => process.env[p.keyEnv]);
+}
+
+async function callFree(prompt, provider, maxTokens = 800, timeoutMs = 45000) {
+  const key = process.env[provider.keyEnv];
+  if (!key) return { ok: false, error: '缺 ' + provider.keyEnv };
+  const t0 = Date.now();
+  const doCall = async (model) => {
+    const r = await fetch(provider.baseURL + '/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + key,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: maxTokens,
+        temperature: 0.2,
+      }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!r.ok) {
+      const t = await r.text().catch(() => '');
+      throw new Error('HTTP ' + r.status + ' ' + t.slice(0, 80));
+    }
+    return r.json();
+  };
+  try {
+    let j;
+    try {
+      j = await doCall(provider.model);
+    } catch (e1) {
+      if (!provider.fallbackModel) throw e1;
+      j = await doCall(provider.fallbackModel);
+    }
+    const ms = Date.now() - t0;
+    return {
+      ok: true, ms, model: provider.model,
+      text: (j.choices && j.choices[0] && j.choices[0].message &&
+        j.choices[0].message.content) || '',
+      usage: j.usage || null,
+    };
+  } catch (e) {
+    return {
+      ok: false, ms: Date.now() - t0,
+      error: String((e.cause && (e.cause.code || e.cause.message)) ||
+        e.message).slice(0, 80),
+    };
+  }
+}
+
+async function dispatchFree(prompt, maxTokens = 800) {
+  const provs = availableProviders();
+  // ★ V001.1：免费云没 key 时，自动降级到本地 Ollama
+  //   理由：用户要求「用免费模型做普通工作」，而**本地 Ollama 本身就是免费的**。
+  //   云 key 缺失不该让整个通道瘫痪 —— 本地兜底既零成本又不出网，更安全。
+  if (!provs.length) {
+    const oll = await ollamaProbe();
+    if (oll.ok && oll.hasTarget) {
+      const r = await callOllama(prompt, maxTokens, Number(process.env.OLLAMA_TIMEOUT_MS || 420000));
+      if (r.ok) {
+        return {
+          ...r, provider: 'ollama', providerName: OLLAMA.name + '（云 key 缺失，自动兜底）',
+          attempts: [{ provider: 'ollama', name: OLLAMA.name, ok: true, ms: r.ms }],
+          fallback_used: true,
+        };
+      }
+      return {
+        ok: false, error: '免费云无 key，本地兜底也失败：' + r.error,
+        hint: '配 key：setx ZHIPU_API_KEY "你的key"；或启动 Ollama',
+        attempts: [{ provider: 'ollama', ok: false, error: r.error }],
+      };
+    }
+    return {
+      ok: false, error: '没有可用的免费通道（云 key 全缺，本地 Ollama 也不可用）',
+      hint: '二选一：① setx ZHIPU_API_KEY "你的key" ② 启动 Ollama（D:\\AI\\OllamaApp\\ollama.exe serve）',
+      attempts: [],
+    };
+  }
+  const attempts = [];
+  for (const p of provs) {
+    const r = await callFree(prompt, p, maxTokens);
+    attempts.push({ provider: p.id, name: p.name, ...r });
+    if (r.ok) {
+      return { ok: true, ...r, provider: p.id, providerName: p.name, attempts };
+    }
+  }
+  // ★ 云全失败 → 再试本地兜底
+  const oll = await ollamaProbe();
+  if (oll.ok && oll.hasTarget) {
+    const r = await callOllama(prompt, maxTokens, Number(process.env.OLLAMA_TIMEOUT_MS || 420000));
+    if (r.ok) {
+      return {
+        ...r, provider: 'ollama',
+        providerName: OLLAMA.name + '（云通道全失败，自动兜底）',
+        attempts, fallback_used: true,
+      };
+    }
+    attempts.push({ provider: 'ollama', ok: false, error: r.error });
+  }
+  return { ok: false, error: '所有免费通道都失败（含本地兜底）', attempts };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ⑤ Codex 派活（只生成命令，不自动执行）
+ * ══════════════════════════════════════════════════════════════════════ */
+const CODEX_PATHS = [
+  'D:\\AI\\npm_global\\codex.ps1',
+  'D:\\AI\\npm_global\\codex.cmd',
+  'D:\\AI\\npm_global\\codex',
+];
+
+function findCodex() {
+  for (const p of CODEX_PATHS) if (existsSync(p)) return p;
+  return null;
+}
+
+function dispatchCodex(task) {
+  const codex = findCodex();
+  if (!codex) {
+    return { ok: false, error: '找不到 codex（查过 ' + CODEX_PATHS.join(' / ') + '）' };
+  }
+  // ⚠️ 不自动执行 —— Codex 会改文件，必须先人确认
+  return {
+    ok: true, mode: 'command-only',
+    command: '& "' + codex + '" exec "' + String(task).replace(/"/g, '`"') + '"',
+    note: '⚠️ 不自动执行（Codex 会改文件）。确认后手动跑，或由我代跑。',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ⑥ 成本模型（用于算「省了多少钱」）
+ * ══════════════════════════════════════════════════════════════════════
+ * DeepSeek 官方价（2026-10 参考，元/百万 token）：
+ *   输入 ¥1.0 / 输出 ¥2.0（cache miss）；cache hit 输入 ¥0.1
+ * 保守按 ¥1.5/M 混合价估算（输入输出大致 3:1）。
+ * 这个单价只在「算省了多少钱」时用，不影响路由决策。
+ */
+const DEEPSEEK_CNY_PER_M = 1.5;
+
+function estCostCny(tokens) {
+  return ((tokens || 0) / 1e6) * DEEPSEEK_CNY_PER_M;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ⑦ 经济账
+ * ══════════════════════════════════════════════════════════════════════ */
+function logUsage(entry) {
+  try {
+    mkdirSync(DATA_DIR, { recursive: true });
+    appendFileSync(LEDGER,
+      JSON.stringify({ at: new Date().toISOString(), v: VERSION, ...entry }) + '\n',
+      'utf8');
+  } catch { /* 落盘失败不影响主流程 */ }
+}
+
+function readLedger() {
+  if (!existsSync(LEDGER)) return [];
+  try {
+    return readFileSync(LEDGER, 'utf8').split('\n').filter(Boolean)
+      .map((l) => { try { return JSON.parse(l); } catch { return null; } })
+      .filter(Boolean);
+  } catch { return []; }
+}
+
+function buildReport() {
+  const rows = readLedger();
+  const byChannel = {};
+  const byLevel = {};
+  let totalTokens = 0;
+  let freeTasks = 0;
+  let paidTasks = 0;
+  let localTasks = 0;
+  let savedTokens = 0;
+
+  for (const r of rows) {
+    const ch = r.channel || '?';
+    byChannel[ch] = (byChannel[ch] || 0) + 1;
+    const lv = r.level || '?';
+    byLevel[lv] = (byLevel[lv] || 0) + 1;
+    const tk = Number(r.tokens) || 0;
+    if (r.cost === 'free' || r.cost === 'zero' || ch === 'ollama') {
+      totalTokens += tk;
+      savedTokens += tk;                 // 这些 token 若走 DeepSeek 就要花钱
+      freeTasks++;
+      if (ch === 'ollama') localTasks++;
+    } else {
+      paidTasks++;
+    }
+  }
+  const total = rows.length;
+  return {
+    schema: 'mackorn-econ/2',
+    version: VERSION,
+    at: new Date().toISOString(),
+    total_tasks: total,
+    by_channel: byChannel,
+    by_level: byLevel,
+    free_tasks: freeTasks,
+    paid_tasks: paidTasks,
+    local_tasks: localTasks,
+    free_ratio: total ? Math.round((freeTasks / total) * 100) : 0,
+    local_ratio: total ? Math.round((localTasks / total) * 100) : 0,
+    tokens_routed_away: totalTokens,
+    saved_cny_est: Number(estCostCny(savedTokens).toFixed(4)),
+    note: 'free_ratio/free_tasks 含「本地 Ollama」与「纯脚本」；'
+      + 'saved_cny_est 按 DeepSeek ¥1.5/M token 估算，仅供参考。'
+      + 'DSH 会话本身的 token 不计入。',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * ⑧ 自测
+ * ══════════════════════════════════════════════════════════════════════ */
+async function selftest() {
+  const out = { version: VERSION, at: new Date().toISOString(), channels: {} };
+
+  // 本地
+  const oll = await ollamaProbe();
+  out.channels.ollama = {
+    ok: oll.ok && oll.hasTarget, probe: oll,
+    detail: oll.ok
+      ? (oll.hasTarget ? '服务在线，目标模型可用' : '服务在线但缺 ' + OLLAMA.model)
+      : '服务不在线',
+  };
+
+  // 免费云
+  const provKeys = {};
+  for (const p of FREE_PROVIDERS) {
+    provKeys[p.id] = { key: !!process.env[p.keyEnv], env: p.keyEnv };
+  }
+  out.channels.free_cloud = {
+    ok: availableProviders().length > 0,
+    providers: provKeys,
+    detail: availableProviders().length
+      ? '可用 ' + availableProviders().length + ' 条'
+      : '所有免费通道都缺 key',
+  };
+
+  // Codex
+  const cx = findCodex();
+  out.channels.codex = {
+    ok: !!cx, path: cx,
+    detail: cx ? '已找到 CLI' : '未找到 codex CLI',
+  };
+
+  // 纯脚本
+  out.channels.pure_script = { ok: true, detail: '始终可用（不需要外部依赖）' };
+
+  // DeepSeek（本会话）
+  out.channels.deepseek = {
+    ok: true,
+    detail: 'DSH 会话在用（本工具无法探测其 API，只标记可用）',
+  };
+
+  out.ok_count = Object.values(out.channels).filter((c) => c.ok).length;
+  out.total = Object.keys(out.channels).length;
+
+  try {
+    mkdirSync(DATA_DIR, { recursive: true });
+    writeFileSync(SELFTEST_JSON, JSON.stringify(out, null, 2), 'utf8');
+  } catch { /* ignore */ }
+  return out;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ * 主流程
+ * ══════════════════════════════════════════════════════════════════════ */
+
+/* ── --status */
+if (has('--status')) {
+  const oll = await ollamaProbe();
+  if (JSON_OUT) {
+    console.log(JSON.stringify({
+      version: VERSION,
+      ollama: oll,
+      free_available: availableProviders().map((p) => p.id),
+      free_total: FREE_PROVIDERS.length,
+      codex: findCodex(),
+    }, null, 2));
+    process.exit(0);
+  }
+  console.log('');
+  console.log('  ══ 经济路由 ' + VERSION + ' · 六通道状态 ══');
+  console.log('');
+  console.log('  ── T3a/T3b 敏感（本地，不出网）──');
+  console.log('  ' + (oll.ok && oll.hasTarget ? '✅' : '❌') + ' Ollama ' +
+    OLLAMA.model.padEnd(24) + (oll.ok
+      ? (oll.hasTarget ? '服务在线 · ' + oll.ms + 'ms' : '服务在线但缺目标模型')
+      : '不在线（' + (oll.error || '') + '）'));
+  console.log('      端点 ' + OLLAMA.baseURL + ' · 数据不出本机');
+  if (oll.ok && oll.models) console.log('      已装模型：' + oll.models.join(', '));
+  console.log('');
+  console.log('  ── T0 机械（免费云）──');
+  for (const p of FREE_PROVIDERS) {
+    const ok = !!process.env[p.keyEnv];
+    console.log('  ' + (ok ? '✅' : '❌') + ' ' + p.name.padEnd(34) +
+      ' ' + (ok ? 'key 已配' : '缺 ' + p.keyEnv));
+  }
+  console.log('      可用：' + availableProviders().length + '/' + FREE_PROVIDERS.length);
+  console.log('');
+  console.log('  ── 其他通道 ──');
+  const cx = findCodex();
+  console.log('  ' + (cx ? '✅' : '❌') + ' Codex（T1 编程）       ' + (cx || '未找到'));
+  console.log('  ✅ 纯脚本（T0 纯算）      始终可用');
+  console.log('  ✅ DeepSeek（总指挥）     本会话在用（收费，只在 T2 判断时用）');
+  console.log('');
+  process.exit(0);
+}
+
+/* ── --selftest */
+if (has('--selftest')) {
+  const st = await selftest();
+  if (JSON_OUT) { console.log(JSON.stringify(st, null, 2)); process.exit(0); }
+  console.log('');
+  console.log('  ══ 通道自测 ' + VERSION + ' ══');
+  console.log('');
+  for (const [k, v] of Object.entries(st.channels)) {
+    console.log('  ' + (v.ok ? '✅' : '❌') + ' ' + k.padEnd(14) + ' ' + v.detail);
+    if (k === 'free_cloud' && v.providers) {
+      for (const [pid, pv] of Object.entries(v.providers)) {
+        console.log('       ' + (pv.key ? '✅' : '—') + ' ' + pid + '（' + pv.env + '）');
+      }
+    }
+    if (k === 'ollama' && v.probe && v.probe.models) {
+      console.log('       模型：' + v.probe.models.join(', '));
+    }
+  }
+  console.log('');
+  console.log('  可用 ' + st.ok_count + '/' + st.total + ' 条通道');
+  console.log('  报告：econ-data/econ-selftest.json');
+  console.log('');
+  process.exit(st.ok_count >= 3 ? 0 : 1);
+}
+
+/* ── --classify */
+const classifyText = val('--classify');
+if (classifyText) {
+  const c = classify(classifyText);
+  if (JSON_OUT) { console.log(JSON.stringify(c, null, 2)); process.exit(0); }
+  console.log('');
+  console.log('  ══ 任务判级 ' + VERSION + ' ══');
+  console.log('  任务：' + classifyText.slice(0, 80));
+  console.log('');
+  console.log('  级别：' + c.level + '  通道：' + c.channel);
+  console.log('  理由：' + c.reason);
+  console.log('  动作：' + c.action);
+  console.log('  成本：' + c.cost);
+  if (c.must_stay_local) {
+    console.log('  ⛔ **必须留在本机**（绝不降级到云端）');
+  }
+  console.log('');
+  process.exit(0);
+}
+
+/* ── --route：★ V001.1 新增，自动判级 + 自动派 */
+const routeText = val('--route');
+if (routeText) {
+  const c = classify(routeText);
+  console.log('');
+  console.log('  ══ 自动路由 ' + VERSION + ' ══');
+  console.log('  判级：' + c.level + ' → ' + c.channel);
+  console.log('  理由：' + c.reason);
+  console.log('');
+
+  let r = null;
+  if (c.channel === 'local-ollama') {
+    console.log('  ⛔ 敏感内容 —— 只走本地（不出网）');
+    console.log('  ⏳ 派给本地 Ollama…（首次调用需加载模型，可能 30-90s）');
+    r = await dispatchLocal(routeText, 900);
+  } else if (c.channel === 'codex') {
+    r = dispatchCodex(routeText);
+    console.log('  → 该派给 Codex');
+    console.log('  ' + (r.ok ? '命令：' + r.command : '❌ ' + r.error));
+    console.log('');
+    process.exit(r.ok ? 0 : 1);
+  } else if (c.channel === 'deepseek-self') {
+    console.log('  → 该我自己做（T2 判断类），不适合派给免费模型');
+    console.log('     原因：需要取舍与责任判断，免费模型不可靠');
+    console.log('');
+    process.exit(0);
+  } else if (c.channel === 'pure-script') {
+    console.log('  → 纯算任务，建议写脚本而不是问模型');
+    console.log('     （本工具不代写脚本，交给 Codex 或我自己）');
+    console.log('');
+    process.exit(0);
+  } else {
+    console.log('  ⏳ 派给免费云通道…');
+    r = await dispatchFree(routeText, 800);
+  }
+
+  if (r && r.ok) {
+    console.log('  ✅ ' + r.providerName + ' · ' + r.ms + 'ms · ' + (r.model || ''));
+    if (r.usage) {
+      console.log('  token: ' + r.usage.total_tokens +
+        '（输入 ' + r.usage.prompt_tokens + ' / 输出 ' + r.usage.completion_tokens + '）');
+      console.log('  省下（若走 DeepSeek）：¥' +
+        estCostCny(r.usage.total_tokens).toFixed(6));
+    }
+    console.log('');
+    console.log('  ── 结果 ──');
+    console.log(String(r.text).split('\n').map((l) => '  ' + l).join('\n'));
+    console.log('');
+    logUsage({
+      task: routeText.slice(0, 200), level: c.level, channel: r.provider,
+      cost: c.channel === 'local-ollama' ? 'zero' :
+        (c.channel === 'free-cloud' ? 'free' : 'paid'),
+      ms: r.ms, tokens: r.usage ? r.usage.total_tokens : null,
+      stays_local: !!r.stays_local,
+    });
+  } else if (r) {
+    console.log('  ❌ ' + (r.error || '失败'));
+    if (r.hint) console.log('     ' + r.hint);
+    if (r.no_fallback_reason) console.log('     ' + r.no_fallback_reason);
+    if (r.attempts) {
+      for (const a of r.attempts) console.log('     · ' + a.name + ': ' + (a.error || '?'));
+    }
+    console.log('');
+    process.exit(1);
+  }
+  console.log('');
+  process.exit(r && r.ok ? 0 : 1);
+}
+
+/* ── V001.1：文档抽取（.docx/.pdf/.xlsx 走 Python，Node 没这些库） */
+/* ⚠ 沙箱边界（实测 2026-10-26 22:52）：Node 的 spawn 用默认 stdio:'pipe'
+ *   捕获子进程输出会被拦（EPERM，named pipes 不可用）。
+ *   ⇒ 改成：子进程用 `stdio:'ignore'`，结果**写临时文件**，父进程再读文件。
+ *   这是本机跑外部工具的唯一可行方式。
+ */
+import { spawnSync as _spawn } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { unlinkSync } from 'node:fs';
+
+function findPython() {
+  const cands = [
+    process.env.ECON_PYTHON,
+    'C:\\Users\\m00002\\.dsh\\dsh-runtimes\\dsh-primary-runtime\\dependencies\\python\\python.exe',
+  ].filter(Boolean);
+  const probe = join(tmpdir(), 'econ_py_probe_' + process.pid + '.txt');
+  for (const p of cands) {
+    try {
+      if (existsSync(probe)) { try { unlinkSync(probe); } catch { /* */ } }
+      const code = 'import sys;open(r"' + probe + '","w").write(str(sys.version_info[0]))';
+      const r = _spawn(p, ['-c', code], { stdio: 'ignore', timeout: 20000 });
+      if (r.status === 0 && existsSync(probe)) {
+        const v = readFileSync(probe, 'utf8').trim();
+        try { unlinkSync(probe); } catch { /* */ }
+        if (v === '3') return p;
+      }
+    } catch { /* next */ }
+  }
+  try { if (existsSync(probe)) unlinkSync(probe); } catch { /* */ }
+  return null;
+}
+
+/** 抽文档正文。返回 {ok, text, err} */
+function extractDocText(file, maxLen = 20000) {
+  const ext = String(file).toLowerCase().match(/\.[a-z0-9]+$/);
+  const e = ext ? ext[0] : '';
+  // 纯文本直接读
+  if (['.txt', '.md', '.csv', '.json', '.log', '.xml'].includes(e)) {
+    try { return { ok: true, text: readFileSync(file, 'utf8').slice(0, maxLen) }; }
+    catch (er) { return { ok: false, err: String(er.message).slice(0, 120) }; }
+  }
+  // docx/pdf/xlsx 走 Python（结果经临时文件中转）
+  const py = findPython();
+  if (!py) {
+    return { ok: false, err: '找不到 Python 3（' + e + ' 需要它来解析）' };
+  }
+  const script = join(HERE, 'extract_doc.py');
+  if (!existsSync(script)) return { ok: false, err: '缺 tools/extract_doc.py' };
+  const outFile = join(tmpdir(), 'econ_doc_' + process.pid + '_' + Date.now() + '.txt');
+  try {
+    const r = _spawn(py, [script, file, '--max', String(maxLen), '--out', outFile],
+      { stdio: 'ignore', timeout: 120000 });
+    if (r.status !== 0) {
+      return { ok: false, err: '抽取器退出码 ' + r.status + '（' + e + '）' };
+    }
+    if (!existsSync(outFile)) return { ok: false, err: '抽取器没产出结果文件' };
+    const t = readFileSync(outFile, 'utf8').trim();
+    if (!t) return { ok: false, err: '抽取结果为空' };
+    return { ok: true, text: t };
+  } catch (er) {
+    return { ok: false, err: String(er.message).slice(0, 160) };
+  } finally {
+    try { if (existsSync(outFile)) unlinkSync(outFile); } catch { /* */ }
+  }
+}
+
+/* ── --local：★ V001.1 新增，显式走本地（可带文件） */
+let _lastDocText = '';
+const localText = val('--local');
+const localFile = val('--file');
+if (localText !== null || localFile) {
+  let prompt = localText || '';
+  if (localFile) {
+    if (!existsSync(localFile)) {
+      console.log('  ❌ 文件不存在：' + localFile);
+      process.exit(1);
+    }
+    console.log('');
+    console.log('  📄 读取：' + basename(localFile));
+    const ex = extractDocText(localFile);
+    if (!ex.ok) {
+      console.log('  ❌ 抽取失败：' + ex.err);
+      process.exit(1);
+    }
+    console.log('  正文 ' + ex.text.length + ' 字符');
+    _lastDocText = ex.text;
+    prompt = (prompt ? prompt + '\n\n---\n\n' : '') + ex.text;
+  }
+  if (!prompt) { console.log('  ❌ 没有内容'); process.exit(1); }
+
+  console.log('');
+  console.log('  ══ 本地模型处理 ' + VERSION + ' ══');
+  console.log('  模型：' + OLLAMA.model + '（数据不出本机）');
+  console.log('  ⏳ 加载中…首次可能 30-90s');
+  console.log('');
+  // ★ 长文档自动分块（实测 1.5B 超过 ~800 字符会退化）
+const _maxTok = Number(process.env.OLLAMA_MAX_TOKENS || 500);
+const r = localFile
+  ? await dispatchLocalChunked(prompt || '请阅读全文并只输出要点',
+      _lastDocText || prompt, _maxTok)
+  : await dispatchLocal(prompt, _maxTok);
+if (r.chunked) {
+  console.log('  ⚠ 文档 ' + (_lastDocText || '').length + ' 字符 > ' +
+    CHUNK_CHARS + '，已自动分成 ' + r.chunks + ' 块（1.5B 直吃不消）');
+  console.log('');
+}
+  if (r.ok) {
+    console.log('  ✅ ' + r.ms + 'ms · token ' +
+      (r.usage ? r.usage.total_tokens : '?'));
+    console.log('');
+    console.log('  ── 结果 ──');
+    console.log(String(r.text).split('\n').map((l) => '  ' + l).join('\n'));
+    console.log('');
+    // ★ 质量护栏（本地 1.5B 不可靠，必须自动判定）
+    const _q = checkLocalQuality(r.text, prompt);
+    console.log('  ── 质量判定（自动）──');
+    console.log('  ' + _q.verdict);
+    if (!_q.ok) {
+      for (const it of _q.issues) console.log('    · ' + it);
+      console.log('  ' + _q.advice);
+    }
+    console.log('');
+    logUsage({
+      task: prompt.slice(0, 200), level: 'T3a', channel: 'ollama',
+      cost: 'zero', ms: r.ms,
+      tokens: r.usage ? r.usage.total_tokens : null, stays_local: true,
+    });
+    process.exit(0);
+  }
+  console.log('  ❌ ' + r.error);
+  if (r.hint) console.log('     ' + r.hint);
+  if (r.no_fallback_reason) console.log('     ' + r.no_fallback_reason);
+  console.log('');
+  process.exit(1);
+}
+
+/* ── --exec：派给免费云（明确拒绝敏感） */
+const execText = val('--exec');
+if (execText) {
+  const c = classify(execText);
+  console.log('');
+  console.log('  ══ 派活 ' + VERSION + ' ══');
+  console.log('  判级：' + c.level + ' → ' + c.channel);
+  console.log('  理由：' + c.reason);
+  console.log('');
+
+  if (c.must_stay_local) {
+    console.log('  ⛔ 敏感内容不出网 —— 拒绝派给云通道');
+    console.log('     命中：' + c.reason);
+    console.log('     请用 --local 走本地 Ollama，或我自己处理');
+    console.log('');
+    process.exit(2);
+  }
+  if (c.channel === 'codex') {
+    const r = dispatchCodex(execText);
+    console.log('  → 该派给 Codex，不是免费模型');
+    console.log('  ' + (r.ok ? '命令：' + r.command : '❌ ' + r.error));
+    console.log('');
+    process.exit(0);
+  }
+  if (c.channel === 'deepseek-self') {
+    console.log('  → 该我自己做（判断类）');
+    console.log('');
+    process.exit(0);
+  }
+
+  console.log('  ⏳ 派给免费通道…');
+  const r = await dispatchFree(execText, 800);
+  if (r.ok) {
+    console.log('  ✅ ' + r.providerName + ' · ' + r.ms + 'ms');
+    if (r.usage) {
+      console.log('  token: ' + r.usage.total_tokens + '｜省 ¥' +
+        estCostCny(r.usage.total_tokens).toFixed(6));
+    }
+    console.log('');
+    console.log('  ── 结果 ──');
+    console.log(String(r.text).split('\n').map((l) => '  ' + l).join('\n'));
+    console.log('');
+    logUsage({
+      task: execText.slice(0, 200), level: c.level, channel: r.provider,
+      cost: 'free', ms: r.ms,
+      tokens: r.usage ? r.usage.total_tokens : null,
+    });
+  } else {
+    console.log('  ❌ ' + r.error);
+    if (r.hint) console.log('     ' + r.hint);
+    if (r.attempts) for (const a of r.attempts) {
+      console.log('     · ' + a.name + ': ' + (a.error || '?'));
+    }
+    console.log('');
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
+/* ── --codex */
+const codexTask = val('--codex');
+if (codexTask) {
+  const r = dispatchCodex(codexTask);
+  if (r.ok) {
+    console.log('');
+    console.log('  ══ Codex 派活 ══');
+    console.log('  任务：' + codexTask);
+    console.log('');
+    console.log('  命令：');
+    console.log('    ' + r.command);
+    console.log('');
+    console.log('  ' + r.note);
+    console.log('');
+  } else {
+    console.log('  ❌ ' + r.error);
+  }
+  process.exit(0);
+}
+
+/* ── --batch */
+const batchFile = val('--batch');
+if (batchFile && existsSync(batchFile)) {
+  const tasks = readFileSync(batchFile, 'utf8').split('\n')
+    .map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+  console.log('');
+  console.log('  ══ 批量派活（' + tasks.length + ' 个任务）══');
+  console.log('');
+  let free = 0, local = 0, self_ = 0, codex_ = 0, refused = 0, failed = 0;
+  for (let i = 0; i < tasks.length; i++) {
+    const t = tasks[i];
+    const c = classify(t);
+    process.stdout.write('  [' + (i + 1) + '/' + tasks.length + '] ' +
+      c.level + ' ' + t.slice(0, 46).padEnd(48) + ' ');
+    if (c.must_stay_local) {
+      const r = await dispatchLocal(t, 700);
+      if (r.ok) { console.log('🔒 本地 ' + r.ms + 'ms'); local++; }
+      else { console.log('❌ 本地不可用'); failed++; }
+      continue;
+    }
+    if (c.channel === 'codex') { console.log('→ Codex'); codex_++; continue; }
+    if (c.channel === 'deepseek-self') { console.log('→ 我自己'); self_++; continue; }
+    if (c.channel === 'pure-script') { console.log('→ 脚本'); self_++; continue; }
+    const r = await dispatchFree(t, 600);
+    if (r.ok) { console.log('✅ ' + r.ms + 'ms'); free++; }
+    else { console.log('❌ ' + (r.error || '').slice(0, 26)); failed++; }
+  }
+  console.log('');
+  console.log('  免费云 ' + free + ' · 本地 ' + local + ' · 我自己 ' + self_ +
+    ' · Codex ' + codex_ + ' · 失败 ' + failed);
+  console.log('');
+  process.exit(0);
+}
+
+/* ── --report */
+if (has('--report')) {
+  const rep = buildReport();
+  mkdirSync(DATA_DIR, { recursive: true });
+  writeFileSync(OUT_JSON, JSON.stringify(rep, null, 2), 'utf8');
+  if (JSON_OUT) { console.log(JSON.stringify(rep, null, 2)); process.exit(0); }
+  console.log('');
+  console.log('  ══ 经济账 ' + VERSION + ' ══');
+  console.log('  总任务数：' + rep.total_tasks);
+  console.log('  免费处理（含本地零成本）：' + rep.free_tasks +
+    ' · 收费处理：' + rep.paid_tasks);
+  console.log('  **免费占比：' + rep.free_ratio + '%**（越高越省）');
+  console.log('  其中本地处理（不出网）：' + rep.local_tasks +
+    '（' + rep.local_ratio + '%）');
+  console.log('  路由到免费/本地的 token：' + rep.tokens_routed_away);
+  console.log('  **估算省下：¥' + rep.saved_cny_est + '**（按 DeepSeek ¥1.5/M token）');
+  console.log('');
+  if (rep.total_tasks === 0) {
+    console.log('  ⚠️ 还没有派活记录。用 --route / --exec / --batch 派几件活再来。');
+  } else {
+    console.log('  ── 按通道 ──');
+    for (const [k, v] of Object.entries(rep.by_channel)) {
+      console.log('    ' + k + ': ' + v);
+    }
+    console.log('  ── 按级别 ──');
+    for (const [k, v] of Object.entries(rep.by_level)) {
+      console.log('    ' + k + ': ' + v);
+    }
+  }
+  console.log('');
+  console.log('  报告：econ-data/econ-report.json');
+  console.log('  台账：econ-data/econ-ledger.jsonl');
+  console.log('');
+  process.exit(0);
+}
+
+/* 无参数：帮助 */
+console.log('');
+console.log('  ══ 经济路由器 ' + VERSION + ' ══');
+console.log('  （收费 DeepSeek 当总指挥 · 免费模型干活 · 本地模型保管密 · Codex 编程）');
+console.log('');
+console.log('  用法：');
+console.log('    --status                六通道状态（含 Ollama 实探）');
+console.log('    --selftest              逐通道自测');
+console.log('    --classify "任务"        只判级不执行');
+console.log('    --route "任务"           ★ 自动判级 + 自动派活');
+console.log('    --local "任务"           ★ 强制走本地模型（敏感）');
+console.log('    --local "要求" --file f  ★ 本地处理文件');
+console.log('    --exec "任务"            派给免费云（明确拒绝敏感）');
+console.log('    --codex "任务"           生成 Codex 命令');
+console.log('    --batch 文件             批量派活（一行一个）');
+console.log('    --report                经济账（含省钱估算）');
+console.log('');
+console.log('  六通道分级：');
+console.log('    T3a 绝密 → 本地 Ollama（合同/支付/法务/客户名单/图纸）**不出网**');
+console.log('    T3b 内部 → 本地 Ollama（人事/工资/预算）**不出网**');
+console.log('    T2  判断 → DeepSeek（我）');
+console.log('    T1  编程 → Codex');
+console.log('    T0  机械 → 免费云（智谱 GLM-4-Flash / NVIDIA NIM）');
+console.log('    T0  纯算 → 纯脚本');
+console.log('');
+export { checkLocalQuality, classify, isSensitive, ollamaProbe, callOllama, dispatchLocal,
+  dispatchFree, dispatchCodex, buildReport, selftest, VERSION };
