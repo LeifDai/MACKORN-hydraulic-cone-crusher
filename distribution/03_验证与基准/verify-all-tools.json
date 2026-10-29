@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-29T12:46:54.386Z",
+  "generated": "2026-10-29T19:38:59.617Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -17,12 +17,12 @@
     {
       "name": "mackorn_cone_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_capacity_check",
@@ -32,7 +32,7 @@
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_mcfm_analysis",
@@ -42,17 +42,17 @@
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grading_porosity",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_intel",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_selection_report",
@@ -87,12 +87,12 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 45
+      "ms": 46
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 145
+      "ms": 137
     },
     {
       "name": "mackorn_contact",
@@ -102,7 +102,7 @@
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_stats",
@@ -132,7 +132,7 @@
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_full_chain",

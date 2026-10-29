@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-harness/1",
-  "generated": "2026-10-29T12:48:14.295Z",
+  "generated": "2026-10-29T19:39:48.253Z",
   "what_this_is": "MACKORN 插件的运行边界清单。任何接手的 Agent（云端/他人/另一个 AI）应先读本文件，再动手。",
   "hard_rules": [
     {
