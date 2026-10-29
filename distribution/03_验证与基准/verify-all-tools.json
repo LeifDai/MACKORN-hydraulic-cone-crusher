@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-29T00:02:47.322Z",
+  "generated": "2026-10-29T05:38:58.615Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,22 +7,22 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 3
+      "ms": 5
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_cone_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_capacity_check",
@@ -42,7 +42,7 @@
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_grading_porosity",
@@ -57,7 +57,7 @@
     {
       "name": "mackorn_selection_report",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_equipment_catalog",
@@ -72,7 +72,7 @@
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
@@ -82,17 +82,17 @@
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 3
+      "ms": 6
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 24
+      "ms": 48
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 78
+      "ms": 128
     },
     {
       "name": "mackorn_contact",
@@ -107,7 +107,7 @@
     {
       "name": "mackorn_market_stats",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_knowledge",
@@ -117,7 +117,7 @@
     {
       "name": "mackorn_grinding_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_beneficiation_selection",
@@ -142,12 +142,12 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_screen_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     }
   ]
 }
