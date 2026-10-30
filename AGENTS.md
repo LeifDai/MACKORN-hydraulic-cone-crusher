@@ -588,3 +588,66 @@ Five tools have `vendor_params_pending: true` — their models are literature-ba
 
 
 <!-- /MACKORN-BRAND-BLOCK -->
+---
+
+## 13. ★★★★★ 断点续接（用户 2026-10-27 16:39 明令 · 每次开工第一件事）
+
+> **用户原话**：「每次开工，都要回顾之前的对话，回顾焦点问题，
+>  请编写进入断电，断点续接程序」（连说两次）
+
+### 开工第一条命令
+
+```powershell
+cd "D:\DSH desktop\DSH destop工作区\MACKORN-DSH-Plugin"
+node tools\resume.mjs          # 或双击 开工.cmd
+```
+
+**输出一个屏（≤35 行）**，四段：
+```
+① 上次做到哪      最新交接文档 + 时间 + 上次留的待办
+② 焦点            收录数 / 已收录更新 / GitHub 版本 / 待收录对策
+③ 未完成的债      版本不一致 / 工具数不一致 / 文档引用不存在 / 焦点过期
+④ 今天第一件事    ★ 明确一条 + 理由
+```
+
+### 为什么必须有
+
+```
+会话之间不共享上下文。关机 = 上下文全丢。
+靠"翻聊天记录"或"凭记忆"接手 → 必漏事。
+⇒ 把「接手」变成一条命令。
+```
+
+### 四条硬规矩
+
+```
+① 每次开工第一件事 = node tools/resume.mjs（不许跳过直接干）
+② 交接文档写进 distribution/*交接*.md（resume 会自动找最新的）
+③ 交接里用 [P0]/[P1]/[P2] 标记待办（resume 会自动抽出来）
+④ 开工后如果发现 resume 漏了什么 → 立刻补进交接，下次就能接上
+```
+
+### 数据
+
+```
+报告：resume-data/latest.json
+历史：resume-data/history.jsonl（每次开工留痕）
+每日：resume-data/resume-YYYY-MM-DD.json
+```
+
+### 焦点程序（第二件事）
+
+```powershell
+node tools/daily_focus.mjs     # 或不带参数跑 resume 已包含
+```
+
+**焦点固定为「让更多 AI 收录我们」**，四件事：
+```
+① 回顾收录清单      现在几个收录了
+② 已收录的更新      已收录平台的内容/版本是否过期
+③ GitHub 插件更新   本地/npm/GitHub 三方版本是否一致
+④ 待收录的分析对策  没收录的卡在哪、下一步干什么
+```
+
+**用户明令：聚焦，别太分散。** 不要再铺 74 个平台的监控，
+就盯这四件事，每天一次。
