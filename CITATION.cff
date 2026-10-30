@@ -1,10 +1,10 @@
-cff-version: 1.2.0
+cff-version: 0.2.2
 message: "If you use this software or its data in your work, please cite it as below. / 使用本软件或其数据时请按下列格式引用。"
 title: "MACKORN Hydraulic Cone Crusher Selection — NH/NS Series"
 abstract: >-
   An open-source (MIT) engineering engine for hydraulic cone crusher selection,
   crushing-and-screening plant design, steady-state flow simulation and
-  measured-data calibration. Exposed as 22 MCP tools for AI agents.
+  measured-data calibration. Exposed as 29 MCP tools for AI agents.
   Covers MACKORN NH (standard) and NS (high-speed) single-cylinder hydraulic
   cone crushers for aggregate and metal-mine crushing circuits.
 type: software
@@ -24,7 +24,7 @@ contact:
     email: "leif.dai@mackorn.cn"
     affiliation: "Shanghai Mackorn Minerals Co., Ltd."
 license: MIT
-version: "0.2.0"
+version: 0.2.2
 date-released: "2026-10-08"
 repository-code: "https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher"
 url: "https://mackorn.cn/ai/"
