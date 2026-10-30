@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-10-29T23:59:33.212Z",
+  "generated": "2026-10-30T05:16:48.267Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,24 +12,24 @@
     "error": null
   },
   "last_commit": {
-    "sha": "b253611",
-    "date": "2026-10-29T19:39:57Z",
-    "message": "chore(nightly): 云端自迭代 2026-10-29 19:39 [skip ci]"
+    "sha": "d1cc84f",
+    "date": "2026-10-30T03:41:13Z",
+    "message": "docs: 开机交接 2026-10-30 — 8收录 / C1C2C6全403 / 下次插AI"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 11.37,
+    "days_since": 11.59,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.18,
-  "days_since_publish": 0.18,
+  "effective_days": 0.07,
+  "days_since_publish": 0.07,
   "changed_since_publish": {
-    "count": 317,
+    "count": 319,
     "files": [
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/index.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/automation-engine.mjs",
@@ -94,7 +94,7 @@
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.2 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.1 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
