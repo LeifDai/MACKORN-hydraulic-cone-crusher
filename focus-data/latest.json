@@ -1,0 +1,104 @@
+{
+  "schema": "mackorn-daily-focus/1",
+  "date": "2026-10-27",
+  "at": "2026-10-27T08:39:39.483Z",
+  "focus": "让更多 AI 收录我们",
+  "quick": false,
+  "sections": [
+    {
+      "key": "listed",
+      "title": "① 回顾收录清单",
+      "question": "现在到底有几个 AI/平台收录了我们？",
+      "data": {
+        "probe_listed": 1,
+        "probe_not_listed": 2,
+        "probe_blocked": 4,
+        "probe_errors": 7,
+        "ledger_total": 74,
+        "ledger_listed": 24,
+        "listed_names": [
+          "npm registry"
+        ],
+        "not_listed_names": [
+          "MCP-X",
+          "MCPList"
+        ],
+        "blocked_names": [
+          "GitHub",
+          "punkpeye/awesome-mcp-servers",
+          "awesome-dsh-plugin",
+          "MCPServers.org"
+        ]
+      },
+      "verdict": "探测到 1 个确认收录 · 2 个未收录 · 4 个被挡 · 7 个错误",
+      "next": "先重跑 node tools/directory_checker.mjs --check（错误≥3 通常是网络问题）"
+    },
+    {
+      "key": "updates",
+      "title": "② 已收录的更新",
+      "question": "已收录的平台，内容/版本是不是过期了？",
+      "data": {
+        "current_version": "0.2.2",
+        "current_tools": "29",
+        "in_sync": [
+          "README.md",
+          "llms.txt",
+          "QUICKSTART.md",
+          "server.json",
+          "CITATION.cff"
+        ],
+        "stale": [
+          {
+            "file": "AGENTS.md",
+            "issue": "找不到版本/工具数标记"
+          }
+        ],
+        "listed_over_90d": []
+      },
+      "verdict": "⚠️ 1 个文件里的版本/工具数过期",
+      "next": "跑 node tools/sync_tool_count_facts.mjs 自动同步；版本号手改"
+    },
+    {
+      "key": "github",
+      "title": "③ GitHub 插件更新",
+      "question": "仓库版本、npm 版本、工具数是否一致？",
+      "data": {
+        "local_version": "0.2.2",
+        "npm_latest": "0.2.2",
+        "github_head": null,
+        "version_match": true,
+        "github_version": "0.2.2"
+      },
+      "verdict": "✅ 三方版本一致：本地 v0.2.2 = npm 0.2.2 = GitHub 0.2.2",
+      "next": "无需更新"
+    },
+    {
+      "key": "todo",
+      "title": "④ 待收录的分析对策",
+      "question": "没收录的，各卡在哪、下一步干什么？",
+      "data": {
+        "total": 2,
+        "items": [
+          {
+            "name": "MCP-X",
+            "status": "not-listed",
+            "blocker": "页面 200 但搜不到 mackorn 标识符",
+            "action": "手动提交一次（填表），提交后 7 天再查；若仍无，找它们的 GitHub 提 issue",
+            "effort": "15 分钟",
+            "priority": "P1"
+          },
+          {
+            "name": "MCPList",
+            "status": "not-listed",
+            "blocker": "站点 404（可能已关停或换域名）",
+            "action": "先确认站点是否还活着；死了就从清单移除，不再浪费精力",
+            "effort": "5 分钟",
+            "priority": "P2"
+          }
+        ]
+      },
+      "verdict": "⚠️ 2 个待收录",
+      "next": "按 P0 → P1 → P2 顺序处理；每个都写清「卡在哪 + 下一步」"
+    }
+  ]
+}
