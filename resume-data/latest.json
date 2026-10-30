@@ -1,0 +1,79 @@
+{
+  "schema": "mackorn-resume/1",
+  "date": "2026-10-29",
+  "at": "2026-10-29T08:50:45.758Z",
+  "full": false,
+  "handoff": {
+    "file": "⏻开机交接-2026-10-27.md",
+    "when": "2026-10-27 00:11",
+    "size_kb": 7.6,
+    "hours_ago": 56.7,
+    "count": 7,
+    "todos": [],
+    "next_lines": [
+      "下次第一件事：让文档与磁盘一致（copy 一份 V001.5.1.mjs 最省事）。"
+    ],
+    "done_marks": 9
+  },
+  "focus": {
+    "ok": true,
+    "date": "2026-10-27",
+    "stale_days": 2,
+    "listed": {
+      "verdict": "探测到 1 个确认收录 · 2 个未收录 · 4 个被挡 · 7 个错误",
+      "next": "先重跑 node tools/directory_checker.mjs --check（错误≥3 通常是网络问题）",
+      "counts": {
+        "listed": 1,
+        "not_listed": 2,
+        "blocked": 4,
+        "errors": 7
+      }
+    },
+    "updates": {
+      "verdict": "⚠️ 1 个文件里的版本/工具数过期",
+      "next": "跑 node tools/sync_tool_count_facts.mjs 自动同步；版本号手改",
+      "stale": [
+        "AGENTS.md — 找不到版本/工具数标记"
+      ]
+    },
+    "github": {
+      "verdict": "✅ 三方版本一致：本地 v0.2.2 = npm 0.2.2 = GitHub 0.2.2",
+      "next": "无需更新"
+    },
+    "todo": {
+      "verdict": "⚠️ 2 个待收录",
+      "items": [
+        {
+          "priority": "P1",
+          "name": "MCP-X",
+          "action": "手动提交一次（填表），提交后 7 天再查；若仍无，找它们的 GitHub 提 issue",
+          "effort": "15 分钟",
+          "blocker": "页面 200 但搜不到 mackorn 标识符"
+        },
+        {
+          "priority": "P2",
+          "name": "MCPList",
+          "action": "先确认站点是否还活着；死了就从清单移除，不再浪费精力",
+          "effort": "5 分钟",
+          "blocker": "站点 404（可能已关停或换域名）"
+        }
+      ]
+    }
+  },
+  "debts": [
+    {
+      "kind": "焦点报告过期",
+      "detail": "focus-data 是 2026-10-27，今天 2026-10-29",
+      "fix": "node tools/daily_focus.mjs"
+    },
+    {
+      "kind": "很久没开工",
+      "detail": "上次续接是 48 小时前（2026-10-27）",
+      "fix": "先看交接，再看焦点"
+    }
+  ],
+  "first": {
+    "action": "node tools/daily_focus.mjs",
+    "why": "焦点报告过期，先拿今天真实数据"
+  }
+}
