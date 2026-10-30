@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-live-health/1",
-  "generated": "2026-10-30T05:16:53.305Z",
+  "generated": "2026-10-30T12:37:08.299Z",
   "host": "mackorn.cn",
   "cert_warn_days": 14,
   "expected_tools": 22,
@@ -9,10 +9,10 @@
       "id": "cert",
       "name": "SSL 证书有效且不临期",
       "pass": true,
-      "detail": "✅ 还有 83.8 天（DigiCert Inc）",
+      "detail": "✅ 还有 83.5 天（DigiCert Inc）",
       "cert": {
         "ok": true,
-        "days": 83.8,
+        "days": 83.5,
         "validTo": "Jan 21 23:59:59 2027 GMT",
         "issuer": "DigiCert Inc",
         "subject": "mackorn.cn",
@@ -23,7 +23,7 @@
       "id": "home",
       "name": "官网首页 HTTPS 可达",
       "pass": true,
-      "detail": "HTTP 200 · 45950 字符 · 2147ms"
+      "detail": "HTTP 200 · 45950 字符 · 2133ms"
     },
     {
       "id": "landing",
