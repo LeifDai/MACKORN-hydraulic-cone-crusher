@@ -1,0 +1,148 @@
+[
+  {
+    "name": "mackorn_catalog",
+    "description": "List all MACKORN hydraulic cone crusher models with their max feed size, CSS range, motor power, weight and capacity. Use this when the user asks \"what models do you have\" / \"你们有什么型号\" / wants an overview before choosing.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "catalog"
+          ],
+          "description": "Fixed action: \"catalog\"."
+        }
+      },
+      "required": [
+        "action"
+      ]
+    }
+  },
+  {
+    "name": "mackorn_specs",
+    "description": "Get the full cavity-by-CSS capacity table for one MACKORN model (e.g. NH400). Returns css_list and cavity_rows where each row has cavity code, max feed size and a [min,max] tph pair per CSS. Use this when the user names a specific model and asks for its specifications.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "specs"
+          ],
+          "description": "Fixed action: \"specs\"."
+        },
+        "model": {
+          "type": "string",
+          "description": "Crusher model code, e.g. 'NH400', 'NH700', 'NS200'. Case-insensitive."
+        }
+      },
+      "required": [
+        "action",
+        "model"
+      ]
+    }
+  },
+  {
+    "name": "mackorn_capacity",
+    "description": "Query the exact capacity range (t/h) for one MACKORN model at a given closed-side-setting (CSS) and optionally a cavity code. Returns min/max tph per cavity. If the CSS is not in the vendor table, returns available CSS list instead of interpolating. Use this when the user gives model + CSS and asks \"how many tonnes per hour\".",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "capacity"
+          ],
+          "description": "Fixed action: \"capacity\"."
+        },
+        "model": {
+          "type": "string",
+          "description": "Crusher model code, e.g. 'NH400'."
+        },
+        "css": {
+          "type": "number",
+          "description": "Closed side setting in mm. Must be one of the model css_list values."
+        },
+        "cavity": {
+          "type": "string",
+          "description": "Optional cavity code: EC/C/MC/M/MF/F/EF/EFX/EEF. Omit to get all cavities."
+        }
+      },
+      "required": [
+        "action",
+        "model",
+        "css"
+      ]
+    }
+  },
+  {
+    "name": "mackorn_recommend",
+    "description": "Recommend MACKORN model tier(s) for a target capacity in t/h. Returns the smallest tier whose tphMax covers the request, with model options and motor power. If the target exceeds the largest single unit, returns EXCEEDS_SINGLE_UNIT instead of a wrong answer. Use this when the user says \"I need 500 tonnes per hour, which model\".",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "recommend"
+          ],
+          "description": "Fixed action: \"recommend\"."
+        },
+        "tph": {
+          "type": "number",
+          "description": "Required capacity in tonnes per hour (t/h)."
+        }
+      },
+      "required": [
+        "action",
+        "tph"
+      ]
+    }
+  },
+  {
+    "name": "mackorn_materials",
+    "description": "Look up MACKORN material library for ore/rock properties (hardness, abrasiveness, bond work index reference). Optional keyword filter, e.g. 花岗岩 / granite / 玄武岩 / 铁矿. Use this when the user mentions a specific ore type and you need to know how it affects crusher selection.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "materials"
+          ],
+          "description": "Fixed action: \"materials\"."
+        },
+        "q": {
+          "type": "string",
+          "description": "Optional keyword, e.g. '花岗岩', 'granite', 'iron ore'. Omit to list the library."
+        }
+      },
+      "required": [
+        "action"
+      ]
+    }
+  },
+  {
+    "name": "mackorn_liner",
+    "description": "Get liner (wear part) life reference for MACKORN cone crushers, optionally per model. Use this when the user asks about wear parts, liner replacement interval, or operating cost.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "liner"
+          ],
+          "description": "Fixed action: \"liner\"."
+        },
+        "model": {
+          "type": "string",
+          "description": "Optional model code. Omit to return the whole table."
+        }
+      },
+      "required": [
+        "action"
+      ]
+    }
+  }
+]
