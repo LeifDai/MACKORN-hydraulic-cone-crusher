@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-31T05:01:04.338Z",
-  "total": 242,
-  "debt": 208,
+  "generated": "2026-10-31T12:03:57.895Z",
+  "total": 243,
+  "debt": 209,
   "high_risk": [],
   "debt_files": [
     "tools/add_hreflang.mjs",
@@ -119,6 +119,7 @@
     "tools/fix_tests_sdk_portability.mjs",
     "tools/fix_whiten_model.mjs",
     "tools/g1_calibration_test.mjs",
+    "tools/gen_ai_plugin_pack.mjs",
     "tools/gen_mcp_dns_key.mjs",
     "tools/gen_php_mcp.mjs",
     "tools/gen_redirect_stubs.mjs",
