@@ -1,0 +1,321 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MACKORN Hydraulic Cone Crusher API",
+    "description": "Query MACKORN (Shanghai Mackorn Minerals) hydraulic cone crusher models, capacity tables, model recommendation by target t/h, material library and liner life. All numbers come from MACKORN vendor tables (source level S1). Every response carries assumptions[] and warnings[] which MUST be relayed to the user.",
+    "version": "0.2.2",
+    "contact": {
+      "name": "MACKORN 美矿",
+      "url": "https://mackorn.cn/ai/",
+      "email": "leif.dai@mackorn.cn"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://mackorn.cn/ai/api"
+    }
+  ],
+  "paths": {
+    "/ai_execute.php?action=catalog": {
+      "get": {
+        "operationId": "mackornCatalog",
+        "summary": "列出 MACKORN 全部液压圆锥破机型与腔型",
+        "description": "List all MACKORN hydraulic cone crusher models with their max feed size, CSS range, motor power, weight and capacity. Use this when the user asks \"what models do you have\" / \"你们有什么型号\" / wants an overview before choosing.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"catalog\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "catalog"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai_execute.php?action=specs": {
+      "get": {
+        "operationId": "mackornSpecs",
+        "summary": "查某机型的完整腔型×CSS 产能表",
+        "description": "Get the full cavity-by-CSS capacity table for one MACKORN model (e.g. NH400). Returns css_list and cavity_rows where each row has cavity code, max feed size and a [min,max] tph pair per CSS. Use this when the user names a specific model and asks for its specifications.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"specs\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "specs"
+              ]
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": true,
+            "description": "Crusher model code, e.g. 'NH400', 'NH700', 'NS200'. Case-insensitive.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai_execute.php?action=capacity": {
+      "get": {
+        "operationId": "mackornCapacity",
+        "summary": "查某机型+CSS+腔型的精确产能区间",
+        "description": "Query the exact capacity range (t/h) for one MACKORN model at a given closed-side-setting (CSS) and optionally a cavity code. Returns min/max tph per cavity. If the CSS is not in the vendor table, returns available CSS list instead of interpolating. Use this when the user gives model + CSS and asks \"how many tonnes per hour\".",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"capacity\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "capacity"
+              ]
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": true,
+            "description": "Crusher model code, e.g. 'NH400'.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "css",
+            "in": "query",
+            "required": true,
+            "description": "Closed side setting in mm. Must be one of the model css_list values.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "cavity",
+            "in": "query",
+            "required": false,
+            "description": "Optional cavity code: EC/C/MC/M/MF/F/EF/EFX/EEF. Omit to get all cavities.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai_execute.php?action=recommend": {
+      "get": {
+        "operationId": "mackornRecommend",
+        "summary": "按目标产能推荐机型档位",
+        "description": "Recommend MACKORN model tier(s) for a target capacity in t/h. Returns the smallest tier whose tphMax covers the request, with model options and motor power. If the target exceeds the largest single unit, returns EXCEEDS_SINGLE_UNIT instead of a wrong answer. Use this when the user says \"I need 500 tonnes per hour, which model\".",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"recommend\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "recommend"
+              ]
+            }
+          },
+          {
+            "name": "tph",
+            "in": "query",
+            "required": true,
+            "description": "Required capacity in tonnes per hour (t/h).",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai_execute.php?action=materials": {
+      "get": {
+        "operationId": "mackornMaterials",
+        "summary": "查矿石物料库（硬度/磨蚀性参考）",
+        "description": "Look up MACKORN material library for ore/rock properties (hardness, abrasiveness, bond work index reference). Optional keyword filter, e.g. 花岗岩 / granite / 玄武岩 / 铁矿. Use this when the user mentions a specific ore type and you need to know how it affects crusher selection.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"materials\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "materials"
+              ]
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Optional keyword, e.g. '花岗岩', 'granite', 'iron ore'. Omit to list the library.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ai_execute.php?action=liner": {
+      "get": {
+        "operationId": "mackornLiner",
+        "summary": "查衬板寿命参考值",
+        "description": "Get liner (wear part) life reference for MACKORN cone crushers, optionally per model. Use this when the user asks about wear parts, liner replacement interval, or operating cost.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "required": true,
+            "description": "Fixed action for this tool. Must be \"liner\".",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "liner"
+              ]
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": false,
+            "description": "Optional model code. Omit to return the whole table.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON string containing the query result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "string",
+                      "description": "JSON-encoded string of { result, assumptions, warnings, source }"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
