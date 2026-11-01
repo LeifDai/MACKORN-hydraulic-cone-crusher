@@ -1,0 +1,460 @@
+{
+  "schema": "mackorn-listing-engine/1",
+  "at": "2026-10-31T15:09:46.388Z",
+  "version": "0.2.2",
+  "package": "mackorn-cone-crusher",
+  "quick": false,
+  "totals": {
+    "platforms": 9,
+    "listed": 5,
+    "ready": 1,
+    "missing": 3
+  },
+  "diff": {
+    "improved": [],
+    "regressed": [
+      {
+        "name": "punkpeye/awesome-mcp-servers",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "name": "扣子 Coze（Agent 平台）",
+        "from": 2,
+        "to": 1
+      },
+      {
+        "name": "Dify（Agent 平台）",
+        "from": 2,
+        "to": 1
+      }
+    ],
+    "unchanged": [
+      "npm registry",
+      "Official MCP Registry",
+      "Smithery",
+      "skills.sh",
+      "Glama",
+      "Claude Desktop / Cursor / Cline"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "npm",
+      "name": "npm registry",
+      "group": "源头",
+      "how": "自动（npm publish）",
+      "action": "若未发布：npm publish --access public",
+      "canIBoost": false,
+      "hard": {
+        "pass": 3,
+        "total": 3
+      },
+      "soft": {
+        "pass": 0,
+        "total": 0
+      },
+      "verify": {
+        "pass": 1,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "pkg_name",
+          "desc": "package.json 有 name",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "pkg_version",
+          "desc": "package.json 有 version",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "pkg_bin",
+          "desc": "有 bin 字段（npx 可运行）",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "verify",
+          "id": "npm_live",
+          "desc": "npm 上该版本已发布",
+          "pass": true,
+          "detail": "已发布 v0.2.2"
+        }
+      ],
+      "status": "listed"
+    },
+    {
+      "id": "mcp-registry",
+      "name": "Official MCP Registry",
+      "group": "MCP 目录",
+      "how": "提交（server.json）",
+      "action": "若 identifier/version 不一致：改 server.json 对齐 package.json，然后重新提交",
+      "canIBoost": true,
+      "hard": {
+        "pass": 4,
+        "total": 4
+      },
+      "soft": {
+        "pass": 0,
+        "total": 0
+      },
+      "verify": {
+        "pass": 0,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "server_json",
+          "desc": "根目录有 server.json",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "svr_name",
+          "desc": "server.json 的 name 符合反域名格式",
+          "pass": true,
+          "detail": "name=cn.mackorn/mackorn-cone-crusher"
+        },
+        {
+          "level": "hard",
+          "id": "svr_pkg_match",
+          "desc": "server.json 的 packages[].identifier = package.json 的 name",
+          "pass": true,
+          "detail": "identifier=mackorn-cone-crusher"
+        },
+        {
+          "level": "hard",
+          "id": "svr_ver_match",
+          "desc": "server.json 的 version = package.json 的 version",
+          "pass": true,
+          "detail": "v0.2.2"
+        },
+        {
+          "level": "verify",
+          "id": "registry_live",
+          "desc": "官方注册表能搜到",
+          "pass": false,
+          "detail": "查询失败"
+        }
+      ],
+      "status": "ready"
+    },
+    {
+      "id": "smithery",
+      "name": "Smithery",
+      "group": "MCP 目录",
+      "how": "自动抓（package.json + smithery.yaml）",
+      "action": "补 smithery.yaml（HTTP 部署配置），然后等 Smithery 自动抓",
+      "canIBoost": true,
+      "hard": {
+        "pass": 2,
+        "total": 2
+      },
+      "soft": {
+        "pass": 1,
+        "total": 1
+      },
+      "verify": {
+        "pass": 1,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "kw_mcp",
+          "desc": "keywords 含 mcp",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "kw_mcp_server",
+          "desc": "keywords 含 mcp-server",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "soft",
+          "id": "smithery_yaml",
+          "desc": "根目录有 smithery.yaml",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "verify",
+          "id": "smithery_live",
+          "desc": "Smithery 页面能访问",
+          "pass": true,
+          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+        }
+      ],
+      "status": "listed"
+    },
+    {
+      "id": "skills-sh",
+      "name": "skills.sh",
+      "group": "Agent Skills",
+      "how": "自动抓（skills/<name>/SKILL.md）",
+      "action": "若 SKILL.md 缺 frontmatter：补 name + description 两行",
+      "canIBoost": true,
+      "hard": {
+        "pass": 2,
+        "total": 2
+      },
+      "soft": {
+        "pass": 1,
+        "total": 1
+      },
+      "verify": {
+        "pass": 1,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "skills_dir",
+          "desc": "skills/ 目录存在且有技能",
+          "pass": true,
+          "detail": "6 个技能"
+        },
+        {
+          "level": "hard",
+          "id": "skill_frontmatter",
+          "desc": "每个 SKILL.md 有 YAML frontmatter（name + description）",
+          "pass": true,
+          "detail": "6/6 合规"
+        },
+        {
+          "level": "soft",
+          "id": "skills_index",
+          "desc": "有 skills.sh.json 索引",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "verify",
+          "id": "skillssh_live",
+          "desc": "skills.sh 页面能访问",
+          "pass": true,
+          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+        }
+      ],
+      "status": "listed"
+    },
+    {
+      "id": "glama",
+      "name": "Glama",
+      "group": "MCP 目录",
+      "how": "容器化 release",
+      "action": "三件套已备 → 去 glama.ai admin/dockerfile 点 Deploy + Make Release",
+      "canIBoost": false,
+      "hard": {
+        "pass": 3,
+        "total": 3
+      },
+      "soft": {
+        "pass": 0,
+        "total": 0
+      },
+      "verify": {
+        "pass": 1,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "dockerfile",
+          "desc": "根目录有 Dockerfile",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "dockerignore",
+          "desc": "根目录有 .dockerignore",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "hard",
+          "id": "glama_json",
+          "desc": "根目录有 glama.json",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "verify",
+          "id": "glama_live",
+          "desc": "Glama 页面能访问",
+          "pass": true,
+          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+        }
+      ],
+      "status": "listed"
+    },
+    {
+      "id": "awesome-mcp",
+      "name": "punkpeye/awesome-mcp-servers",
+      "group": "MCP 目录",
+      "how": "PR",
+      "action": "先做 Glama release → 评分出了 → PR #15410 补评论推动合并",
+      "canIBoost": false,
+      "hard": {
+        "pass": 0,
+        "total": 1
+      },
+      "soft": {
+        "pass": 1,
+        "total": 1
+      },
+      "verify": {
+        "pass": 0,
+        "total": 0
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "glama_score",
+          "desc": "Glama 有评分（PR 合并前置条件）",
+          "pass": false,
+          "detail": "页面打不开：HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+        },
+        {
+          "level": "soft",
+          "id": "readme_quality",
+          "desc": "README 有安装说明 + 工具列表",
+          "pass": true,
+          "detail": "✅"
+        }
+      ],
+      "status": "missing"
+    },
+    {
+      "id": "coze",
+      "name": "扣子 Coze（Agent 平台）",
+      "group": "Agent 平台",
+      "how": "手动导入 OpenAPI",
+      "action": "① 上传 ai_execute.php → ② 验证 REST 在线 → ③ Coze 导入 openapi.json",
+      "canIBoost": false,
+      "hard": {
+        "pass": 1,
+        "total": 2
+      },
+      "soft": {
+        "pass": 0,
+        "total": 0
+      },
+      "verify": {
+        "pass": 0,
+        "total": 0
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "openapi",
+          "desc": "ai-pack/openapi.json 存在且是 3.0.0",
+          "pass": true,
+          "detail": "v3.0.0 ✅"
+        },
+        {
+          "level": "hard",
+          "id": "rest_live",
+          "desc": "REST 执行层 ai_execute.php 在线",
+          "pass": false,
+          "detail": "HTTP 404（文件未上传）"
+        }
+      ],
+      "status": "missing"
+    },
+    {
+      "id": "dify",
+      "name": "Dify（Agent 平台）",
+      "group": "Agent 平台",
+      "how": "手动导入 OpenAPI",
+      "action": "同 Coze：先传 PHP，再导入 openapi.json",
+      "canIBoost": false,
+      "hard": {
+        "pass": 1,
+        "total": 2
+      },
+      "soft": {
+        "pass": 0,
+        "total": 0
+      },
+      "verify": {
+        "pass": 0,
+        "total": 0
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "openapi",
+          "desc": "openapi.json 的 response 是 string（Dify 硬要求）",
+          "pass": true,
+          "detail": "✅ type=string"
+        },
+        {
+          "level": "hard",
+          "id": "rest_live",
+          "desc": "REST 执行层在线",
+          "pass": false,
+          "detail": "HTTP 404"
+        }
+      ],
+      "status": "missing"
+    },
+    {
+      "id": "claude-clients",
+      "name": "Claude Desktop / Cursor / Cline",
+      "group": "AI 客户端",
+      "how": "配置文件（npx）",
+      "action": "用户侧：在 claude_desktop_config.json / mcp.json 加 {\"command\":\"npx\",\"args\":[\"-y\",\"mackorn-cone-crusher\"]}",
+      "canIBoost": false,
+      "hard": {
+        "pass": 1,
+        "total": 1
+      },
+      "soft": {
+        "pass": 1,
+        "total": 1
+      },
+      "verify": {
+        "pass": 1,
+        "total": 1
+      },
+      "conditions": [
+        {
+          "level": "hard",
+          "id": "npx_ok",
+          "desc": "bin 指向可执行文件",
+          "pass": true,
+          "detail": "plugin/mcp-server.mjs ✅"
+        },
+        {
+          "level": "soft",
+          "id": "readme_config",
+          "desc": "README 有客户端配置示例",
+          "pass": true,
+          "detail": "✅"
+        },
+        {
+          "level": "verify",
+          "id": "npm_exec",
+          "desc": "npm 包能用 npx 拉取",
+          "pass": true,
+          "detail": "bin=mackorn-mcp,mackorn-cone-crusher"
+        }
+      ],
+      "status": "listed"
+    }
+  ]
+}
