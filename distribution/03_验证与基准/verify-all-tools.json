@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-01T22:00:11.436Z",
+  "generated": "2026-11-02T01:30:54.189Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 2
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_cone_selection",
@@ -42,7 +42,7 @@
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grading_porosity",
@@ -77,7 +77,7 @@
     {
       "name": "mackorn_pdca_status",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_crusher_curve",
@@ -87,12 +87,12 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 25
+      "ms": 29
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 73
+      "ms": 90
     },
     {
       "name": "mackorn_contact",
@@ -142,12 +142,12 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_screen_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     }
   ]
 }
