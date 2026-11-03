@@ -1,0 +1,7562 @@
+[
+  {
+    "Crusher": "Barmac B2400",
+    "Cavity": "Std rotor",
+    "CrusherId": 5074,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "11kW (15 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B2400",
+    "Cavity": "Std rotor",
+    "CrusherId": 5075,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "15kW (21 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B3000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5001,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "11kW (15 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B3000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5002,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "15kW (21 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B3100SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5041,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "11kW (15 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B3100SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5042,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "15kW (21 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B4800",
+    "Cavity": "Std rotor",
+    "CrusherId": 5076,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "37kW (50 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B4800",
+    "Cavity": "Std rotor",
+    "CrusherId": 5077,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "45kW (60 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B4800",
+    "Cavity": "Std rotor",
+    "CrusherId": 5078,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "55kW (75 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B5000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5079,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "37kW (50 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5080,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "45kW (60 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5081,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "55kW (75 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B5100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5003,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "37kW (50 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5004,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "45kW (60 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5005,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "55kW (75 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B5100SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5043,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "37kW (50 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5100SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5044,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "45kW (60 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B5100SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5045,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "55kW (75 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5007,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5009,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5011,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "690 DTR",
+    "CrusherId": 5046,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "690 DTR",
+    "CrusherId": 5047,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "690 DTR",
+    "CrusherId": 5048,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "690 DTR",
+    "CrusherId": 5049,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "690 DTR",
+    "CrusherId": 5050,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690",
+    "CrusherId": 5136,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690",
+    "CrusherId": 5137,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690",
+    "CrusherId": 5138,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690",
+    "CrusherId": 5139,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690",
+    "CrusherId": 5140,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + anvils",
+    "CrusherId": 5158,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + anvils",
+    "CrusherId": 5159,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + anvils",
+    "CrusherId": 5160,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + anvils",
+    "CrusherId": 5161,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + anvils",
+    "CrusherId": 5162,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + low tonnage kit",
+    "CrusherId": 5171,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + low tonnage kit",
+    "CrusherId": 5172,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + low tonnage kit",
+    "CrusherId": 5173,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + low tonnage kit",
+    "CrusherId": 5174,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "RC690 + low tonnage kit",
+    "CrusherId": 5175,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5064,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5065,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5066,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5067,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B6150SE",
+    "Cavity": "Std rotor",
+    "CrusherId": 5068,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6900",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5082,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "75kW (100 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6900",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5083,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "92kW (125 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B6900",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5084,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "110kW (150 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5012,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "132kW (175 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5013,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "150kW (200 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5014,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "185kW (250 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150M",
+    "Cavity": "840 DTR",
+    "CrusherId": 5131,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150M",
+    "Cavity": "RC840",
+    "CrusherId": 5145,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5053,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5054,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5055,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5070,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "185kW (250 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 STD",
+    "CrusherId": 5052,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "185kW (250 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 STD",
+    "CrusherId": 5071,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 STD",
+    "CrusherId": 5072,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "840 STD",
+    "CrusherId": 5073,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840",
+    "CrusherId": 5141,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "185kW (250 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840",
+    "CrusherId": 5142,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840",
+    "CrusherId": 5143,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840",
+    "CrusherId": 5144,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5154,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "185kW (250 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5155,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5156,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B7150SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5157,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5016,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5018,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5020,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5015,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "220kW (300 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5017,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "260kW (350 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B8100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5019,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "300kW (400 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5093,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5094,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5095,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5096,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5097,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5098,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5099,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9000",
+    "Cavity": "Std rotor",
+    "CrusherId": 5100,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5022,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5024,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5026,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5028,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5021,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5023,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5025,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100",
+    "Cavity": "Std rotor",
+    "CrusherId": 5027,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5057,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5059,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5061,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "840 DTR",
+    "CrusherId": 5063,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 DTR",
+    "CrusherId": 5132,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 DTR",
+    "CrusherId": 5133,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 DTR",
+    "CrusherId": 5134,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 DTR",
+    "CrusherId": 5135,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 STD",
+    "CrusherId": 5056,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 STD",
+    "CrusherId": 5058,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 STD",
+    "CrusherId": 5060,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "990 STD",
+    "CrusherId": 5062,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840",
+    "CrusherId": 5146,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840",
+    "CrusherId": 5147,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840",
+    "CrusherId": 5148,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840",
+    "CrusherId": 5149,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5163,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5164,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5165,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC840 + anvils",
+    "CrusherId": 5166,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990",
+    "CrusherId": 5150,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990",
+    "CrusherId": 5151,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990",
+    "CrusherId": 5152,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990",
+    "CrusherId": 5153,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990 + anvils",
+    "CrusherId": 5167,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990 + anvils",
+    "CrusherId": 5168,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990 + anvils",
+    "CrusherId": 5169,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9100SE",
+    "Cavity": "RC990 + anvils",
+    "CrusherId": 5170,
+    "TypeId": 500,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5085,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5086,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5087,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "DTR rotor",
+    "CrusherId": 5088,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "Std rotor",
+    "CrusherId": 5089,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "370kW (500 hp)",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "Std rotor",
+    "CrusherId": 5090,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "440kW (600 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "Std rotor",
+    "CrusherId": 5091,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "520kW (700 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac B9600",
+    "Cavity": "Std rotor",
+    "CrusherId": 5092,
+    "TypeId": 502,
+    "Symbol": "barmac",
+    "Motor": "600kW (800 hp)",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5030,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "75kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5034,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "90kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5037,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "110kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5040,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "132kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5029,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "75kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5033,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "90kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5036,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "110kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI200",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5039,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "132kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5102,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "132kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5104,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "160kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5106,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5108,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5101,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "132kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5103,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "160kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5105,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI300",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5107,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5110,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5112,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "250kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5114,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "300kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5116,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "320kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Closed rotor/Anvils",
+    "CrusherId": 5118,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "400kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5109,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5111,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "250kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5113,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "300kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5115,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "320kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "Barmac VI400",
+    "Cavity": "Open rotor/Anvils",
+    "CrusherId": 5117,
+    "TypeId": 501,
+    "Symbol": "vi",
+    "Motor": "400kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "C100",
+    "Cavity": "quarry",
+    "CrusherId": 1103,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C100",
+    "Cavity": "recycling",
+    "CrusherId": 1203,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C100",
+    "Cavity": "std",
+    "CrusherId": 1003,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C105",
+    "Cavity": "recycling",
+    "CrusherId": 1211,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C105",
+    "Cavity": "std",
+    "CrusherId": 1011,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C106",
+    "Cavity": "quarry",
+    "CrusherId": 1115,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C106",
+    "Cavity": "std",
+    "CrusherId": 1015,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C110",
+    "Cavity": "quarry",
+    "CrusherId": 1104,
+    "TypeId": 101,
+    "Symbol": "c110",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C110",
+    "Cavity": "std",
+    "CrusherId": 1004,
+    "TypeId": 101,
+    "Symbol": "c110",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C116",
+    "Cavity": "quarry",
+    "CrusherId": 1117,
+    "TypeId": 100,
+    "Symbol": "c110",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C116",
+    "Cavity": "recycling",
+    "CrusherId": 1217,
+    "TypeId": 100,
+    "Symbol": "c110",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C116",
+    "Cavity": "std",
+    "CrusherId": 1017,
+    "TypeId": 100,
+    "Symbol": "c110",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C120",
+    "Cavity": "quarry",
+    "CrusherId": 1120,
+    "TypeId": 100,
+    "Symbol": "c120",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C120",
+    "Cavity": "super grip",
+    "CrusherId": 1320,
+    "TypeId": 100,
+    "Symbol": "c120",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C120 + MB352",
+    "Cavity": "quarry",
+    "CrusherId": 1123,
+    "TypeId": 100,
+    "Symbol": "c120MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C120 + MB352",
+    "Cavity": "super grip",
+    "CrusherId": 1323,
+    "TypeId": 100,
+    "Symbol": "c120MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C125",
+    "Cavity": "quarry",
+    "CrusherId": 1105,
+    "TypeId": 101,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C125",
+    "Cavity": "std",
+    "CrusherId": 1005,
+    "TypeId": 101,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C125 + MB352",
+    "Cavity": "quarry",
+    "CrusherId": 1124,
+    "TypeId": 101,
+    "Symbol": "C125MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C125 + MB352",
+    "Cavity": "std",
+    "CrusherId": 1024,
+    "TypeId": 101,
+    "Symbol": "C125MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C130",
+    "Cavity": "quarry",
+    "CrusherId": 1122,
+    "TypeId": 100,
+    "Symbol": "c130",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C130",
+    "Cavity": "super grip",
+    "CrusherId": 1322,
+    "TypeId": 100,
+    "Symbol": "c130",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C130 + MB352",
+    "Cavity": "quarry",
+    "CrusherId": 1125,
+    "TypeId": 100,
+    "Symbol": "c130MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C130 + MB352",
+    "Cavity": "super grip",
+    "CrusherId": 1325,
+    "TypeId": 100,
+    "Symbol": "c130MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C140",
+    "Cavity": "quarry",
+    "CrusherId": 1107,
+    "TypeId": 101,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C140 + MB432",
+    "Cavity": "quarry",
+    "CrusherId": 1126,
+    "TypeId": 101,
+    "Symbol": "c140MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C145",
+    "Cavity": "std",
+    "CrusherId": 1012,
+    "TypeId": 101,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C150",
+    "Cavity": "quarry",
+    "CrusherId": 1121,
+    "TypeId": 100,
+    "Symbol": "c150",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C150",
+    "Cavity": "quarry super grip",
+    "CrusherId": 1321,
+    "TypeId": 100,
+    "Symbol": "c150",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C150 + MB432",
+    "Cavity": "quarry",
+    "CrusherId": 1127,
+    "TypeId": 100,
+    "Symbol": "c150MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C150 + MB432",
+    "Cavity": "quarry super grip",
+    "CrusherId": 1327,
+    "TypeId": 100,
+    "Symbol": "c150MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C160",
+    "Cavity": "std",
+    "CrusherId": 1008,
+    "TypeId": 100,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C160 + MB655",
+    "Cavity": "std",
+    "CrusherId": 1028,
+    "TypeId": 100,
+    "Symbol": "c160MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C200",
+    "Cavity": "std",
+    "CrusherId": 1009,
+    "TypeId": 100,
+    "Symbol": "c140",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C200 + MB676",
+    "Cavity": "std",
+    "CrusherId": 1029,
+    "TypeId": 100,
+    "Symbol": "c200MB",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C3054",
+    "Cavity": "quarry",
+    "CrusherId": 1114,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C3054",
+    "Cavity": "super teeth",
+    "CrusherId": 1314,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C3055",
+    "Cavity": "std",
+    "CrusherId": 1013,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C63",
+    "Cavity": "recycling",
+    "CrusherId": 1201,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C63",
+    "Cavity": "std",
+    "CrusherId": 1001,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C80",
+    "Cavity": "quarry",
+    "CrusherId": 1110,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C80",
+    "Cavity": "recycling",
+    "CrusherId": 1210,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C80",
+    "Cavity": "std",
+    "CrusherId": 1010,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C95",
+    "Cavity": "std",
+    "CrusherId": 1002,
+    "TypeId": 101,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "C96",
+    "Cavity": "std",
+    "CrusherId": 1019,
+    "TypeId": 100,
+    "Symbol": "c100",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1012",
+    "Cavity": "std",
+    "CrusherId": 13026,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1014",
+    "Cavity": "std",
+    "CrusherId": 13013,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G108",
+    "Cavity": "std",
+    "CrusherId": 13002,
+    "TypeId": 211,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1211",
+    "Cavity": "std",
+    "CrusherId": 13010,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1312",
+    "Cavity": "std",
+    "CrusherId": 13028,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1315",
+    "Cavity": "std",
+    "CrusherId": 13018,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G138",
+    "Cavity": "std",
+    "CrusherId": 13023,
+    "TypeId": 211,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G158",
+    "Cavity": "std",
+    "CrusherId": 13003,
+    "TypeId": 211,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1811",
+    "Cavity": "std",
+    "CrusherId": 13027,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1812",
+    "Cavity": "std",
+    "CrusherId": 13021,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1814",
+    "Cavity": "std",
+    "CrusherId": 13014,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G1815",
+    "Cavity": "std",
+    "CrusherId": 13019,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2011",
+    "Cavity": "std",
+    "CrusherId": 13011,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G208",
+    "Cavity": "std",
+    "CrusherId": 12001,
+    "TypeId": 211,
+    "Symbol": "g8s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2211",
+    "Cavity": "std",
+    "CrusherId": 12005,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2211LS",
+    "Cavity": "std",
+    "CrusherId": 12014,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2215",
+    "Cavity": "std",
+    "CrusherId": 13020,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2510",
+    "Cavity": "std",
+    "CrusherId": 12015,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2511",
+    "Cavity": "std",
+    "CrusherId": 12006,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G258",
+    "Cavity": "std",
+    "CrusherId": 12002,
+    "TypeId": 211,
+    "Symbol": "g8s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2612",
+    "Cavity": "std",
+    "CrusherId": 13022,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2614",
+    "Cavity": "std",
+    "CrusherId": 13015,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G2812",
+    "Cavity": "std",
+    "CrusherId": 12008,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G3310",
+    "Cavity": "std",
+    "CrusherId": 12016,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G3511",
+    "Cavity": "std",
+    "CrusherId": 12007,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G3514",
+    "Cavity": "std",
+    "CrusherId": 12010,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G3812",
+    "Cavity": "std",
+    "CrusherId": 12009,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G3815",
+    "Cavity": "std",
+    "CrusherId": 12012,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G411",
+    "Cavity": "std",
+    "CrusherId": 13008,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G412",
+    "Cavity": "std",
+    "CrusherId": 13024,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G415",
+    "Cavity": "std",
+    "CrusherId": 13016,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G4214",
+    "Cavity": "std",
+    "CrusherId": 12011,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G49",
+    "Cavity": "std",
+    "CrusherId": 13004,
+    "TypeId": 211,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G5015",
+    "Cavity": "std",
+    "CrusherId": 12013,
+    "TypeId": 211,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G58",
+    "Cavity": "std",
+    "CrusherId": 13001,
+    "TypeId": 211,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G612",
+    "Cavity": "std",
+    "CrusherId": 13025,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G811",
+    "Cavity": "std",
+    "CrusherId": 13009,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G814",
+    "Cavity": "std",
+    "CrusherId": 13012,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "G815",
+    "Cavity": "std",
+    "CrusherId": 13017,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GD36\"",
+    "Cavity": "all",
+    "CrusherId": 3601,
+    "TypeId": 211,
+    "Symbol": "gyrad",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GD48\"",
+    "Cavity": "all",
+    "CrusherId": 3602,
+    "TypeId": 211,
+    "Symbol": "gyrad",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GD66\"",
+    "Cavity": "all",
+    "CrusherId": 3603,
+    "TypeId": 211,
+    "Symbol": "gyrad",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GD84\"",
+    "Cavity": "all",
+    "CrusherId": 3604,
+    "TypeId": 211,
+    "Symbol": "gyrad",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100",
+    "Cavity": "coarse",
+    "CrusherId": 3003,
+    "TypeId": 200,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100",
+    "Cavity": "extra fine",
+    "CrusherId": 3004,
+    "TypeId": 200,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100",
+    "Cavity": "fine",
+    "CrusherId": 3001,
+    "TypeId": 200,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100",
+    "Cavity": "medium",
+    "CrusherId": 3023,
+    "TypeId": 200,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100",
+    "Cavity": "medium fine",
+    "CrusherId": 3002,
+    "TypeId": 200,
+    "Symbol": "g8t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100S",
+    "Cavity": "coarse",
+    "CrusherId": 2002,
+    "TypeId": 200,
+    "Symbol": "g8s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP100S",
+    "Cavity": "medium",
+    "CrusherId": 2001,
+    "TypeId": 200,
+    "Symbol": "g8s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11F",
+    "Cavity": "coarse",
+    "CrusherId": 3011,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11F",
+    "Cavity": "extra fine",
+    "CrusherId": 3008,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11F",
+    "Cavity": "fine",
+    "CrusherId": 3009,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11F",
+    "Cavity": "medium",
+    "CrusherId": 3010,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11M",
+    "Cavity": "coarse",
+    "CrusherId": 3027,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11M",
+    "Cavity": "extra coarse",
+    "CrusherId": 2005,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP11M",
+    "Cavity": "extra coarse LS",
+    "CrusherId": 2014,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200",
+    "Cavity": "extra coarse",
+    "CrusherId": 3032,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200",
+    "Cavity": "extra fine",
+    "CrusherId": 3029,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200",
+    "Cavity": "fine",
+    "CrusherId": 3030,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200",
+    "Cavity": "medium",
+    "CrusherId": 3031,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200S",
+    "Cavity": "coarse",
+    "CrusherId": 2015,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP200S",
+    "Cavity": "extra coarse",
+    "CrusherId": 2016,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "coarse",
+    "CrusherId": 3043,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "extra coarse",
+    "CrusherId": 3044,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "extra coarse LS",
+    "CrusherId": 3046,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "extra fine",
+    "CrusherId": 3045,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "fine",
+    "CrusherId": 3040,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "medium",
+    "CrusherId": 3042,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP220",
+    "Cavity": "medium fine",
+    "CrusherId": 3041,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "coarse",
+    "CrusherId": 3021,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "extra coarse",
+    "CrusherId": 3022,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "extra fine",
+    "CrusherId": 3024,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "fine",
+    "CrusherId": 3025,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "medium",
+    "CrusherId": 3028,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300",
+    "Cavity": "medium fine",
+    "CrusherId": 3026,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300S",
+    "Cavity": "coarse",
+    "CrusherId": 2008,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300S",
+    "Cavity": "extra coarse",
+    "CrusherId": 2009,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP300S",
+    "Cavity": "extra coarse LS",
+    "CrusherId": 2017,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "coarse",
+    "CrusherId": 3050,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "extra coarse",
+    "CrusherId": 3051,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "extra coarse TR",
+    "CrusherId": 3052,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "fine",
+    "CrusherId": 3047,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "medium",
+    "CrusherId": 3049,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP330",
+    "Cavity": "medium fine",
+    "CrusherId": 3048,
+    "TypeId": 200,
+    "Symbol": "GP330",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500",
+    "Cavity": "coarse",
+    "CrusherId": 3020,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500",
+    "Cavity": "extra fine",
+    "CrusherId": 3016,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500",
+    "Cavity": "fine",
+    "CrusherId": 3017,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500",
+    "Cavity": "medium",
+    "CrusherId": 3019,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500",
+    "Cavity": "medium fine",
+    "CrusherId": 3018,
+    "TypeId": 211,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500S",
+    "Cavity": "coarse",
+    "CrusherId": 2012,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500S",
+    "Cavity": "extra coarse",
+    "CrusherId": 2013,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP500S",
+    "Cavity": "extra coarse LS",
+    "CrusherId": 2018,
+    "TypeId": 200,
+    "Symbol": "g15s",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "coarse",
+    "CrusherId": 3037,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "extra coarse",
+    "CrusherId": 3038,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "extra coarse S",
+    "CrusherId": 3039,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "extra fine",
+    "CrusherId": 3033,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "fine",
+    "CrusherId": 3034,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "medium",
+    "CrusherId": 3036,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP550",
+    "Cavity": "medium fine",
+    "CrusherId": 3035,
+    "TypeId": 200,
+    "Symbol": "g15t",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP7",
+    "Cavity": "coarse",
+    "CrusherId": 3053,
+    "TypeId": 200,
+    "Symbol": "GP7",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP7",
+    "Cavity": "extra coarse",
+    "CrusherId": 3054,
+    "TypeId": 200,
+    "Symbol": "GP7",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "GP7",
+    "Cavity": "extra coarse TR",
+    "CrusherId": 3055,
+    "TypeId": 200,
+    "Symbol": "GP7",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100",
+    "Cavity": "std coarse",
+    "CrusherId": 3104,
+    "TypeId": 204,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100",
+    "Cavity": "std extra coarse",
+    "CrusherId": 3106,
+    "TypeId": 204,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100",
+    "Cavity": "std fine",
+    "CrusherId": 3102,
+    "TypeId": 204,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100",
+    "Cavity": "std medium",
+    "CrusherId": 3103,
+    "TypeId": 204,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100",
+    "Cavity": "std super coarse",
+    "CrusherId": 3105,
+    "TypeId": 204,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP100.",
+    "Cavity": "std extra fine",
+    "CrusherId": 3101,
+    "TypeId": 202,
+    "Symbol": "hp1",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "sh coarse",
+    "CrusherId": 3110,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "sh fine",
+    "CrusherId": 3108,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "sh medium",
+    "CrusherId": 3109,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "std coarse",
+    "CrusherId": 3113,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "std fine",
+    "CrusherId": 3111,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200",
+    "Cavity": "std medium",
+    "CrusherId": 3112,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP200.",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3107,
+    "TypeId": 202,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "coarse",
+    "CrusherId": 3158,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "220kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "coarse",
+    "CrusherId": 3181,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "extra coarse",
+    "CrusherId": 3159,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "220kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "extra coarse",
+    "CrusherId": 3182,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "fine",
+    "CrusherId": 3156,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "220kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "fine",
+    "CrusherId": 3179,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "medium",
+    "CrusherId": 3157,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "220kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP3",
+    "Cavity": "medium",
+    "CrusherId": 3180,
+    "TypeId": 204,
+    "Symbol": "hp3",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP3.",
+    "Cavity": "extra fine",
+    "CrusherId": 3155,
+    "TypeId": 202,
+    "Symbol": "hp3",
+    "Motor": "220kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP3.",
+    "Cavity": "extra fine",
+    "CrusherId": 3178,
+    "TypeId": 202,
+    "Symbol": "hp3",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "sh coarse",
+    "CrusherId": 3117,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "sh fine",
+    "CrusherId": 3115,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "sh medium",
+    "CrusherId": 3116,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "std coarse",
+    "CrusherId": 3120,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "std extra coarse",
+    "CrusherId": 3121,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "std fine",
+    "CrusherId": 3118,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300",
+    "Cavity": "std medium",
+    "CrusherId": 3119,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP300.",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3114,
+    "TypeId": 202,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP4",
+    "Cavity": "coarse",
+    "CrusherId": 3160,
+    "TypeId": 204,
+    "Symbol": "hp4",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP4",
+    "Cavity": "extra coarse",
+    "CrusherId": 3139,
+    "TypeId": 204,
+    "Symbol": "hp4",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP4",
+    "Cavity": "fine",
+    "CrusherId": 3137,
+    "TypeId": 204,
+    "Symbol": "hp4",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP4",
+    "Cavity": "medium",
+    "CrusherId": 3138,
+    "TypeId": 204,
+    "Symbol": "hp4",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP4.",
+    "Cavity": "extra fine",
+    "CrusherId": 3136,
+    "TypeId": 202,
+    "Symbol": "hp4",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "sh coarse",
+    "CrusherId": 3124,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "sh fine",
+    "CrusherId": 3122,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "sh medium",
+    "CrusherId": 3123,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "std coarse",
+    "CrusherId": 3127,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "std extra coarse",
+    "CrusherId": 3128,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "std fine",
+    "CrusherId": 3125,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400",
+    "Cavity": "std medium",
+    "CrusherId": 3126,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP400.",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3161,
+    "TypeId": 202,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "coarse",
+    "CrusherId": 3176,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "370kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "coarse",
+    "CrusherId": 3186,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "extra coarse",
+    "CrusherId": 3177,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "370kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "extra coarse",
+    "CrusherId": 3187,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "fine",
+    "CrusherId": 3174,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "370kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "fine",
+    "CrusherId": 3184,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "medium",
+    "CrusherId": 3175,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "370kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP5",
+    "Cavity": "medium",
+    "CrusherId": 3185,
+    "TypeId": 204,
+    "Symbol": "hp5",
+    "Motor": "315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP5.",
+    "Cavity": "extra fine",
+    "CrusherId": 3173,
+    "TypeId": 202,
+    "Symbol": "hp5",
+    "Motor": "370kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP5.",
+    "Cavity": "extra fine",
+    "CrusherId": 3183,
+    "TypeId": 202,
+    "Symbol": "hp5",
+    "Motor": "315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "sh coarse",
+    "CrusherId": 3131,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "sh fine",
+    "CrusherId": 3129,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "sh medium",
+    "CrusherId": 3130,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "std coarse",
+    "CrusherId": 3134,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "std extra coarse",
+    "CrusherId": 3135,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "std fine",
+    "CrusherId": 3132,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500",
+    "Cavity": "std medium",
+    "CrusherId": 3133,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP500.",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3162,
+    "TypeId": 202,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "coarse",
+    "CrusherId": 3153,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "450kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "coarse",
+    "CrusherId": 3166,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "2x250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "coarse",
+    "CrusherId": 3171,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "500kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "extra coarse",
+    "CrusherId": 3154,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "450kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "extra coarse",
+    "CrusherId": 3167,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "2x250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "extra coarse",
+    "CrusherId": 3172,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "500kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "fine",
+    "CrusherId": 3151,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "450kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "fine",
+    "CrusherId": 3164,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "2x250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "fine",
+    "CrusherId": 3169,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "500kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "medium",
+    "CrusherId": 3152,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "450kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "medium",
+    "CrusherId": 3165,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "2x250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6",
+    "Cavity": "medium",
+    "CrusherId": 3170,
+    "TypeId": 204,
+    "Symbol": "hp6",
+    "Motor": "500kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6.",
+    "Cavity": "extra fine",
+    "CrusherId": 3150,
+    "TypeId": 202,
+    "Symbol": "hp6",
+    "Motor": "450kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "HP6.",
+    "Cavity": "extra fine",
+    "CrusherId": 3163,
+    "TypeId": 202,
+    "Symbol": "hp6",
+    "Motor": "2x250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP6.",
+    "Cavity": "extra fine",
+    "CrusherId": 3168,
+    "TypeId": 202,
+    "Symbol": "hp6",
+    "Motor": "500kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "sh coarse",
+    "CrusherId": 3145,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "sh fine",
+    "CrusherId": 3143,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "sh medium",
+    "CrusherId": 3144,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "std coarse",
+    "CrusherId": 3148,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "std extra coarse",
+    "CrusherId": 3149,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "std fine",
+    "CrusherId": 3146,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HP800",
+    "Cavity": "std medium",
+    "CrusherId": 3147,
+    "TypeId": 204,
+    "Symbol": "hp2",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HRC 8",
+    "Cavity": "Smooth rolls",
+    "CrusherId": 3901,
+    "TypeId": 600,
+    "Symbol": "HRC",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "HRC 800",
+    "Cavity": "Smooth rolls",
+    "CrusherId": 3902,
+    "TypeId": 600,
+    "Symbol": "HRC",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Sh Coarse",
+    "CrusherId": 3409,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Sh Fine",
+    "CrusherId": 3408,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Sh Medium",
+    "CrusherId": 3401,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Std Coarse",
+    "CrusherId": 2409,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Std Extra fine",
+    "CrusherId": 2407,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Std Fine",
+    "CrusherId": 2408,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1000",
+    "Cavity": "Std Medium",
+    "CrusherId": 2401,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Sh Coarse",
+    "CrusherId": 3412,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Sh Fine",
+    "CrusherId": 3411,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Sh Medium",
+    "CrusherId": 3403,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Std Coarse",
+    "CrusherId": 2412,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Std Extra fine",
+    "CrusherId": 2410,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Std Fine",
+    "CrusherId": 2411,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP1250",
+    "Cavity": "Std Medium",
+    "CrusherId": 2403,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Sh Coarse",
+    "CrusherId": 3406,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Sh Fine",
+    "CrusherId": 3405,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Sh Medium",
+    "CrusherId": 3402,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Std Coarse",
+    "CrusherId": 2406,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Std Extra fine",
+    "CrusherId": 2404,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Std Fine",
+    "CrusherId": 2405,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MP800",
+    "Cavity": "Std Medium",
+    "CrusherId": 2402,
+    "TypeId": 206,
+    "Symbol": "mp",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "coarse",
+    "CrusherId": 3807,
+    "TypeId": 207,
+    "Symbol": "NC C",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "coarse",
+    "CrusherId": 3808,
+    "TypeId": 207,
+    "Symbol": "NC C",
+    "Motor": "315kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "extra coarse",
+    "CrusherId": 3809,
+    "TypeId": 207,
+    "Symbol": "NC EC",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "extra coarse",
+    "CrusherId": 3810,
+    "TypeId": 207,
+    "Symbol": "NC EC",
+    "Motor": "315kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "fine",
+    "CrusherId": 3803,
+    "TypeId": 207,
+    "Symbol": "NC F",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "fine",
+    "CrusherId": 3804,
+    "TypeId": 207,
+    "Symbol": "NC F",
+    "Motor": "315kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "medium",
+    "CrusherId": 3805,
+    "TypeId": 207,
+    "Symbol": "NC M",
+    "Motor": "250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "MX 4",
+    "Cavity": "medium",
+    "CrusherId": 3806,
+    "TypeId": 207,
+    "Symbol": "NC M",
+    "Motor": "315kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4014,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4036,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4183,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4205,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4141,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4163,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4099,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4121,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4057,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4079,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4153,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4174,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4195,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4216,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4026,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4048,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4111,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4132,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4069,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "90 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1007",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4090,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4015,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4037,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4246,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4256,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4184,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4206,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4254,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4264,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4142,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4164,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4252,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4262,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4100,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4122,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4250,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4260,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4058,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4080,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4248,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4258,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4154,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4175,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4253,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron blowbars",
+    "CrusherId": 4263,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4196,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4217,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4255,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, chromium iron+ceramic blowbars",
+    "CrusherId": 4265,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4027,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4049,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4247,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, manganese blowbars",
+    "CrusherId": 4257,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4112,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4133,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4251,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic + ceramic blowbars",
+    "CrusherId": 4261,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4070,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4091,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4249,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "110 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110",
+    "Cavity": "2nd breaker plate long, martensitic blowbars",
+    "CrusherId": 4259,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "132 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1110M",
+    "Cavity": " 1 breaker plate, manganese blowbars",
+    "CrusherId": 4019,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "160 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1110M",
+    "Cavity": "1 breaker plate, chromium iron + ceramic blowbars",
+    "CrusherId": 4188,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "160 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1110M",
+    "Cavity": "1 breaker plate, chromium iron blowbars",
+    "CrusherId": 4146,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "160 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1110M",
+    "Cavity": "1 breaker plate, martensitic + ceramic blowbars",
+    "CrusherId": 4104,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "160 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1110M",
+    "Cavity": "1 breaker plate, martensitic blowbars",
+    "CrusherId": 4062,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "160 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4011,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4033,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4096,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4118,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4054,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4076,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4023,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4045,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4108,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4129,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4066,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "160 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1210",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4087,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4016,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4038,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4185,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4207,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4143,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4165,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4101,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4123,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4059,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4081,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4197,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4218,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4155,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4176,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4028,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4050,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4113,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4134,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4071,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4092,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1213M",
+    "Cavity": " 1 breaker plate, manganese blowbars",
+    "CrusherId": 4268,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "240 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M",
+    "Cavity": "1 breaker plate, chromium iron + ceramic blowbars",
+    "CrusherId": 4272,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "240 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M",
+    "Cavity": "1 breaker plate, chromium iron blowbars",
+    "CrusherId": 4271,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "240 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M",
+    "Cavity": "1 breaker plate, martensitic + ceramic blowbars",
+    "CrusherId": 4270,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "240kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M",
+    "Cavity": "1 breaker plate, martensitic blowbars",
+    "CrusherId": 4269,
+    "TypeId": 302,
+    "Symbol": "nppm",
+    "Motor": "240 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M.",
+    "Cavity": " 1 breaker plate, manganese blowbars",
+    "CrusherId": 4020,
+    "TypeId": 301,
+    "Symbol": "nppm",
+    "Motor": "200 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M.",
+    "Cavity": "1 breaker plate, chromium iron + ceramic blowbars",
+    "CrusherId": 4189,
+    "TypeId": 301,
+    "Symbol": "nppm",
+    "Motor": "200 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M.",
+    "Cavity": "1 breaker plate, chromium iron blowbars",
+    "CrusherId": 4147,
+    "TypeId": 301,
+    "Symbol": "nppm",
+    "Motor": "200 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M.",
+    "Cavity": "1 breaker plate, martensitic + ceramic blowbars",
+    "CrusherId": 4105,
+    "TypeId": 301,
+    "Symbol": "nppm",
+    "Motor": "200 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1213M.",
+    "Cavity": "1 breaker plate, martensitic blowbars",
+    "CrusherId": 4063,
+    "TypeId": 301,
+    "Symbol": "nppm",
+    "Motor": "200 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4303,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4313,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4323,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4311,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4321,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4331,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4309,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4319,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4329,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4307,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4317,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4327,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4305,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4315,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4325,
+    "TypeId": 300,
+    "Symbol": "NP13",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4312,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4322,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4332,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4310,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4320,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4330,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4304,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4314,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4324,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4308,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4318,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4328,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4306,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4316,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP13",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4326,
+    "TypeId": 300,
+    "Symbol": "NP13_3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4012,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4034,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4097,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4119,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4055,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4077,
+    "TypeId": 300,
+    "Symbol": "nps",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4024,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4046,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4109,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4130,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4067,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1313",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4088,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4009,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4031,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4178,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4200,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4136,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4158,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4094,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4116,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4052,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4074,
+    "TypeId": 301,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4190,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4211,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4148,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4169,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4021,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4043,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4106,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4127,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4064,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4085,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1315M",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4220,
+    "TypeId": 302,
+    "Symbol": "npp",
+    "Motor": "310 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1315M",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4222,
+    "TypeId": 302,
+    "Symbol": "npp",
+    "Motor": "310 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1315M",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4221,
+    "TypeId": 302,
+    "Symbol": "npp",
+    "Motor": "310 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4010,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4032,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4095,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4117,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4053,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4075,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4022,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4044,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4107,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4128,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4065,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4086,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1415M",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4223,
+    "TypeId": 302,
+    "Symbol": "npp",
+    "Motor": "310 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1415M",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4224,
+    "TypeId": 302,
+    "Symbol": "npp",
+    "Motor": "310 kW",
+    "Default motor": 1
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4226,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4228,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4242,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4244,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4238,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4240,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4234,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4236,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4230,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4232,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4243,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4245,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW ",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4239,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4241,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW ",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4227,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4229,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW ",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4235,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4237,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW ",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4231,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "315 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1418",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4233,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW ",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4273,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4275,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4277,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4297,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4299,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4301,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4291,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4293,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4295,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4285,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4287,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4289,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4279,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4281,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4283,
+    "TypeId": 300,
+    "Symbol": "NP15",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4298,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4300,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4302,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4292,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4294,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4296,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4274,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4276,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4278,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4286,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4288,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4290,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4280,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "250 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4282,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "320 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP15",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4284,
+    "TypeId": 300,
+    "Symbol": "NP15_3",
+    "Motor": "355 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4017,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4039,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4186,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4208,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4144,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4166,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4102,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4124,
+    "TypeId": 301,
+    "Symbol": "nps",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4198,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4219,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4156,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4177,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4029,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4051,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4114,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1520",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4135,
+    "TypeId": 301,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4013,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4035,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4098,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4120,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4025,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4047,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4110,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "400 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP1620",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4131,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "500 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4333,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4335,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4337,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4357,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4359,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4361,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4351,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4353,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, chromium iron blowbars",
+    "CrusherId": 4355,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4345,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4347,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4349,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4339,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4341,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "2 breaker plates, martensitic blowbars",
+    "CrusherId": 4343,
+    "TypeId": 300,
+    "Symbol": "NP20",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4358,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4360,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron + ceramic blowbars",
+    "CrusherId": 4362,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4352,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4354,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, chromium iron blowbars",
+    "CrusherId": 4356,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4334,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4336,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4338,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4346,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4348,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic + ceramic blowbars",
+    "CrusherId": 4350,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4340,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 200kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4342,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 250kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP20",
+    "Cavity": "3 breaker plates, martensitic blowbars",
+    "CrusherId": 4344,
+    "TypeId": 300,
+    "Symbol": "NP20_3",
+    "Motor": "2x 315kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP2023",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4018,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "1000 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP2023",
+    "Cavity": " 2 breaker plates, manganese blowbars",
+    "CrusherId": 4266,
+    "TypeId": 300,
+    "Symbol": "npp",
+    "Motor": "1200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP2023",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4030,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "1000 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "NP2023",
+    "Cavity": "3 breaker plates, manganese blowbars",
+    "CrusherId": 4267,
+    "TypeId": 300,
+    "Symbol": "nps3",
+    "Motor": "1200 kW",
+    "Default motor": 0
+  },
+  {
+    "Crusher": "OC1144 st",
+    "Cavity": "coarse",
+    "CrusherId": 2506,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144 st",
+    "Cavity": "fine",
+    "CrusherId": 2504,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144 st",
+    "Cavity": "medium",
+    "CrusherId": 2505,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144sh",
+    "Cavity": "coarse",
+    "CrusherId": 3206,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144sh",
+    "Cavity": "fine",
+    "CrusherId": 3204,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144sh",
+    "Cavity": "medium",
+    "CrusherId": 3205,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144SX sh",
+    "Cavity": "all",
+    "CrusherId": 3214,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1144SX st",
+    "Cavity": "all",
+    "CrusherId": 2514,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352 st",
+    "Cavity": "coarse",
+    "CrusherId": 2509,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352 st",
+    "Cavity": "fine",
+    "CrusherId": 2507,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352 st",
+    "Cavity": "medium",
+    "CrusherId": 2508,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352sh",
+    "Cavity": "coarse",
+    "CrusherId": 3209,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352sh",
+    "Cavity": "fine",
+    "CrusherId": 3207,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352sh",
+    "Cavity": "medium",
+    "CrusherId": 3208,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352SX sh",
+    "Cavity": "all",
+    "CrusherId": 3215,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1352SX st",
+    "Cavity": "all",
+    "CrusherId": 2515,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 sh",
+    "Cavity": "coarse",
+    "CrusherId": 3212,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 sh",
+    "Cavity": "fine",
+    "CrusherId": 3210,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 sh",
+    "Cavity": "medium",
+    "CrusherId": 3211,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 st",
+    "Cavity": "coarse",
+    "CrusherId": 2512,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 st",
+    "Cavity": "fine",
+    "CrusherId": 2510,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560 st",
+    "Cavity": "medium",
+    "CrusherId": 2511,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC1560SX st",
+    "Cavity": "all",
+    "CrusherId": 2516,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937 st",
+    "Cavity": "coarse",
+    "CrusherId": 2503,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937 st",
+    "Cavity": "fine",
+    "CrusherId": 2501,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937 st",
+    "Cavity": "medium",
+    "CrusherId": 2502,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937sh",
+    "Cavity": "coarse",
+    "CrusherId": 3203,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937sh",
+    "Cavity": "fine",
+    "CrusherId": 3201,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937sh",
+    "Cavity": "medium",
+    "CrusherId": 3202,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937SX sh",
+    "Cavity": "all",
+    "CrusherId": 3213,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "OC937SX st",
+    "Cavity": "all",
+    "CrusherId": 2513,
+    "TypeId": 211,
+    "Symbol": "oc",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 42-65",
+    "Cavity": "all",
+    "CrusherId": 1903,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 50-65",
+    "Cavity": "all",
+    "CrusherId": 1904,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 54-75",
+    "Cavity": "all",
+    "CrusherId": 1905,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 60-110",
+    "Cavity": "all",
+    "CrusherId": 1908,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 60-110E",
+    "Cavity": "all",
+    "CrusherId": 1912,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 60-89",
+    "Cavity": "all",
+    "CrusherId": 1907,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-II 62-75",
+    "Cavity": "all",
+    "CrusherId": 1909,
+    "TypeId": 400,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 42-65",
+    "Cavity": "all",
+    "CrusherId": 1913,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 50-65",
+    "Cavity": "all",
+    "CrusherId": 1914,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 54-75",
+    "Cavity": "all",
+    "CrusherId": 1915,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 60-110E",
+    "Cavity": "all",
+    "CrusherId": 1918,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 60-89",
+    "Cavity": "all",
+    "CrusherId": 1916,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Superior MK-III 62-75",
+    "Cavity": "all",
+    "CrusherId": 1917,
+    "TypeId": 402,
+    "Symbol": "pg",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 2' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3302,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 2' sh",
+    "Cavity": "fine",
+    "CrusherId": 3301,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 2' st",
+    "Cavity": "coarse",
+    "CrusherId": 2302,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 2' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2303,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 2' st",
+    "Cavity": "fine",
+    "CrusherId": 2301,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3305,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' sh",
+    "Cavity": "fine",
+    "CrusherId": 3303,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' sh",
+    "Cavity": "medium",
+    "CrusherId": 3304,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' st",
+    "Cavity": "coarse",
+    "CrusherId": 2305,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2306,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 3' st",
+    "Cavity": "fine",
+    "CrusherId": 2304,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3308,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' sh",
+    "Cavity": "extra coarse",
+    "CrusherId": 3309,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' sh",
+    "Cavity": "fine",
+    "CrusherId": 3306,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' sh",
+    "Cavity": "medium",
+    "CrusherId": 3307,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' st",
+    "Cavity": "coarse",
+    "CrusherId": 2309,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2310,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' st",
+    "Cavity": "fine",
+    "CrusherId": 2307,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4' st",
+    "Cavity": "medium",
+    "CrusherId": 2308,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3312,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' sh",
+    "Cavity": "extra coarse",
+    "CrusherId": 3313,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' sh",
+    "Cavity": "fine",
+    "CrusherId": 3310,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' sh",
+    "Cavity": "medium",
+    "CrusherId": 3311,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' st",
+    "Cavity": "coarse",
+    "CrusherId": 2313,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2314,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' st",
+    "Cavity": "fine",
+    "CrusherId": 2311,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 4.25' st",
+    "Cavity": "medium",
+    "CrusherId": 2312,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3316,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' sh",
+    "Cavity": "extra coarse",
+    "CrusherId": 3317,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' sh",
+    "Cavity": "fine",
+    "CrusherId": 3314,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' sh",
+    "Cavity": "medium",
+    "CrusherId": 3315,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' st",
+    "Cavity": "coarse",
+    "CrusherId": 2317,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2318,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' st",
+    "Cavity": "fine",
+    "CrusherId": 2315,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 5.5' st",
+    "Cavity": "medium",
+    "CrusherId": 2316,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' sh",
+    "Cavity": "coarse",
+    "CrusherId": 3320,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' sh",
+    "Cavity": "extra coarse",
+    "CrusherId": 3321,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' sh",
+    "Cavity": "fine",
+    "CrusherId": 3318,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' sh",
+    "Cavity": "medium",
+    "CrusherId": 3319,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' st",
+    "Cavity": "coarse",
+    "CrusherId": 2321,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' st",
+    "Cavity": "extra coarse",
+    "CrusherId": 2322,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' st",
+    "Cavity": "fine",
+    "CrusherId": 2319,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "Symons 7' st",
+    "Cavity": "medium",
+    "CrusherId": 2320,
+    "TypeId": 211,
+    "Symbol": "symons",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "coarse",
+    "CrusherId": 3704,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "extra coarse",
+    "CrusherId": 3706,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "extra fine",
+    "CrusherId": 3701,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "fine",
+    "CrusherId": 3702,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "medium",
+    "CrusherId": 3703,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF100",
+    "Cavity": "super coarse",
+    "CrusherId": 3705,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "coarse",
+    "CrusherId": 3713,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "fine",
+    "CrusherId": 3711,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "medium",
+    "CrusherId": 3712,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "sh coarse",
+    "CrusherId": 3710,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3707,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "sh fine",
+    "CrusherId": 3708,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF200",
+    "Cavity": "sh medium",
+    "CrusherId": 3709,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "coarse",
+    "CrusherId": 3720,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "extra coarse",
+    "CrusherId": 3721,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "fine",
+    "CrusherId": 3718,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "medium",
+    "CrusherId": 3719,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "sh coarse",
+    "CrusherId": 3717,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "sh extra fine",
+    "CrusherId": 3714,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "sh fine",
+    "CrusherId": 3715,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF300",
+    "Cavity": "sh medium",
+    "CrusherId": 3716,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "coarse",
+    "CrusherId": 3727,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "extra coarse",
+    "CrusherId": 3728,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "fine",
+    "CrusherId": 3725,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "medium",
+    "CrusherId": 3726,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "sh coarse",
+    "CrusherId": 3724,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "sh fine",
+    "CrusherId": 3722,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF400",
+    "Cavity": "sh medium",
+    "CrusherId": 3723,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "coarse",
+    "CrusherId": 3734,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "extra coarse",
+    "CrusherId": 3735,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "fine",
+    "CrusherId": 3732,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "medium",
+    "CrusherId": 3733,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "sh coarse",
+    "CrusherId": 3731,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "sh fine",
+    "CrusherId": 3729,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF500",
+    "Cavity": "sh medium",
+    "CrusherId": 3730,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "coarse",
+    "CrusherId": 3748,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "extra coarse",
+    "CrusherId": 3749,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "fine",
+    "CrusherId": 3746,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "medium",
+    "CrusherId": 3747,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "sh coarse",
+    "CrusherId": 3745,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "sh fine",
+    "CrusherId": 3743,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  },
+  {
+    "Crusher": "WF800",
+    "Cavity": "sh medium",
+    "CrusherId": 3744,
+    "TypeId": 210,
+    "Symbol": "Wf",
+    "Motor": null,
+    "Default motor": null
+  }
+]
