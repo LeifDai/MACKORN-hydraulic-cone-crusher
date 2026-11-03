@@ -1,0 +1,227 @@
+{
+  "schema": "mackorn-listing-experience/1",
+  "last_updated": "2026-11-02T16:53:01.858Z",
+  "success_patterns": [
+    {
+      "platform_id": "npm",
+      "platform": "npm registry",
+      "date": "2026-11-03",
+      "how": "自动（npm publish）",
+      "proven_conditions": [
+        "package.json 有 name",
+        "package.json 有 version",
+        "有 bin 字段（npx 可运行）",
+        "npm 上该版本已发布"
+      ]
+    },
+    {
+      "platform_id": "mcp-registry",
+      "platform": "Official MCP Registry",
+      "date": "2026-11-03",
+      "how": "提交（server.json）",
+      "proven_conditions": [
+        "根目录有 server.json",
+        "server.json 的 name 符合反域名格式",
+        "server.json 的 packages[].identifier = package.json 的 name",
+        "server.json 的 version = package.json 的 version",
+        "官方注册表能搜到"
+      ]
+    },
+    {
+      "platform_id": "skills-sh",
+      "platform": "skills.sh",
+      "date": "2026-11-03",
+      "how": "自动抓（skills/<name>/SKILL.md）",
+      "proven_conditions": [
+        "skills/ 目录存在且有技能",
+        "每个 SKILL.md 有 YAML frontmatter（name + description）",
+        "有 skills.sh.json 索引",
+        "skills.sh 页面能访问"
+      ]
+    },
+    {
+      "platform_id": "glama",
+      "platform": "Glama",
+      "date": "2026-11-03",
+      "how": "容器化 release",
+      "proven_conditions": [
+        "根目录有 Dockerfile",
+        "根目录有 .dockerignore",
+        "根目录有 glama.json",
+        "Glama 页面能访问"
+      ]
+    },
+    {
+      "platform_id": "claude-clients",
+      "platform": "Claude Desktop / Cursor / Cline",
+      "date": "2026-11-03",
+      "how": "配置文件（npx）",
+      "proven_conditions": [
+        "bin 指向可执行文件",
+        "README 有客户端配置示例",
+        "npm 包能用 npx 拉取"
+      ]
+    }
+  ],
+  "gap_analyses": [
+    {
+      "platform_id": "smithery",
+      "platform": "Smithery",
+      "date": "2026-11-03",
+      "status": "ready",
+      "missing_conditions": [
+        "Smithery 页面能访问"
+      ],
+      "evidence": [
+        "Smithery 页面能访问 → HTTP 404"
+      ],
+      "quick_false_failures": [],
+      "migration": [
+        {
+          "gap": "Smithery 页面能访问",
+          "detail": "HTTP 404",
+          "category": "other",
+          "proof": [
+            "npm registry ✔ package.json 有 name",
+            "npm registry ✔ package.json 有 version",
+            "npm registry ✔ 有 bin 字段（npx 可运行）"
+          ],
+          "how": "逐条对照成功平台的同类条件补齐"
+        }
+      ],
+      "action": "补 smithery.yaml（HTTP 部署配置），然后等 Smithery 自动抓",
+      "canIBoost": true
+    },
+    {
+      "platform_id": "coze",
+      "platform": "扣子 Coze（Agent 平台）",
+      "date": "2026-11-03",
+      "status": "ready",
+      "missing_conditions": [],
+      "evidence": [],
+      "quick_false_failures": [],
+      "migration": [],
+      "action": "① 上传 ai_execute.php → ② 验证 REST 在线 → ③ Coze 导入 openapi.json",
+      "canIBoost": false
+    },
+    {
+      "platform_id": "dify",
+      "platform": "Dify（Agent 平台）",
+      "date": "2026-11-03",
+      "status": "ready",
+      "missing_conditions": [],
+      "evidence": [],
+      "quick_false_failures": [],
+      "migration": [],
+      "action": "同 Coze：先传 PHP，再导入 openapi.json",
+      "canIBoost": false
+    },
+    {
+      "platform_id": "awesome-mcp",
+      "platform": "punkpeye/awesome-mcp-servers",
+      "date": "2026-11-03",
+      "status": "missing",
+      "missing_conditions": [
+        "Glama 有评分（PR 合并前置条件）"
+      ],
+      "evidence": [
+        "Glama 有评分（PR 合并前置条件） → 页面可访问（需人工看是否有评分）"
+      ],
+      "quick_false_failures": [],
+      "migration": [
+        {
+          "gap": "Glama 有评分（PR 合并前置条件）",
+          "detail": "页面可访问（需人工看是否有评分）",
+          "category": "submit",
+          "proof": [],
+          "how": "按 detail 处理：页面可访问（需人工看是否有评分）"
+        }
+      ],
+      "action": "先做 Glama release → 评分出了 → PR #15410 补评论推动合并",
+      "canIBoost": false
+    }
+  ],
+  "snapshots": [
+    {
+      "date": "2026-11-02",
+      "at": "2026-11-02 23:49",
+      "data_at": "2026-11-01T23:13:59.555Z",
+      "quick_mode": true,
+      "totals": {
+        "platforms": 9,
+        "listed": 3,
+        "ready": 5,
+        "missing": 1
+      },
+      "listed": [
+        "Smithery",
+        "skills.sh",
+        "Glama"
+      ],
+      "ready": [
+        "npm registry",
+        "Official MCP Registry",
+        "扣子 Coze（Agent 平台）",
+        "Dify（Agent 平台）",
+        "Claude Desktop / Cursor / Cline"
+      ],
+      "missing": [
+        "punkpeye/awesome-mcp-servers"
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "at": "2026-11-02 23:50",
+      "data_at": "2026-11-02T15:51:01.921Z",
+      "quick_mode": false,
+      "totals": {
+        "platforms": 9,
+        "listed": 5,
+        "ready": 3,
+        "missing": 1
+      },
+      "listed": [
+        "npm registry",
+        "Official MCP Registry",
+        "skills.sh",
+        "Glama",
+        "Claude Desktop / Cursor / Cline"
+      ],
+      "ready": [
+        "Smithery",
+        "扣子 Coze（Agent 平台）",
+        "Dify（Agent 平台）"
+      ],
+      "missing": [
+        "punkpeye/awesome-mcp-servers"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "at": "2026-11-03 00:53",
+      "data_at": "2026-11-02T15:51:01.921Z",
+      "quick_mode": false,
+      "totals": {
+        "platforms": 9,
+        "listed": 5,
+        "ready": 3,
+        "missing": 1
+      },
+      "listed": [
+        "npm registry",
+        "Official MCP Registry",
+        "skills.sh",
+        "Glama",
+        "Claude Desktop / Cursor / Cline"
+      ],
+      "ready": [
+        "Smithery",
+        "扣子 Coze（Agent 平台）",
+        "Dify（Agent 平台）"
+      ],
+      "missing": [
+        "punkpeye/awesome-mcp-servers"
+      ]
+    }
+  ]
+}
