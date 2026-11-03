@@ -1,40 +1,36 @@
 {
   "schema": "mackorn-listing-engine/1",
-  "at": "2026-10-31T15:09:46.388Z",
+  "at": "2026-11-02T15:51:01.921Z",
   "version": "0.2.2",
   "package": "mackorn-cone-crusher",
   "quick": false,
   "totals": {
     "platforms": 9,
     "listed": 5,
-    "ready": 1,
-    "missing": 3
+    "ready": 3,
+    "missing": 1
   },
   "diff": {
-    "improved": [],
-    "regressed": [
-      {
-        "name": "punkpeye/awesome-mcp-servers",
-        "from": 2,
-        "to": 1
-      },
+    "improved": [
       {
         "name": "扣子 Coze（Agent 平台）",
-        "from": 2,
-        "to": 1
+        "from": 1,
+        "to": 2
       },
       {
         "name": "Dify（Agent 平台）",
-        "from": 2,
-        "to": 1
+        "from": 1,
+        "to": 2
       }
     ],
+    "regressed": [],
     "unchanged": [
       "npm registry",
       "Official MCP Registry",
       "Smithery",
       "skills.sh",
       "Glama",
+      "punkpeye/awesome-mcp-servers",
       "Claude Desktop / Cursor / Cline"
     ]
   },
@@ -106,7 +102,7 @@
         "total": 0
       },
       "verify": {
-        "pass": 0,
+        "pass": 1,
         "total": 1
       },
       "conditions": [
@@ -142,11 +138,11 @@
           "level": "verify",
           "id": "registry_live",
           "desc": "官方注册表能搜到",
-          "pass": false,
-          "detail": "查询失败"
+          "pass": true,
+          "detail": "找到 4 条"
         }
       ],
-      "status": "ready"
+      "status": "listed"
     },
     {
       "id": "smithery",
@@ -164,7 +160,7 @@
         "total": 1
       },
       "verify": {
-        "pass": 1,
+        "pass": 0,
         "total": 1
       },
       "conditions": [
@@ -193,11 +189,11 @@
           "level": "verify",
           "id": "smithery_live",
           "desc": "Smithery 页面能访问",
-          "pass": true,
-          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+          "pass": false,
+          "detail": "HTTP 404"
         }
       ],
-      "status": "listed"
+      "status": "ready"
     },
     {
       "id": "skills-sh",
@@ -245,7 +241,7 @@
           "id": "skillssh_live",
           "desc": "skills.sh 页面能访问",
           "pass": true,
-          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+          "detail": "HTTP 200"
         }
       ],
       "status": "listed"
@@ -296,7 +292,7 @@
           "id": "glama_live",
           "desc": "Glama 页面能访问",
           "pass": true,
-          "detail": "HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+          "detail": "HTTP 200"
         }
       ],
       "status": "listed"
@@ -326,7 +322,7 @@
           "id": "glama_score",
           "desc": "Glama 有评分（PR 合并前置条件）",
           "pass": false,
-          "detail": "页面打不开：HTTP ERR_TLS_CERT_ALTNAME_INVALID"
+          "detail": "页面可访问（需人工看是否有评分）"
         },
         {
           "level": "soft",
@@ -346,7 +342,7 @@
       "action": "① 上传 ai_execute.php → ② 验证 REST 在线 → ③ Coze 导入 openapi.json",
       "canIBoost": false,
       "hard": {
-        "pass": 1,
+        "pass": 2,
         "total": 2
       },
       "soft": {
@@ -369,11 +365,11 @@
           "level": "hard",
           "id": "rest_live",
           "desc": "REST 执行层 ai_execute.php 在线",
-          "pass": false,
-          "detail": "HTTP 404（文件未上传）"
+          "pass": true,
+          "detail": "HTTP 200"
         }
       ],
-      "status": "missing"
+      "status": "ready"
     },
     {
       "id": "dify",
@@ -383,7 +379,7 @@
       "action": "同 Coze：先传 PHP，再导入 openapi.json",
       "canIBoost": false,
       "hard": {
-        "pass": 1,
+        "pass": 2,
         "total": 2
       },
       "soft": {
@@ -406,11 +402,11 @@
           "level": "hard",
           "id": "rest_live",
           "desc": "REST 执行层在线",
-          "pass": false,
-          "detail": "HTTP 404"
+          "pass": true,
+          "detail": "HTTP 200"
         }
       ],
-      "status": "missing"
+      "status": "ready"
     },
     {
       "id": "claude-clients",
