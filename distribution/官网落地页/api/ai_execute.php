@@ -38,7 +38,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
     exit;
 }
 
-define('MACKORN_VERSION', '0.2.2');
+define('MACKORN_VERSION', '0.2.3');
 define('MACKORN_SERVER', 'cn.mackorn/mackorn-cone-crusher');
 define('SOURCE_NOTE', 'MACKORN 官方数据（S1 机型表 / S6 选型规范）· REST 端点 /ai/api/ai_execute.php');
 
@@ -52,6 +52,37 @@ if (!is_array($DB)) {
     ], JSON_UNESCAPED_UNICODE)], JSON_UNESCAPED_UNICODE);
     exit;
 }
+
+/* ══════════════════════════════════════════════════════════════
+ * MERGE-MATERIALS-PATCH（R208 · 2026-11-03）
+ *
+ * 为什么：
+ *   线上服务器 _data.php 是 2026-10-21 旧版，缺 MATERIAL_LIBRARY
+ *   → ai_execute.php?action=materials 返回 count=0 → Q6 失败（线上 7/8）
+ *
+ *   应急补丁 _data_materials.php 已生成，但原 ai_execute.php 从不 include 它
+ *   → 方案 B「应急」实际上是坏的（只 require _data.php）
+ *
+ * 本补丁：
+ *   ① 若 _data_materials.php 存在 → include 并合并
+ *   ② 只补 _data.php 里【缺失】的键，绝不覆盖已有数据
+ *   ③ 幂等：合并多次结果一致
+ * ══════════════════════════════════════════════════════════════ */
+$__mp = __DIR__ . '/_data_materials.php';
+if (is_file($__mp)) {
+    $__M = @include $__mp;
+    if (is_array($__M)) {
+        foreach ($__M as $__k => $__v) {
+            if (!array_key_exists($__k, $DB)) {
+                $DB[$__k] = $__v;
+            } elseif (is_array($DB[$__k]) && is_array($__v) && count($DB[$__k]) === 0) {
+                // 键存在但为空数组 → 用补丁填充
+                $DB[$__k] = $__v;
+            }
+        }
+    }
+}
+unset($__mp, $__M, $__k, $__v);
 
 /* ══════════════════════════════════════════════════════════════
  * 工具函数
@@ -159,13 +190,37 @@ if ($action === 'specs') {
         out(['status' => 'error', 'error' => 'PARAM_REQUIRED', 'detail' => '缺少 model 参数，例如 model=NH400'], [], []);
     }
     if (!isset($DB['CAVITY_CAPACITY'][$model])) {
-        $available = array_keys($DB['CAVITY_CAPACITY']);
+        /* ★ 2026-11-01 修：CAVITY_CAPACITY 详表只覆盖 NH200/300/400，
+           其余 10 个机型（含展机 NH890）在 ALL_MODELS 里有基本参数。
+           回退到 ALL_MODELS + 系列区间，并明确标注 basis=APPROX，
+           绝不编造腔型×CSS 细表。 */
+        $baseRow = findModelRow($DB, $model);
+        if ($baseRow !== null) {
+            out([
+                'status'      => 'success',
+                'model'       => $model,
+                'base'        => $baseRow,
+                'css_list'    => null,
+                'cavity_rows' => null,
+                'basis'       => 'APPROX',
+                'capacity_range_tph' => isset($baseRow['capacityTph']) ? $baseRow['capacityTph'] : null,
+                'css_range_mm'       => [isset($baseRow['cssMin'])?$baseRow['cssMin']:null,
+                                         isset($baseRow['cssMax'])?$baseRow['cssMax']:null],
+                'note'        => '该机型无腔型×CSS 详表，此处返回系列区间；具体工况需向 MACKORN 确认',
+            ], ['基本参数来自 MACKORN 厂商参数表（S1）', '该机型无逐腔型×CSS 详表，产能为系列区间'], [
+                '产能是区间值不是保证值', '腔型×CSS 逐点产能请向 MACKORN 索取实测表',
+            ]);
+        }
+        $available = array_merge(array_keys($DB['CAVITY_CAPACITY']),
+            isset($DB['ALL_MODELS']) && is_array($DB['ALL_MODELS'])
+                ? array_map(function ($r) { return isset($r['model']) ? $r['model'] : ''; }, $DB['ALL_MODELS']) : []);
+        $available = array_values(array_unique(array_filter($available)));
         out([
             'status'    => 'error',
             'error'     => 'MODEL_NOT_FOUND',
             'requested' => $model,
             'available' => $available,
-        ], [], ['该机型在 CAVITY_CAPACITY 详表里没有记录 —— 不能编造，请向 MACKORN 索取']);
+        ], [], ['该机型不在机型表里 —— 不能编造，请向 MACKORN 索取']);
     }
     $spec = $DB['CAVITY_CAPACITY'][$model];
     $base = findModelRow($DB, $model);
@@ -191,6 +246,30 @@ if ($action === 'capacity') {
         out(['status' => 'error', 'error' => 'PARAM_REQUIRED', 'detail' => '需要 model 与 css，例如 action=capacity&model=NH400&css=16'], [], []);
     }
     if (!isset($DB['CAVITY_CAPACITY'][$model])) {
+        /* ★ 2026-11-01 修：无逐腔型详表时，按系列区间线性外推（标注 APPROX，不冒充实测） */
+        $baseRow = findModelRow($DB, $model);
+        if ($baseRow !== null) {
+            $cMin = isset($baseRow['cssMin']) ? (float)$baseRow['cssMin'] : null;
+            $cMax = isset($baseRow['cssMax']) ? (float)$baseRow['cssMax'] : null;
+            $tph  = isset($baseRow['capacityTph']) && is_array($baseRow['capacityTph']) ? $baseRow['capacityTph'] : null;
+            $rated = null;
+            if ($tph && $cMin !== null && $cMax !== null && $cMax > $cMin && $css >= $cMin && $css <= $cMax) {
+                $ratio = ($css - $cMin) / ($cMax - $cMin);
+                $rated = $tph[0] + ($tph[1] - $tph[0]) * $ratio;
+            }
+            out([
+                'status'       => 'success',
+                'model'        => $model,
+                'css'          => $css,
+                'cavity'       => $cav,
+                'base'         => $baseRow,
+                'capacity_min_tph'   => $tph ? $tph[0] : null,
+                'capacity_rated_tph' => $rated !== null ? round($rated, 1) : ($tph ? $tph[1] : null),
+                'basis'        => 'APPROX（系列区间在 CSS ' . ($cMin !== null ? $cMin : '?') . '-' . ($cMax !== null ? $cMax : '?') . 'mm 上线性外推）',
+            ], ['基本参数来自 MACKORN 厂商参数表（S1）', '该机型无逐腔型×CSS 详表，产能为线性外推近似值'], [
+                '这是近似值，不是实测值；正式选型需向 MACKORN 索取该工况实测数据',
+            ]);
+        }
         out([
             'status' => 'error', 'error' => 'MODEL_NOT_FOUND', 'requested' => $model,
             'available' => array_keys($DB['CAVITY_CAPACITY']),
