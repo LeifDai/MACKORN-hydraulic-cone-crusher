@@ -1,0 +1,121 @@
+[
+  {
+    "MaterialName": "Amphibolite",
+    "Solid density": 2.83,
+    "Crushability": 34,
+    "Abrasiveness": 921.5,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Basalt",
+    "Solid density": 2.9,
+    "Crushability": 25.9,
+    "Abrasiveness": 1132,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Diabase",
+    "Solid density": 2.85,
+    "Crushability": 26.2,
+    "Abrasiveness": 924,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Diorite",
+    "Solid density": 2.75,
+    "Crushability": 39.3,
+    "Abrasiveness": 1543,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Dolomite",
+    "Solid density": 2.71,
+    "Crushability": 62.5,
+    "Abrasiveness": 322.8,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Dolorite",
+    "Solid density": 2.85,
+    "Crushability": 43.53,
+    "Abrasiveness": 1341.2,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Gabbro",
+    "Solid density": 2.85,
+    "Crushability": 39.3,
+    "Abrasiveness": 1227,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Gneiss",
+    "Solid density": 2.7,
+    "Crushability": 38.4,
+    "Abrasiveness": 1398,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Granite",
+    "Solid density": 2.7,
+    "Crushability": 35,
+    "Abrasiveness": 1398,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Greywacke",
+    "Solid density": 2.67,
+    "Crushability": 30.3,
+    "Abrasiveness": 959.9,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Kimberlite",
+    "Solid density": 2.48,
+    "Crushability": 60.7,
+    "Abrasiveness": 140,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Limestone",
+    "Solid density": 2.6,
+    "Crushability": 40,
+    "Abrasiveness": 434,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "My material",
+    "Solid density": 0,
+    "Crushability": 0,
+    "Abrasiveness": 0,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Porphyre",
+    "Solid density": 2.65,
+    "Crushability": 28.24,
+    "Abrasiveness": 1430.4,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Quartzite",
+    "Solid density": 2.6,
+    "Crushability": 41.9,
+    "Abrasiveness": 1798,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "River gravel",
+    "Solid density": 2.67,
+    "Crushability": 42.73,
+    "Abrasiveness": 1176.1,
+    "RockGravel": 0
+  },
+  {
+    "MaterialName": "Sandstone",
+    "Solid density": 2.6,
+    "Crushability": 62.5,
+    "Abrasiveness": 1227,
+    "RockGravel": 0
+  }
+]
