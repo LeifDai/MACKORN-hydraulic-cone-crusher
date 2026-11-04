@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-11-04T00:39:55.488Z",
+  "generated": "2026-11-04T09:02:56.512Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,24 +12,24 @@
     "error": null
   },
   "last_commit": {
-    "sha": "d40b53f",
-    "date": "2026-11-03T19:29:37Z",
-    "message": "chore(nightly): 云端自迭代 2026-11-03 19:29 [skip ci]"
+    "sha": "b24778f",
+    "date": "2026-11-04T03:58:55Z",
+    "message": "docs: 开机交接 2026-11-04 — probe.php就绪/只等IT传3个文件"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 16.4,
+    "days_since": 16.75,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.22,
-  "days_since_publish": 0.22,
+  "effective_days": 0.21,
+  "days_since_publish": 0.21,
   "changed_since_publish": {
-    "count": 324,
+    "count": 325,
     "files": [
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/index.mjs",
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/plugin/lib/automation-engine.mjs",
