@@ -38,7 +38,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
     exit;
 }
 
-define('MACKORN_VERSION', '0.2.3');
+define('MACKORN_VERSION', '0.2.2');
 define('MACKORN_SERVER', 'cn.mackorn/mackorn-cone-crusher');
 define('SOURCE_NOTE', 'MACKORN 官方数据（S1 机型表 / S6 选型规范）· REST 端点 /ai/api/ai_execute.php');
 
