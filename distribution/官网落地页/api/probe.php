@@ -28,7 +28,32 @@ header('Content-Type: application/json; charset=utf-8');
 /* ══════════════════════════════════════════════════════════════
  * 配置
  * ══════════════════════════════════════════════════════════════ */
-define('PROBE_TOKEN', 'mackorn-probe-2026-Kx9mQ');
+/* ★ 2026-11-04 安全补丁：token 不再硬编码在源码里
+ *
+ * 原因：硬编码的问题不是「别人猜不到」，而是
+ *   ① 源码一旦被 git 提交/备份/发给人 → token 永久泄漏
+ *   ② 泄漏后想换 = 改代码重新上传，很麻烦
+ * 现在：token 存在 _probe/.token（0600），首次访问自动生成，可一键轮换。
+ *
+ * 兼容：如果你已经用旧 token 配了 cron，访问一次 ?action=migrate 把它迁过来。
+ */
+define('TOKEN_FILE', __DIR__ . '/_probe/.token');
+define('LEGACY_TOKEN', 'mackorn-probe-2026-Kx9mQ');   // 仅用于迁移，其他情况不用
+
+function loadProbeToken() {
+    if (is_file(TOKEN_FILE)) {
+        $s = trim((string)@file_get_contents(TOKEN_FILE));
+        if (strlen($s) >= 32) return $s;
+    }
+    return '';
+}
+function saveProbeToken($tok) {
+    $dir = dirname(TOKEN_FILE);
+    if (!is_dir($dir)) @mkdir($dir, 0700, true);
+    @file_put_contents(TOKEN_FILE, $tok);
+    @chmod(TOKEN_FILE, 0600);
+    @chmod($dir, 0700);
+}
 define('PKG', 'mackorn-cone-crusher');
 define('TIMEOUT', 12);
 define('DATA_DIR', __DIR__ . '/cloud_data');
@@ -38,14 +63,106 @@ define('HISTORY_FILE', DATA_DIR . '/probe_history.jsonl');
 /* ══════════════════════════════════════════════════════════════
  * 鉴权
  * ══════════════════════════════════════════════════════════════ */
-$token = isset($_GET['token']) ? $_GET['token'] : '';
-if ($token !== PROBE_TOKEN) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Unauthorized', 'hint' => 'need ?token=...'], JSON_UNESCAPED_UNICODE);
+/* ★ 2026-11-04 安全补丁：三处加固
+ *   ① 常量时间比较 hash_equals（原来 !== 可被时序攻击逐字符猜）
+ *   ② 支持 Authorization: Bearer（Cron 用 URL 是必要妥协，但有别的客户端时优先 header）
+ *   ③ action=init 首次生成 token / action=rotate 轮换 / action=migrate 从旧硬编码迁移
+ */
+$__action = isset($_GET['action']) ? preg_replace('/[^a-z]/', '', $_GET['action']) : '';
+
+/* action=init：只在没有 token 文件时可用 */
+if ($__action === 'init') {
+    header('Content-Type: application/json; charset=utf-8');
+    if (loadProbeToken() !== '') {
+        http_response_code(409);
+        echo json_encode(['error' => 'TOKEN_EXISTS', 'hint' => '用 action=rotate&token=旧token 轮换'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $newTok = bin2hex(random_bytes(24));
+    saveProbeToken($newTok);
+    echo json_encode([
+        'ok' => true, 'token' => $newTok,
+        'note' => '★ 只显示这一次，请立刻保存',
+        'cron' => 'https://mackorn.cn/ai/api/probe.php?token=' . $newTok . '&run=1',
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit;
 }
 
-if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0755, true);
+/* action=migrate：把旧硬编码 token 迁到文件（用旧 token 认证） */
+if ($__action === 'migrate') {
+    header('Content-Type: application/json; charset=utf-8');
+    $old = isset($_GET['token']) ? (string)$_GET['token'] : '';
+    if (!hash_equals(LEGACY_TOKEN, $old)) {
+        http_response_code(403);
+        echo json_encode(['error' => 'UNAUTHORIZED_LEGACY'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $newTok = bin2hex(random_bytes(24));
+    saveProbeToken($newTok);
+    echo json_encode([
+        'ok' => true, 'token' => $newTok,
+        'note' => '旧 token 已迁移。★ 立刻更新 cron 和本地配置，然后忽略这段输出',
+    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    exit;
+}
+
+/* action=rotate：用当前 token 换新的 */
+if ($__action === 'rotate') {
+    header('Content-Type: application/json; charset=utf-8');
+    $cur = loadProbeToken();
+    $given = '';
+    if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Bearer\s+([0-9a-f]{32,})$/i', trim($_SERVER['HTTP_AUTHORIZATION']), $mm)) $given = $mm[1];
+    if ($given === '' && isset($_GET['token'])) $given = (string)$_GET['token'];
+    if ($cur === '' || !hash_equals($cur, $given)) {
+        http_response_code(403);
+        echo json_encode(['error' => 'UNAUTHORIZED'], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    $newTok = bin2hex(random_bytes(24));
+    saveProbeToken($newTok);
+    echo json_encode(['ok' => true, 'token' => $newTok, 'note' => '旧 token 已失效'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    exit;
+}
+
+/* ── 正常鉴权 ── */
+$token = '';
+if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Bearer\s+([0-9a-f]{32,})$/i', trim($_SERVER['HTTP_AUTHORIZATION']), $mm)) {
+    $token = $mm[1];
+}
+if ($token === '' && isset($_GET['token'])) $token = (string)$_GET['token'];
+
+$__expected = loadProbeToken();
+if ($__expected === '') {
+    http_response_code(412);
+    echo json_encode([
+        'error' => 'NOT_INITIALIZED',
+        'hint'  => '第一次用：浏览器打开 probe.php?action=init 生成 token',
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+if (!is_string($token) || !hash_equals($__expected, $token)) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Unauthorized', 'hint' => 'need ?token=... (header Authorization: Bearer 也支持)'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+/* ★ 2026-11-04 安全补丁：目录 0755 → 0700
+ * 0755 意味着同服务器上任何用户（含其他虚拟主机）都能读你的探测结果。
+ * 0700 = 只有 PHP 进程自己能读写。
+ */
+if (!is_dir(DATA_DIR)) {
+    @mkdir(DATA_DIR, 0700, true);
+}
+@chmod(DATA_DIR, 0700);
+/* Apache 兜底：拒绝外网直接访问 cloud_data/
+   Nginx 需要在站点配置加 location ~ ^/ai/api/cloud_data/ { deny all; }
+   （这条注释就是给 IT 看的，别忘了）
+*/
+$__ht = DATA_DIR . '/.htaccess';
+if (!file_exists($__ht)) {
+    @file_put_contents($__ht, "Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n");
+    @chmod($__ht, 0600);
+}
 
 /* ══════════════════════════════════════════════════════════════
  * HTTP 抓取（用 curl，失败降级到 file_get_contents）
