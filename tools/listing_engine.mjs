@@ -401,7 +401,7 @@ if (has('--due')) {
     console.log('');
     console.log('  ⚠️ 从未跑过 → 现在就该跑');
     console.log('');
-    process.exit(0);
+    process.exitCode = 0;
   }
   const days = (Date.now() - Date.parse(last.at)) / 86400000;
   const due = days >= 3;
@@ -409,7 +409,7 @@ if (has('--due')) {
   console.log('  上次运行：' + last.at.slice(0, 16).replace('T', ' ') + '（' + Math.round(days * 10) / 10 + ' 天前）');
   console.log('  是否到期：' + (due ? '✅ 该跑了（≥3 天）' : '⏳ 还没到（3 天周期）'));
   console.log('');
-  process.exit(due ? 0 : 1);
+  process.exitCode = due ? 0 : 1;
 }
 
 /* --report：看历史 */
@@ -426,7 +426,7 @@ if (has('--report')) {
     console.log('  ' + r.at.slice(0, 16).replace('T', ' ') + '  已收录 ' + listed + ' · 就绪待传 ' + ready + ' · 缺条件 ' + missing);
   }
   console.log('');
-  process.exit(0);
+  process.exitCode = 0;
 }
 
 const results = await runChecks();
