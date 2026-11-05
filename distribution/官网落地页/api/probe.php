@@ -1,550 +1,561 @@
 <?php
 /**
- * MACKORN 云端探测引擎（R211 · 2026-11-04）
+ * MACKORN 云端全息引擎 · probe.php
+ * 版本 YU0001.2（2026-11-04）
  *
- * 为什么用 PHP 而不是 Node：
- *   阿里云装 Node + PM2 需要 SSH + 安装 + 维护，服务器重启会挂。
- *   而 PHP 本来就在跑（mackorn.cn 是 PHP 站），传一个文件 + 配一次 cron 就完事。
- *   这是最轻的「电脑关机也能探」。
+ * ============================================================================
+ * 这一版做了什么（合并两套设计的优点）
+ * ============================================================================
+ *   来自 SW0001.3（我自己验证过的）：
+ *     ① register_shutdown_function 抓致命错 → 返回带行号的 JSON，不再 0 字节黑盒
+ *     ② action=ping 最小探针 → 先测这个，能区分「PHP 环境问题」和「文件问题」
+ *     ③ PHP 5.6 兼容 → 不用空合并运算符 / 箭头函数 / 返回类型 / 类型声明
+ *     ④ SSL 校验强制开启 → 关掉等于让中间人伪造探测结果
  *
- * 部署：
- *   1. 本文件 → /ai/api/probe.php
- *   2. cron（宝塔面板 → 计划任务 → Shell 脚本）：
- *        */30 * * * * /usr/bin/curl -s "https://mackorn.cn/ai/api/probe.php?token=XXX&run=1" > /dev/null
- *   3. 查看结果：https://mackorn.cn/ai/api/probe.php?token=XXX
+ *   来自 YU0001.1 提案（真正有价值的三条）：
+ *     ⑤ **三级 token**（phone / pc / admin）→ 手机泄露不影响电脑
+ *     ⑥ **heartbeats 心跳** → 三端谁掉线立刻能看出来
+ *     ⑦ **history 自动归档** → 电脑关机期间云端攒历史，回来能知道发生了什么
  *
- * 安全：
- *   token 必填，不匹配直接 403（否则别人可以刷你的 cron）
+ *   ⚠️ 明确不采纳的：
+ *     · PHP 7.4 及以上才有的语法 —— 服务器版本未知，用这个可能又 500
+ *     · 硬编码 token —— 一律走文件（0600）
  *
- * 探测逻辑（全部真实 HTTP，不是读本地 JSON）：
- *   · 每个平台定义 url + successCheck
- *   · 记录 http_status / response_time_ms / matched / evidence
- *   · 区分 5 种状态：listed / not_found / endpoint_changed / deprecated / error
- *   · 结果写 cloud_data/probe_state.json，保留最近 60 次历史
+ * 部署
+ * ────
+ *   ① 传本文件到 htdocs/ai/api/probe.php
+ *   ② 浏览器开  probe.php?action=ping     ← 必须看到 {"ok":true,...}
+ *   ③ 浏览器开  probe.php?action=init     拿到 3 个 token（只显示这一次）
+ *   ④ 宝塔→计划任务→访问URL→每30分钟：
+ *        probe.php?action=holo&token=<pc_token>
  */
 
-header('Content-Type: application/json; charset=utf-8');
+/* ============================================================================
+   第 0 步：错误可见（这一段是全文件最重要的 20 行）
+   ============================================================================ */
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+@set_time_limit(300);
 
-/* ══════════════════════════════════════════════════════════════
- * 配置
- * ══════════════════════════════════════════════════════════════ */
-/* ★ 2026-11-04 安全补丁：token 不再硬编码在源码里
- *
- * 原因：硬编码的问题不是「别人猜不到」，而是
- *   ① 源码一旦被 git 提交/备份/发给人 → token 永久泄漏
- *   ② 泄漏后想换 = 改代码重新上传，很麻烦
- * 现在：token 存在 _probe/.token（0600），首次访问自动生成，可一键轮换。
- *
- * 兼容：如果你已经用旧 token 配了 cron，访问一次 ?action=migrate 把它迁过来。
- */
-define('TOKEN_FILE', __DIR__ . '/_probe/.token');
-define('LEGACY_TOKEN', 'mackorn-probe-2026-Kx9mQ');   // 仅用于迁移，其他情况不用
+$GLOBALS['__PROBE_DEBUG'] = (isset($_GET['debug']) && $_GET['debug'] === '1');
 
-function loadProbeToken() {
-    if (is_file(TOKEN_FILE)) {
-        $s = trim((string)@file_get_contents(TOKEN_FILE));
-        if (strlen($s) >= 32) return $s;
+register_shutdown_function(function () {
+    $e = error_get_last();
+    if ($e === null) return;
+    $fatal = array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR);
+    if (!in_array($e['type'], $fatal, true)) return;
+
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    $out = array(
+        'ok'      => false,
+        'error'   => 'PHP_FATAL',
+        'message' => $e['message'],
+        'line'    => $e['line'],
+        'php'     => PHP_VERSION,
+        'hint'    => '把这段原样发回给 Leif —— 有行号就能定位',
+    );
+    if ($GLOBALS['__PROBE_DEBUG']) { $out['file'] = basename($e['file']); }
+    echo json_encode($out, JSON_UNESCAPED_UNICODE);
+});
+
+/* ============================================================================
+   第 1 步：常量
+   ============================================================================ */
+define('YU_VER',         'YU0001.2');
+define('DIR_DATA',       __DIR__ . '/_probe');
+define('FILE_HOLO',      DIR_DATA . '/holo.json');
+define('FILE_STATE',     DIR_DATA . '/latest.json');
+define('FILE_HIST',      DIR_DATA . '/history.jsonl');
+define('FILE_HB',        DIR_DATA . '/heartbeats.json');
+define('HIST_MAX_LINES', 5000);
+define('HTTP_TIMEOUT',   12);
+define('ROLES',          'phone,pc,admin');   // 逗号串，避免 array 常量（PHP 5.6 不支持数组常量）
+
+/* ============================================================================
+   第 2 步：基础工具（PHP 5.6 兼容）
+   ============================================================================ */
+function jout($code, $data) {
+    if (!headers_sent()) {
+        http_response_code($code);
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        header('Cache-Control: no-store');
+    }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    exit;
+}
+
+function ensureDir() {
+    if (!is_dir(DIR_DATA)) { @mkdir(DIR_DATA, 0700, true); }
+    @chmod(DIR_DATA, 0700);
+    $ht = DIR_DATA . '/.htaccess';
+    if (!file_exists($ht)) {
+        $rule = "<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n"
+              . "<IfModule !mod_authz_core.c>\nOrder deny,allow\nDeny from all\n</IfModule>\n";
+        @file_put_contents($ht, $rule);
+        @chmod($ht, 0600);
+    }
+}
+
+/** 文件读 JSON，坏了一律返回空数组（不让坏文件把接口打挂） */
+function readJsonFile($f, $fallback) {
+    if (!is_file($f)) return $fallback;
+    $raw = @file_get_contents($f);
+    if (!is_string($raw) || $raw === '') return $fallback;
+    $j = json_decode($raw, true);
+    return is_array($j) ? $j : $fallback;
+}
+
+/** 原子写：先写 tmp 再 rename，避免读到半个文件 */
+function writeJsonFile($f, $data) {
+    $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $tmp = $f . '.tmp';
+    if (@file_put_contents($tmp, $json) === false) return false;
+    @chmod($tmp, 0600);
+    if (!@rename($tmp, $f)) {
+        @unlink($tmp);
+        return @file_put_contents($f, $json) !== false;
+    }
+    @chmod($f, 0600);
+    return true;
+}
+
+/* ── 三级 token ── */
+function tokenFile($role) { return DIR_DATA . '/.token_' . $role; }
+
+function readRoleToken($role) {
+    $f = tokenFile($role);
+    if (!is_file($f)) return '';
+    $s = trim((string)@file_get_contents($f));
+    return strlen($s) >= 32 ? $s : '';
+}
+
+function writeRoleToken($role, $tok) {
+    ensureDir();
+    @file_put_contents(tokenFile($role), $tok);
+    @chmod(tokenFile($role), 0600);
+}
+
+function newToken() { return bin2hex(random_bytes(24)); }   // 48 hex
+
+/** 恒定时间比较；长度不同直接 false */
+function tokEq($a, $b) {
+    if (!is_string($a) || !is_string($b) || strlen($b) < 32) return false;
+    if (strlen($a) !== strlen($b)) return false;
+    return hash_equals($b, $a);
+}
+
+function givenToken() {
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        $h = trim($_SERVER['HTTP_AUTHORIZATION']);
+        if (stripos($h, 'Bearer ') === 0) return trim(substr($h, 7));
+    }
+    if (isset($_GET['token'])) return trim((string)$_GET['token']);
+    if (isset($_POST['token'])) return trim((string)$_POST['token']);
+    return '';
+}
+
+/** 判断给到的 token 属于哪个角色；不匹配返回 '' */
+function detectRole($given) {
+    foreach (array('phone', 'pc', 'admin') as $r) {
+        if (tokEq($given, readRoleToken($r))) return $r;
     }
     return '';
 }
-function saveProbeToken($tok) {
-    $dir = dirname(TOKEN_FILE);
-    if (!is_dir($dir)) @mkdir($dir, 0700, true);
-    @file_put_contents(TOKEN_FILE, $tok);
-    @chmod(TOKEN_FILE, 0600);
-    @chmod($dir, 0700);
+
+/* ── 心跳 ── */
+function recordHeartbeat($role) {
+    ensureDir();
+    $hb = readJsonFile(FILE_HB, array());
+    $hb[$role] = array('at' => date('c'), 'ts' => time());
+    writeJsonFile(FILE_HB, $hb);
 }
-define('PKG', 'mackorn-cone-crusher');
-define('TIMEOUT', 12);
-define('DATA_DIR', __DIR__ . '/cloud_data');
-define('STATE_FILE', DATA_DIR . '/probe_state.json');
-define('HISTORY_FILE', DATA_DIR . '/probe_history.jsonl');
 
-/* ══════════════════════════════════════════════════════════════
- * 鉴权
- * ══════════════════════════════════════════════════════════════ */
-/* ★ 2026-11-04 安全补丁：三处加固
- *   ① 常量时间比较 hash_equals（原来 !== 可被时序攻击逐字符猜）
- *   ② 支持 Authorization: Bearer（Cron 用 URL 是必要妥协，但有别的客户端时优先 header）
- *   ③ action=init 首次生成 token / action=rotate 轮换 / action=migrate 从旧硬编码迁移
- */
-$__action = isset($_GET['action']) ? preg_replace('/[^a-z]/', '', $_GET['action']) : '';
-
-/* action=init：只在没有 token 文件时可用 */
-if ($__action === 'init') {
-    header('Content-Type: application/json; charset=utf-8');
-    if (loadProbeToken() !== '') {
-        http_response_code(409);
-        echo json_encode(['error' => 'TOKEN_EXISTS', 'hint' => '用 action=rotate&token=旧token 轮换'], JSON_UNESCAPED_UNICODE);
-        exit;
+function readHeartbeats() {
+    $hb = readJsonFile(FILE_HB, array());
+    $now = time();
+    foreach ($hb as $role => $info) {
+        $ts = isset($info['ts']) ? (int)$info['ts'] : 0;
+        $age = $now - $ts;
+        $hb[$role]['age_seconds'] = $age;
+        $hb[$role]['age_human'] = $age < 60 ? ($age . 's')
+                                : ($age < 3600 ? (round($age / 60) . 'min')
+                                : (round($age / 3600) . 'h'));
+        $hb[$role]['status'] = $age > 7200 ? 'lost' : ($age > 1800 ? 'stale' : 'alive');
     }
-    $newTok = bin2hex(random_bytes(24));
-    saveProbeToken($newTok);
-    echo json_encode([
-        'ok' => true, 'token' => $newTok,
-        'note' => '★ 只显示这一次，请立刻保存',
-        'cron' => 'https://mackorn.cn/ai/api/probe.php?token=' . $newTok . '&run=1',
-    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-    exit;
+    return $hb;
 }
 
-/* action=migrate：把旧硬编码 token 迁到文件（用旧 token 认证） */
-if ($__action === 'migrate') {
-    header('Content-Type: application/json; charset=utf-8');
-    $old = isset($_GET['token']) ? (string)$_GET['token'] : '';
-    if (!hash_equals(LEGACY_TOKEN, $old)) {
-        http_response_code(403);
-        echo json_encode(['error' => 'UNAUTHORIZED_LEGACY'], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-    $newTok = bin2hex(random_bytes(24));
-    saveProbeToken($newTok);
-    echo json_encode([
-        'ok' => true, 'token' => $newTok,
-        'note' => '旧 token 已迁移。★ 立刻更新 cron 和本地配置，然后忽略这段输出',
-    ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-    exit;
+/* ── 历史归档（超过上限切走旧的）── */
+function appendHistory($line) {
+    ensureDir();
+    @file_put_contents(FILE_HIST, $line . "\n", FILE_APPEND);
+    @chmod(FILE_HIST, 0600);
+    if (!is_file(FILE_HIST)) return;
+    $lines = @file(FILE_HIST, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_array($lines) || count($lines) <= HIST_MAX_LINES) return;
+    $keep = array_slice($lines, -HIST_MAX_LINES);
+    $arch = array_slice($lines, 0, count($lines) - HIST_MAX_LINES);
+    $af = DIR_DATA . '/history_' . date('Ym') . '.jsonl';
+    @file_put_contents($af, implode("\n", $arch) . "\n", FILE_APPEND);
+    @chmod($af, 0600);
+    @file_put_contents(FILE_HIST, implode("\n", $keep) . "\n");
+    @chmod(FILE_HIST, 0600);
 }
 
-/* action=rotate：用当前 token 换新的 */
-if ($__action === 'rotate') {
-    header('Content-Type: application/json; charset=utf-8');
-    $cur = loadProbeToken();
-    $given = '';
-    if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Bearer\s+([0-9a-f]{32,})$/i', trim($_SERVER['HTTP_AUTHORIZATION']), $mm)) $given = $mm[1];
-    if ($given === '' && isset($_GET['token'])) $given = (string)$_GET['token'];
-    if ($cur === '' || !hash_equals($cur, $given)) {
-        http_response_code(403);
-        echo json_encode(['error' => 'UNAUTHORIZED'], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-    $newTok = bin2hex(random_bytes(24));
-    saveProbeToken($newTok);
-    echo json_encode(['ok' => true, 'token' => $newTok, 'note' => '旧 token 已失效'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-    exit;
-}
-
-/* ── 正常鉴权 ── */
-$token = '';
-if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/^Bearer\s+([0-9a-f]{32,})$/i', trim($_SERVER['HTTP_AUTHORIZATION']), $mm)) {
-    $token = $mm[1];
-}
-if ($token === '' && isset($_GET['token'])) $token = (string)$_GET['token'];
-
-$__expected = loadProbeToken();
-if ($__expected === '') {
-    http_response_code(412);
-    echo json_encode([
-        'error' => 'NOT_INITIALIZED',
-        'hint'  => '第一次用：浏览器打开 probe.php?action=init 生成 token',
-    ], JSON_UNESCAPED_UNICODE);
-    exit;
-}
-if (!is_string($token) || !hash_equals($__expected, $token)) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Unauthorized', 'hint' => 'need ?token=... (header Authorization: Bearer 也支持)'], JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-/* ★ 2026-11-04 安全补丁：目录 0755 → 0700
- * 0755 意味着同服务器上任何用户（含其他虚拟主机）都能读你的探测结果。
- * 0700 = 只有 PHP 进程自己能读写。
- */
-if (!is_dir(DATA_DIR)) {
-    @mkdir(DATA_DIR, 0700, true);
-}
-@chmod(DATA_DIR, 0700);
-/* Apache 兜底：拒绝外网直接访问 cloud_data/
-   Nginx 需要在站点配置加 location ~ ^/ai/api/cloud_data/ { deny all; }
-   （这条注释就是给 IT 看的，别忘了）
-*/
-$__ht = DATA_DIR . '/.htaccess';
-if (!file_exists($__ht)) {
-    @file_put_contents($__ht, "Require all denied\n<IfModule !mod_authz_core.c>\nDeny from all\n</IfModule>\n");
-    @chmod($__ht, 0600);
-}
-
-/* ══════════════════════════════════════════════════════════════
- * HTTP 抓取（用 curl，失败降级到 file_get_contents）
- * ══════════════════════════════════════════════════════════════ */
-function httpFetch($url, $timeout = TIMEOUT) {
+/* ============================================================================
+   第 3 步：HTTP 抓取（SSL 校验强制开启）
+   ============================================================================ */
+function fetchUrl($url, $timeout) {
     $t0 = microtime(true);
-    $out = ['ok' => false, 'status' => 0, 'body' => '', 'ms' => 0, 'err' => null];
+    $res = array('status' => 0, 'body' => '', 'err' => null, 'ms' => 0);
 
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS      => 5,
-            CURLOPT_TIMEOUT        => $timeout,
-            CURLOPT_CONNECTTIMEOUT => 6,
-            CURLOPT_SSL_VERIFYPEER => false,   /* 服务器偶发证书链问题，探测不因此误判 */
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_USERAGENT      => 'Mozilla/5.0 (compatible; MACKORN-Probe/1.0; +https://mackorn.cn/ai/)',
-            CURLOPT_HTTPHEADER     => ['Accept: text/html,application/json;q=0.9,*/*;q=0.8'],
-        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 6);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MACKORN/' . YU_VER . ')');
+        curl_setopt($ch, CURLOPT_ENCODING, '');
         $body = curl_exec($ch);
-        $out['status'] = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $out['err'] = curl_error($ch) ?: null;
+        $res['status'] = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $res['body']   = is_string($body) ? $body : '';
+        $e = curl_error($ch);
+        $res['err']    = ($e === '') ? null : $e;
         curl_close($ch);
-        $out['body'] = is_string($body) ? $body : '';
     } else {
-        $ctx = stream_context_create([
-            'http' => ['timeout' => $timeout, 'user_agent' => 'Mozilla/5.0 MACKORN-Probe', 'ignore_errors' => true],
-            'ssl'  => ['verify_peer' => false, 'verify_peer_name' => false],
-        ]);
+        $ctx = stream_context_create(array(
+            'http' => array('timeout' => $timeout, 'ignore_errors' => true,
+                            'user_agent' => 'Mozilla/5.0 (compatible; MACKORN/' . YU_VER . ')'),
+            'ssl'  => array('verify_peer' => true, 'verify_peer_name' => true),
+        ));
         $body = @file_get_contents($url, false, $ctx);
-        $out['body'] = is_string($body) ? $body : '';
-        if (isset($http_response_header[0]) && preg_match('/\s(\d{3})\s/', $http_response_header[0], $m)) {
-            $out['status'] = (int)$m[1];
-        }
-        $out['err'] = $body === false ? 'file_get_contents failed' : null;
+        $res['body']   = is_string($body) ? $body : '';
+        $res['status'] = is_string($body) ? 200 : 0;
+        $res['err']    = is_string($body) ? null : 'file_get_contents failed';
     }
-
-    $out['ms'] = (int)round((microtime(true) - $t0) * 1000);
-    $out['ok'] = ($out['status'] >= 200 && $out['status'] < 300);
-    return $out;
+    $res['ms'] = (int)round((microtime(true) - $t0) * 1000);
+    return $res;
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 平台清单（全部真实 URL，2026-11-04 实测校准）
- *
- * status 五态：
- *   listed          真的收录了（返回内容里找到我们）
- *   not_found       端点活着但找不到我们
- *   endpoint_changed端点没了（404/410）→ 需要更新探测 URL
- *   deprecated      平台已废弃（410 API_SUNSET）
- *   error           网络/超时/异常
- * ══════════════════════════════════════════════════════════════ */
-function platforms() {
-    $pkg = PKG;
-    return [
-        [
-            'id' => 'npm', 'name' => 'npm Registry', 'weight' => 100,
-            'url' => "https://registry.npmjs.org/{$pkg}/latest",
-            'check' => 'json_name',
-            'action' => '未收录 → npm publish --access public',
-        ],
-        [
-            'id' => 'npm_search', 'name' => 'npm 站内搜索', 'weight' => 70,
-            'url' => 'https://www.npmjs.com/search?q=' . urlencode('mackorn cone crusher'),
-            'check' => 'text_mackorn',
-            'action' => '未收录 → 检查 package.json keywords',
-        ],
-        [
-            'id' => 'mcp_registry', 'name' => 'MCP 官方注册中心', 'weight' => 95,
-            'url' => 'https://registry.modelcontextprotocol.io/v0/servers?search=mackorn',
-            'check' => 'text_mackorn',
-            'action' => '未收录 → 提交 server.json',
-        ],
-        [
-            'id' => 'mcp_so', 'name' => 'mcp.so', 'weight' => 80,
-            'url' => 'https://mcp.so/search?q=' . urlencode('mackorn'),
-            'check' => 'text_mackorn',
-            'action' => '未收录 → mcp.so/submit 提交',
-        ],
-        [
-            'id' => 'github_topics', 'name' => 'GitHub 仓库 topics', 'weight' => 60,
-            'url' => 'https://github.com/LeifDai/MACKORN-hydraulic-cone-crusher',
-            'check' => 'text_mackorn',
-            'action' => '未收录 → 检查仓库 topics 是否有 mcp',
-        ],
-        [
-            'id' => 'glama', 'name' => 'Glama', 'weight' => 80,
-            'url' => 'https://glama.ai/mcp/servers?q=mackorn',
-            'check' => 'text_mackorn',
-            'action' => '未收录（200 但页面无我们）→ 页面是 JS 渲染，需人工查 glama.ai 后台',
-        ],
-        [
-            'id' => 'smithery', 'name' => 'Smithery', 'weight' => 75,
-            'url' => 'https://smithery.ai/server/@mackorn/mackorn-cone-crusher',
-            'check' => 'text_mackorn',
-            'action' => '端点 404 → API 已改版，需去 smithery.ai 登录 GitHub 手动 submit',
-        ],
-        [
-            'id' => 'pulsemcp', 'name' => 'PulseMCP', 'weight' => 50,
-            'url' => 'https://pulsemcp.com/servers?q=mackorn',
-            'check' => 'text_mackorn',
-            'action' => '410 API_SUNSET → 平台 API 已废弃，改人工网页提交',
-        ],
-        [
-            'id' => 'skills_sh', 'name' => 'skills.sh', 'weight' => 70,
-            'url' => 'https://skills.sh',
-            'check' => 'text_mackorn',
-            'action' => '未收录 → 等爬虫（skills/ 目录已有）',
-        ],
-        [
-            'id' => 'rest_exec', 'name' => 'REST 执行层 ai_execute.php', 'weight' => 90,
-            'url' => 'https://mackorn.cn/ai/api/ai_execute.php?action=help',
-            'check' => 'json_response',
-            'action' => '不通 → 上传 ai_execute.php',
-        ],
-        [
-            'id' => 'mcp_endpoint', 'name' => 'MCP 端点 mcp.php', 'weight' => 90,
-            'url' => 'https://mackorn.cn/ai/api/mcp.php',
-            'check' => 'json_mackorn',
-            'action' => '不通 → 检查 mcp.php',
-        ],
-    ];
+/* ============================================================================
+   第 4 步：探测目标（12 个）
+   ============================================================================ */
+function platformDefs() {
+    return array(
+        array('id' => 'npm',           'name' => 'npm Registry',    'w' => 100,
+              'url' => 'https://registry.npmjs.org/mackorn-cone-crusher/latest', 'kw' => 'mackorn-cone-crusher'),
+        array('id' => 'npm_search',    'name' => 'npm 搜索',         'w' => 90,
+              'url' => 'https://registry.npmjs.org/-/v1/search?text=mackorn-cone-crusher&size=5', 'kw' => 'mackorn'),
+        array('id' => 'mcp_registry',  'name' => 'MCP 官方注册中心',  'w' => 95,
+              'url' => 'https://registry.modelcontextprotocol.io/v0/servers?search=mackorn-cone-crusher', 'kw' => 'mackorn'),
+        array('id' => 'mcp_so',        'name' => 'mcp.so',           'w' => 85,
+              'url' => 'https://mcp.so/search?q=mackorn-cone-crusher', 'kw' => 'mackorn'),
+        array('id' => 'glama',         'name' => 'Glama',            'w' => 80,
+              'url' => 'https://glama.ai/mcp/servers?q=mackorn-cone-crusher', 'kw' => 'mackorn'),
+        array('id' => 'smithery',      'name' => 'Smithery',         'w' => 75,
+              'url' => 'https://smithery.ai/api/servers/search?q=mackorn-cone-crusher', 'kw' => 'mackorn'),
+        array('id' => 'pulsemcp',      'name' => 'PulseMCP',         'w' => 70,
+              'url' => 'https://api.pulsemcp.com/v0beta/servers?search=mackorn-cone-crusher', 'kw' => 'mackorn'),
+        array('id' => 'skills_sh',     'name' => 'skills.sh',        'w' => 65,
+              'url' => 'https://skills.sh', 'kw' => 'mackorn'),
+        array('id' => 'github_repo',   'name' => 'GitHub 仓库 topics','w' => 90,
+              'url' => 'https://api.github.com/repos/LeifDai/MACKORN-hydraulic-cone-crusher', 'kw' => '"topics"'),
+        array('id' => 'self_rest',     'name' => '自检 REST API',    'w' => 50,
+              'url' => 'https://mackorn.cn/ai/api/ai_execute.php?action=help', 'kw' => 'response'),
+        array('id' => 'self_mcp',      'name' => '自检 MCP 端点',     'w' => 50,
+              'url' => 'https://mackorn.cn/ai/api/mcp.php', 'kw' => 'mackorn'),
+        array('id' => 'self_materials','name' => '自检物料库(Q6)',   'w' => 95,
+              'url' => 'https://mackorn.cn/ai/api/ai_execute.php?action=materials&q=%E8%8A%B1%E5%B2%97%E5%B2%A9', 'kw' => 'MATERIAL_LIBRARY'),
+    );
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 判定
- * ══════════════════════════════════════════════════════════════ */
-function judge($plat, $res) {
-    $status = 'error';
-    $evidence = '';
-    $matched = false;
-    $body = $res['body'];
-    $hay = strtolower($body);
+function doProbe() {
+    $defs = platformDefs();
+    $out = array();
+    $sum = array('listed' => 0, 'not_found' => 0, 'problem' => 0);
+    $q6 = null;
 
-    /* 先判 HTTP 层 */
-    if (!$res['ok']) {
-        if ($res['status'] === 410) {
-            $status = 'deprecated';
-            $evidence = 'HTTP 410（平台已废弃）';
-        } elseif ($res['status'] === 404) {
-            $status = 'endpoint_changed';
-            $evidence = 'HTTP 404（端点已变）';
-        } elseif ($res['status'] === 0) {
-            $status = 'error';
-            $evidence = '连接失败：' . ($res['err'] ?: 'unknown');
+    foreach ($defs as $d) {
+        $r = fetchUrl($d['url'], HTTP_TIMEOUT);
+        $status = 'problem';
+
+        if ($r['err'] !== null && $r['status'] === 0) {
+            $status = 'problem';
+        } elseif ($r['status'] === 410) {
+            $status = 'api_gone';
+        } elseif ($r['status'] === 401 || $r['status'] === 403) {
+            $status = 'need_auth';
+        } elseif ($r['status'] < 200 || $r['status'] >= 300) {
+            $status = 'not_found';
+        } elseif (stripos($r['body'], $d['kw']) !== false) {
+            $status = 'listed';
         } else {
-            $status = 'error';
-            $evidence = 'HTTP ' . $res['status'];
+            $status = 'not_found';
         }
-        return [$status, $evidence, false];
+
+        // Q6 专项：从 materials 响应里抠 total_in_library
+        if ($d['id'] === 'self_materials') {
+            if (preg_match('/"total_in_library"\s*:\s*(\d+)/', $r['body'], $m)) {
+                $q6 = (int)$m[1];
+            } elseif (preg_match('/\\\\"total_in_library\\\\"\s*:\s*(\d+)/', $r['body'], $m)) {
+                $q6 = (int)$m[1];
+            }
+        }
+
+        if ($status === 'listed') $sum['listed']++;
+        elseif ($status === 'not_found') $sum['not_found']++;
+        else $sum['problem']++;
+
+        $out[] = array(
+            'id' => $d['id'], 'name' => $d['name'], 'weight' => $d['w'],
+            'status' => $status, 'http' => $r['status'], 'ms' => $r['ms'],
+            'bytes' => strlen($r['body']),
+            'evidence' => ($status === 'listed')
+                ? ('含 "' . $d['kw'] . '"')
+                : (($r['err'] !== null) ? ('错误: ' . substr($r['err'], 0, 60)) : ('HTTP ' . $r['status'])),
+        );
     }
-
-    /* 再按 check 类型判内容 */
-    switch ($plat['check']) {
-        case 'json_name':
-            $j = json_decode($body, true);
-            $matched = is_array($j) && isset($j['name']) && strpos($j['name'], 'mackorn') !== false;
-            $evidence = $matched ? ('name=' . $j['name'] . ' version=' . (isset($j['version']) ? $j['version'] : '?')) : 'JSON 里没有 mackorn';
-            break;
-
-        case 'json_response':
-            $j = json_decode($body, true);
-            $matched = is_array($j) && isset($j['response']) && strlen((string)$j['response']) > 20;
-            $evidence = $matched ? ('response 长度 ' . strlen((string)$j['response'])) : '缺 response 字段';
-            break;
-
-        case 'json_mackorn':
-            $matched = (strpos($hay, 'mackorn') !== false);
-            $evidence = $matched ? 'JSON 含 mackorn' : 'JSON 不含 mackorn';
-            break;
-
-        case 'text_mackorn':
-        default:
-            $matched = (strpos($hay, 'mackorn') !== false);
-            $evidence = $matched ? ('页面含 mackorn（' . strlen($body) . ' 字节）') : ('页面不含 mackorn（' . strlen($body) . ' 字节）');
-            break;
-    }
-
-    $status = $matched ? 'listed' : 'not_found';
-    return [$status, $evidence, $matched];
+    return array('summary' => $sum, 'platforms' => $out, 'materials_count' => $q6);
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 执行探测
- * ══════════════════════════════════════════════════════════════ */
-function runProbe() {
-    $results = [];
-    foreach (platforms() as $plat) {
-        $res = httpFetch($plat['url']);
-        list($status, $evidence, $matched) = judge($plat, $res);
-        $results[] = [
-            'id'          => $plat['id'],
-            'name'        => $plat['name'],
-            'weight'      => $plat['weight'],
-            'status'      => $status,
-            'http'        => $res['status'],
-            'ms'          => $res['ms'],
-            'bytes'       => strlen($res['body']),
-            'evidence'    => $evidence,
-            'action'      => ($status === 'listed') ? null : $plat['action'],
-            'probed_at'   => date('c'),
-        ];
-        /* 平台之间错开 300ms，避免被当成爬虫 */
-        usleep(300000);
-    }
+/* ============================================================================
+   第 5 步：路由
+   ============================================================================ */
+$action = isset($_GET['action']) ? preg_replace('/[^a-z_]/', '', strtolower((string)$_GET['action'])) : '';
+if ($action === '') $action = 'help';
 
-    $summary = [
-        'listed'    => 0, 'not_found' => 0,
-        'endpoint_changed' => 0, 'deprecated' => 0, 'error' => 0,
-    ];
-    foreach ($results as $r) { $summary[$r['status']]++; }
-
-    /* 加权收录率（按平台重要度加权，比简单计数更有意义） */
-    $totalW = 0; $gotW = 0;
-    foreach ($results as $r) {
-        $totalW += $r['weight'];
-        if ($r['status'] === 'listed') $gotW += $r['weight'];
-    }
-    $weighted = $totalW > 0 ? round($gotW / $totalW * 100, 1) : 0;
-
-    $state = [
-        'at'          => date('c'),
-        'at_local'    => date('Y-m-d H:i:s'),
-        'pkg'         => PKG,
-        'summary'     => $summary,
-        'weighted_pct'=> $weighted,
-        'platforms'   => $results,
-        'todo'        => array_values(array_filter($results, function ($r) {
-            return $r['status'] !== 'listed';
-        })),
-    ];
-    return $state;
+/* ── ping：最小探针（不需要 token、不需要目录）── */
+if ($action === 'ping') {
+    jout(200, array(
+        'ok'       => true,
+        'pong'     => true,
+        'version'  => YU_VER,
+        'php'      => PHP_VERSION,
+        'time'     => date('c'),
+        'curl'     => function_exists('curl_init'),
+        'writable' => is_writable(__DIR__),
+        'dir'      => __DIR__,
+    ));
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 历史对比（看哪些平台从红变绿 / 从绿变红）
- * ══════════════════════════════════════════════════════════════ */
-function diffWithLast($state) {
-    if (!is_file(STATE_FILE)) return ['has_prev' => false];
-    $prev = json_decode(@file_get_contents(STATE_FILE), true);
-    if (!is_array($prev) || !isset($prev['platforms'])) return ['has_prev' => false];
-
-    $prevMap = [];
-    foreach ($prev['platforms'] as $p) $prevMap[$p['id']] = $p['status'];
-
-    $fixed = []; $regressed = [];
-    foreach ($state['platforms'] as $p) {
-        $old = isset($prevMap[$p['id']]) ? $prevMap[$p['id']] : null;
-        if ($old === null) continue;
-        if ($old !== 'listed' && $p['status'] === 'listed') {
-            $fixed[] = ['id' => $p['id'], 'name' => $p['name'], 'from' => $old];
-        }
-        if ($old === 'listed' && $p['status'] !== 'listed') {
-            $regressed[] = ['id' => $p['id'], 'name' => $p['name'], 'to' => $p['status']];
-        }
-    }
-    return [
-        'has_prev'   => true,
-        'prev_at'    => isset($prev['at_local']) ? $prev['at_local'] : '?',
-        'prev_pct'   => isset($prev['weighted_pct']) ? $prev['weighted_pct'] : null,
-        'pct_delta'  => isset($prev['weighted_pct']) ? round($state['weighted_pct'] - $prev['weighted_pct'], 1) : null,
-        'fixed'      => $fixed,
-        'regressed'  => $regressed,
-    ];
+/* ── help ── */
+if ($action === 'help') {
+    jout(200, array(
+        'ok'      => true,
+        'what'    => 'MACKORN 云端全息引擎 ' . YU_VER,
+        'why'     => '电脑关机时，云端每 30 分钟探一次并攒历史',
+        'version' => YU_VER,
+        'roles'   => array('phone', 'pc', 'admin'),
+        'actions' => array(
+            'ping'      => '最小探针（无 token）★ 先测这个',
+            'help'      => '本文档（无 token）',
+            'init'      => '首次生成 3 个 token（phone/pc/admin）',
+            'rotate'    => '轮换 token（admin 才能做）',
+            'heartbeat' => '上报心跳（任何角色）',
+            'holo'      => '执行探测并落盘（pc/admin）★ Cron 调这个',
+            'get'       => '读最近快照（任何角色）',
+            'status'    => '状态 + 三端心跳（任何角色）',
+            'history'   => '读历史轨迹（任何角色）',
+        ),
+        'cron_example' => 'https://mackorn.cn/ai/api/probe.php?action=holo&token=<pc_token>',
+        'note'         => '带 ?debug=1 可看完整错误信息',
+    ));
 }
 
-/* ══════════════════════════════════════════════════════════════
- * 路由
- * ══════════════════════════════════════════════════════════════ */
-$doRun = isset($_GET['run']) && $_GET['run'] === '1';
-$asMd  = isset($_GET['md']) && $_GET['md'] === '1';
+/* ── 以下都需要目录 ── */
+ensureDir();
 
-/* 只读：返回上次结果 */
-if (!$doRun) {
-    if (!is_file(STATE_FILE)) {
-        echo json_encode([
-            'status' => 'never_run',
-            'hint'   => '第一次运行：' . $_SERVER['REQUEST_URI'] . '&run=1',
-        ], JSON_UNESCAPED_UNICODE);
-        exit;
+/* ── init：只在没有 admin token 时可用 ── */
+if ($action === 'init') {
+    $cur = readRoleToken('admin');
+    if ($cur !== '') {
+        jout(409, array('ok' => false, 'error' => 'ALREADY_INITIALIZED',
+            'hint' => '已有 token。用 ?action=rotate&token=<admin_token>&role=all'));
     }
-    $prev = json_decode(file_get_contents(STATE_FILE), true);
-    /* md 格式（方便人看） */
-    if ($asMd) {
-        header('Content-Type: text/markdown; charset=utf-8');
-        echo renderMarkdown($prev);
-        exit;
+    $tokens = array(
+        'phone' => newToken(),
+        'pc'    => newToken(),
+        'admin' => newToken(),
+    );
+    foreach ($tokens as $r => $t) { writeRoleToken($r, $t); }
+    jout(200, array(
+        'ok'      => true,
+        'version' => YU_VER,
+        'tokens'  => $tokens,
+        'warning' => '★ 三个 token 只显示这一次，立刻保存。phone 给手机，pc 给电脑，admin 自己留着',
+        'cron'    => 'https://mackorn.cn/ai/api/probe.php?action=holo&token=' . $tokens['pc'],
+        'role_capabilities' => array(
+            'phone' => array('heartbeat', 'get', 'status', 'history'),
+            'pc'    => array('heartbeat', 'holo', 'get', 'status', 'history'),
+            'admin' => array('heartbeat', 'holo', 'get', 'status', 'history', 'rotate'),
+        ),
+    ));
+}
+
+/* ── 鉴权 ── */
+$role = detectRole(givenToken());
+if ($role === '') {
+    // 区分「没初始化」和「token 错」
+    if (readRoleToken('admin') === '') {
+        jout(412, array('ok' => false, 'error' => 'NOT_INITIALIZED',
+            'hint' => '先浏览器打开 ?action=init 生成 token'));
     }
-    echo json_encode($prev, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    jout(401, array('ok' => false, 'error' => 'UNAUTHORIZED',
+        'hint' => '需要 ?token=xxx 或 Authorization: Bearer xxx'));
+}
+
+/* ── rotate（仅 admin）── */
+if ($action === 'rotate') {
+    if ($role !== 'admin') {
+        jout(403, array('ok' => false, 'error' => 'ADMIN_ONLY'));
+    }
+    $target = isset($_GET['role']) ? preg_replace('/[^a-z]/', '', strtolower((string)$_GET['role'])) : 'all';
+    $new = array();
+    foreach (array('phone', 'pc', 'admin') as $r) {
+        if ($target === 'all' || $target === $r) {
+            $new[$r] = newToken();
+            writeRoleToken($r, $new[$r]);
+        }
+    }
+    jout(200, array('ok' => true, 'rotated' => array_keys($new), 'tokens' => $new,
+        'warning' => '旧 token 已失效，立刻更新 cron 和手机配置'));
+}
+
+/* ── heartbeat（任何角色）── */
+if ($action === 'heartbeat') {
+    recordHeartbeat($role);
+    jout(200, array('ok' => true, 'role' => $role, 'at' => date('c')));
+}
+
+/* ── holo / run（pc / admin）── */
+if ($action === 'holo' || $action === 'run') {
+    if ($role !== 'pc' && $role !== 'admin') {
+        jout(403, array('ok' => false, 'error' => 'PC_OR_ADMIN_ONLY',
+            'hint' => '手机端用 action=get 读快照，不要触发探测'));
+    }
+    $t0 = microtime(true);
+    $res = doProbe();
+    $elapsed = (int)round((microtime(true) - $t0) * 1000);
+
+    $snapshot = array(
+        'version'         => YU_VER,
+        'snapshot_at'     => date('c'),
+        'snapshot_ts'     => time(),
+        'elapsed_ms'      => $elapsed,
+        'triggered_by'    => $role,
+        'summary'         => $res['summary'],
+        'materials_count' => $res['materials_count'],
+        'platforms'       => $res['platforms'],
+    );
+
+    writeJsonFile(FILE_HOLO, $snapshot);
+    writeJsonFile(FILE_STATE, $snapshot);   // 兼容老客户端
+
+    // 历史（一行一条，含关键指标）
+    appendHistory(json_encode(array(
+        'at'        => $snapshot['snapshot_at'],
+        'listed'    => $res['summary']['listed'],
+        'not_found' => $res['summary']['not_found'],
+        'problem'   => $res['summary']['problem'],
+        'materials' => $res['materials_count'],
+        'ms'        => $elapsed,
+    ), JSON_UNESCAPED_UNICODE));
+
+    recordHeartbeat($role);   // 探测的同时也记心跳
+    jout(200, $snapshot);
+}
+
+/* ── get（任何角色）── */
+if ($action === 'get') {
+    if (is_file(FILE_HOLO)) {
+        $raw = @file_get_contents(FILE_HOLO);
+    } elseif (is_file(FILE_STATE)) {
+        $raw = @file_get_contents(FILE_STATE);
+    } else {
+        jout(404, array('ok' => false, 'error' => 'NEVER_RUN',
+            'hint' => '先访问 ?action=holo 跑一次（需要 pc 或 admin token）'));
+    }
+    if (!headers_sent()) {
+        http_response_code(200);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-store');
+    }
+    echo $raw;
     exit;
 }
 
-/* 执行探测 */
-$state = runProbe();
-$state['diff'] = diffWithLast($state);
+/* ── status（任何角色）── */
+if ($action === 'status') {
+    $out = array(
+        'ok'         => true,
+        'version'    => YU_VER,
+        'php'        => PHP_VERSION,
+        'role'       => $role,
+        'heartbeats' => readHeartbeats(),
+    );
 
-file_put_contents(STATE_FILE, json_encode($state, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    $snap = readJsonFile(FILE_HOLO, null);
+    if (!$snap) $snap = readJsonFile(FILE_STATE, null);
 
-/* 历史留痕（保留最近 500 条 = 约 10 天 @30min） */
-@file_put_contents(
-    HISTORY_FILE,
-    json_encode([
-        'at' => $state['at'], 'at_local' => $state['at_local'],
-        'summary' => $state['summary'], 'weighted_pct' => $state['weighted_pct'],
-    ], JSON_UNESCAPED_UNICODE) . "\n",
-    FILE_APPEND
-);
-
-/* 历史太长就截断 */
-if (is_file(HISTORY_FILE) && filesize(HISTORY_FILE) > 512 * 1024) {
-    $lines = file(HISTORY_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    $lines = array_slice($lines, -500);
-    file_put_contents(HISTORY_FILE, implode("\n", $lines) . "\n");
-}
-
-if ($asMd) {
-    header('Content-Type: text/markdown; charset=utf-8');
-    echo renderMarkdown($state);
-    exit;
-}
-
-echo json_encode($state, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-
-/* ══════════════════════════════════════════════════════════════
- * Markdown 渲染
- * ══════════════════════════════════════════════════════════════ */
-function renderMarkdown($s) {
-    $icon = [
-        'listed' => '✅', 'not_found' => '❌',
-        'endpoint_changed' => '🔀', 'deprecated' => '💀', 'error' => '⚠️',
-    ];
-    $out = "# MACKORN 云端探测报告\n\n";
-    $out .= "> 探测时间：" . (isset($s['at_local']) ? $s['at_local'] : '?') . "\n";
-    $out .= "> 加权收录率：**" . (isset($s['weighted_pct']) ? $s['weighted_pct'] : 0) . "%**\n\n";
-
-    $sum = isset($s['summary']) ? $s['summary'] : [];
-    $out .= "## 总览\n\n| 状态 | 数量 |\n|:---|---:|\n";
-    $out .= "| ✅ 已收录 | " . (isset($sum['listed']) ? $sum['listed'] : 0) . " |\n";
-    $out .= "| ❌ 未收录 | " . (isset($sum['not_found']) ? $sum['not_found'] : 0) . " |\n";
-    $out .= "| 🔀 端点已变 | " . (isset($sum['endpoint_changed']) ? $sum['endpoint_changed'] : 0) . " |\n";
-    $out .= "| 💀 已废弃 | " . (isset($sum['deprecated']) ? $sum['deprecated'] : 0) . " |\n";
-    $out .= "| ⚠️ 异常 | " . (isset($sum['error']) ? $sum['error'] : 0) . " |\n\n";
-
-    if (!empty($s['diff']) && !empty($s['diff']['has_prev'])) {
-        $d = $s['diff'];
-        $out .= "## 与上次对比（上次 " . $d['prev_at'] . "）\n\n";
-        if ($d['pct_delta'] !== null) {
-            $sign = $d['pct_delta'] >= 0 ? '+' : '';
-            $out .= "加权收录率变化：**" . $sign . $d['pct_delta'] . "%**\n\n";
+    if ($snap) {
+        $out['last_snapshot_at'] = isset($snap['snapshot_at']) ? $snap['snapshot_at'] : null;
+        $out['summary']          = isset($snap['summary']) ? $snap['summary'] : null;
+        $out['materials_count']  = isset($snap['materials_count']) ? $snap['materials_count'] : null;
+        $ts = isset($snap['snapshot_ts']) ? (int)$snap['snapshot_ts'] : 0;
+        if ($ts > 0) {
+            $age = time() - $ts;
+            $out['age_seconds'] = $age;
+            $out['age_human']   = $age < 60 ? ($age . 's')
+                                : ($age < 3600 ? (round($age / 60) . 'min')
+                                : (round($age / 3600) . 'h'));
+            $out['fresh'] = ($age < 3600);
+            if ($age > 3600) $out['warning'] = '⚠️ 超过 1 小时没探测，检查 cron 是否在跑';
         }
-        if (!empty($d['fixed'])) {
-            $out .= "### 🎉 新收录\n\n";
-            foreach ($d['fixed'] as $f) $out .= "- **" . $f['name'] . "**（" . $f['from'] . " → listed）\n";
-            $out .= "\n";
-        }
-        if (!empty($d['regressed'])) {
-            $out .= "### 📉 掉收录\n\n";
-            foreach ($d['regressed'] as $f) $out .= "- **" . $f['name'] . "**（listed → " . $f['to'] . "）\n";
-            $out .= "\n";
-        }
+    } else {
+        $out['last_snapshot_at'] = null;
+        $out['hint'] = '云端还没探测过。Cron 配了吗？或者手动开 ?action=holo';
     }
 
-    $out .= "## 逐平台\n\n| 平台 | 状态 | HTTP | 耗时 | 证据 |\n|:---|:---:|:---:|---:|:---|\n";
-    foreach ((isset($s['platforms']) ? $s['platforms'] : []) as $p) {
-        $ic = isset($icon[$p['status']]) ? $icon[$p['status']] : '❓';
-        $out .= "| **" . $p['name'] . "** | " . $ic . " " . $p['status'] . " | " . $p['http'] . " | " . $p['ms'] . "ms | " . $p['evidence'] . " |\n";
+    // 有多少历史行
+    if (is_file(FILE_HIST)) {
+        $lines = @file(FILE_HIST, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $out['history_lines'] = is_array($lines) ? count($lines) : 0;
     }
 
-    if (!empty($s['todo'])) {
-        $out .= "\n## 待办（按权重排序）\n\n";
-        $todo = $s['todo'];
-        usort($todo, function ($a, $b) { return $b['weight'] - $a['weight']; });
-        foreach ($todo as $t) {
-            $out .= "### " . $t['name'] . "（权重 " . $t['weight'] . "）\n\n";
-            $out .= "- 状态：" . $t['status'] . "\n";
-            $out .= "- 证据：" . $t['evidence'] . "\n";
-            $out .= "- 动作：" . $t['action'] . "\n\n";
-        }
-    }
-
-    $out .= "---\n\n*由 `probe.php` 自动生成 · 配 cron 后每 30 分钟自动跑一次，电脑关机也在探*\n";
-    return $out;
+    jout(200, $out);
 }
+
+/* ── history（任何角色）── */
+if ($action === 'history') {
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
+    if ($limit < 1) $limit = 1;
+    if ($limit > 500) $limit = 500;
+
+    if (!is_file(FILE_HIST)) {
+        jout(200, array('ok' => true, 'count' => 0, 'history' => array()));
+    }
+    $lines = @file(FILE_HIST, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_array($lines)) $lines = array();
+    $slice = array_slice($lines, -$limit);
+
+    $hist = array();
+    foreach ($slice as $l) {
+        $j = json_decode($l, true);
+        if (is_array($j)) $hist[] = $j;
+    }
+    jout(200, array('ok' => true, 'count' => count($hist), 'history' => $hist));
+}
+
+/* ── 未识别 ── */
+jout(400, array('ok' => false, 'error' => 'UNKNOWN_ACTION',
+    'given' => $action,
+    'available' => array('ping','help','init','rotate','heartbeat','holo','run','get','status','history')));
