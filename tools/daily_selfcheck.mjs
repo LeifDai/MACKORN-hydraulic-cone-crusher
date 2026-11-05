@@ -87,7 +87,7 @@ if (!existsSync(SRC)) {
   console.error('  或：');
   console.error('     node tools\\daily_selfcheck.mjs --refresh');
   console.error('');
-  process.exit(1);
+  process.exitCode = 1;
 }
 
 let raw;
@@ -95,13 +95,13 @@ try {
   raw = JSON.parse(readFileSync(SRC, 'utf8'));
 } catch (e) {
   console.error('  🚨 数据源不是合法 JSON：' + e.message);
-  process.exit(1);
+  process.exitCode = 1;
 }
 
 /* 校验结构（不猜，缺字段就报错） */
 if (!Array.isArray(raw.platforms) || !raw.platforms.length) {
   console.error('  🚨 latest.json 缺 platforms 数组或为空 —— 结构不对，拒绝生成报告');
-  process.exit(1);
+  process.exitCode = 1;
 }
 
 const IS_QUICK = raw.quick === true;
@@ -302,7 +302,7 @@ try {
  * ══════════════════════════════════════════════════════════════ */
 if (JSON_OUT) {
   console.log(JSON.stringify(exp, null, 2));
-  process.exit(missing.length > 0 ? 1 : 0);
+  process.exitCode = missing.length > 0 ? 1 : 0;
 }
 
 console.log('');
@@ -460,7 +460,7 @@ console.log('');
 if (has('--check')) {
   if (missing.length > 0) {
     console.log('  ❌ 门禁失败：还有 ' + missing.length + ' 个平台缺条件');
-    process.exit(1);
+    process.exitCode = 1;
   }
   console.log('  ✅ 门禁通过：无缺条件平台');
 }
