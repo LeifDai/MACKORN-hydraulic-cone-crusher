@@ -54,35 +54,44 @@ if (!is_array($DB)) {
 }
 
 /* ══════════════════════════════════════════════════════════════
- * MERGE-MATERIALS-PATCH（R208 · 2026-11-03）
+ * MERGE-MATERIALS-PATCH（R209 · 2026-11-03 · 兼容两种结构）
  *
- * 为什么：
- *   线上服务器 _data.php 是 2026-10-21 旧版，缺 MATERIAL_LIBRARY
- *   → ai_execute.php?action=materials 返回 count=0 → Q6 失败（线上 7/8）
+ * 为什么改（R208 → R209）：
+ *   R208 假设 _data_materials.php 返回 { MATERIAL_LIBRARY: [...] }（嵌套一层）
+ *   但 R210 版 _data_materials.php 实际返回【直接物料数组】：
+ *       return [ '花岗岩' => [...], '玄武岩' => [...], ... ]
+ *   → R208 的 foreach ($__M as $__k => $__v) 会把「花岗岩」当成顶层键塞进 $DB
+ *   → $DB['MATERIAL_LIBRARY'] 仍然是空的 → Q6 = 0
  *
- *   应急补丁 _data_materials.php 已生成，但原 ai_execute.php 从不 include 它
- *   → 方案 B「应急」实际上是坏的（只 require _data.php）
+ * 实测证据（2026-11-04 21:54）：
+ *   线上 _data_materials.php 已传、ai_execute.php 已传，
+ *   但 ai_execute.php?action=materials&q=花岗岩 仍返回 total_in_library=0
  *
- * 本补丁：
- *   ① 若 _data_materials.php 存在 → include 并合并
- *   ② 只补 _data.php 里【缺失】的键，绝不覆盖已有数据
- *   ③ 幂等：合并多次结果一致
+ * 本版逻辑：
+ *   ① 自动识别两种结构（有 MATERIAL_LIBRARY 键就取它，否则整个数组就是物料表）
+ *   ② 只补/合并 $DB['MATERIAL_LIBRARY']，不污染 $DB 顶层
+ *   ③ 幂等：多次 include 结果一致
  * ══════════════════════════════════════════════════════════════ */
 $__mp = __DIR__ . '/_data_materials.php';
 if (is_file($__mp)) {
     $__M = @include $__mp;
-    if (is_array($__M)) {
-        foreach ($__M as $__k => $__v) {
-            if (!array_key_exists($__k, $DB)) {
-                $DB[$__k] = $__v;
-            } elseif (is_array($DB[$__k]) && is_array($__v) && count($DB[$__k]) === 0) {
-                // 键存在但为空数组 → 用补丁填充
-                $DB[$__k] = $__v;
-            }
+    if (is_array($__M) && count($__M) > 0) {
+        // ① 结构识别
+        if (isset($__M['MATERIAL_LIBRARY']) && is_array($__M['MATERIAL_LIBRARY'])) {
+            $__mat = $__M['MATERIAL_LIBRARY'];   // 旧结构：嵌套
+        } else {
+            $__mat = $__M;                        // 新结构：直接物料数组
+        }
+        // ② 只动 MATERIAL_LIBRARY
+        if (!isset($DB['MATERIAL_LIBRARY']) || !is_array($DB['MATERIAL_LIBRARY'])
+            || count($DB['MATERIAL_LIBRARY']) === 0) {
+            $DB['MATERIAL_LIBRARY'] = $__mat;
+        } else {
+            $DB['MATERIAL_LIBRARY'] = array_merge($DB['MATERIAL_LIBRARY'], $__mat);
         }
     }
 }
-unset($__mp, $__M, $__k, $__v);
+unset($__mp, $__M, $__mat);
 
 /* ══════════════════════════════════════════════════════════════
  * 工具函数
