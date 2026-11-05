@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-11-05T00:59:50.603Z",
+  "generated": "2026-11-05T09:23:59.391Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "827872a",
-    "date": "2026-11-05T00:04:14Z",
-    "message": "docs: 关机交接 2026-11-05 — Q6真因/28个问题/7条硬规矩"
+    "sha": "6ed1e29",
+    "date": "2026-11-05T00:59:57Z",
+    "message": "chore(nightly): 云端自迭代 2026-11-05 00:59 [skip ci]"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 17.41,
+    "days_since": 17.76,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.04,
-  "days_since_publish": 0.04,
+  "effective_days": 0.35,
+  "days_since_publish": 0.35,
   "changed_since_publish": {
     "count": 325,
     "files": [
@@ -94,7 +94,7 @@
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.0 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.4 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
