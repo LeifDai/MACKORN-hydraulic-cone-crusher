@@ -598,7 +598,7 @@ Five tools have `vendor_params_pending: true` — their models are literature-ba
 ### 开工第一条命令
 
 ```powershell
-cd "D:\DSH desktop\DSH destop工作区\MACKORN-DSH-Plugin"
+cd MACKORN-hydraulic-cone-crusher
 node tools\resume.mjs          # 或双击 开工.cmd
 ```
 
@@ -651,3 +651,160 @@ node tools/daily_focus.mjs     # 或不带参数跑 resume 已包含
 
 **用户明令：聚焦，别太分散。** 不要再铺 74 个平台的监控，
 就盯这四件事，每天一次。
+
+<!-- CROSS-PROJECT-PRINCIPLES-V3 -->
+
+## 🧠 跨项目通用法则（Cognition Bus V3 提炼）
+
+> 自动生成：2026-11-02 23:29
+> 来源：cognition-data/cross_principles.json
+> 由 4 套认知库（HELPER / MACKORN / GUANDAN / TAF）共 562 条记录碰撞提炼
+
+**这 7 条法则是跨项目验证过的底层规律，写代码前必读。**
+
+### 1. 【工程法则】Windows 下 UTF-8/GBK 混杂是第二大杀手，必须显式指定编码
+
+**涉及项目**：GUANDAN, HELPER, MACKORN, TAF  
+**证据数**：120 条跨项目关联
+
+HELPER：PowerShell 5.1 按 GBK 读 UTF-8 无 BOM 文件 → 乱码假报错。所有文件读写必须显式 encoding='utf-8'，.ps1 文件必须带 BOM。
+
+### 2. 【执行法则】异步队列必须快照比对 + 异步防腐
+
+**涉及项目**：GUANDAN, HELPER, TAF  
+**证据数**：31 条跨项目关联
+
+TAF：队列与 HTML 不一致导致发错内容。HELPER：并发写同一文件。任何异步操作必须有版本快照 + 幂等标记。
+
+### 3. 【工程法则】爬虫 0 命中先怀疑自己，不要怀疑目标站
+
+**涉及项目**：HELPER, MACKORN, TAF  
+**证据数**：26 条跨项目关联
+
+TAF：B2B 官网 8/8 全灭（动态渲染/语种路径）。MACKORN：同类。GUANDAN：OCR 成功率 0.7%~6.8%。0 命中 99% 是自己的问题（编码/渲染/反爬/路径）。
+
+### 4. 【数据法则】数据源必须唯一（Single Source of Truth），严禁手工推断
+
+**涉及项目**：GUANDAN, HELPER, TAF  
+**证据数**：17 条跨项目关联
+
+MACKORN：AI 伪造 NH890 参数（315kW）。TAF：猜测邮箱后缀导致退信。GUANDAN：手写特征覆盖实测。所有数据必须向源数据库或 API 请求。
+
+### 5. 【API法则】免费的云端 API 是最贵的（时间成本 + 稳定性）
+
+**涉及项目**：GUANDAN, HELPER, TAF  
+**证据数**：8 条跨项目关联
+
+MACKORN：OpenCode 免费模型 322 秒卡死；NVIDIA 85 个模型仅 11 个可用。TAF：免费邮件网关限流。关键业务必须有本地兜底或付费 API 备份。
+
+### 6. 【工程法则】Windows 路径带空格是第一杀手，必须显式引号包裹
+
+**涉及项目**：GUANDAN, HELPER, TAF  
+**证据数**：5 条跨项目关联
+
+HELPER：Start-Process 因路径空格裂开。TAF：schtasks 同理。所有子进程调用必须显式加引号，不要依赖隐式转义。
+
+### 7. 【网络法则】永远不要信任本地系统的默认 DNS，必须强制公共 DNS
+
+**涉及项目**：HELPER, TAF  
+**证据数**：4 条跨项目关联
+
+HELPER 和 TAF 均踩坑：系统 DNS 被污染 → 正常网站误判为死域、请求走向错误 IP。必须强制 223.5.5.5 / 8.8.8.8。
+
+<!-- CROSS-PROJECT-PRINCIPLES-V3 -->
+<!-- ADDED-8TH-IMAP -->
+
+### 8. 【执行法则】批量 IMAP 操作必须「先全部 Copy 成功，再倒序 Delete」
+
+**涉及项目**：HELPER, TAF  
+**证据数**：4 条跨项目关联
+
+HELPER 和 TAF 均踩坑：直接标记 \Deleted 导致 UID 漂移 → 误删。488 封误删事故（12 封有价值）。四条铁律：① copy 失败绝不删 ② 倒序标记 ③ 单次上限 500 ④ 每批 verify。安全实现：trading-agent-finder/tools/safe_imap.py
+
+<!-- ADDED-8TH-IMAP -->
+
+<!-- NIGHT-20261104-LESSONS -->
+
+## 🚨 2026-11-04 夜间实战教训（7 条硬规矩）
+
+> 那一夜修了 28 个真问题。以下 7 条是从坑里提炼的，**改代码前必读**。
+
+### 1. 内部链接必须带 `/ai/` 前缀 —— 相对和绝对两种形式都要检查
+
+```
+❌ href="/en/"                            → 线上 404（正确是 /ai/en/）
+❌ https://mackorn.cn/distributors/       → 线上 404（正确是 /ai/distributors/）
+❌ href="../basalt/"                      → 解析成 /guides/basalt（正确是 /ai/guides/basalt/）
+
+实测：11 个语言页的 <div class="langbar"> 语言切换链接全部失效，共 263 处。
+门禁：node tools/audit-site-full.mjs（「内部链接完整性」项）
+```
+
+### 2. 每页必须有 OG + Twitter Card
+
+```
+实测：100/108 页缺 og:title / og:description / og:image / twitter:card
+后果：分享到微信 / LinkedIn / Twitter 时无标题无图，B2B 外贸损失大
+门禁：node tools/audit-site-full.mjs（「OG / Twitter Card 完整」项）
+```
+
+### 3. 多语言必须有完整 hreflang 互链
+
+```
+实测：vi 只有 1 个 hreflang、ja/de/tr 只有 2 个（应 12 个语言互链 + x-default）
+门禁：node tools/audit-site-full.mjs（「hreflang 互链完整」项）
+```
+
+### 4. sitemap 必须与页面一一对应 —— 写完必须实测
+
+```
+实测：sitemap 提交 160 个 URL，98 个 404
+根因：写的是旧扁平布局 /en/ /markets/au/，实际是 /ai/en/ /ai/markets/au/
+门禁：node tools/build_sitemap.mjs --verify（会逐个测线上）
+```
+
+### 5. 部署包必须验证一致性 —— 「有包」不等于「包对」
+
+```
+实测：6 个部署目录里有 5 个过期
+  _Q6上传包/         ai_execute.php 还是 R208（就是有 bug 那版）
+  _部署包-20261103/  llms.txt / openapi.json 旧版
+规则：给 IT 的包必须逐文件 MD5 比对最新源；过期包必须放警告文件
+索引：distribution/📦部署包索引.md
+```
+
+### 6. 改合并逻辑前，先打印真实数据结构 —— 不要假设
+
+```
+实测（Q6 卡 3 天的真因）：
+  R208 的合并逻辑假设 _data_materials.php 返回 { MATERIAL_LIBRARY: [...] }（嵌套）
+  实际文件返回 [ '花岗岩' => [...], '玄武岩' => [...] ]（直接数组）
+  → foreach 把「花岗岩」当成顶层键 → $DB['MATERIAL_LIBRARY'] 仍空
+规则：任何 include/merge 之前先 var_dump 或写端到端模拟验证结构
+```
+
+### 7. 批量替换前必须确认语义 —— `process.exit` ≠ `process.exitCode`
+
+```
+实测教训：我用正则把 144 个文件的 process.exit(N) 批量改成 process.exitCode = N
+  以为「纯改善」（避免 libuv 断言），实际语义完全不同：
+    process.exit(N)        = 立即终止
+    process.exitCode = N   = 只设退出码，代码继续执行
+  → github_device_auth.mjs 不推送时也推送
+  → build_deploy_zip.mjs 会 readFileSync 不存在的文件崩
+  门禁全绿也没发现（那些路径没被测试覆盖）
+规则：批量替换前先想「这个函数的控制流语义变了吗」，并用认知台账记录（C085）
+```
+
+### 一键门禁
+
+```powershell
+cd <仓库根目录>          # 不要写死绝对路径（发布包合规禁止）
+node tools\audit-site-full.mjs        # 官网 10 项全量体检
+node tools\morning-report.mjs         # 早报（守望/收录/页面/Q6）
+node tests\run.mjs                    # 132 通过 0 失败
+node tools\self_audit.mjs             # 100/100
+node tools\build_public.mjs           # exit 0
+```
+
+<!-- /NIGHT-20261104-LESSONS -->
