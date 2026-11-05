@@ -208,7 +208,7 @@ try {
     console.log('  本地文件：distribution/官网落地页/api/probe.php（16.3KB）');
     console.log('');
   }
-  process.exit(1);
+  process.exitCode = 1;
 }
 
 const { state, ms } = pulled;
@@ -290,4 +290,4 @@ if (top) {
   console.log('');
 }
 
-process.exit(0);
+process.exitCode = 0;
