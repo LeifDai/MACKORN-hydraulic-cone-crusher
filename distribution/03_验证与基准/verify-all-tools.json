@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T09:27:54.364Z",
+  "generated": "2026-11-13T19:34:23.086Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,7 +7,7 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 3
+      "ms": 5
     },
     {
       "name": "mackorn_proposal",
@@ -22,7 +22,7 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_capacity_check",
@@ -32,7 +32,7 @@
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_mcfm_analysis",
@@ -52,12 +52,12 @@
     {
       "name": "mackorn_market_intel",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_selection_report",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_equipment_catalog",
@@ -67,12 +67,12 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
@@ -82,42 +82,42 @@
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 4
+      "ms": 6
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 29
+      "ms": 44
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 87
+      "ms": 134
     },
     {
       "name": "mackorn_contact",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_stats",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grinding_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_beneficiation_selection",
@@ -132,7 +132,7 @@
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_full_chain",
