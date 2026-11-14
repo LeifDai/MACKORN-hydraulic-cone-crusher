@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T18:00:25.311Z",
+  "generated": "2026-11-14T22:23:02.843Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -22,7 +22,7 @@
     {
       "name": "mackorn_plant_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_capacity_check",
@@ -37,7 +37,7 @@
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_wear_design",
@@ -47,7 +47,7 @@
     {
       "name": "mackorn_grading_porosity",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_market_intel",
@@ -72,7 +72,7 @@
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
@@ -87,12 +87,12 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 35
+      "ms": 42
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 103
+      "ms": 136
     },
     {
       "name": "mackorn_contact",
@@ -122,17 +122,17 @@
     {
       "name": "mackorn_beneficiation_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_automation_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_full_chain",
@@ -142,7 +142,7 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_screen_selection",
