@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-14T22:23:02.843Z",
+  "generated": "2026-11-15T05:52:34.221Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_cone_selection",
@@ -27,12 +27,12 @@
     {
       "name": "mackorn_capacity_check",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mcfm_analysis",
@@ -47,7 +47,7 @@
     {
       "name": "mackorn_grading_porosity",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_intel",
@@ -57,7 +57,7 @@
     {
       "name": "mackorn_selection_report",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_equipment_catalog",
@@ -67,7 +67,7 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_knowledge_update",
@@ -87,12 +87,12 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 42
+      "ms": 30
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 136
+      "ms": 96
     },
     {
       "name": "mackorn_contact",
@@ -122,7 +122,7 @@
     {
       "name": "mackorn_beneficiation_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_automation_design",
@@ -132,7 +132,7 @@
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_full_chain",
@@ -142,7 +142,7 @@
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_screen_selection",
