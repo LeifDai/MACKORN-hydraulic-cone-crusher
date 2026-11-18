@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T03:36:53.811Z",
+  "generated": "2026-11-18T13:00:13.508Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,7 +7,7 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 3
+      "ms": 4
     },
     {
       "name": "mackorn_proposal",
@@ -37,12 +37,12 @@
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_grading_porosity",
@@ -67,17 +67,17 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 1
+      "ms": 2
     },
     {
       "name": "mackorn_pdca_status",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_crusher_curve",
@@ -87,12 +87,12 @@
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 28
+      "ms": 36
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 89
+      "ms": 105
     },
     {
       "name": "mackorn_contact",
@@ -117,7 +117,7 @@
     {
       "name": "mackorn_grinding_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_beneficiation_selection",
@@ -137,17 +137,17 @@
     {
       "name": "mackorn_full_chain",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_jaw_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_screen_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     }
   ]
 }
