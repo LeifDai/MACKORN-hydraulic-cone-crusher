@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-18T13:00:13.508Z",
+  "generated": "2026-11-18T21:54:46.172Z",
   "total": 29,
   "passed": 29,
   "failed": 1,
@@ -7,12 +7,12 @@
     {
       "name": "mackorn_requirement_intake",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_proposal",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_cone_selection",
@@ -32,17 +32,17 @@
     {
       "name": "mackorn_cost_estimate",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_mcfm_analysis",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_wear_design",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_grading_porosity",
@@ -67,32 +67,32 @@
     {
       "name": "mackorn_intel_watch",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_knowledge_update",
       "status": "ok",
-      "ms": 2
+      "ms": 1
     },
     {
       "name": "mackorn_pdca_status",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_crusher_curve",
       "status": "ok",
-      "ms": 4
+      "ms": 3
     },
     {
       "name": "mackorn_simulate_flowsheet",
       "status": "ok",
-      "ms": 36
+      "ms": 29
     },
     {
       "name": "mackorn_calibrate",
       "status": "ok",
-      "ms": 105
+      "ms": 96
     },
     {
       "name": "mackorn_contact",
@@ -102,7 +102,7 @@
     {
       "name": "mackorn_distributor_eval",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_market_stats",
@@ -117,12 +117,12 @@
     {
       "name": "mackorn_grinding_selection",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_beneficiation_selection",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_automation_design",
@@ -132,12 +132,12 @@
     {
       "name": "mackorn_mining_interface",
       "status": "ok",
-      "ms": 0
+      "ms": 1
     },
     {
       "name": "mackorn_full_chain",
       "status": "ok",
-      "ms": 1
+      "ms": 0
     },
     {
       "name": "mackorn_jaw_selection",
