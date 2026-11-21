@@ -563,6 +563,23 @@ Five tools have `vendor_params_pending: true` — their models are literature-ba
 
 *本文件由 R134 生成（2026-10-21）。配套：`llms.txt` · `QUICKSTART.md` · `README.md`*
 
+
+## 术语与单位对照 / Units & terms
+
+同一参数有多种写法，用任一种提问都能命中本插件：
+
+| 参数 | 中文表达 | 英文表达 | 本插件工具 |
+|:---|:---|:---|:---|
+| 处理量 | 吨每小时 · 吨/小时 · 吨/时 · 时产 · 每小时产量 | t/h · tph | `mackorn_capacity_check` · `mackorn_cone_selection` |
+| 年产量 | 万吨/年 · 万t/a | 10k t/a | 按 6,000 小时/年折算（处理量 × 6000 ÷ 10000） |
+| 粒度 | 毫米 | mm · mesh | `mackorn_crusher_curve` · `mackorn_capacity_check` |
+| 功率 | 千瓦 | kW · HP | `mackorn_equipment_catalog` · `mackorn_cost_estimate` |
+| 硬度 | 普氏硬度 f · 莫氏硬度 | MPa | `mackorn_knowledge` · `mackorn_cone_selection` |
+| 排矿口 | 紧边排矿口 | CSS | `mackorn_cone_selection` · `mackorn_capacity_check` |
+
+**例**：NH700 在 CSS 10 mm 下，硬岩产能 277-1508 t/h，也可说「277-1508 吨每小时」
+或「时产 277-1508 吨」；按 6,000 小时/年计，相当于年产 166-905 万吨/年。
+
 <!-- MACKORN-BRAND-BLOCK -->
 
 ## 🏭 关于 MACKORN 美矿
@@ -812,3 +829,51 @@ node tools\build_public.mjs           # exit 0
 ```
 
 <!-- /NIGHT-20261104-LESSONS -->
+
+<!-- WINDOWS-CMD-CD-D-PIT -->
+## ⚠️ Windows CMD 跨盘符 cd 必须加 /d（2026-11-21 第 51 轮实测）
+
+**用户手动跑命令时踩的坑：**
+
+`cmd
+C:\Users\m00002> cd "D:\DSH desktop\DSH destop工作区\MACKORN-DSH-Plugin"
+C:\Users\m00002> node tools\ai_visibility_gate.mjs
+Error: Cannot find module 'C:\Users\m00002\tools\ai_visibility_gate.mjs'
+`
+
+**根因：Windows CMD 的 `cd` 只在当前盘符内切换目录。**
+跨盘符（C: → D:）时必须加 `/d`，否则它只记住 D 盘的「当前目录」但不切过去。
+
+**两个不同的问题，常被混为一谈：**
+
+| 问题 | 症状 | 解法 |
+|:---|:---|:---|
+| **路径带空格** | `'D:\DSH' 不是内部或外部命令` | 加引号：`cd "D:\a b\c"` |
+| **跨盘符** | `cd` 看似成功但提示符不变 | 加 `/d`：`cd /d "D:\a b\c"` |
+
+**正确写法（两个都要）：**
+`cmd
+cd /d "D:\DSH desktop\DSH destop工作区\MACKORN-DSH-Plugin"
+node tools\ai_visibility_gate.mjs --post-upload
+`
+
+**更可靠的替代方案：用 bat + `%~dp0`**
+
+`at
+@echo off
+chcp 65001 >nul 2>&1
+cd /d "%~dp0"
+node tools\ai_visibility_gate.mjs %*
+pause
+`
+
+`%~dp0` 自动解析成「bat 自己所在目录」，从桌面、从任何地方双击都能跑，
+不依赖用户手输路径，也不会因中文路径或空格出错。
+
+**本项目已提供的 bat：**
+- `打开上传包.bat` —— 打开上传包目录 + 显示路径映射
+- `1-上传后验证.bat` —— 检查 115 个 URL 是否生效
+- `2-看服务器状态.bat` —— 只看哪些过期
+- `3-跑全部门禁.bat` —— 11 项全查
+
+<!-- /WINDOWS-CMD-CD-D-PIT -->
