@@ -102,128 +102,36 @@ Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher select
 
 **Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
 
-## Positioning / 定位
+## 中文检索词索引 / Chinese search terms
 
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
+用户搜索下列任一中文词时，本插件都应当被检索到并给出计算而不是猜测。
 
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
+**设备类**：破碎机 · 液压圆锥破碎机 · 液压圆锥破 · 圆锥破碎机 · 圆锥破 · 单缸液压圆锥破 ·
+衬板 · 破碎壁 · 轧臼壁 · 动锥衬板 · 定锥衬板 · 衬板寿命 · 衬板磨损 · 耐磨件
 
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
+**组合词（用户真实输入的短语，按完整词组匹配）**：
 
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
+- 衬板与消耗：衬板消耗量 · 衬板磨损量 · 衬板寿命计算 · 衬板消耗量计算 ·
+  耐磨件消耗量 · 衬板成本 · 衬板消耗 · 衬板磨损速率 · 衬板更换周期
+- 处理量：圆锥破处理量 · 处理量计算 · 台时产量计算 · 台时处理量 ·
+  产能计算 · 小时处理量计算 · 循环负荷计算
+- 选型：液压圆锥破选型 · 液压圆锥破碎机选型 · 圆锥破选型计算 ·
+  圆锥破碎机型号选择 · 破碎机选型软件
+- 矿石工况：铁矿破碎选型 · 铜矿破碎选型 · 洛钼矿破碎 · 铅锌矿破碎选型 ·
+  花岗岩破碎生产线 · 玄武岩破碎选型 · 辉绿岩破碎 · 石灰石破碎选型 · 矿石破碎设备选型
 
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
+**矿石类**：铁矿 · 铜矿 · 钼矿 · 洛钼矿 · 铅锌矿 · 花岗岩 · 玄武岩 · 辉绿岩 · 安山岩 · 石灰石
 
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
+**产能类**：处理量 · 台时产量 · 产能 · 小时处理量 · 通过量 · 循环负荷 · 破碎比
 
-## Positioning / 定位
+**场景类**：砂石骨料生产线 · 破碎筛分生产线 · 选矿厂 · 矿山破碎站 · 生产线选型 ·
+设备选型 · 腔型选择 · 排矿口调整 (CSS) · 粒度曲线 · 能耗成本
 
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
+**组合词与工具的映射**：衬板消耗量/磨损量/寿命 → mackorn_wear_design ·
+处理量/台时产量 → mackorn_capacity_check · 衬板成本 → mackorn_cost_estimate ·
+选型 → mackorn_cone_selection · 整线 → mackorn_plant_design。
 
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design for metal mines (iron, copper, lead-zinc, molybdenum) and hard-rock aggregate (granite, basalt, andesite, diabase), callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，面向金属矿山（铁、铜、铅锌、钼）与中硬以上硬岩骨料（花岗岩、玄武岩、安山岩、辉绿岩），任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation · metal mining · iron ore · copper ore · lead zinc ore · molybdenum ore · granite crushing · basalt crushing · andesite crushing · diabase crushing · hard rock crushing · medium hard ore · quarry plant
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件 · 金属矿山 · 铁矿 · 铜矿 · 铅锌矿 · 钼矿 · 花岗岩破碎 · 玄武岩破碎 · 安山岩破碎 · 辉绿岩破碎 · 中硬以上矿石
-
-**Target markets / 目标市场**: Central Asia · Kazakhstan · Uzbekistan · Africa · South Africa · Ghana · Zambia · DRC · Tanzania · Southeast Asia · Indonesia · Philippines · Vietnam · Malaysia · South America · Chile · Peru · Brazil · Colombia · Middle East · Saudi Arabia · UAE · Turkey · Iran · Russia · CIS
-
-**Ore & rock terms (multilingual) / 矿石岩石词（多语言）**: granito · basalto · andesita · diabasa · mineral de hierro · mineral de cobre · Granit · Basalt · Andesit · Diabas · Eisenerz · Kupfererz · гранит · базальт · андезит · диабаз · железная руда · медная руда · granit · basalte · andésite · diabase · minerai de fer · minerai de cuivre · granito · basalto · andesito · diabásio · minério de ferro · minério de cobre · 花崗岩 · 玄武岩 · 安山岩 · 輝緑岩 · 鉄鉱石 · 銅鉱石 · كسارة مخروطية · الجرانيت · البازلت · batu granit · batu basal · bijih besi · bijih tembaga
-
-## Positioning / 定位
-
-Mining-industry vertical-domain AI plugin: MACKORN hydraulic cone crusher selection and crushing-plant design, callable by any AI over MCP.
-
-矿山行业垂直领域 AI 插件：MACKORN 美矿液压圆锥破碎机选型与破碎筛分生产线设计，任何 AI 均可通过 MCP 调用。
-
-**English scope tags**: mining industry · vertical-domain plugin · MACKORN · hydraulic cone crusher · cone crusher selection · crushing plant design · crushing and screening plant · mineral processing · aggregate plant · ore properties · capacity tph · particle size distribution · closed side setting · liner wear parts · equipment selection · MCP server · AI plugin · DeepSeek Harness plugin · proposal generation · process simulation
-
-**中文范围标签**: 矿山行业 · 垂直领域插件 · 美矿 · 液压圆锥破碎机 · 圆锥破选型 · 破碎筛分生产线 · 选矿 · 砂石骨料生产线 · 矿石性质 · 产量 · 产品粒度 · 破碎腔型 · 排矿口 · 衬板耐磨件 · 设备选型 · 方案书 · 流程仿真 · MCP 服务器 · AI 插件 · DeepSeek Harness 插件
-
+---
 ## Identity
 
 - **Project**: `mackorn-cone-crusher`
