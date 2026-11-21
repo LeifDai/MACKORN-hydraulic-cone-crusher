@@ -59,6 +59,23 @@
 
 ---
 
+## 术语与单位对照 / Units & terms
+
+同一参数有多种写法，用任一种提问都能命中本插件：
+
+| 参数 | 中文表达 | 英文表达 | 本插件工具 |
+|:---|:---|:---|:---|
+| 处理量 | 吨每小时 · 吨/小时 · 吨/时 · 时产 · 每小时产量 | t/h · tph | `mackorn_capacity_check` · `mackorn_cone_selection` |
+| 年产量 | 万吨/年 · 万t/a | 10k t/a | 按 6,000 小时/年折算（处理量 × 6000 ÷ 10000） |
+| 粒度 | 毫米 | mm · mesh | `mackorn_crusher_curve` · `mackorn_capacity_check` |
+| 功率 | 千瓦 | kW · HP | `mackorn_equipment_catalog` · `mackorn_cost_estimate` |
+| 硬度 | 普氏硬度 f · 莫氏硬度 | MPa | `mackorn_knowledge` · `mackorn_cone_selection` |
+| 排矿口 | 紧边排矿口 | CSS | `mackorn_cone_selection` · `mackorn_capacity_check` |
+
+**例**：NH700 在 CSS 10 mm 下，硬岩产能 277-1508 t/h，也可说「277-1508 吨每小时」
+或「时产 277-1508 吨」；按 6,000 小时/年计，相当于年产 166-905 万吨/年。
+
+
 <h1 align="center">MACKORN Hydraulic Cone Crusher — Selection, Simulation &amp; Plant Design</h1>
 
 <p align="center">
