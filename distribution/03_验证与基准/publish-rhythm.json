@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-11-21T01:20:14.247Z",
+  "generated": "2026-11-21T09:33:26.605Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "a68081b",
-    "date": "2026-11-20T19:56:18Z",
-    "message": "chore(nightly): 云端自迭代 2026-11-20 19:56 [skip ci]"
+    "sha": "31a63d5",
+    "date": "2026-11-21T05:10:14Z",
+    "message": "revert(docs): restore \"12 languages\" — version.json is the authoritative source (language_"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 33.42,
+    "days_since": 33.77,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.22,
-  "days_since_publish": 0.22,
+  "effective_days": 0.18,
+  "days_since_publish": 0.18,
   "changed_since_publish": {
     "count": 325,
     "files": [

@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-11-21T01:20:14.333Z",
+  "generated": "2026-11-21T09:33:26.726Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
@@ -12,13 +12,13 @@
       "id": "M-README.md",
       "name": "根 README（GitHub 展示的）",
       "pass": false,
-      "detail": "❌ 不一致（本地 30KB vs 真相源 30KB）"
+      "detail": "❌ 不一致（本地 34KB vs 真相源 30KB）"
     },
     {
       "id": "M-llms.txt",
       "name": "llms.txt（AI 索引）",
       "pass": false,
-      "detail": "❌ 不一致（本地 33KB vs 真相源 31KB）"
+      "detail": "❌ 不一致（本地 19KB vs 真相源 31KB）"
     },
     {
       "id": "M-cordis.patch.yml",
