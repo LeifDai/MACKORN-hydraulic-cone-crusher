@@ -91,7 +91,7 @@ npx skills add LeifDai/MACKORN-hydraulic-cone-crusher   # Agent Skills
 > single-cylinder hydraulic cone crusher selection, crushing-circuit design, product-size simulation
 > and field-data calibration. Input: one customer requirement form plus a target capacity.
 > Output: equipment selection, plant configuration, process simulation, and a 14-section proposal.
-> 29 tools, 6 skills, 12 languages, 0 dependencies.
+> 29 tools, 6 skills, 10 languages, 0 dependencies.
 
 Machine-readable project summary for AI assistants and crawlers. Human-facing documentation: [README.md](./README.md)
 
@@ -234,7 +234,7 @@ Knowledge, market and self-iteration
 - `mackorn_knowledge` — ore properties, selection hints and case benchmarks (read-only lookup)
 - `mackorn_knowledge_update` — knowledge ingestion with credibility grading, numeric-conflict detection, version evolution (source URL mandatory)
 - `mackorn_pdca_status` — self-iteration PDCA ledger, evolution metrics, next-round suggestions
-- `mackorn_contact` — company contact block and worldwide distributor/agent recruitment programme, in 12 languages
+- `mackorn_contact` — company contact block and worldwide distributor/agent recruitment programme, in 10 languages
 
 ## Output contract
 
