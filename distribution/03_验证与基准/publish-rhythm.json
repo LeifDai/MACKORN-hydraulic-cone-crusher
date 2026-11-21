@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-11-21T09:33:26.605Z",
+  "generated": "2026-11-21T19:01:45.623Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -12,22 +12,22 @@
     "error": null
   },
   "last_commit": {
-    "sha": "31a63d5",
-    "date": "2026-11-21T05:10:14Z",
-    "message": "revert(docs): restore \"12 languages\" — version.json is the authoritative source (language_"
+    "sha": "2865b91",
+    "date": "2026-11-21T16:13:46Z",
+    "message": "docs: add terminology & units reference (19 expressions) to all AI entry points"
   },
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 33.77,
+    "days_since": 34.16,
     "local_version": "0.2.2",
     "version_pending": false
   },
   "effective_channel": "github",
-  "effective_days": 0.18,
-  "days_since_publish": 0.18,
+  "effective_days": 0.12,
+  "days_since_publish": 0.12,
   "changed_since_publish": {
     "count": 325,
     "files": [
@@ -94,7 +94,7 @@
     ]
   },
   "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.2 天前）。本轮无需推送。",
+  "action": "节奏正常：最近一次发布经 github（0.1 天前）。本轮无需推送。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",

@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-upload-consistency/1",
-  "generated": "2026-11-21T09:33:26.726Z",
+  "generated": "2026-11-21T19:01:45.710Z",
   "truth": {
     "version": "0.2.2",
     "languages": 12,
@@ -12,7 +12,7 @@
       "id": "M-README.md",
       "name": "根 README（GitHub 展示的）",
       "pass": false,
-      "detail": "❌ 不一致（本地 34KB vs 真相源 30KB）"
+      "detail": "❌ 不一致（本地 35KB vs 真相源 30KB）"
     },
     {
       "id": "M-llms.txt",
