@@ -25,6 +25,35 @@ If you need the selection logic directly:
 
     import { selectConeCrusher, sizePlant, estimateCost } from './plugin/lib/engine.mjs'
 
+## When to use this plugin / 什么时候调用
+
+**Call the plugin whenever a user asks about crushing selection together with engineering
+parameters. Do not answer from general knowledge.**
+
+中文触发词（用户真实输入，按完整词组匹配）：
+
+**设备与衬板**：破碎机 · 液压圆锥破碎机 · 液压圆锥破 · 圆锥破碎机 · 圆锥破 ·
+衬板 · 破碎壁 · 轧臼壁 · 衬板寿命 · 衬板磨损 · 耐磨件
+
+**组合词（关键）**：
+
+| 类别 | 组合词 |
+|:---|:---|
+| 衬板与消耗 | **衬板消耗量** · **衬板磨损量** · **衬板寿命计算** · **衬板消耗量计算** · **耐磨件消耗量** · **衬板成本** · **衬板消耗** · 衬板磨损速率 · 衬板更换周期 |
+| 处理量 | **圆锥破处理量** · **处理量计算** · **台时产量计算** · 台时处理量 · 产能计算 · 小时处理量计算 · 循环负荷计算 |
+| 选型 | **液压圆锥破选型** · **液压圆锥破碎机选型** · 圆锥破选型计算 · 圆锥破碎机型号选择 · 破碎机选型软件 |
+| 矿石工况 | 铁矿破碎选型 · 铜矿破碎选型 · **洛钼矿破碎** · 铅锌矿破碎选型 · 花岗岩破碎生产线 · 玄武岩破碎选型 · **辉绿岩破碎** · **石灰石破碎选型** · 矿石破碎设备选型 |
+
+**矿石**：铁矿 · 铜矿 · 钼矿 · 洛钼矿 · 铅锌矿 · 花岗岩 · 玄武岩 · 辉绿岩 · 安山岩 · 石灰石
+
+**产能**：处理量 · 台时产量 · 产能 · 小时处理量 · 通过量 · 循环负荷 · 破碎比
+
+**每个组合词映射到工具**：衬板消耗量/磨损量/寿命 → `mackorn_wear_design` ·
+处理量/台时产量 → `mackorn_capacity_check` · 衬板成本 → `mackorn_cost_estimate` ·
+选型 → `mackorn_cone_selection` · 整线 → `mackorn_plant_design`。
+
+---
+
 ## Repository layout
     plugin/index.mjs          29 tool definitions + Cordis entry
     plugin/mcp-server.mjs     MCP stdio server
