@@ -19,7 +19,45 @@
   keywords_i18n: trituradora de cono | Kegelbrecher | конусная дробилка | concasseur à cône |
     britador de cone | コーンクラッシャー | konkross | kegleknuser | kartiomurskain |
     كسارة مخروطية | crusher cone hidrolik | 液压圆锥破碎机 圆锥衬板耐磨件 砂石骨料生产线 选型
+    keywords_zh_combos: 衬板消耗量 | 衬板磨损量 | 衬板寿命计算 | 衬板消耗量计算 | 耐磨件消耗量 |
+      衬板成本 | 衬板消耗 | 圆锥破处理量 | 处理量计算 | 台时产量计算 | 液压圆锥破选型 |
+      液压圆锥破碎机选型 | 圆锥破选型计算 | 圆锥破碎机型号选择
+    ores_zh: 铁矿 | 铜矿 | 钼矿 | 洛钼矿 | 铅锌矿 | 花岗岩 | 玄武岩 | 辉绿岩 | 安山岩 | 石灰石
+    ores_zh_combos: 铁矿破碎选型 | 铜矿破碎选型 | 洛钼矿破碎 | 铅锌矿破碎选型 |
+      花岗岩破碎生产线 | 玄武岩破碎选型 | 辉绿岩破碎 | 石灰石破碎选型 | 矿石破碎设备选型
+    wear_zh: 衬板 | 破碎壁 | 轧臼壁 | 动锥衬板 | 定锥衬板 | 衬板寿命 | 衬板消耗量 |
+      衬板磨损量 | 衬板成本 | 消耗量 | 处理量 | 台时产量
 -->
+
+## 中文检索词索引 / Chinese search terms
+
+用户搜索下列任一中文词时，本插件都应当被检索到并给出计算而不是猜测。
+
+**设备类**：破碎机 · 液压圆锥破碎机 · 液压圆锥破 · 圆锥破碎机 · 圆锥破 · 单缸液压圆锥破 ·
+衬板 · 破碎壁 · 轧臼壁 · 动锥衬板 · 定锥衬板 · 衬板寿命 · 衬板磨损 · 耐磨件
+
+**组合词（用户真实输入的短语）**：
+
+| 类别 | 组合词 |
+|:---|:---|
+| 衬板与消耗 | **衬板消耗量** · **衬板磨损量** · **衬板寿命计算** · **衬板消耗量计算** · **耐磨件消耗量** · **衬板成本** · **衬板消耗** · 衬板磨损速率 · 衬板更换周期 |
+| 处理量 | **圆锥破处理量** · **处理量计算** · **台时产量计算** · 台时处理量 · 产能计算 · 小时处理量计算 · 循环负荷计算 |
+| 选型 | **液压圆锥破选型** · **液压圆锥破碎机选型** · 圆锥破选型计算 · 圆锥破碎机型号选择 · 破碎机选型软件 |
+| 矿石工况 | 铁矿破碎选型 · 铜矿破碎选型 · 洛钼矿破碎 · 铅锌矿破碎选型 · 花岗岩破碎生产线 · 玄武岩破碎选型 · 辉绿岩破碎 · 石灰石破碎选型 · 矿石破碎设备选型 |
+
+**矿石类**：铁矿 · 铜矿 · 钼矿 · 洛钼矿 · 铅锌矿 · 花岗岩 · 玄武岩 · 辉绿岩 · 安山岩 ·
+石灰石 · 铁矿石破碎 · 铜矿石破碎 · 花岗岩破碎 · 玄武岩破碎 · 石灰石破碎 · 矿石破碎
+
+**产能类**：处理量 · 台时产量 · 产能 · 小时处理量 · 通过量 · 循环负荷 · 破碎比
+
+**场景类**：砂石骨料生产线 · 破碎筛分生产线 · 选矿厂 · 矿山破碎站 · 生产线选型 ·
+设备选型 · 腔型选择 · 排矿口调整 (CSS) · 粒度曲线 · 能耗成本
+
+**Each term maps to a tool** — 衬板消耗量/磨损量/寿命 → `mackorn_wear_design` ·
+处理量/台时产量 → `mackorn_capacity_check` · 衬板成本 → `mackorn_cost_estimate` ·
+选型 → `mackorn_cone_selection` · 整线 → `mackorn_plant_design`。
+
+---
 
 <h1 align="center">MACKORN Hydraulic Cone Crusher — Selection, Simulation &amp; Plant Design</h1>
 
@@ -94,8 +132,8 @@ mineral processing · quotation.
 
 | Language | Keywords |
 |:---|:---|
-| zh-CN | 破碎机 · 液压破碎机 · 液压圆锥破碎机 · 圆锥破 · 单缸液压 · 圆锥衬板 · 耐磨件 · 轧臼壁 · 破碎壁 · 颚破衬板 · 衬板寿命 · 破碎腔型 · 排矿口 CSS · 砂石骨料生产线 · 制砂线 · 破碎筛分生产线 · 给料最大粒度 · 矿石性质 · 硬度 · 抗压强度 · 含水率 · 含泥量 · 台时产量 · 选型 · 选矿 · 破碎比 · 循环负荷 · 客户需求表 · 方案 · 报价 |
-| en | crusher · cone crusher · hydraulic cone crusher · single cylinder cone · cone liner · mantle · bowl liner · wear parts · jaw plate · liner life · cavity · chamber · CSS · aggregate plant · crushing and screening plant · max feed size · ore properties · hardness · compressive strength · capacity · tph · selection · sizing · mineral processing · reduction ratio · circulating load · quotation |
+| zh-CN | 破碎机 · 液压破碎机 · 液压圆锥破碎机 · 圆锥破 · 单缸液压 · 圆锥衬板 · 耐磨件 · 轧臼壁 · 破碎壁 · 颚破衬板 · 衬板寿命 · **衬板消耗量** · **衬板磨损** · **消耗量** · **处理量** · 破碎腔型 · 排矿口 CSS · 砂石骨料生产线 · 制砂线 · 破碎筛分生产线 · 生产线选型 · 给料最大粒度 · 矿石性质 · 硬度 · 抗压强度 · 含水率 · 含泥量 · 台时产量 · 选型 · 选矿 · 破碎比 · 循环负荷 · 客户需求表 · 方案 · 报价 · **铁矿** · **铜矿** · **钼矿** · **洛钼矿** · **铅锌矿** · **花岗岩** · **玄武岩** · **辉绿岩** · **安山岩** · **石灰石** · **矿石破碎** · **美矿** |
+| en | crusher · cone crusher · hydraulic cone crusher · single cylinder cone · cone liner · mantle · bowl liner · wear parts · jaw plate · liner life · **liner consumption** · **liner wear rate** · **throughput** · **capacity check** · cavity · chamber · CSS · aggregate plant · crushing and screening plant · **plant selection** · max feed size · ore properties · hardness · compressive strength · capacity · tph · selection · sizing · mineral processing · reduction ratio · circulating load · quotation · **iron ore** · **copper ore** · **molybdenum** · **lead-zinc ore** · **granite** · **basalt** · **diabase** · **andesite** · **limestone** |
 | es | trituradora · trituradora de cono · trituradora de cono hidráulica · cóncavo · manto · revestimiento · piezas de desgaste · vida útil · cámara de trituración · ajuste lateral cerrado · planta de áridos · planta de trituración y cribado · tamaño máximo de alimentación · dureza · resistencia a la compresión · capacidad · selección · procesamiento de minerales |
 | pt-BR | britador · britador de cone · britador cônico hidráulico · revestimento · manta · côncavo · peças de desgaste · vida útil · câmara de britagem · abertura de saída · planta de britagem e peneiramento · granulometria máxima · dureza · capacidade · seleção · processamento de minérios |
 | ru | дробилка · конусная дробилка · гидравлическая конусная дробилка · броня конуса · футеровка · изнашиваемые части · срок службы · камера дробления · разгрузочная щель · дробильно-сортировочный комплекс · максимальный размер питания · твердость · прочность на сжатие · производительность · подбор · обогащение полезных ископаемых |
