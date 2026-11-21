@@ -247,6 +247,7 @@ and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 | `mackorn_proposal` | `capacity_tph` (required), `form_text` or the same structured fields, `cost_model`, `cost_units`, `electricity_price`, `liner_life_hours`, `liner_cost_per_set`, `language` | 14-section Markdown proposal: project overview · design basis · process flow · equipment selection + bill of materials · technical parameters · electrical &amp; control · environment · civil &amp; layout · supply scope · investment estimate · schedule · **assumptions &amp; sources** · **risks &amp; open items** · attachments |
 | `mackorn_cone_selection` | `target_tph` (required), `max_feed_mm`, `target_product_mm`, `stage` (`中碎`/`细碎`/`超细碎`/auto), `ore`, `units`, `closed_circuit` | `candidates[]` ranked: `model`, `series`, `cavity`, `css_mm`, `capacity_tph[]`, `capacity_after_circulating_load_tph`, `headroom_ratio`, `power_kw`, `p80_estimate_mm[]`, `match_score`, `basis` (`S1 detailed table` or `series-interval approximation`), `warnings[]` |
 | `mackorn_plant_design` | `target_tph` (required), `max_feed_mm`, `target_product_mm`, `ore`, `closed_circuit`, `washing` | `total_reduction_ratio`, `stage_count`, per-stage feed/product/reduction ratio, medium &amp; fine cone selection, `screen_area_m2`, `belt_width_mm`, auxiliaries, `assumptions[]` |
+| `mackorn_full_chain` | `target_tph` (required), `max_feed_mm`, `target_product_mm`, `ore`, `to_beneficiation`, `liberation_um` | end-to-end chain: mining → jaw → cone → screen → grinding → beneficiation, per-stage reduction ratio and circulating load |
 
 ### Engineering computation
 
@@ -258,6 +259,17 @@ and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 | `mackorn_wear_design` | `sections`, `wear_rates[]`, `base_hardness`, `gradient_factor` | wear uniformity index, multi-gradient zone hardness H_i, improvement over uniform design |
 | `mackorn_grading_porosity` | `coarse_frac`, `mid_frac`, `fine_frac` (all required) | bed porosity φ, optimal-blend comparison, stability verdict |
 | `mackorn_equipment_catalog` | *(none)* | all NH (9) / NS (4) models with max feed, CSS range, power, weight, capacity; 9 cavity codes and their applicability |
+
+### Per-stage selection / 分段选型
+
+| Tool | Input (key fields) | Output (key fields) |
+|:---|:---|:---|
+| `mackorn_mining_interface` | `target_tph`, `max_feed_mm`, `muddy` | Kuz-Ram blast fragmentation, whether feed is directly crusher-able, stripping ratio and haulage hints |
+| `mackorn_jaw_selection` | `target_tph` (required), `max_feed_mm`, `ucs_mpa` | jaw model tier, feed opening, installed kW, unit count; duty factor applied for hard rock |
+| `mackorn_screen_selection` | `feed_tph`, `aperture_mm`, `feed_p80_mm`, `closed_circuit` | screen area m², unit count, oversize return (closed circuit), deck count |
+| `mackorn_grinding_selection` | `target_tph`, `feed_p80_mm`, `product_p80_mm` | SAG / ball / rod / HPGR, installed kW, Bond-based specific energy |
+| `mackorn_beneficiation_selection` | `ore`, `target_mineral`, `liberation_um` | flotation / gravity / magnetic / sensor-based sorting, circuit hints, recovery range |
+| `mackorn_automation_design` | `section`, `target_tph`, `has_plc` | L0-L3 automation layering, instrument list, control-loop hints |
 
 ### Simulation (public-literature algorithms)
 
@@ -277,6 +289,9 @@ and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 | `mackorn_knowledge_update` | `entries[]` (required; each needs `title`, `content`, `**source_url**`), `tolerance`, `check_fields`, `actor`, `rationale`, `crushing_leverage_score` | ingestion result, credibility score, numeric-conflict ledger, version-evolution verdict, changelog. **Entries without a source URL are rejected.** |
 | `mackorn_pdca_status` | `action` (`status`/`record`), `plan`, `do_items`, `check`, `act`, `actor` | model version, knowledge revision, entry count &amp; credibility distribution, conflict ledger, four evolution metrics, due watch items, optimization suggestions |
 | `mackorn_contact` | `language` (12 languages), `include_partner`, `include_triggers` | company name, address (CN/EN), service times, sales contacts, WeChat QR asset, worldwide distributor/agent recruitment programme; optional trigger-coverage report |
+| `mackorn_knowledge` | `ore`, `question` | ore properties (hardness / abrasiveness / Bond Wi), selection hints, benchmark cases |
+| `mackorn_market_stats` | `mode` (`describe`/`concentration`/`residual`/`weibull`/`growth`), `values[]`, `lives[]` | descriptive stats, CR/HHI/Gini, linear regression residuals, Weibull B10 liner life |
+| `mackorn_distributor_eval` | `agent_type` (required), `scores{}` (17 dimensions × 1/3/5), `missing[]` | grade A/B/C/D, credit-line suggestion, risk list, verification channels |
 
 ---
 
