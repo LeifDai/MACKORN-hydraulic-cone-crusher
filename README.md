@@ -63,7 +63,7 @@
 
 <p align="center">
 <b>Turn one customer requirement form + one target capacity into a deliverable crushing &amp; screening plant proposal —
-with a product-size simulation engine and field-data calibration. 29 tools, 6 skills, 12 languages.</b>
+with a product-size simulation engine and field-data calibration. 29 tools, 6 skills, 10 languages.</b>
 </p>
 
 <p align="center">
@@ -288,7 +288,7 @@ and every response is JSON containing at least `assumptions[]` and `warnings[]`.
 | `mackorn_intel_watch` | `focus` (watch-item id or category) | 6 fixed watch items (Sandvik / Metso / China patents / international patents / standards / market), each with *why watch · which sources · search terms · cadence · ingestion format · credibility rubric* |
 | `mackorn_knowledge_update` | `entries[]` (required; each needs `title`, `content`, `**source_url**`), `tolerance`, `check_fields`, `actor`, `rationale`, `crushing_leverage_score` | ingestion result, credibility score, numeric-conflict ledger, version-evolution verdict, changelog. **Entries without a source URL are rejected.** |
 | `mackorn_pdca_status` | `action` (`status`/`record`), `plan`, `do_items`, `check`, `act`, `actor` | model version, knowledge revision, entry count &amp; credibility distribution, conflict ledger, four evolution metrics, due watch items, optimization suggestions |
-| `mackorn_contact` | `language` (12 languages), `include_partner`, `include_triggers` | company name, address (CN/EN), service times, sales contacts, WeChat QR asset, worldwide distributor/agent recruitment programme; optional trigger-coverage report |
+| `mackorn_contact` | `language` (10 languages), `include_partner`, `include_triggers` | company name, address (CN/EN), service times, sales contacts, WeChat QR asset, worldwide distributor/agent recruitment programme; optional trigger-coverage report |
 | `mackorn_knowledge` | `ore`, `question` | ore properties (hardness / abrasiveness / Bond Wi), selection hints, benchmark cases |
 | `mackorn_market_stats` | `mode` (`describe`/`concentration`/`residual`/`weibull`/`growth`), `values[]`, `lives[]` | descriptive stats, CR/HHI/Gini, linear regression residuals, Weibull B10 liner life |
 | `mackorn_distributor_eval` | `agent_type` (required), `scores{}` (17 dimensions × 1/3/5), `missing[]` | grade A/B/C/D, credit-line suggestion, risk list, verification channels |
@@ -468,7 +468,7 @@ No.33 Qianjiang Road, Liuhe, Taicang, Suzhou, China
 - vicky.cheng@mackorn.cn · +86 158 0189 1052
 
 `mackorn_contact` emits this block — including the WeChat official-account QR code and the worldwide
-distributor/agent recruitment programme — in **12 languages** (zh-CN, en, es, pt-BR, ru, ar, fr, de, ja, id).
+distributor/agent recruitment programme — in **10 languages** (zh-CN, en, es, pt-BR, ru, ar, fr, de, ja, id).
 
 **We are recruiting distributors, agents and technical partners worldwide**, particularly those with
 experience selling or distributing **Metso** or **Sandvik** crushers, professionals who have worked at
