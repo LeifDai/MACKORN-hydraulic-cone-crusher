@@ -363,7 +363,7 @@ console.log(r);
 | `mackorn_wear_design` | 衬板磨损均匀度 |
 | `mackorn_mcfm_analysis` | 给料模数诊断 |
 | `mackorn_grading_porosity` | 料层孔隙率 |
-| `mackorn_contact` | 联系方式（10 语言） |
+| `mackorn_contact` | 联系方式（12 语言） |
 
 ---
 
