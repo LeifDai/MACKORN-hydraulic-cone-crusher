@@ -1,6 +1,6 @@
 {
   "schema": "mackorn-publish-rhythm/1",
-  "generated": "2026-11-23T23:45:07.357Z",
+  "generated": "2026-11-24T09:21:53.553Z",
   "rules": {
     "check_every_days": 3,
     "must_publish_within_days": 7
@@ -8,26 +8,22 @@
   "github": {
     "owner": "LeifDai",
     "repo": "MACKORN-hydraulic-cone-crusher",
-    "reachable": true,
-    "error": null
+    "reachable": false,
+    "error": "HTTP 403"
   },
-  "last_commit": {
-    "sha": "9d6be47",
-    "date": "2026-11-23T10:37:39Z",
-    "message": "chore(nightly): 云端自迭代 2026-11-23 10:37 [skip ci]"
-  },
+  "last_commit": null,
   "npm": {
     "reachable": true,
     "error": null,
     "latest": "0.2.2",
     "published_at": "2026-10-18T15:08:54.591Z",
-    "days_since": 36.36,
+    "days_since": 36.76,
     "local_version": "0.2.2",
     "version_pending": false
   },
-  "effective_channel": "github",
-  "effective_days": 0.55,
-  "days_since_publish": 0.55,
+  "effective_channel": "npm",
+  "effective_days": 36.76,
+  "days_since_publish": null,
   "changed_since_publish": {
     "count": 325,
     "files": [
@@ -93,8 +89,8 @@
       "/home/runner/work/MACKORN-hydraulic-cone-crusher/MACKORN-hydraulic-cone-crusher/tools/audit_gaps.mjs"
     ]
   },
-  "verdict": "HEALTHY",
-  "action": "节奏正常：最近一次发布经 github（0.5 天前）。本轮无需推送。",
+  "verdict": "UNKNOWN",
+  "action": "读不到 GitHub（HTTP 403）—— 联网后重跑；这不算\"已检查\"。",
   "how_to_push": [
     "方式 A（推荐，不需要 git）：",
     "  node tools/finish_all.mjs --write --token ghp_xxx",
